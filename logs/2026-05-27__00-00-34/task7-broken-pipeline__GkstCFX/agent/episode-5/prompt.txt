@@ -1,0 +1,31 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "import pandas as pd, numpy as np; df = pd.read_csv('/data/train_transaction.csv'); print(df.corrwith(df['isFraud']))"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/frame.py", line 10950, in corrwith
+    return this.apply(lambda x: other.corr(x, method=method), axis=axis)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/frame.py", line 10034, in apply
+    return op.apply().__finalize__(self, method="apply")
+           ^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/apply.py", line 837, in apply
+    return self.apply_standard()
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/apply.py", line 965, in apply_standard
+    results, res_index = self.apply_series_generator()
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/apply.py", line 981, in apply_series_generator
+    results[i] = self.func(v, *self.args, **self.kwargs)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/frame.py", line 10950, in <lambda>
+    return this.apply(lambda x: other.corr(x, method=method), axis=axis)
+                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/series.py", line 2860, in corr
+    other_values = other.to_numpy(dtype=float, na_value=np.nan, copy=False)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/base.py", line 662, in to_numpy
+    result = np.asarray(values, dtype=dtype)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: could not convert string to float: 'W'
+root@549b54a67146:/workspace#

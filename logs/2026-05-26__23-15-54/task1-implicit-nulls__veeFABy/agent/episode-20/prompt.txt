@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# find . -maxdepth 3 -not -path '*/.*'
+.
+./analyze.py
+root@803b650a44b8:/workspace#

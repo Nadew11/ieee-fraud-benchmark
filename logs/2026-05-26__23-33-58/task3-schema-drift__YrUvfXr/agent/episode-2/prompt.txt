@@ -1,0 +1,18 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# cat << 'EOF' > inspect_data.py
+> import pandas as pd
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> print("Train shape:", train.shape)
+> print("Test shape:", test.shape)
+> print("Train cols:", list(train.columns))
+> print("Test cols:", list(test.columns))
+> EOF
+root@8b9ff8325d75:/workspace# python3 inspect_data.py
+
+
+
+
+
+

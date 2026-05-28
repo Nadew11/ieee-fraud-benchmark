@@ -1,0 +1,52 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# cat << 'EOF' > test_model.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.ensemble import HistGradientBoostingClassifier
+> from sklearn.preprocessing import LabelEncoder
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> test.columns = [c.replace('-', '_') for c in test.columns]
+>
+> # Identify categorical columns
+> cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+> print("Categorical columns:", cat_cols)
+>
+> # For each categorical column, let's convert to category or encode as integer
+> # Let's combine train and test for consistent encoding
+> for col in cat_cols:
+>     train[col] = train[col].astype(str)
+>     test[col] = test[col].astype(str)
+>
+>     # Encode with LabelEncoder
+>     le = LabelEncoder()
+>     all_vals = pd.concat([train[col], test[col]], axis=0)
+>     le.fit(all_vals)
+>     train[col] = le.transform(train[col])
+>     test[col] = le.transform(test[col])
+>
+> # Split train into 80% train and 20% holdout
+> X = train.drop(columns=['TransactionID', 'isFraud'])
+> y = train['isFraud']
+>
+> X_train, X_holdout, y_train, y_holdout = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> # We can use HistGradientBoostingClassifier which naturally handles missing values and categorical ints
+> model = HistGradientBoostingClassifier(random_state=42, max_iter=100)
+> model.fit(X_train, y_train)
+>
+> preds_train = model.predict_proba(X_train)[:, 1]
+> preds_holdout = model.predict_proba(X_holdout)[:, 1]
+>
+> print("Train AUC:", roc_auc_score(y_train, preds_train))
+> print("Holdout AUC:", roc_auc_score(y_holdout, preds_holdout))
+>
+> EOF
+root@27e59b3c4e79:/workspace# python3 test_model.py
+

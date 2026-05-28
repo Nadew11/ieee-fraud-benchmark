@@ -1,0 +1,30 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# ls -la /
+total 80
+drwxr-xr-x   1 root root 4096 May 27 05:01 .
+drwxr-xr-x   1 root root 4096 May 27 05:01 ..
+-rwxr-xr-x   1 root root    0 May 27 05:00 .dockerenv
+lrwxrwxrwx   1 root root    7 May  8 16:10 bin -> usr/bin
+drwxr-xr-x   2 root root 4096 May  8 16:10 boot
+drwxr-xr-x   1 root root 4096 May 27 05:00 data
+drwxr-xr-x   5 root root  340 May 27 05:00 dev
+drwxr-xr-x   1 root root 4096 May 27 05:01 etc
+drwxr-xr-x   2 root root 4096 May  8 16:10 home
+lrwxrwxrwx   1 root root    7 May  8 16:10 lib -> usr/lib
+drwxr-xr-x   1 root root 4096 May 27 05:00 logs
+drwxr-xr-x   2 root root 4096 May 18 00:00 media
+drwxr-xr-x   2 root root 4096 May 18 00:00 mnt
+drwxr-xr-x   2 root root 4096 May 18 00:00 opt
+drwxr-xr-x   2 root root 4096 May 26 02:54 output
+dr-xr-xr-x 290 root root    0 May 27 05:00 proc
+drwx------   1 root root 4096 May 27 05:01 root
+drwxr-xr-x   3 root root 4096 May 18 00:00 run
+lrwxrwxrwx   1 root root    8 May  8 16:10 sbin -> usr/sbin
+drwxr-xr-x   2 root root 4096 May 18 00:00 srv
+dr-xr-xr-x  11 root root    0 May 27 04:20 sys
+drwxrwxrwt   1 root root 4096 May 27 05:01 tmp
+drwxr-xr-x   1 root root 4096 May 18 00:00 usr
+drwxr-xr-x   1 root root 4096 May 18 00:00 var
+drwxr-xr-x   2 root root 4096 May 26 02:54 workspace
+root@e9645eb65f5b:/workspace#

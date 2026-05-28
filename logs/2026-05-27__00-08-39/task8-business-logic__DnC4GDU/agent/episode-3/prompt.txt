@@ -1,0 +1,31 @@
+New Terminal Output:
+
+head -n 5 /data/*.csv
+head -n 5 /data/*.csv
+Pandas and openpyxl are installed
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

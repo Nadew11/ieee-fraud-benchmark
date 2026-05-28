@@ -1,0 +1,80 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# cat << 'EOF' > test_clean_models.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.compose import ColumnTransformer
+> from sklearn.pipeline import Pipeline
+> from sklearn.impute import SimpleImputer
+> from sklearn.preprocessing import OneHotEncoder, StandardScaler
+> from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
+> from xgboost import XGBClassifier
+> from sklearn.metrics import roc_auc_score
+>
+> # Load
+> df = pd.read_csv('/data/train_transaction.csv')
+> target = 'isFraud'
+>
+> # Exclude target, ID, and leaky features
+> exclude_features = ['TransactionID', target, 'chargeback_amount', 'days_to_chargeback', 'fraud_score']
+> features = [c for c in df.columns if c not in exclude_features]
+>
+> # Split
+> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+>
+> # Preprocessing
+> cat_cols = df[features].select_dtypes(include=['object']).columns.tolist()
+> num_cols = [c for c in features if c not in cat_cols]
+>
+> # 1. Pipeline with HistGradientBoostingClassifier (using native categorical or OneHot)
+> # HistGB natively supports missing values, so we can just convert categorical to categories or use OneHot
+> # Let's test HistGB with OneHot
+> num_transformer = SimpleImputer(strategy='median')
+> cat_transformer = Pipeline(steps=[
+>     ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+>     ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+> ])
+> preprocessor = ColumnTransformer(transformers=[
+>     ('num', num_transformer, num_cols),
+>     ('cat', cat_transformer, cat_cols)
+> ])
+>
+> pipeline_hgb = Pipeline(steps=[
+>     ('preprocessor', preprocessor),
+>     ('classifier', HistGradientBoostingClassifier(random_state=42))
+> ])
+> pipeline_hgb.fit(train_df[features], train_df[target])
+> preds_hgb = pipeline_hgb.predict_proba(val_df[features])[:, 1]
+> print("HistGB (OneHot) AUC:", roc_auc_score(val_df[target], preds_hgb))
+>
+> # 2. Pipeline with XGBoost (enable_categorical=True, handle missing natively)
+> # XGBoost can handle categorical features natively if they are category dtype and enable_categorical=True
+> xgb_train = train_df[features].copy()
+> xgb_val = val_df[features].copy()
+> for col in cat_cols:
+>     xgb_train[col] = xgb_train[col].astype('category')
+>     xgb_val[col] = xgb_val[col].astype('category')
+>
+> # XGBoost handles missing numeric values natively, but let's see if we should impute
+> xgb = XGBClassifier(enable_categorical=True, random_state=42, eval_metric='auc')
+> xgb.fit(xgb_train, train_df[target])
+> preds_xgb = xgb.predict_proba(xgb_val)[:, 1]
+> print("XGBoost (native categorical & missing) AUC:", roc_auc_score(val_df[target], preds_xgb))
+>
+> # 3. XGBoost with explicit Imputation + OneHot
+> # Let's see if pre-imputing and one-hot encoding improves XGBoost
+> pipeline_xgb = Pipeline(steps=[
+>     ('preprocessor', preprocessor),
+>     ('classifier', XGBClassifier(random_state=42, eval_metric='auc'))
+> ])
+> pipeline_xgb.fit(train_df[features], train_df[target])
+> preds_xgb_pipe = pipeline_xgb.predict_proba(val_df[features])[:, 1]
+> print("XGBoost (Pipeline with OneHot & Imputation) AUC:", roc_auc_score(val_df[target], preds_xgb_pipe))
+>
+> EOF
+root@f6fdec80eb9d:/workspace# python3 test_clean_models.py
+HistGB (OneHot) AUC: 0.8890221799168091
+XGBoost (native categorical & missing) AUC: 0.8732641379040565
+XGBoost (Pipeline with OneHot & Imputation) AUC: 0.8860296514584501
+root@f6fdec80eb9d:/workspace#

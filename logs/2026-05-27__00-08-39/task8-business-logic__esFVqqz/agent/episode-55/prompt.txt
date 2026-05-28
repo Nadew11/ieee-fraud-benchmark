@@ -1,0 +1,70 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > generate_data.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+> rm = pd.read_csv('/data/region_map.csv')
+>
+> rates_dict = {}
+> for idx, row in fx.iterrows():
+>     rates_dict[(row['currency'], row['date'])] = row['rate_to_usd']
+>
+> def get_rate(currency, date_str):
+>     if currency == 'USD':
+>         return 1.0
+>     if (currency, date_str) in rates_dict:
+>         return rates_dict[(currency, date_str)]
+>     currency_rates = fx[fx['currency'] == currency]
+>     prior_rates = currency_rates[currency_rates['date'] <= date_str]
+>     if len(prior_rates) == 0:
+>         return currency_rates.sort_values('date').iloc[0]['rate_to_usd']
+>     return prior_rates.sort_values('date', ascending=False).iloc[0]['rate_to_usd']
+>
+> df['fx_rate'] = df.apply(lambda r: get_rate(r['currency'], r['transaction_date']), axis=1)
+> df['amt_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = dict(zip(fees['merchant_category'], fees['fee_rate']))
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee'] = df['amt_usd'] * df['fee_rate']
+>
+> df_clean = df.drop_duplicates(subset=['TransactionID'], keep='first').copy()
+> df_clean = df_clean[df_clean.settlement_status != 'declined'].copy()
+>
+> region_dict = dict(zip(rm['country_code'], rm['region']))
+> def get_region(country_code):
+>     return region_dict.get(country_code, 'Other')
+>
+> df_clean['region'] = df_clean['country_code'].apply(get_region)
+> df_clean['month'] = df_clean['transaction_date'].apply(lambda x: x[:7])
+>
+> fraud = df_clean[df_clean.isFraud == 1].copy()
+>
+> purchases = fraud[fraud.transaction_type == 'purchase']
+> refunds = fraud[fraud.transaction_type == 'refund']
+>
+> gross_total = purchases['amt_usd'].sum()
+> fees_total = purchases['processing_fee'].sum()
+> recoveries_total = refunds['amt_usd'].sum()
+> net_total = gross_total - recoveries_total - fees_total
+> count_total = len(purchases)
+>
+> print("Calculated Totals:")
+> print("Gross Total:", gross_total)
+> print("Fees Total:", fees_total)
+> print("Recoveries Total:", recoveries_total)
+> print("Net Total:", net_total)
+> print("Fraud purchase count:", count_total)
+>
+> EOF
+root@b9e5a18b679d:/workspace# python3 generate_data.py
+Calculated Totals:
+Gross Total: 30212.65790995
+Fees Total: 1021.4958475308201
+Recoveries Total: 2435.89068568
+Net Total: 26755.271376739183
+Fraud purchase count: 263
+root@b9e5a18b679d:/workspace#

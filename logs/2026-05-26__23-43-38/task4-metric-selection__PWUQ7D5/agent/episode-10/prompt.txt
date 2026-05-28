@@ -1,0 +1,37 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > time_analyze.py
+> import csv
+> from datetime import datetime
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     rows = [r for r in reader]
+>
+> # Header: ['TransactionID', 'y_true', 'y_pred_prob', 'scored_at', 'batch_id']
+> dates = [datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') for r in rows]
+> min_date = min(dates)
+> max_date = max(dates)
+> print(f"Overall date range: {min_date} to {max_date}")
+>
+> out_of_bounds = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') > datetime(2026, 4, 30, 23, 59, 59)]
+> print(f"Number of rows with scored_at > 2026-04-30: {len(out_of_bounds)}")
+>
+> # Let's see if all these out_of_bounds are duplicate TransactionIDs
+> # are they duplicate of some in-bound TransactionIDs?
+> out_of_bounds_ids = set([r[0] for r in out_of_bounds])
+> in_bound = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') <= datetime(2026, 4, 30, 23, 59, 59)]
+> in_bound_ids = set([r[0] for r in in_bound])
+>
+> print("Are out_of_bounds_ids in in_bound_ids?", out_of_bounds_ids.issubset(in_bound_ids))
+> print("Intersection size:", len(out_of_bounds_ids.intersection(in_bound_ids)))
+> print("Difference size (out of bounds but not in-bound):", len(out_of_bounds_ids - in_bound_ids))
+> EOF
+root@a7f99ad36897:/workspace# python3 time_analyze.py
+Overall date range: 2026-01-15 00:00:00 to 2026-05-11 15:00:00
+Number of rows with scored_at > 2026-04-30: 585
+Are out_of_bounds_ids in in_bound_ids? False
+Intersection size: 500
+Difference size (out of bounds but not in-bound): 85
+root@a7f99ad36897:/workspace#

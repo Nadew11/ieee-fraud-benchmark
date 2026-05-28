@@ -1,0 +1,61 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > test_net.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = (df['TransactionAmt'] * df['fx_rate']).round(2)
+>
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee_usd'] = (df['amount_usd'] * df['fee_rate']).round(2)
+>
+> # Drop duplicates on TransactionID keeping 'first'
+> df_dedup = df.drop_duplicates(subset=['TransactionID'], keep='first')
+>
+> # Q4 subset and not declined
+> df_q4 = df_dedup[(df_dedup['transaction_date'] >= '2023-10-01') & (df_dedup['transaction_date'] <= '2023-12-31')]
+> df_q4 = df_q4[df_q4['settlement_status'] != 'declined']
+>
+> # Let's inspect isFraud == 1
+> fraud = df_q4[df_q4['isFraud'] == 1]
+>
+> purchases = fraud[fraud['transaction_type'] == 'purchase']
+> refunds = fraud[fraud['transaction_type'] == 'refund']
+> chargebacks = fraud[fraud['transaction_type'] == 'chargeback_reversal']
+>
+> gross = purchases['amount_usd'].sum()
+> recoveries = refunds['amount_usd'].sum()
+> fees_sum = purchases['processing_fee_usd'].sum()
+>
+> net_fraud = gross - recoveries - fees_sum
+> print(f"Gross: {gross:.2f}")
+> print(f"Recoveries (refunds only): {recoveries:.2f}")
+> print(f"Recoveries (refunds + chargeback reversals): {(refunds['amount_usd'].sum() + chargebacks['amount_usd'].sum()):.2f}")
+> print(f"Processing fees on fraud (purchases only): {fees_sum:.2f}")
+> print(f"Net fraud: {net_fraud:.2f}")
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 test_net.py
+Gross: 30212.56
+Recoveries (refunds only): 2435.89
+Recoveries (refunds + chargeback reversals): 3298.98
+Processing fees on fraud (purchases only): 1021.58
+Net fraud: 26755.09
+root@474ebd5bd0a4:/workspace#

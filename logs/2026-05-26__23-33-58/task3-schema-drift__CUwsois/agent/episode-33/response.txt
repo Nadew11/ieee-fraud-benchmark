@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's wait for `generate_report.py` to finish execution.",
+  "plan": "Wait for command output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 5.0
+    }
+  ]
+}

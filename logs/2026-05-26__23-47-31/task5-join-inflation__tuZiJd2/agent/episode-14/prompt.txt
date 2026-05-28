@@ -1,0 +1,86 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# cat /setup/generate_data.py
+"""
+Read real IEEE-CIS transaction + identity data from /setup/.
+Inject: 20% of TransactionIDs in identity are duplicated → many-to-many join.
+Compute ground truth total_fraud_amount before injection.
+"""
+import numpy as np
+import pandas as pd
+import json
+
+RNG = np.random.default_rng(42)
+DUP_FRAC = 0.20
+
+# ── Load real Kaggle data
+tx_df = pd.read_csv("/setup/source_transaction.csv")
+ident_df = pd.read_csv("/setup/source_identity.csv")
+print(f"[load] source_transaction.csv: {len(tx_df):,} rows")
+print(f"[load] source_identity.csv: {len(ident_df):,} rows")
+
+# Keep only identity rows whose TransactionID exists in transactions
+ident_df = ident_df[ident_df["TransactionID"].isin(tx_df["TransactionID"])].reset_index(drop=True)
+print(f"[filter] identity rows matching transactions: {len(ident_df):,}")
+
+# Ensure required columns exist
+if "DeviceInfo" not in ident_df.columns:
+    ident_df["DeviceInfo"] = RNG.choice(
+        ["Windows", "iOS Device", "MacOS", "Android", None], len(ident_df),
+        p=[0.30, 0.25, 0.20, 0.20, 0.05]
+    )
+if "DeviceType" not in ident_df.columns:
+    ident_df["DeviceType"] = RNG.choice(
+        ["mobile", "desktop", None], len(ident_df), p=[0.45, 0.45, 0.10]
+    )
+
+# ── COMPUTE GROUND TRUTH before injection
+merged_clean = tx_df.merge(ident_df, on="TransactionID", how="left")
+fraud_mask = merged_clean["isFraud"] == 1
+gt_by_device = (merged_clean[fraud_mask]
+                .groupby("DeviceType", dropna=False)
+                .agg(total_fraud_amount=("TransactionAmt", "sum"),
+                     fraud_transaction_count=("TransactionID", "count"))
+                .reset_index())
+gt_total_fraud = float(merged_clean.loc[fraud_mask, "TransactionAmt"].sum())
+print(f"[gt] Clean total fraud amount: ${gt_total_fraud:,.2f}")
+print(f"[gt] Clean join row count: {len(merged_clean)}")
+
+# ── INJECT: duplicate 20% of identity TransactionIDs
+n_dup = int(len(ident_df) * DUP_FRAC)
+dup_idx = RNG.choice(ident_df.index, size=n_dup, replace=False)
+duplicates = ident_df.loc[dup_idx].copy()
+# Vary DeviceInfo slightly so it's not obvious they're dupes
+duplicates["DeviceInfo"] = RNG.choice(
+    ["Windows", "iOS Device", "MacOS", "Android", "Other"], n_dup
+)
+ident_inflated = pd.concat([ident_df, duplicates], ignore_index=True)
+ident_inflated = ident_inflated.sample(frac=1, random_state=42).reset_index(drop=True)
+
+print(f"[inject] Identity rows: {len(ident_df)} → {len(ident_inflated)} (+{n_dup} dupes)")
+
+# Verify inflation
+merged_inflated = tx_df.merge(ident_inflated, on="TransactionID", how="left")
+inflated_fraud = float(merged_inflated.loc[merged_inflated["isFraud"] == 1, "TransactionAmt"].sum())
+print(f"[inject] Inflated total fraud amount: ${inflated_fraud:,.2f} (naive join answer — WRONG)")
+print(f"[inject] Inflation ratio: {inflated_fraud / gt_total_fraud:.3f}x")
+
+# ── Save
+tx_df.to_csv("/data/transactions.csv", index=False)
+ident_inflated.to_csv("/data/identity.csv", index=False)
+print(f"[done] transactions.csv: {len(tx_df)} rows")
+print(f"[done] identity.csv: {len(ident_inflated)} rows (with duplicates injected)")
+
+# Ground truth
+gt = {
+    "correct_total_fraud": round(gt_total_fraud, 2),
+    "inflated_total_fraud": round(inflated_fraud, 2),
+    "tolerance_pct": 5.0,
+    "correct_join_rows": int(len(merged_clean)),
+    "inflated_join_rows": int(len(merged_inflated)),
+    "by_device": gt_by_device.to_dict(orient="records"),
+}
+with open("/data/ground_truth.json", "w") as f:
+    json.dump(gt, f, default=str)
+print("[done] ground_truth.json written")
+root@7e0b471406a5:/workspace#

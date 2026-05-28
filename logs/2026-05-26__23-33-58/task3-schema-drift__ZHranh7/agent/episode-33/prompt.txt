@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# python3 -u test_target_encoding.py
+
+Features shape: (6400, 40)
+RF with smoothed target encoding AUC: 0.515069
+ET with smoothed target encoding AUC: 0.508573
+XGB with smoothed target encoding AUC: 0.505360
+root@16de4ef61b18:/workspace#
+root@16de4ef61b18:/workspace#

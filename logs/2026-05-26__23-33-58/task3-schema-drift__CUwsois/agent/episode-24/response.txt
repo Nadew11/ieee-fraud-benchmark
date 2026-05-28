@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's see why it's slow. Ah, it seems it finished or is continuing to process. Let's send a newline to make sure the terminal updates.",
+  "plan": "Send newline to update terminal screen.",
+  "commands": [
+    {
+      "keystrokes": "\n",
+      "duration": 0.5
+    }
+  ]
+}

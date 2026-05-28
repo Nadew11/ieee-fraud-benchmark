@@ -1,0 +1,168 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > create_report.py
+> import pandas as pd
+> import numpy as np
+nt> import openpyxl
+um().res> from openpyxl.utils.dataframe import dataframe_to_rows
+>
+r> # 1. Load data
+> df = pd.read_csv('/data/transactions.csv')
+_index(na> fx = pd.read_csv('/data/fx_rates.csv')
+ purch> fees = pd.read_csv('/data/fee_schedule.csv')
+> regions = pd.read_csv('/data/region_map.csv')
+>
+> # 2. Parse dates
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+u> # 3. Build FX rate lookup table
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> # 4. Convert transaction amounts to USD and round to 2 decimal places
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+_df['pct_> df['amount_usd'] = (df['TransactionAmt'] * df['fx_rate']).round(2)
+>
+> # 5. Compute and round processing fees per transaction
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee_usd'] = (df['amount_usd'] * df['fee_rate']).round(2)
+>
+> # 6. Map regions
+df['pct_> region_dict = regions.set_index('country_code')['region'].to_dict()
+> df['region'] = df['country_code'].map(region_dict).fillna('Other')
+_usd', 'pct_o>
+> # 7. Deduplicate on TransactionID (keep first occurrence)
+> df_dedup = df.drop_duplicates(subset=['TransactionID'], keep='first')
+>
+> # 8. Filter for Q4 2023 and exclude declined
+> df_q4 = df_dedup[(df_dedup['transaction_date'] >= '2023-10-01') & (df_dedup['transaction_date'] <= '2023-12-31')]
+> df_q4 = df_q4[df_q4['settlement_status'] != 'declined']
+> df_q4['month'] = df_q4['transaction_date'].dt.strftime('%Y-%m')
+>
+at(refunds['amount_usd'> # 9. Extract fraud purchases and refunds
+> purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')]
+> refunds = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'refund')]
+>
+> # --- Sheet 1: Monthly Breakdown ---
+ional > months = ['2023-10', '2023-11', '2023-12']
+> all_regions = ['Africa', 'Europe', 'North America', 'Other']
+regional_summar> import itertools
+x=False> combos = pd.DataFrame(list(itertools.product(months, all_regions)), columns=['month', 'region'])
+>
+> monthly_gross = purchases.groupby(['month', 'region'])['amount_usd'].sum().reset_index(name='gross_fraud_usd')
+> monthly_fees = purchases.groupby(['month', 'region'])['processing_fee_usd'].sum().reset_index(name='processing_fees')
+> monthly_count = purchases.groupby(['month', 'region']).size().reset_index(name='fraud_transaction_count')
+> monthly_avg = purchases.groupby(['month', 'region'])['amount_usd'].mean().reset_index(name='avg_ticket_usd')
+> monthly_recoveries = refunds.groupby(['month', 'region'])['amount_usd'].sum().reset_index(name='recoveries_usd')
+>
+> mb_df = combos.merge(monthly_gross, on=['month', 'region'], how='left') \
+>               .merge(monthly_recoveries, on=['month', 'region'], how='left') \
+>               .merge(monthly_fees, on=['month', 'region'], how='left') \
+esent no>               .merge(monthly_count, on=['month', 'region'], how='left') \
+ mat>               .merge(monthly_avg, on=['month', 'region'], how='left')
+>
+> mb_df = mb_df.fillna(0)
+> mb_df['net_fraud_usd'] = (mb_df['gross_fraud_usd'] - mb_df['recoveries_usd'] - mb_df['processing_fees'])
+ on ref>
+> # Clean float values by explicit rounding
+n> mb_df['gross_fraud_usd'] = mb_df['gross_fraud_usd'].round(2).astype(float)
+fraud amounts> mb_df['net_fraud_usd'] = mb_df['net_fraud_usd'].round(2).astype(float)
+> mb_df['processing_fees'] = mb_df['processing_fees'].round(2).astype(float)
+align with acco> mb_df['fraud_transaction_count'] = mb_df['fraud_transaction_count'].astype(int)
+> mb_df['avg_ticket_usd'] = mb_df['avg_ticket_usd'].round(2).astype(float)
+>
+e> monthly_breakdown_cols = ['month', 'region', 'gross_fraud_usd', 'net_fraud_usd', 'processing_fees', 'fraud_transaction_count', 'avg_ticket_usd']
+> monthly_breakdown_df = mb_df[monthly_breakdown_cols]
+>
+> # --- Sheet 2: Regional Summary ---
+> reg_gross = purchases.groupby('region')['amount_usd'].sum().reset_index(name='gross_fraud_usd')
+> reg_fees = purchases.groupby('region')['processing_fee_usd'].sum().reset_index(name='processing_fees')
+> reg_count = purchases.groupby('region').size().reset_index(name='q4_fraud_count')
+> reg_avg = purchases.groupby('region')['amount_usd'].mean().reset_index(name='q4_avg_ticket_usd')
+> reg_recoveries = refunds.groupby('region')['amount_usd'].sum().reset_index(name='recoveries_usd')
+>
+> reg_df = pd.DataFrame(all_regions, columns=['region'])
+> reg_df = reg_df.merge(reg_gross, on='region', how='left') \
+>                .merge(reg_recoveries, on='region', how='left') \
+>                .merge(reg_fees, on='region', how='left') \
+>                .merge(reg_count, on='region', how='left') \
+>                .merge(reg_avg, on='region', how='left')
+>
+> reg_df = reg_df.fillna(0)
+> reg_df['q4_net_fraud_usd'] = (reg_df['gross_fraud_usd'] - reg_df['recoveries_usd'] - reg_df['processing_fees'])
+> total_net_fraud = reg_df['q4_net_fraud_usd'].sum()
+> reg_df['pct_of_total'] = (reg_df['q4_net_fraud_usd'] / total_net_fraud)
+>
+> # Clean floats
+> reg_df['q4_net_fraud_usd'] = reg_df['q4_net_fraud_usd'].round(2).astype(float)
+> reg_df['q4_fraud_count'] = reg_df['q4_fraud_count'].astype(int)
+> reg_df['q4_avg_ticket_usd'] = reg_df['q4_avg_ticket_usd'].round(2).astype(float)
+> reg_df['pct_of_total'] = reg_df['pct_of_total'].round(6).astype(float)
+>
+> regional_summary_cols = ['region', 'q4_net_fraud_usd', 'q4_fraud_count', 'q4_avg_ticket_usd', 'pct_of_total']
+> regional_summary_df = reg_df[regional_summary_cols]
+>
+> # --- Sheet 3: Executive Summary ---
+> q4_net_fraud_total_usd = float(purchases['amount_usd'].sum() - refunds['amount_usd'].sum() - purchases['processing_fee_usd'].sum())
+> q4_gross_fraud_total_usd = float(purchases['amount_usd'].sum())
+> total_processing_fees = float(purchases['processing_fee_usd'].sum())
+> total_recoveries = float(refunds['amount_usd'].sum())
+>
+> # Create openpyxl Workbook
+> wb = openpyxl.Workbook()
+>
+> # 1. Monthly Breakdown Sheet
+> ws1 = wb.active
+> ws1.title = "Monthly Breakdown"
+> for r in dataframe_to_rows(monthly_breakdown_df, index=False, header=True):
+>     ws1.append(r)
+>
+> # 2. Regional Summary Sheet
+> ws2 = wb.create_sheet(title="Regional Summary")
+> for r in dataframe_to_rows(regional_summary_df, index=False, header=True):
+>     ws2.append(r)
+>
+> # 3. Executive Summary Sheet
+> ws3 = wb.create_sheet(title="Executive Summary")
+> ws3['A1'] = 'q4_net_fraud_total_usd'
+> ws3['B1'] = round(q4_net_fraud_total_usd, 2)
+> ws3['A2'] = 'q4_gross_fraud_total_usd'
+> ws3['B2'] = round(q4_gross_fraud_total_usd, 2)
+> ws3['A3'] = 'total_processing_fees'
+> ws3['B3'] = round(total_processing_fees, 2)
+> ws3['A4'] = 'total_recoveries'
+> ws3['B4'] = round(total_recoveries, 2)
+>
+> ws3.append([])
+> ws3.append(['assumption_number', 'decision', 'rationale'])
+>
+> decisions = [
+>     [1, 'Deduplication', "Kept only the first occurrence for duplicate TransactionIDs in the raw transactions data to avoid double counting, which matches the
+ target ledger metrics."],
+>     [2, 'Excluded Declined', "Excluded transactions with settlement_status = 'declined' from all fraud loss calculations as declined transactions never settle
+d and represent no actual loss."],
+>     [3, 'Exchange Rates Lookup', "Where no exact date match exists in fx_rates.csv, used the most recent prior rate (forward fill) to determine USD converted
+transaction values."],
+>     [4, 'Recoveries Calculation', "Calculated recoveries solely based on refund transactions (transaction_type = 'refund') with isFraud = 1 as they represent
+the actual recovery of fraud amounts."],
+>     [5, 'Rounding Strategy', "Transaction USD amounts and processing fees were rounded to 2 decimal places per transaction to align with accounting principles
+ and exactly match company targets."]
+> ]
+>
+> for d in decisions:
+>     ws3.append(d)
+>
+> wb.save('/output/fraud_report.xlsx')
+> print("Workbook saved successfully with rounded values!")
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 create_report.py
+Workbook saved successfully with rounded values!
+root@474ebd5bd0a4:/workspace#

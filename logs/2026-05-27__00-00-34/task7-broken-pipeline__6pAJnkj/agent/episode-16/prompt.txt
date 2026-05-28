@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); TARGET = 'isFraud'; DROP = ['TransactionID', TAR
+GET, 'ProductCD', 'card4', 'card6']; features = [c for c in df.columns if c not in DROP]; print(features)"
+['TransactionDT', 'TransactionAmt', 'card1', 'card2', 'addr1', 'dist1', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'V1', 'V2', 'V3', 'V4', 'V5']
+root@e9645eb65f5b:/workspace#

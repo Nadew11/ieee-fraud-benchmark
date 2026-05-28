@@ -1,0 +1,4 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.isna().sum().to_string())"
+

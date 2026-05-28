@@ -1,0 +1,6 @@
+New Terminal Output:
+
+ls -la /data /output
+
+ls -la /data /output
+

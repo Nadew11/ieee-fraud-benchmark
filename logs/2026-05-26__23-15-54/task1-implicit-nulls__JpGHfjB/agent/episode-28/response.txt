@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's hit Enter to run grep or see why it took longer/was cut off.",
+  "plan": "Send newline and wait.",
+  "commands": [
+    {
+      "keystrokes": "\n",
+      "duration": 1.0
+    }
+  ]
+}

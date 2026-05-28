@@ -1,0 +1,28 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# python3 check_cats.py
+Categorical columns: ['id_12', 'id_15', 'id_16', 'id_23', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'De
+viceType', 'DeviceInfo']
+Column id_12: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column id_15: train_unique=3, test_unique=3, only_train=0, only_test=0
+Column id_16: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column id_23: train_unique=3, test_unique=3, only_train=0, only_test=0
+Column id_27: train_unique=2, test_unique=1, only_train=1, only_test=0
+  only_train: {'NotFound'}
+Column id_28: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column id_29: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column id_30: train_unique=69, test_unique=60, only_train=11, only_test=2
+  only_test: {'Windows', 'other'}
+Column id_31: train_unique=103, test_unique=79, only_train=29, only_test=5
+  only_test: {'Cherry', 'icedragon', 'firefox 55.0', 'google search application 48.0', 'samsung browser 3.3'}
+Column id_33: train_unique=87, test_unique=56, only_train=38, only_test=7
+  only_test: {'3600x2250', '3839x2160', '1680x945', '1440x803', '3843x2163', '1440x720', '3001x2000'}
+Column id_34: train_unique=3, test_unique=4, only_train=0, only_test=1
+  only_test: {'match_status:-1'}
+Column id_35: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column id_36: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column id_37: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column id_38: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column DeviceType: train_unique=2, test_unique=2, only_train=0, only_test=0
+Column DeviceInfo: train_unique=615, test_unique=264, only_train=424, only_test=73
+root@8b9ff8325d75:/workspace#

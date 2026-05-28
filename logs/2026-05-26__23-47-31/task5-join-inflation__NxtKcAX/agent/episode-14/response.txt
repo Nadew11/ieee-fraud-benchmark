@@ -1,0 +1,14 @@
+{
+  "analysis": "These directories seem to be named `model-evaluation`, but are they directories? Let's check `ls -la /root/.claude/skills/model-evaluation` or similar, or check if they are files.",
+  "plan": "I will inspect the contents of `/root/.claude` or `/root/.github` to see what is in there.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /root/.claude/skills/model-evaluation\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "ls -la /root/.claude/skills/\n",
+      "duration": 0.5
+    }
+  ]
+}

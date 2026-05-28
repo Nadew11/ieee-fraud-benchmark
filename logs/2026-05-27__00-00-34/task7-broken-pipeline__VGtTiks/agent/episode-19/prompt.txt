@@ -1,0 +1,39 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_sep.py
+> import pandas as pd
+> df = pd.read_csv('/data/train_transaction.csv')
+> for col in df.select_dtypes('number').columns:
+>     if col == 'isFraud': continue
+>     c0 = df[df['isFraud'] == 0][col]
+>     c1 = df[df['isFraud'] == 1][col]
+>     overlap_min = max(c0.min(), c1.min())
+>     overlap_max = min(c0.max(), c1.max())
+>     if overlap_min > overlap_max:
+>         print(f'{col} perfectly separates!')
+>     else:
+>         # Check how much overlap
+>         overlap_c0 = ((c0 >= overlap_min) & (c0 <= overlap_max)).sum() / len(c0)
+>         overlap_c1 = ((c1 >= overlap_min) & (c1 <= overlap_max)).sum() / len(c1)
+>         print(f'{col}: overlap range [{overlap_min}, {overlap_max}], overlap fraction in c0: {overlap_c0:.4f}, c1: {overlap_c1:.4f}')
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_sep.py
+TransactionID: overlap range [2987027, 3011995], overlap fraction in c0: 0.9987, c1: 1.0000
+TransactionDT: overlap range [98857, 15788942], overlap fraction in c0: 0.9975, c1: 1.0000
+TransactionAmt: overlap range [9.11, 1477.1], overlap fraction in c0: 0.9875, c1: 1.0000
+card1: overlap range [8000, 14997], overlap fraction in c0: 0.4983, c1: 0.6895
+card2: overlap range [350.0, 499.0], overlap fraction in c0: 0.3595, c1: 0.5826
+addr1: overlap range [300.0, 449.0], overlap fraction in c0: 0.3924, c1: 0.4318
+dist1: overlap range [2000.0, 3499.0], overlap fraction in c0: 0.2517, c1: 0.3033
+C1: overlap range [5.0, 9.0], overlap fraction in c0: 0.4495, c1: 0.4525
+C2: overlap range [3.0, 5.0], overlap fraction in c0: 0.4546, c1: 0.5483
+C3: overlap range [0.0, 1.0], overlap fraction in c0: 0.8990, c1: 0.8931
+C4: overlap range [4.0, 7.0], overlap fraction in c0: 0.4497, c1: 0.5858
+C5: overlap range [2.0, 3.0], overlap fraction in c0: 0.4479, c1: 0.6034
+C6: overlap range [0.0, 14.0], overlap fraction in c0: 0.9017, c1: 0.9098
+V1: overlap range [0.600210339812341, 1.9938433836192968], overlap fraction in c0: 0.4147, c1: 1.0000
+V2: overlap range [0.5003998333932227, 1.999864935060424], overlap fraction in c0: 0.4507, c1: 0.9992
+V3: overlap range [0.0037681959723934, 1.997009941581769], overlap fraction in c0: 0.3979, c1: 0.3958
+V4: overlap range [0.0007665905268212, 1.9772357594884045], overlap fraction in c0: 0.2974, c1: 0.2721
+V5: overlap range [0.80017375764314, 1.999184774665126], overlap fraction in c0: 0.4139, c1: 1.0000
+root@0d5e255b62ea:/workspace#

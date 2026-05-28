@@ -1,0 +1,45 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_rounding.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+>
+> # Prepare data
+> df = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+> df = df[df['settlement_status'] != 'declined']
+>
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+>
+> # Let's see: if we round amt_usd to 2 decimal places first
+> df_merged['amt_usd'] = (df_merged['TransactionAmt'] * df_merged['rate_to_usd']).round(2)
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> # And round processing_fee to 2 decimal places first
+> df_merged['processing_fee'] = (df_merged['amt_usd'] * df_merged['fee_rate']).round(2)
+>
+> # Now let's see what happens to the sums for settled-only fraud purchases!
+> purchases = df_merged[(df_merged['isFraud'] == 1) & (df_merged['transaction_type'] == 'purchase')]
+> settled_purchases = purchases[purchases['settlement_status'] == 'settled']
+> print("Total settled purchases with rounding:", len(settled_purchases))
+> print("Settled purchases gross sum with rounding:", settled_purchases['amt_usd'].sum())
+> print("Settled purchases fee sum with rounding:", settled_purchases['processing_fee'].sum())
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_rounding.py
+Total settled purchases with rounding: 264
+Settled purchases gross sum with rounding: 30309.25
+Settled purchases fee sum with rounding: 1025.23
+root@cf0db7aa8136:/workspace#

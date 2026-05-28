@@ -1,0 +1,10 @@
+{
+  "analysis": "Wow! In all duplicated `TransactionID` pairs, the only column that differs (and is not null in both) is `id_02`. Let's check how many duplicates have a different `id_02` vs how many are exact duplicates.",
+  "plan": "I will calculate how many duplicates have differing `id_02` values and inspect if the second occurrence has some noise added to `id_02`.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c 'import pandas as pd; df = pd.read_csv(\"/data/train_identity.csv\"); d = df[df.duplicated(subset=[\"TransactionID\"], keep=False)].sort_values(\"TransactionID\"); d1 = d.groupby(\"TransactionID\").first(); d2 = d.groupby(\"TransactionID\").last(); print((d1[\"id_02\"] != d2[\"id_02\"]).sum())'\n",
+      "duration": 1.0
+    }
+  ]
+}

@@ -1,0 +1,94 @@
+New Terminal Output:
+
+root@d8276d655354:/workspace# cat << 'EOF' > run.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # Load data
+> df = pd.read_csv('/data/train_transaction.csv')
+> print("Loaded shape:", df.shape)
+>
+> # Drop the obvious target leakage columns to build a realistic and robust model
+> leakage_cols = ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+> existing_leaks = [col for col in leakage_cols if col in df.columns]
+> print("Dropping leakage columns:", existing_leaks)
+> df_clean = df.drop(columns=existing_leaks)
+>
+> # Separate features and target
+> X = df_clean.drop(columns=['isFraud'])
+> y = df_clean['isFraud']
+>
+> # Keep track of TransactionID for predictions
+> trans_id = X['TransactionID']
+> X = X.drop(columns=['TransactionID'])
+>
+> # Identify and label encode categorical columns
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+> from sklearn.preprocessing import LabelEncoder
+> for col in cat_cols:
+>     X[col] = X[col].fillna('Missing').astype(str)
+>     le = LabelEncoder()
+>     X[col] = le.fit_transform(X[col])
+>
+> # Split 80/20 using stratify on the target label
+> X_train, X_val, y_train, y_val, idx_train, idx_val = train_test_split(
+>     X, y, trans_id, test_size=0.20, random_state=42, stratify=y
+> )
+>
+> print("Train shape:", X_train.shape)
+> print("Validation shape:", X_val.shape)
+>
+> # Train tuned XGBoost Classifier
+> clf = xgb.XGBClassifier(
+>     n_estimators=300,
+>     learning_rate=0.03,
+>     max_depth=6,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     eval_metric='auc'
+> )
+>
+> clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=50)
+>
+> # Predict probabilities
+> val_preds = clf.predict_proba(X_val)[:, 1]
+>
+> # Calculate and report Validation AUC
+> auc_score = roc_auc_score(y_val, val_preds)
+> print(f"Validation ROC-AUC: {auc_score:.6f}")
+>
+> # Save predictions to /output/predictions.csv
+> predictions_df = pd.DataFrame({
+>     'TransactionID': idx_val,
+>     'fraud_prob': val_preds
+> })
+> predictions_df.to_csv('/output/predictions.csv', index=False)
+> print("Saved validation predictions to /output/predictions.csv")
+>
+> # Save AUC to /output/auc.txt
+> with open('/output/auc.txt', 'w') as f:
+>     f.write(f"{auc_score:.6f}")
+> print("Saved validation AUC to /output/auc.txt")
+>
+> EOF
+root@d8276d655354:/workspace# python3 run.py
+Loaded shape: (15000, 58)
+Dropping leakage columns: ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+Train shape: (12000, 53)
+Validation shape: (3000, 53)
+[0]     validation_0-auc:0.79836
+[50]    validation_0-auc:0.87830
+[100]   validation_0-auc:0.88671
+[150]   validation_0-auc:0.89177
+[200]   validation_0-auc:0.89604
+[250]   validation_0-auc:0.89729
+[299]   validation_0-auc:0.89960
+Validation ROC-AUC: 0.899604
+Saved validation predictions to /output/predictions.csv
+Saved validation AUC to /output/auc.txt
+root@d8276d655354:/workspace#

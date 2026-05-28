@@ -1,0 +1,106 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > optimize_threshold.py
+> import csv
+> from datetime import datetime
+> import numpy as np
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     rows = [r for r in reader]
+>
+> # Filter to scoring period: before May 1, 2026
+> filtered_rows = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') < datetime(2026, 5, 1)]
+>
+> y_true = np.array([int(r[1]) for r in filtered_rows])
+> y_prob = np.array([float(r[2]) for r in filtered_rows])
+>
+> N = len(filtered_rows)
+> num_pos = sum(y_true)
+> num_neg = N - num_pos
+>
+> print("Filtered dataset length:", N)
+> print("Positives:", num_pos)
+> print("Negatives:", num_neg)
+>
+> # Cost parameters
+> loss_per_fn = 4200.0
+> cost_per_alert = 35.0
+> capacity_daily = 1500.0
+> quarterly_volume = 2800000.0
+>
+> daily_volume = quarterly_volume / 90.0
+> print(f"Daily transaction volume: {daily_volume:.2f}")
+>
+> best_overall_cost = float('inf')
+> best_overall_t = None
+> best_overall_metrics = {}
+>
+> best_feas_cost = float('inf')
+> best_feas_t = None
+> best_feas_metrics = {}
+>
+> # Scan thresholds from 0 to 1
+> for t in np.linspace(0.0, 1.0, 1001):
+>     y_pred = (y_prob >= t).astype(int)
+>     tp = int(sum((y_true == 1) & (y_pred == 1)))
+>     fp = int(sum((y_true == 0) & (y_pred == 1)))
+>     fn = int(sum((y_true == 1) & (y_pred == 0)))
+>     tn = int(sum((y_true == 0) & (y_pred == 0)))
+>
+>     tp_rate = tp / N
+>     fp_rate = fp / N
+>     fn_rate = fn / N
+>     tn_rate = tn / N
+>
+>     tp_q = tp_rate * quarterly_volume
+>     fp_q = fp_rate * quarterly_volume
+>     fn_q = fn_rate * quarterly_volume
+>     tn_q = tn_rate * quarterly_volume
+>
+>     alerts_q = tp_q + fp_q
+>     alerts_daily = alerts_q / 90.0
+>
+>     cost_fn = fn_q * loss_per_fn
+>     cost_alert = alerts_q * cost_per_alert
+>     total_cost = cost_fn + cost_alert
+>
+>     # Check overall
+>     if total_cost < best_overall_cost:
+>         best_overall_cost = total_cost
+>         best_overall_t = t
+>         best_overall_metrics = {
+>             'threshold': t,
+>             'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+>             'alerts_daily': alerts_daily,
+>             'total_cost': total_cost
+>         }
+>
+>     # Check feasible
+>     if alerts_daily <= capacity_daily:
+>         if total_cost < best_feas_cost:
+>             best_feas_cost = total_cost
+>             best_feas_t = t
+>             best_feas_metrics = {
+>                 'threshold': t,
+>                 'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+>                 'alerts_daily': alerts_daily,
+>                 'total_cost': total_cost
+>             }
+>
+> print("Unconstrained:")
+> print(best_overall_metrics)
+> print("Feasible:")
+> print(best_feas_metrics)
+> EOF
+root@a7f99ad36897:/workspace# python3 optimize_threshold.py
+Filtered dataset length: 5065
+Positives: 193
+Negatives: 4872
+Daily transaction volume: 31111.11
+Unconstrained:
+{'threshold': 0.29, 'tp': 185, 'fp': 2142, 'fn': 8, 'tn': 2730, 'alerts_daily': 14293.298234068225, 'total_cost': 63598420.53307009}
+Feasible:
+{'threshold': 0.644, 'tp': 112, 'fp': 129, 'fn': 81, 'tn': 4743, 'alerts_daily': 1480.3115059778438, 'total_cost': 192730108.58835143}
+root@a7f99ad36897:/workspace#

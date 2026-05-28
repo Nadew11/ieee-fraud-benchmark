@@ -1,0 +1,20 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_logic.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+> region = pd.read_csv('/data/region_map.csv')
+>
+> # Let's inspect fx_rates and how we match currency and transaction_date
+> # We need daily exchange rates to USD. Where no exact date match exists, use the most recent prior rate.
+> # Let's write a function or prepare a map for fx rates.
+> print("fx currencies:", fx['currency'].unique())
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_logic.py
+fx currencies: ['GBP' 'ETB' 'NGN' 'EUR']
+root@cf0db7aa8136:/workspace#

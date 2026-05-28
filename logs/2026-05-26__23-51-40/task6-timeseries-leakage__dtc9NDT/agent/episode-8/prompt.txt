@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 306 (char 307) | Content preview: '{\n  "analysis": "Excellent! The data is already chronologically sorted (`Is sorted: True`). This mak'...
+
+Please fix these issues and provide a proper JSON response.

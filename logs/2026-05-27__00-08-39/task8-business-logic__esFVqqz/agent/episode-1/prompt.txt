@@ -1,0 +1,41 @@
+New Terminal Output:
+root@b9e5a18b679d:/workspace# ls -la /data
+total 904
+drwxr-xr-x 1 root root   4096 May 27 05:09 .
+drwxr-xr-x 1 root root   4096 May 27 05:15 ..
+-rw-rw-rw- 1 root root    115 May 26 21:34 fee_schedule.csv
+-rw-rw-rw- 1 root root   7227 May 26 21:34 fx_rates.csv
+-rw-rw-rw- 1 root root    382 May 26 21:35 ground_truth.json
+-rw-rw-rw- 1 root root    123 May 26 21:34 region_map.csv
+-rw-rw-rw- 1 root root 896810 May 26 21:34 transactions.csv
+root@b9e5a18b679d:/workspace#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

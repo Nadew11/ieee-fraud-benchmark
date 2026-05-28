@@ -1,0 +1,47 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> # Filter for Q4, isFraud == 1, purchase, settled
+> df_q4 = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+> purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase') & (df_q4['settlement_status'] == 'settled')]
+> print('Total settled purchase fraud count:', len(purchases))
+> dups = purchases[purchases['TransactionID'].duplicated(keep=False)].sort_values('TransactionID')
+> print('Duplicate rows inside settled purchase fraud:')
+> print(dups[['TransactionID', 'TransactionAmt', 'transaction_date', 'currency', 'country_code']])
+> "
+Total settled purchase fraud count: 264
+Duplicate rows inside settled purchase fraud:
+      TransactionID  TransactionAmt transaction_date currency country_code
+6796        3004648          39.400       2023-10-15      ETB           US
+929         3004648          38.669       2023-10-15      ETB           US
+7260        3107345         102.142       2023-10-15      ETB           DE
+1304        3107345         106.740       2023-10-15      ETB           DE
+128         3144258         183.120       2023-11-18      ETB           US
+2264        3144258         175.000       2023-11-18      ETB           US
+4326        3150070          10.450       2023-10-22      USD           DE
+2503        3150070          10.494       2023-10-22      USD           DE
+7422        3180745         202.000       2023-12-29      USD           US
+336         3180745         200.000       2023-12-29      USD           US
+1378        3186368          49.672       2023-10-31      USD           GB
+5821        3186368          47.880       2023-10-31      USD           GB
+525         3257273         152.070       2023-10-27      USD           JP
+3501        3257273         150.000       2023-10-27      USD           JP
+6606        3264116          87.000       2023-12-12      EUR           KE
+1610        3264116          86.340       2023-12-12      EUR           KE
+302         3274084           8.580       2023-11-22      NGN           ET
+3646        3274084           8.280       2023-11-22      NGN           ET
+3902        3290643         427.030       2023-10-28      USD           US
+1029        3290643         422.500       2023-10-28      USD           US
+4630        3294415         103.681       2023-11-20      EUR           DE
+5198        3294415         101.450       2023-11-20      EUR           DE
+6221        3394968          16.313       2023-11-20      EUR           DE
+3300        3394968          17.120       2023-11-20      EUR           DE
+3315        3407851         119.994       2023-10-30      EUR           JP
+1709        3407851         115.210       2023-10-30      EUR           JP
+2966        3564645          39.070       2023-12-21      NGN           ET
+5370        3564645          38.118       2023-12-21      NGN           ET
+3618        3571889         108.870       2023-10-03      USD           GB
+1829        3571889         107.950       2023-10-03      USD           GB
+root@474ebd5bd0a4:/workspace#

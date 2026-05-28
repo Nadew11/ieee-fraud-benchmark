@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's look at `/setup`. It has setup scripts maybe? Let's check `/setup`.",
+  "plan": "Check the contents of `/setup`.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /setup\n",
+      "duration": 0.5
+    }
+  ]
+}

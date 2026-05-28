@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Expecting ',' delimiter: line 2 column 124 (char 125) | Content preview: '{\n  "analysis": "Wait, indeed `[\'Found\' \'\' \'New\' \'Unknown\']`. Both the original `NaN` values and the'...
+
+Please fix these issues and provide a proper JSON response.

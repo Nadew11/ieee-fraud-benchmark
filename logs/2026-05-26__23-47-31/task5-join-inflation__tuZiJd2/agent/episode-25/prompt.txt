@@ -1,0 +1,8 @@
+New Terminal Output:
+
+cat /output/total_fraud.txt
+
+python3 solution.py
+cat /output/fraud_by_device.csv
+cat /output/total_fraud.txt
+

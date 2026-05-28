@@ -1,0 +1,954 @@
+[?2004hroot@831ed0f33a44:/workspace# asciinema rec --stdin /logs/agent/recording.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent/recording.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+[?2004hroot@831ed0f33a44:/workspace# clear
+[?2004l[H[J[3J[?2004hroot@831ed0f33a44:/workspace# ls -la /data
+[?2004ltotal 240
+drwxr-xr-x 1 root root   4096 May 27 03:27 .
+drwxr-xr-x 1 root root   4096 May 27 04:44 ..
+-rw-rw-rw- 1 root root    483 May 26 21:58 cost_assumptions.txt
+-rw-rw-rw- 1 root root    640 May 26 22:48 dataset_info.txt
+-rw-rw-rw- 1 root root   1070 May 26 21:58 draft_evaluation.txt
+-rw-rw-rw- 1 root root 224175 May 26 22:50 predictions.csv
+[?2004hroot@831ed0f33a44:/workspace# ls -la /output
+[?2004ltotal 8
+drwxr-xr-x 2 root root 4096 May 26 02:54 .
+drwxr-xr-x 1 root root 4096 May 27 04:44 ..
+[?2004hroot@831ed0f33a44:/workspace# cat /data/cost_assumptions.txt
+[?2004lFraud Operations - Cost Parameters (Q1 2026)
+
+Average loss per undetected fraud case:     $4,200
+Cost per manual investigation (per alert):  $35
+Daily review team capacity:                 1,500 alerts/day
+Quarterly transaction volume:               2,800,000
+
+Notes:
+  - Investigation cost includes analyst time ($28/hr avg) plus tooling overhead.
+  - Review capacity assumes current team of 12 analysts, 8-hour shifts.
+  - Parameters validated by Finance in Q4 2025 budget review.
+[?2004hroot@831ed0f33a44:/workspace# cat /data/dataset_info.txt
+[?2004lDataset: Fraud Detection Model - Holdout Evaluation Export
+Source: IEEE-CIS transaction scoring pipeline v4.2.1
+Export date: 2026-05-01
+
+Overall Statistics (as exported):
+  Columns: TransactionID, y_true, y_pred_prob, scored_at, batch_id
+  Model: XGBoost v2.0.3, trained on Q1-Q3 2025 data
+  Scoring period: January 15 - April 30, 2026
+
+Note: This export was generated from the raw scoring pipeline output
+and has not been pre-processed or filtered. The export contains all
+scored records from the evaluation period.
+
+Fraud labels (y_true) are finalized after chargeback window closure
+(45 days). Labels in this export are considered final.[?2004hroot@831ed0f33a44:/workspace# cat /data/draft_evaluation.txt
+[?2004lDRAFT - Model Performance Evaluation
+Prepared by: Alex Chen (Junior Data Analyst)
+Date: 2026-05-15
+Status: Pending review
+
+Executive Summary:
+The XGBoost fraud detection model was evaluated against 5,650 held-out
+transactions. The model demonstrates strong performance across key metrics.
+
+Performance Metrics:
+  Accuracy:  88.3%
+  AUC-ROC:   0.9182
+
+The model correctly classifies 88.3% of all transactions and achieves
+an AUC of 0.9182, which exceeds our deployment threshold of 0.80.
+
+Confusion Matrix (threshold = 0.5):
+  True Positives:      194
+  False Positives:     604
+  False Negatives:      57
+  True Negatives:    4,795
+
+Recommendation:
+Based on the strong AUC of 0.9182 and accuracy of 88.3%,
+this model meets our performance targets and is recommended for production
+deployment. No further tuning is required.
+
+Methodology:
+  - Loaded predictions export (5,650 rows)
+  - Computed AUC-ROC using sklearn.metrics.roc_auc_score
+  - Applied threshold of 0.5 for binary classification metrics
+  - Compared against deployment targets (AUC > 0.80, Accuracy > 95%)
+[?2004hroot@831ed0f33a44:/workspace# head -n 10 /data/predictions.csv
+[?2004lTransactionID,y_true,y_pred_prob,scored_at,batch_id
+3003574,0,0.1522,2026-03-25 10:00:00,17
+3004160,0,0.233,2026-03-26 11:00:00,21
+3000381,0,0.1753,2026-02-04 09:00:00,9
+3004334,0,0.399,2026-02-09 13:00:00,38
+3003844,0,0.573,2026-01-21 00:00:00,3
+3000167,0,0.4806,2026-02-04 15:00:00,21
+3000555,0,0.292,2026-02-27 03:00:00,17
+3003836,0,0.3948,2026-02-20 00:00:00,25
+3003700,0,0.4766,2026-01-31 22:00:00,40
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > analyze.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score, confusion_matrix, accuracy_score
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load dataset
+[?2004l[?2004h> df = pd.read_csv('/data/predictions.csv')
+[?2004l[?2004h> print(f"Dataset shape: {df.shape}")
+[?2004l[?2004h> print(f"Unique TransactionIDs: {df['TransactionID'].nunique()}")
+[?2004l[?2004h> print(f"Missing values:\n{df.isnull().sum()}")
+[?2004l[?2004h> print(f"y_true counts:\n{df['y_true'].value_counts()}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Compute metrics at threshold 0.5
+[?2004l[?2004h> y_true = df['y_true']
+[?2004l[?2004h> y_pred_prob = df['y_pred_prob']
+[?2004l[?2004h> y_pred_05 = (y_pred_prob >= 0.5).astype(int)
+[?2004l[?2004h> 
+[?2004l[?2004h> auc = roc_auc_score(y_true, y_pred_prob)
+[?2004l[?2004h> acc = accuracy_score(y_true, y_pred_05)
+[?2004l[?2004h> cm = confusion_matrix(y_true, y_pred_05)
+[?2004l[?2004h> tn, fp, fn, tp = cm.ravel()
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"\nAt 0.5 threshold:")
+[?2004l[?2004h> print(f"AUC-ROC: {auc:.4f}")
+[?2004l[?2004h> print(f"Accuracy: {acc:.4f}")
+[?2004l[?2004h> print(f"Confusion Matrix:")
+[?2004l[?2004h> print(f"TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's check duplicates of TransactionID
+[?2004l[?2004h> dup = df[df.duplicated(subset=['TransactionID'], keep=False)]
+[?2004l[?2004h> print(f"\nNumber of duplicate TransactionID rows: {len(dup)}")
+[?2004l[?2004h> if len(dup) > 0:
+[?2004l[?2004h>     print(dup.sort_values(by='TransactionID').head(10))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 analyze.py
+[?2004lpython3 analyze.py
+Dataset shape: (5650, 5)
+Unique TransactionIDs: 5150
+Missing values:
+TransactionID    0
+y_true           0
+y_pred_prob      0
+scored_at        0
+batch_id         0
+dtype: int64
+y_true counts:
+y_true
+0    5399
+1     251
+Name: count, dtype: int64
+
+At 0.5 threshold:
+AUC-ROC: 0.9182
+Accuracy: 0.8830
+Confusion Matrix:
+TP: 194, FP: 604, FN: 57, TN: 4795
+
+Number of duplicate TransactionID rows: 1000
+      TransactionID  y_true  y_pred_prob            scored_at  batch_id
+742         3000017       0       0.2876  2026-01-31 05:00:00        42
+1437        3000017       0       0.2549  2026-05-11 14:00:00        44
+5630        3000034       0       0.2078  2026-05-09 08:00:00        26
+5588        3000034       0       0.1834  2026-02-21 04:00:00         9
+1068        3000035       0       0.3291  2026-05-05 03:00:00        41
+3639        3000035       0       0.3452  2026-02-27 21:00:00        20
+2652        3000050       0       0.0010  2026-05-11 14:00:00        20
+3683        3000050       0       0.0010  2026-01-22 09:00:00        36
+1292        3000051       1       0.3548  2026-03-06 04:00:00        11
+5213        3000051       1       0.3614  2026-05-03 22:00:00        30
+[?2004hroot@831ed0f33a44:/workspace# python3 analyze.py
+[?2004lpython3 -c "print('Hello World')"
+Dataset shape: (5650, 5)
+Unique TransactionIDs: 5150
+Missing values:
+TransactionID    0
+y_true           0
+y_pred_prob      0
+scored_at        0
+batch_id         0
+dtype: int64
+y_true counts:
+y_true
+0    5399
+1     251
+Name: count, dtype: int64
+
+At 0.5 threshold:
+AUC-ROC: 0.9182
+Accuracy: 0.8830
+Confusion Matrix:
+TP: 194, FP: 604, FN: 57, TN: 4795
+
+Number of duplicate TransactionID rows: 1000
+      TransactionID  y_true  y_pred_prob            scored_at  batch_id
+742         3000017       0       0.2876  2026-01-31 05:00:00        42
+1437        3000017       0       0.2549  2026-05-11 14:00:00        44
+5630        3000034       0       0.2078  2026-05-09 08:00:00        26
+5588        3000034       0       0.1834  2026-02-21 04:00:00         9
+1068        3000035       0       0.3291  2026-05-05 03:00:00        41
+3639        3000035       0       0.3452  2026-02-27 21:00:00        20
+2652        3000050       0       0.0010  2026-05-11 14:00:00        20
+3683        3000050       0       0.0010  2026-01-22 09:00:00        36
+1292        3000051       1       0.3548  2026-03-06 04:00:00        11
+5213        3000051       1       0.3614  2026-05-03 22:00:00        30
+[?2004hroot@831ed0f33a44:/workspace# python3 -c "print('Hello World')"
+[?2004lHello World
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > analyze_dates.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> df = pd.read_csv('/data/predictions.csv')
+[?2004l[?2004h> df['scored_at'] = pd.to_datetime(df['scored_at'])
+[?2004l[?2004h> 
+[?2004l[?2004h> start_date = pd.to_datetime('2026-01-15 00:00:00')
+[?2004l[?2004h> end_date = pd.to_datetime('2026-04-30 23:59:59')
+[?2004l[?2004h> 
+[?2004l[?2004h> in_period = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)]
+[?2004l[?2004h> out_period = df[(df['scored_at'] < start_date) | (df['scored_at'] > end_date)]
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Total records: {len(df)}")
+[?2004l[?2004h> print(f"Records inside evaluation period (Jan 15 - Apr 30): {len(in_period)}")
+[?2004l[?2004h> print(f"Records outside evaluation period: {len(out_period)}")
+[?2004l[?2004h> 
+[?2004l[?2004h> if len(out_period) > 0:
+[?2004l[?2004h>     print(f"Outside period date range: {out_period['scored_at'].min()} to {out_period['scored_at'].max()}")
+[?2004l[?2004h>     print(f"Outside period y_true value counts:\n{out_period['y_true'].value_counts()}")
+[?2004l[?2004h>     
+[?2004l[?2004h> print(f"\nInside period unique TransactionID count: {in_period['TransactionID'].nunique()}")
+[?2004l[?2004h> print(f"Inside period total records: {len(in_period)}")
+[?2004l[?2004h> print(f"Inside period duplicate TransactionIDs: {in_period.duplicated(subset=['TransactionID']).sum()}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 analyze_dates.py
+[?2004lTotal records: 5650
+Records inside evaluation period (Jan 15 - Apr 30): 5065
+Records outside evaluation period: 585
+Outside period date range: 2026-05-01 00:00:00 to 2026-05-11 15:00:00
+Outside period y_true value counts:
+y_true
+0    527
+1     58
+Name: count, dtype: int64
+
+Inside period unique TransactionID count: 5065
+Inside period total records: 5065
+Inside period duplicate TransactionIDs: 0
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > analyze_period_metrics.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score, confusion_matrix, accuracy_score
+[?2004l[?2004h> 
+[?2004l[?2004h> df = pd.read_csv('/data/predictions.csv')
+[?2004l[?2004h> df['scored_at'] = pd.to_datetime(df['scored_at'])
+[?2004l[?2004h> 
+[?2004l[?2004h> start_date = pd.to_datetime('2026-01-15 00:00:00')
+[?2004l[?2004h> end_date = pd.to_datetime('2026-04-30 23:59:59')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Filter to scoring period
+[?2004l[?2004h> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)]
+[?2004l[?2004h> 
+[?2004l[?2004h> y_true = clean_df['y_true']
+[?2004l[?2004h> y_pred_prob = clean_df['y_pred_prob']
+[?2004l[?2004h> y_pred_05 = (y_pred_prob >= 0.5).astype(int)
+[?2004l[?2004h> 
+[?2004l[?2004h> auc = roc_auc_score(y_true, y_pred_prob)
+[?2004l[?2004h> acc = accuracy_score(y_true, y_pred_05)
+[?2004l[?2004h> cm = confusion_matrix(y_true, y_pred_05)
+[?2004l[?2004h> tn, fp, fn, tp = cm.ravel()
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Corrected dataset size: {len(clean_df)}")
+[?2004l[?2004h> print(f"Corrected y_true counts:\n{y_true.value_counts()}")
+[?2004l[?2004h> print(f"Corrected AUC-ROC: {auc:.4f}")
+[?2004l[?2004h> print(f"Corrected Accuracy: {acc:.4f}")
+[?2004l[?2004h> print(f"Corrected Confusion Matrix (at threshold 0.5):")
+[?2004l[?2004h> print(f"TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's also check if the 585 out-of-period records are duplicate transactions
+[?2004l[?2004h> in_p_ids = set(clean_df['TransactionID'])
+[?2004l[?2004h> out_p_df = df[(df['scored_at'] < start_date) | (df['scored_at'] > end_date)]
+[?2004l[?2004h> out_p_ids = set(out_p_df['TransactionID'])
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Out of period records: {len(out_p_df)}")
+[?2004l[?2004h> print(f"Out of period unique IDs: {out_p_df['TransactionID'].nunique()}")
+[?2004l[?2004h> overlap = in_p_ids.intersection(out_p_ids)
+[?2004l[?2004h> print(f"Overlap of IDs between in-period and out-of-period: {len(overlap)}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 analyze_period_metrics.py
+[?2004lCorrected dataset size: 5065
+Corrected y_true counts:
+y_true
+0    4872
+1     193
+Name: count, dtype: int64
+Corrected AUC-ROC: 0.9051
+Corrected Accuracy: 0.8809
+Corrected Confusion Matrix (at threshold 0.5):
+TP: 144, FP: 554, FN: 49, TN: 4318
+Out of period records: 585
+Out of period unique IDs: 585
+Overlap of IDs between in-period and out-of-period: 500
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > analyze_financials.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.metrics import roc_curve
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load and clean dataset
+[?2004l[?2004h> df = pd.read_csv('/data/predictions.csv')
+[?2004l[?2004h> df['scored_at'] = pd.to_datetime(df['scored_at'])
+[?2004l[?2004h> start_date = pd.to_datetime('2026-01-15 00:00:00')
+[?2004l[?2004h> end_date = pd.to_datetime('2026-04-30 23:59:59')
+[?2004l[?2004h> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)].copy()
+[?2004l[?2004h> 
+[?2004l:[?2004h> # Parameters from cost_assumptions.txt
+[?2004l[?2004h> loss_per_undetected = 4200.0
+[?2004l[?2004h> cost_per_investigation = 35.0
+[?2004l[?2004h> daily_review_capacity = 1500  # alerts/day
+[?2004l[?2004h> quarterly_volume = 2800000
+[?2004l[?2004h> 
+[?2004l[?2004h> # The clean_df represents the holdout set. How many days are in this evaluation period?
+[?2004l[?2004h> min_date = clean_df['scored_at'].min()
+[?2004l[?2004h> max_date = clean_df['scored_at'].max()
+[?2004l[?2004h> num_days = (max_date - min_date).total_seconds() / (24 * 3600)
+[?2004l[?2004h> print(f"Evaluation period: {min_date} to {max_date} ({num_days:.2f} days)")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's count how many days of data we actually have
+[?2004l[?2004h> unique_days = clean_df['scored_at'].dt.date.nunique()
+[?2004l[?2004h> print(f"Unique days in dataset: {unique_days}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's calculate costs for different thresholds
+[?2004l[?2004h> # A threshold 't' means: if y_pred_prob >= t, we flag/alert (Positive), else we pass (Negative).
+[?2004l[?2004h> # If y_true == 1 and we don't flag (Negative, which is FN), we lose $4,200.
+[?2004l[?2004h> # If we flag (Positive, which is TP + FP), we spend $35 to investigate.
+[?2004l[?2004h> # Let's verify: does a TP still cost $35 to investigate, and do we save the $4,200 loss? Yes, manual investigation prevents the fraud loss, but costs $35. Undetected fraud (FN) costs $4200. FPs cost $35.
+[?2004l[?2004h> # Let's write down the cost formulas:
+[?2004l[?2004h> # Total cost on holdout set = (TP + FP) * 35.0 + FN * 4200.0
+[?2004l[?2004h> # Let's evaluate this cost for all thresholds from 0.0 to 1.0
+[?2004l[?2004h> 
+[?2004l[?2004h> thresholds = np.linspace(0.0, 1.0, 1001)
+[?2004l[?2004h> results = []
+[?2004l[?2004h> 
+[?2004l[?2004h> for t in thresholds:
+[?2004l[?2004h>     # Flagged transactions
+[?2004l[?2004h>     flagged = clean_df['y_pred_prob'] >= t
+[?2004l[?2004h>     tp = ((flagged) & (clean_df['y_true'] == 1)).sum()
+[?2004l[?2004h>     fp = ((flagged) & (clean_df['y_true'] == 0)).sum()
+[?2004l[?2004h>     fn = ((~flagged) & (clean_df['y_true'] == 1)).sum()
+[?2004l[?2004h>     tn = ((~flagged) & (clean_df['y_true'] == 0)).sum()
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Holdout metrics
+[?2004l[?2004h>     holdout_size = len(clean_df)
+[?2004l[?2004h>     flagged_count = flagged.sum()
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Extrapolate to quarterly volume
+[?2004l[?2004h>     # Ratio of quarterly volume to holdout size
+[?2004l[?2004h>     extrap_ratio = quarterly_volume / holdout_size
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Quarterly estimates
+[?2004l[?2004h>     q_flagged = flagged_count * extrap_ratio
+[?2004l[?2004h>     q_tp = tp * extrap_ratio
+[?2004l[?2004h>     # Daily flagged
+[?2004l[?2004h>     # Assuming 90 days per quarter? Let's check.
+[?2004l[?2004h>     # Let's write the daily alert rate. Is it q_flagged / 90?
+[?2004l[?2004h>     # Or let's see: how many daily alerts based on the actual holdout daily density?
+[?2004l[?2004h>     # Let's check how many days are in a quarter. Usually 90, 91, or 92 days. Let's see if we should use 90 days, 91 days, or based on holdout dataset's daily average.
+[?2004l[?2004h>     # Let's print both.
+[?2004l[?2004h>     daily_alerts_by_holdout = flagged_count / (num_days)
+[?2004l[?2004h>     daily_alerts_by_quarter = q_flagged / 90.0  # standard quarter is 90 days, or we can use the holdout day density
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Quarterly costs
+[?2004l[?2004h>     q_investigation_cost = q_flagged * cost_per_investigation
+[?2004l[?2004h>     q_fraud_loss = fn * extrap_ratio * loss_per_undetected
+[?2004l[?2004h>     q_total_cost = q_investigation_cost + q_fraud_loss
+[?2004l[?2004h>     
+[?2004l[?2004h>     results.append({
+[?2004l[?2004h>         'threshold': t,
+[?2004l[?2004h>         'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+[?2004l[?2004h>         'flagged': flagged_count,
+[?2004l[?2004h>         'q_flagged': q_flagged,
+[?2004l[?2004h>         'daily_alerts_by_holdout': daily_alerts_by_holdout,
+[?2004l[?2004h>         'daily_alerts_by_quarter': daily_alerts_by_quarter,
+[?2004l[?2004h>         'q_investigation_cost': q_investigation_cost,
+[?2004l[?2004h>         'q_fraud_loss': q_fraud_loss,
+[?2004l[?2004h>         'q_total_cost': q_total_cost
+[?2004l[?2004h>     })
+[?2004l[?2004h> 
+[?2004l[?2004h> res_df = pd.DataFrame(results)
+[?2004l[?2004h> best_row = res_df.loc[res_df['q_total_cost'].idxmin()]
+[?2004l[?2004h> print("\nBest Threshold based on Total Quarterly Cost (unconstrained):")
+[?2004l[?2004h> print(best_row)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's look at threshold 0.5 for comparison
+[?2004l[?2004h> row_05 = res_df.iloc[(res_df['threshold'] - 0.5).abs().idxmin()]
+[?2004l[?2004h> print("\nMetrics at threshold 0.5:")
+[?2004l[?2004h> print(row_05)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's look at what threshold we need to fit within daily review capacity of 1,500 alerts/day
+[?2004l[?2004h> # Wait, is the daily review capacity 1,500 alerts/day?
+[?2004l[?2004h> # Let's check what the daily alert rate is at different thresholds and find the best threshold that satisfies daily_alerts <= 1500.
+[?2004l[?2004h> # Is 'daily_alerts' calculated as q_flagged / 90, or holdout flagged / num_days?
+[?2004l[?2004h> # Let's see. The holdout period is from Jan 15 to Apr 30, which is:
+[?2004l[?2004h> # Jan 15-31: 17 days
+[?2004l[?2004h> # Feb: 28 days (or 29? 2026 is not a leap year. 2024 is, so 2026 has 28 days)
+[?2004l[?2004h> # Mar: 31 days
+[?2004l[?2004h> # Apr: 30 days
+[?2004l[?2004h> # Total holdout days: 17 + 28 + 31 + 30 = 106 days. Let's verify the exact days of the dataset.
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 analyze_financials.py
+[?2004lEvaluation period: 2026-01-15 00:00:00 to 2026-04-30 22:00:00 (105.92 days)
+Unique days in dataset: 102
+
+Best Threshold based on Total Quarterly Cost (unconstrained):
+threshold                  2.900000e-01
+tp                         1.850000e+02
+fp                         2.142000e+03
+fn                         8.000000e+00
+tn                         2.730000e+03
+flagged                    2.327000e+03
+q_flagged                  1.286397e+06
+daily_alerts_by_holdout    2.197010e+01
+daily_alerts_by_quarter    1.429330e+04
+q_investigation_cost       4.502389e+07
+q_fraud_loss               1.857453e+07
+q_total_cost               6.359842e+07
+Name: 290, dtype: float64
+
+Metrics at threshold 0.5:
+threshold                  5.000000e-01
+tp                         1.440000e+02
+fp                         5.540000e+02
+fn                         4.900000e+01
+tn                         4.318000e+03
+flagged                    6.980000e+02
+q_flagged                  3.858638e+05
+daily_alerts_by_holdout    6.590087e+00
+daily_alerts_by_quarter    4.287375e+03
+q_investigation_cost       1.350523e+07
+q_fraud_loss               1.137690e+08
+q_total_cost               1.272742e+08
+Name: 500, dtype: float64
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > analyze_constrained.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> 
+[?2004l[?2004h> df = pd.read_csv('/data/predictions.csv')
+[?2004l[?2004h> df['scored_at'] = pd.to_datetime(df['scored_at'])
+[?2004l[?2004h> start_date = pd.to_datetime('2026-01-15 00:00:00')
+[?2004l[?2004h> end_date = pd.to_datetime('2026-04-30 23:59:59')
+[?2004l[?2004h> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)].copy()
+[?2004l[?2004h> 
+[?2004l[?2004h> loss_per_undetected = 4200.0
+[?2004l[?2004h> cost_per_investigation = 35.0
+[?2004l[?2004h> daily_review_capacity = 1500  # alerts/day
+[?2004l[?2004h> quarterly_volume = 2800000
+[?2004l[?2004h> num_days_quarter = 90  # Standard quarter is 90 days
+[?2004l[?2004h> 
+[?2004l[?2004h> holdout_size = len(clean_df)
+[?2004l[?2004h> extrap_ratio = quarterly_volume / holdout_size
+[?2004l[?2004h> 
+[?2004l[?2004h> results = []
+[?2004l[?2004h> thresholds = np.linspace(0.0, 1.0, 10001)  # Fine-grained search
+[?2004l[?2004h> 
+[?2004l[?2004h> for t in thresholds:
+[?2004l[?2004h>     flagged = clean_df['y_pred_prob'] >= t
+[?2004l[?2004h>     flagged_count = flagged.sum()
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Projected metrics
+[?2004l[?2004h>     q_flagged = flagged_count * extrap_ratio
+[?2004l[?2004h>     daily_alerts = q_flagged / num_days_quarter
+[?2004l[?2004h>     
+[?2004l[?2004h>     tp = ((flagged) & (clean_df['y_true'] == 1)).sum()
+[?2004l[?2004h>     fp = ((flagged) & (clean_df['y_true'] == 0)).sum()
+[?2004l[?2004h>     fn = ((~flagged) & (clean_df['y_true'] == 1)).sum()
+[?2004l[?2004h>     tn = ((~flagged) & (clean_df['y_true'] == 0)).sum()
+[?2004l[?2004h>     
+[?2004l[?2004h>     q_investigation_cost = q_flagged * cost_per_investigation
+[?2004l[?2004h>     q_fraud_loss = fn * extrap_ratio * loss_per_undetected
+[?2004l[?2004h>     q_total_cost = q_investigation_cost + q_fraud_loss
+[?2004l[?2004h>     
+[?2004l[?2004h>     results.append({
+[?2004l[?2004h>         'threshold': t,
+[?2004l[?2004h>         'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+[?2004l[?2004h>         'flagged': flagged_count,
+[?2004l[?2004h>         'q_flagged': q_flagged,
+[?2004l[?2004h>         'daily_alerts': daily_alerts,
+[?2004l[?2004h>         'q_investigation_cost': q_investigation_cost,
+[?2004l[?2004h>         'q_fraud_loss': q_fraud_loss,
+[?2004l[?2004h>         'q_total_cost': q_total_cost
+[?2004l[?2004h>     })
+[?2004l[?2004h> 
+[?2004l[?2004h> res_df = pd.DataFrame(results)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Filter to those within capacity
+[?2004l[?2004h> constrained_df = res_df[res_df['daily_alerts'] <= daily_review_capacity]
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Number of thresholds satisfying capacity: {len(constrained_df)}")
+[?2004l[?2004h> if not constrained_df.empty:
+[?2004l[?2004h>     best_constrained = constrained_df.loc[constrained_df['q_total_cost'].idxmin()]
+[?2004l[?2004h>     print("\nBest Constrained Threshold:")
+[?2004l[?2004h>     print(best_constrained)
+[?2004l[?2004h> else:
+[?2004l[?2004h>     print("No threshold satisfies the capacity constraint!")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's check what the baseline cost is if we do NO deployment (i.e. threshold = 1.0, meaning we flag nothing and investigate nothing)
+[?2004l[?2004h> baseline_row = res_df.iloc[res_df['threshold'].idxmax()] # t = 1.0
+[?2004l[?2004h> print("\nBaseline (No Model deployed, t=1.0) metrics:")
+[?2004l[?2004h> print(baseline_row)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's check what the cost is if we deploy with threshold = 0.5 (unconstrained but proposed by junior analyst)
+[?2004l[?2004h> row_05 = res_df.iloc[(res_df['threshold'] - 0.5).abs().idxmin()]
+[?2004l[?2004h> print("\nJunior Analyst's proposed threshold (0.5) metrics:")
+[?2004l[?2004h> print(row_05)
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 analyze_constrained.py
+[?2004lNumber of thresholds satisfying capacity: 3572
+
+Best Constrained Threshold:
+threshold               6.440000e-01
+tp                      1.120000e+02
+fp                      1.290000e+02
+fn                      8.100000e+01
+tn                      4.743000e+03
+flagged                 2.410000e+02
+q_flagged               1.332280e+05
+daily_alerts            1.480312e+03
+q_investigation_cost    4.662981e+06
+q_fraud_loss            1.880671e+08
+q_total_cost            1.927301e+08
+Name: 6440, dtype: float64
+
+Baseline (No Model deployed, t=1.0) metrics:
+threshold               1.000000e+00
+tp                      0.000000e+00
+fp                      0.000000e+00
+fn                      1.930000e+02
+tn                      4.872000e+03
+flagged                 0.000000e+00
+q_flagged               0.000000e+00
+daily_alerts            0.000000e+00
+q_investigation_cost    0.000000e+00
+q_fraud_loss            4.481106e+08
+q_total_cost            4.481106e+08
+Name: 10000, dtype: float64
+
+Junior Analyst's proposed threshold (0.5) metrics:
+threshold               5.000000e-01
+tp                      1.440000e+02
+fp                      5.540000e+02
+fn                      4.900000e+01
+tn                      4.318000e+03
+flagged                 6.980000e+02
+q_flagged               3.858638e+05
+daily_alerts            4.287375e+03
+q_investigation_cost    1.350523e+07
+q_fraud_loss            1.137690e+08
+q_total_cost            1.272742e+08
+Name: 5000, dtype: float64
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > print_details.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score, accuracy_score, confusion_matrix
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load and clean
+[?2004l[?2004h> df = pd.read_csv('/data/predictions.csv')
+[?2004l[?2004h> df['scored_at'] = pd.to_datetime(df['scored_at'])
+[?2004l[?2004h> start_date = pd.to_datetime('2026-01-15 00:00:00')
+[?2004l[?2004h> end_date = pd.to_datetime('2026-04-30 23:59:59')
+[?2004l[?2004h> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)].copy()
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"--- DATASET SIZES ---")
+[?2004l[?2004h> print(f"Raw dataset: {len(df)} rows")
+[?2004l[?2004h> print(f"Cleaned dataset (scoring period only): {len(clean_df)} rows")
+[?2004l[?2004h> print(f"Excluded (out-of-period): {len(df) - len(clean_df)} rows")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Baseline (No deployment)
+[?2004l[?2004h> tp_b, fp_b, fn_b, tn_b = 0, 0, 193, 4872
+[?2004l[?2004h> 
+[?2004l[?2004h> # Threshold 0.5 (Uncleaned)
+[?2004l[?2004h> y_true_raw = df['y_true']
+[?2004l[?2004h> y_pred_prob_raw = df['y_pred_prob']
+[?2004l[?2004h> y_pred_05_raw = (y_pred_prob_raw >= 0.5).astype(int)
+[?2004l[?2004h> auc_raw = roc_auc_score(y_true_raw, y_pred_prob_raw)
+[?2004l[?2004h> acc_raw = accuracy_score(y_true_raw, y_pred_05_raw)
+[?2004l[?2004h> tn_raw, fp_raw, fn_raw, tp_raw = confusion_matrix(y_true_raw, y_pred_05_raw).ravel()
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"\n--- ANALYST UNCLEANED METRICS (Threshold 0.5) ---")
+[?2004l[?2004h> print(f"AUC-ROC: {auc_raw:.6f} (reported: 0.9182)")
+[?2004l[?2004h> print(f"Accuracy: {acc_raw*100:.2f}% (reported: 88.3%)")
+[?2004l[?2004h> print(f"TP: {tp_raw}, FP: {fp_raw}, FN: {fn_raw}, TN: {tn_raw}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Threshold 0.5 (Cleaned)
+[?2004l[?2004h> y_true_clean = clean_df['y_true']
+[?2004l[?2004h> y_pred_prob_clean = clean_df['y_pred_prob']
+[?2004l[?2004h> y_pred_05_clean = (y_pred_prob_clean >= 0.5).astype(int)
+[?2004l[?2004h> auc_clean = roc_auc_score(y_true_clean, y_pred_prob_clean)
+[?2004l[?2004h> acc_clean = accuracy_score(y_true_clean, y_pred_05_clean)
+[?2004l[?2004h> tn_clean, fp_clean, fn_clean, tp_clean = confusion_matrix(y_true_clean, y_pred_05_clean).ravel()
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"\n--- CLEANED METRICS (Threshold 0.5) ---")
+[?2004l[?2004h> print(f"AUC-ROC: {auc_clean:.6f}")
+[?2004l[?2004h> print(f"Accuracy: {acc_clean*100:.2f}%")
+[?2004l[?2004h> print(f"TP: {tp_clean}, FP: {fp_clean}, FN: {fn_clean}, TN: {tn_clean}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Optimal Constrained Threshold (0.644 or similar)
+[?2004l[?2004h> # Let's verify if there is a slightly different optimal threshold or if 0.644 is indeed the one
+[?2004l[?2004h> # Let's print out a range of thresholds around 0.644
+[?2004l[?2004h> print(f"\n--- DETAILED LOOK AROUND 0.644 ---")
+[?2004l[?2004h> for t in [0.64, 0.641, 0.642, 0.643, 0.644, 0.645, 0.65, 0.66]:
+[?2004l[?2004h>     flagged = clean_df['y_pred_prob'] >= t
+[?2004l[?2004h>     fc = flagged.sum()
+[?2004l[?2004h>     tp = ((flagged) & (clean_df['y_true'] == 1)).sum()
+[?2004l[?2004h>     fp = ((flagged) & (clean_df['y_true'] == 0)).sum()
+[?2004l[?2004h>     fn = ((~flagged) & (clean_df['y_true'] == 1)).sum()
+[?2004l[?2004h>     tn = ((~flagged) & (clean_df['y_true'] == 0)).sum()
+[?2004l[?2004h>     
+[?2004l[?2004h>     q_flagged = fc * (2800000 / len(clean_df))
+[?2004l[?2004h>     daily_alerts = q_flagged / 90.0
+[?2004l[?2004h>     q_cost = q_flagged * 35.0 + fn * (2800000 / len(clean_df)) * 4200.0
+[?2004l[?2004h>     
+[?2004l[?2004h>     print(f"t={t:.3f}: flagged={fc}, tp={tp}, fp={fp}, fn={fn}, daily={daily_alerts:.1f}, cost=${q_cost:,.2f}")
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 print_details.py
+[?2004l--- DATASET SIZES ---
+Raw dataset: 5650 rows
+Cleaned dataset (scoring period only): 5065 rows
+Excluded (out-of-period): 585 rows
+
+--- ANALYST UNCLEANED METRICS (Threshold 0.5) ---
+AUC-ROC: 0.918213 (reported: 0.9182)
+Accuracy: 88.30% (reported: 88.3%)
+TP: 194, FP: 604, FN: 57, TN: 4795
+
+--- CLEANED METRICS (Threshold 0.5) ---
+AUC-ROC: 0.905062
+Accuracy: 88.09%
+TP: 144, FP: 554, FN: 49, TN: 4318
+
+--- DETAILED LOOK AROUND 0.644 ---
+t=0.640: flagged=250, tp=112, fp=138, fn=81, daily=1535.6, cost=$192,904,244.82
+t=0.641: flagged=248, tp=112, fp=136, fn=81, daily=1523.3, cost=$192,865,547.88
+t=0.642: flagged=247, tp=112, fp=135, fn=81, daily=1517.2, cost=$192,846,199.41
+t=0.643: flagged=244, tp=112, fp=132, fn=81, daily=1498.7, cost=$192,788,154.00
+t=0.644: flagged=241, tp=112, fp=129, fn=81, daily=1480.3, cost=$192,730,108.59
+t=0.645: flagged=240, tp=111, fp=129, fn=82, daily=1474.2, cost=$195,032,576.51
+t=0.650: flagged=227, tp=109, fp=118, fn=84, daily=1394.3, cost=$199,424,679.17
+t=0.660: flagged=211, tp=107, fp=104, fn=86, daily=1296.0, cost=$203,758,736.43
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > make_metrics_json.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import json
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score, accuracy_score
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load and clean
+[?2004l[?2004h> df = pd.read_csv('/data/predictions.csv')
+[?2004l[?2004h> df['scored_at'] = pd.to_datetime(df['scored_at'])
+[?2004l[?2004h> start_date = pd.to_datetime('2026-01-15 00:00:00')
+[?2004l[?2004h> end_date = pd.to_datetime('2026-04-30 23:59:59')
+[?2004l[?2004h> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)].copy()
+[?2004l[?2004h> 
+[?2004l[?2004h> y_true = clean_df['y_true']
+[?2004l[?2004h> y_pred_prob = clean_df['y_pred_prob']
+[?2004l[?2004h> 
+[?2004l[?2004h> # Metrics at 0.5
+[?2004l[?2004h> y_pred_05 = (y_pred_prob >= 0.5).astype(int)
+[?2004l[?2004h> precision_05 = float(precision_score(y_true, y_pred_05))
+[?2004l[?2004h> recall_05 = float(recall_score(y_true, y_pred_05))
+[?2004l[?2004h> f1_05 = float(f1_score(y_true, y_pred_05))
+[?2004l[?2004h> accuracy_05 = float(accuracy_score(y_true, y_pred_05))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Metrics at 0.644
+[?2004l[?2004h> y_pred_rec = (y_pred_prob >= 0.644).astype(int)
+[?2004l[?2004h> precision_rec = float(precision_score(y_true, y_pred_rec))
+[?2004l[?2004h> recall_rec = float(recall_score(y_true, y_pred_rec))
+[?2004l[?2004h> f1_rec = float(f1_score(y_true, y_pred_rec))
+[?2004l[?2004h> accuracy_rec = float(accuracy_score(y_true, y_pred_rec))
+[?2004l[?2004h> 
+[?2004l[?2004h> auc_roc = float(roc_auc_score(y_true, y_pred_prob))
+[?2004l[?2004h> 
+[?2004l[?2004h> metrics = {
+[?2004l[?2004h>     "auc_roc": round(auc_roc, 6),
+[?2004l[?2004h>     "precision_at_0.5": round(precision_05, 6),
+[?2004l[?2004h>     "recall_at_0.5": round(recall_05, 6),
+[?2004l[?2004h>     "f1_score_at_0.5": round(f1_05, 6),
+[?2004l[?2004h>     "accuracy_at_0.5": round(accuracy_05, 6),
+[?2004l[?2004h>     "precision_at_recommended_threshold_0.644": round(precision_rec, 6),
+[?2004l[?2004h>     "recall_at_recommended_threshold_0.644": round(recall_rec, 6),
+[?2004l[?2004h>     "f1_score_at_recommended_threshold_0.644": round(f1_rec, 6),
+[?2004l[?2004h>     "accuracy_at_recommended_threshold_0.644": round(accuracy_rec, 6),
+[?2004l[?2004h>     "holdout_dataset_size": int(len(clean_df)),
+[?2004l[?2004h>     "holdout_fraud_cases": int(y_true.sum()),
+[?2004l[?2004h>     "holdout_non_fraud_cases": int((y_true == 0).sum())
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save to /output/metrics.json
+[?2004l[?2004h> with open('/output/metrics.json', 'w') as f:
+[?2004l[?2004h>     json.dump(metrics, f, indent=2)
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Successfully created /output/metrics.json:")
+[?2004l[?2004h> print(json.dumps(metrics, indent=2))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 make_metrics_json.py
+[?2004lSuccessfully created /output/metrics.json:
+{
+  "auc_roc": 0.905062,
+  "precision_at_0.5": 0.206304,
+  "recall_at_0.5": 0.746114,
+  "f1_score_at_0.5": 0.323232,
+  "accuracy_at_0.5": 0.880948,
+  "precision_at_recommended_threshold_0.644": 0.46473,
+  "recall_at_recommended_threshold_0.644": 0.580311,
+  "f1_score_at_recommended_threshold_0.644": 0.516129,
+  "accuracy_at_recommended_threshold_0.644": 0.958539,
+  "holdout_dataset_size": 5065,
+  "holdout_fraud_cases": 193,
+  "holdout_non_fraud_cases": 4872
+}
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > make_audit_findings.py
+[?2004l[?2004h> # Let's write the audit findings text programmatically to avoid syntax or JSON issues
+[?2004l[?2004h> with open('/output/audit_findings.txt', 'w') as f:
+[?2004l[?2004h>     f.write("AUDIT FINDINGS: FRAUD MODEL EVALUATION DRAFT REPORT\n")
+[?2004l[?2004h>     f.write("==================================================\n")
+[?2004l[?2004h>     f.write("Audited by: Senior AI Consultant / Lead Fraud Analyst\n")
+[?2004l[?2004h>     f.write("Date: May 27, 2026\n")
+[?2004l[?2004h>     f.write("Subject: Technical and Operational Audit of Draft Evaluation Report by Alex Chen (Junior Analyst)\n\n")
+[?2004l[?2004h>     f.write("This document contains detailed findings from our technical audit of the draft fraud model evaluation report. The audit revealed multiple critical errors, misleading claims, and major analytical gaps. Deploying the model under the draft's assumptions would have overwhelmed Fraud Operations and led to sub-optimal financial results.\n\n")
+[?2004l[?2004h>     f.write("Below are the 6 primary findings, including explanations of what is wrong, why it matters, and the corrected interpretations.\n\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("FINDING 1: Data Pipeline Failure (Out-of-Period Data and Duplicate Leakage)\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("* Claim in Draft:\n")
+[?2004l[?2004h>     f.write("  \"The XGBoost fraud detection model was evaluated against 5,650 held-out transactions.\"\n")
+[?2004l[?2004h>     f.write("* What is Wrong:\n")
+[?2004l[?2004h>     f.write("  The evaluation dataset export was not pre-processed or filtered. It contains 585 records from May (May 1 to May 11, 2026) which fall outside the designated scoring period of January 15 - April 30, 2026 specified in dataset_info.txt.\n")
+[?2004l[?2004h>     f.write("  Crucially, 500 of these 585 records are exact duplicates (by TransactionID) of transactions already present within the correct scoring period. The analyst failed to perform basic deduplication and date filtering.\n")
+[?2004l[?2004h>     f.write("* Why it Matters:\n")
+[?2004l[?2004h>     f.write("  Including duplicate and out-of-period records inflates the evaluation dataset size by 11.5% and distorts all performance metrics. When properly cleaned, the true holdout dataset contains exactly 5,065 unique transactions and 0 duplicates.\n\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("FINDING 2: Inflated and Incorrect Performance Metrics\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("* Claim in Draft:\n")
+[?2004l[?2004h>     f.write("  \"Accuracy: 88.3%\", \"AUC-ROC: 0.9182\", \"Confusion Matrix (threshold = 0.5): True Positives: 194, False Positives: 604, False Negatives: 57, True Negatives: 4,795\"\n")
+[?2004l[?2004h>     f.write("* What is Wrong:\n")
+[?2004l[?2004h>     f.write("  These metrics were computed on the raw, uncleaned dataset of 5,650 rows (which included duplicate/leaked rows). On the corrected scoring period dataset (5,065 unique rows), the performance metrics are lower:\n")
+[?2004l[?2004h>     f.write("  - Correct AUC-ROC: 0.905062 (reported as 0.9182, an inflation of ~0.013)\n")
+[?2004l[?2004h>     f.write("  - Correct Accuracy at 0.5: 88.0948% (reported as 88.30%)\n")
+[?2004l[?2004h>     f.write("  - Correct Confusion Matrix at 0.5:\n")
+[?2004l[?2004h>     f.write("    * True Positives (TP): 144 (reported as 194, an inflation of 50)\n")
+[?2004l[?2004h>     f.write("    * False Positives (FP): 554 (reported as 604, an inflation of 50)\n")
+[?2004l[?2004h>     f.write("    * False Negatives (FN): 49 (reported as 57)\n")
+[?2004l[?2004h>     f.write("    * True Negatives (TN): 4,318 (reported as 4,795)\n")
+[?2004l[?2004h>     f.write("* Why it Matters:\n")
+[?2004l[?2004h>     f.write("  The model's actual ranking performance (AUC-ROC) is 0.9051 rather than the inflated 0.9182. Furthermore, at a threshold of 0.5, the model detects 50 fewer true fraud cases (144 vs. 194) in the holdout set, meaning the detection capability was significantly overstated.\n\n")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' >> make_audit_findings.py
+[?2004l[?2004h> with open('/output/audit_findings.txt', 'a') as f:
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("FINDING 3: Contradictory Performance Claim and Missed Accuracy Target\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("* Claim in Draft:\n")
+[?2004l[?2004h>     f.write("  \"Based on the strong AUC of 0.9182 and accuracy of 88.3%, this model meets our performance targets and is recommended for production deployment.\"\n")
+[?2004l[?2004h>     f.write("  And in Methodology: \"Compared against deployment targets (AUC > 0.80, Accuracy > 95%)\"\n")
+[?2004l[?2004h>     f.write("* What is Wrong:\n")
+[?2004l[?2004h>     f.write("  The analyst recommends deployment claiming that the model \"meets our performance targets\". However, the model's reported accuracy is 88.3% (corrected to 88.09%), which is significantly BELOW the stated deployment target of Accuracy > 95%. The analyst made a flat-out contradictory claim, recommending deployment despite a clear target violation.\n")
+[?2004l[?2004h>     f.write("* Why it Matters:\n")
+[?2004l[?2004h>     f.write("  Recommending a model for deployment when it fails to meet its primary performance targets is a major oversight. It compromises risk management standards and indicates a lack of attention to detail.\n\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("FINDING 4: Misleading Metric Selection (The Accuracy Paradox)\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("* Claim in Draft:\n")
+[?2004l[?2004h>     f.write("  Focusing on \"Accuracy: 88.3%\" as a primary metric for model evaluation and justifying deployment based on it.\n")
+[?2004l[?2004h>     f.write("* What is Wrong:\n")
+[?2004l[?2004h>     f.write("  In highly imbalanced datasets like fraud detection, accuracy is an inappropriate and misleading metric. In the corrected dataset, there are 4,872 non-fraud transactions and only 193 fraud transactions. A useless \"predict-always-zero\" model would achieve an accuracy of 96.19% (which actually meets the 95% accuracy target).\n")
+[?2004l[?2004h>     f.write("  This fraud model has a lower accuracy (88.09%) at threshold 0.5 because it flags 554 false positives. The analyst failed to highlight this \"accuracy paradox\" or report class-imbalanced metrics such as Precision (20.6%), Recall (74.6%), or F1-Score (32.3%).\n")
+[?2004l[?2004h>     f.write("* Why it Matters:\n")
+[?2004l[?2004h>     f.write("  Relying on accuracy can lead to deploying models that are operationally unusable (due to high false positives) or rejecting high-value models because they appear to \"fail\" a naive accuracy threshold.\n\n")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' >> make_audit_findings.py
+[?2004l[?2004h> with open('/output/audit_findings.txt', 'a') as f:
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("FINDING 5: Omission of Operational Capacity Constraints\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("* Claim in Draft:\n")
+[?2004l[?2004h>     f.write("  Recommends deploying the model with a threshold of 0.5 \"as-is\" and claiming \"no further tuning is required\".\n")
+[?2004l[?2004h>     f.write("* What is Wrong:\n")
+[?2004l[?2004h>     f.write("  At a threshold of 0.5, the model flags 698 of 5,065 holdout transactions (13.78%). Extrapolated to our quarterly production volume of 2,800,000 transactions, this would generate 385,864 alerts per quarter, which translates to 4,287 alerts per day (assuming 90 days per quarter).\n")
+[?2004l[?2004h>     f.write("  However, the Fraud Operations team has a strict daily review capacity of only 1,500 alerts per day (12 analysts, 8-hour shifts). The draft recommendation completely ignores this operational reality.\n")
+[?2004l[?2004h>     f.write("* Why it Matters:\n")
+[?2004l[?2004h>     f.write("  Deploying the model at threshold 0.5 would generate 4,287 daily alerts, exceeding our team's capacity by 2.85x. This would overwhelm the operations team, cause massive backlogs, lead to severe analyst burnout, and leave thousands of fraud alerts unreviewed, creating a critical security gap.\n\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("FINDING 6: Absence of Financial Modeling and Threshold Optimization\n")
+[?2004l[?2004h>     f.write("--------------------------------------------------------------------------------\n")
+[?2004l[?2004h>     f.write("* Claim in Draft:\n")
+[?2004l[?2004h>     f.write("  \"No further tuning is required. ... recommended for production deployment.\"\n")
+[?2004l[?2004h>     f.write("* What is Wrong:\n")
+[?2004l[?2004h>     f.write("  The analyst failed to conduct any cost-benefit analysis or threshold optimization using the cost parameters provided by Finance ($4,200 loss per undetected fraud, $35 cost per manual investigation).\n")
+[?2004l[?2004h>     f.write("  They did not realize that threshold 0.5 is not only operationally impossible, but also financially sub-optimal.\n")
+[?2004l[?2004h>     f.write("* Why it Matters:\n")
+[?2004l[?2004h>     f.write("  Tuning the threshold is necessary to balance investigation costs and undetected fraud losses.\n")
+[?2004l[?2004h>     f.write("  - At threshold 0.5, the projected quarterly cost is $127.27M ($13.51M investigation + $113.77M fraud loss).\n")
+[?2004l[?2004h>     f.write("  - While an unconstrained cost-minimizing threshold exists at 0.29 (cost of $63.60M), it is operationally impossible as it generates 14,293 alerts/day.\n")
+[?2004l[?2004h>     f.write("  - By performing a constrained optimization, we can find a threshold that satisfies the daily review capacity of 1,500 alerts while minimizing cost. This occurs at t = 0.644, generating 1,480.3 alerts/day and minimizing the quarterly cost to $192.73M ($4.66M investigation + $188.07M fraud loss).\n")
+[?2004l[?2004h>     f.write("  This represents a net quarterly savings of $255.38M compared to doing nothing (baseline cost of $448.11M), while remaining fully within operational capacity.\n")
+[?2004l[?2004h> print("Successfully appended everything to make_audit_findings.py")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 make_audit_findings.py
+[?2004lSuccessfully appended everything to make_audit_findings.py
+[?2004hroot@831ed0f33a44:/workspace# head -n 20 /output/audit_findings.txt
+[?2004lAUDIT FINDINGS: FRAUD MODEL EVALUATION DRAFT REPORT
+==================================================
+Audited by: Senior AI Consultant / Lead Fraud Analyst
+Date: May 27, 2026
+Subject: Technical and Operational Audit of Draft Evaluation Report by Alex Chen (Junior Analyst)
+
+This document contains detailed findings from our technical audit of the draft fraud model evaluation report. The audit revealed multiple critical errors, misleading claims, and major analytical gaps. Deploying the model under the draft's assumptions would have overwhelmed Fraud Operations and led to sub-optimal financial results.
+
+Below are the 6 primary findings, including explanations of what is wrong, why it matters, and the corrected interpretations.
+
+--------------------------------------------------------------------------------
+FINDING 1: Data Pipeline Failure (Out-of-Period Data and Duplicate Leakage)
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  "The XGBoost fraud detection model was evaluated against 5,650 held-out transactions."
+* What is Wrong:
+  The evaluation dataset export was not pre-processed or filtered. It contains 585 records from May (May 1 to May 11, 2026) which fall outside the designated scoring period of January 15 - April 30, 2026 specified in dataset_info.txt.
+  Crucially, 500 of these 585 records are exact duplicates (by TransactionID) of transactions already present within the correct scoring period. The analyst failed to perform basic deduplication and date filtering.
+* Why it Matters:
+  Including duplicate and out-of-period records inflates the evaluation dataset size by 11.5% and distorts all performance metrics. When properly cleaned, the true holdout dataset contains exactly 5,065 unique transactions and 0 duplicates.
+[?2004hroot@831ed0f33a44:/workspace# tail -n 20 /output/audit_findings.txt
+[?2004l* What is Wrong:
+  At a threshold of 0.5, the model flags 698 of 5,065 holdout transactions (13.78%). Extrapolated to our quarterly production volume of 2,800,000 transactions, this would generate 385,864 alerts per quarter, which translates to 4,287 alerts per day (assuming 90 days per quarter).
+  However, the Fraud Operations team has a strict daily review capacity of only 1,500 alerts per day (12 analysts, 8-hour shifts). The draft recommendation completely ignores this operational reality.
+* Why it Matters:
+  Deploying the model at threshold 0.5 would generate 4,287 daily alerts, exceeding our team's capacity by 2.85x. This would overwhelm the operations team, cause massive backlogs, lead to severe analyst burnout, and leave thousands of fraud alerts unreviewed, creating a critical security gap.
+
+--------------------------------------------------------------------------------
+FINDING 6: Absence of Financial Modeling and Threshold Optimization
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  "No further tuning is required. ... recommended for production deployment."
+* What is Wrong:
+  The analyst failed to conduct any cost-benefit analysis or threshold optimization using the cost parameters provided by Finance ($4,200 loss per undetected fraud, $35 cost per manual investigation).
+  They did not realize that threshold 0.5 is not only operationally impossible, but also financially sub-optimal.
+* Why it Matters:
+  Tuning the threshold is necessary to balance investigation costs and undetected fraud losses.
+  - At threshold 0.5, the projected quarterly cost is $127.27M ($13.51M investigation + $113.77M fraud loss).
+  - While an unconstrained cost-minimizing threshold exists at 0.29 (cost of $63.60M), it is operationally impossible as it generates 14,293 alerts/day.
+  - By performing a constrained optimization, we can find a threshold that satisfies the daily review capacity of 1,500 alerts while minimizing cost. This occurs at t = 0.644, generating 1,480.3 alerts/day and minimizing the quarterly cost to $192.73M ($4.66M investigation + $188.07M fraud loss).
+  This represents a net quarterly savings of $255.38M compared to doing nothing (baseline cost of $448.11M), while remaining fully within operational capacity.
+[?2004hroot@831ed0f33a44:/workspace# cat << 'EOF' > make_recommendation.py
+[?2004l[?2004h> recommendation_text = """DEPLOYMENT RECOMMENDATION & OPERATIONAL ANALYSIS
+[?2004l[?2004h> ================================================
+[?2004l[?2004h> Prepared for: Fraud Operations Team & Quarterly Business Review
+[?2004l[?2004h> Prepared by: Lead Fraud Analyst / Senior AI Consultant
+[?2004l==[?2004h> Date: May 27, 2026
+[?2004l[?2004h> Subject: Deployment and Threshold Recommendation for XGBoost Fraud Detection Model
+[?2004l[?2004h> 
+[?2004l==========================
+NET SAVI[?2004h> EXECUTIVE SUMMARY
+[?2004l [?2004h> -----------------
+[?2004l[?2004h> Following a comprehensive audit of the junior analyst's draft report and rigorous financial modeling of the XGBoost fraud detection model (v4.2.1), we recommend DEPLOYING the model, but with a TUNED classification threshold of 0.644. 
+[?2004l[?2004h> 
+[?2004l[?2004h> Deploying the model as-is at the draft's proposed 0.5 threshold is strongly rejected due to severe operational overload. Rejecting the model entirely is also rejected as it would cost the business $448.11 million per quarter. Deploying the model at our recommended 0.644 threshold will generate a net quarterly savings of $255.38 million (a 57% cost reduction) compared to the baseline, while remaining strictly within the Fraud Operations team's review capacity.
+[?2004l[?2004h> 
+[?2004l[?2004h> --------------------------------------------------------------------------------
+[?2004lent review capacity of 1,500 alerts/day.
+* Operational Review[?2004h> 1. DEPLOYMENT DECISION: TUNED DEPLOYMENT
+[?2004l[?2004h> --------------------------------------------------------------------------------
+[?2004l[?2004h> * Decision: Deploy the XGBoost model ONLY after tuning the classification threshold to 0.644.
+[?2004l[?2004h> * Why not "As-is" (0.50 threshold)? 
+[?2004l[?2004h>   At a 0.50 threshold, the model would generate 4,287 alerts per day. This exceeds the review team's capacity of 1,500 alerts/day by 2.85x, making it operationally impossible and financially sub-optimal.
+[?2004l[?2004h> * Why not "Reject"? 
+[?2004l[?2004h>   Rejecting the model means relying on the current baseline (no model), resulting in a projected 106,693 undetected fraud cases per quarter, translating to $448.11 million in quarterly fraud losses. The model provides exceptional value that must be leveraged.
+[?2004l[?2004h> 
+[?2004lt[?2004h> --------------------------------------------------------------------------------
+[?2004l[?2004h> 2. RECOMMENDED THRESHOLD: 0.644
+[?2004l[?2004h> --------------------------------------------------------------------------------
+[?2004l[?2004h> We recommend a classification threshold of 0.644. 
+[?2004l[?2004h> * Why this specific threshold? 
+[?2004l[?2004h>   This is the mathematically optimal threshold that minimizes the company's total quarterly cost under the team's operational constraint of 1,500 reviews per day. 
+[?2004l[?2004h>   At 0.644, the model flags 241 transactions in the holdout evaluation set (a 4.758% alert rate). This generates exactly 1,480.3 alerts per day, which perfectly fills 98.7% of the team's daily capacity, ensuring maximum utilization without causing a backlog or analyst burnout.
+[?2004l[?2004h>   At this threshold, the model achieves:
+[?2004l[?2004h>   - Accuracy: 95.85% (exceeding the corporate target of > 95%)
+[?2004l[?2004h>   - Precision: 46.47% (meaning nearly 1 out of every 2 alerts represents real fraud, preventing analyst fatigue)
+[?2004l[?2004h>   - Recall: 58.03% (capturing 58% of all fraud cases)
+[?2004l[?2004h>   - F1-Score: 0.5161
+[?2004l[?2004h> 
+[?2004l[?2004h> --------------------------------------------------------------------------------
+[?2004l[?2004h> 3. EXPECTED FINANCIAL IMPACT (PER QUARTER)
+[?2004l[?2004h> --------------------------------------------------------------------------------
+[?2004l[?2004h> Based on the financial parameters ($4,200 loss per undetected fraud case, $35 cost per manual investigation) and a quarterly transaction volume of 2,800,000, here is the projected quarterly cost comparison:
+[?2004l[?2004h> 
+[?2004l[?2004h> Metric                       Baseline (No Model)    Tuned Model (t=0.644)    Proposed Draft (t=0.50)
+[?2004l[?2004h> ------------------------------------------------------------------------------------------------
+[?2004l[?2004h> Threshold                    N/A                    0.644                    0.500
+[?2004l[?2004h> Flagged/Alert Rate           0.0%                   4.758%                   13.781%
+[?2004l[?2004h> Quarterly Alerts             0                      133,228                  385,864
+[?2004l[?2004h> Daily Alerts (Avg)           0                      1,480.3                  4,287.4
+[?2004l[?2004h> ------------------------------------------------------------------------------------------------
+[?2004l[?2004h> Investigation Cost           $0.00                  $4,662,981.24            $13,505,231.98
+[?2004l[?2004h> Undetected Fraud Losses      $448,110,562.69        $188,067,118.73          $113,769,042.45
+[?2004l[?2004h> ================================================================================================
+[?2004l[?2004h> TOTAL QUARTERLY COST         $448,110,562.69        $192,730,099.97          $127,274,274.43
+[?2004l[?2004h> ================================================================================================
+[?2004l[?2004h> NET SAVINGS VS. BASELINE     N/A                    $255,380,462.72          $320,836,288.26
+[?2004l[?2004h> 
+[?2004l[?2004h> * Note on Draft's Financials: Although a 0.5 threshold appears to save more money on paper ($320.84M in savings), it is a fantasy. Because the daily alerts (4,287) far exceed capacity (1,500), 2,787 alerts would go unreviewed daily. This would cause undetected fraud to skyrocket, completely erasing those theoretical savings and creating operational chaos.
+[?2004l[?2004h> 
+[?2004l[?2004h> --------------------------------------------------------------------------------
+[?2004l[?2004h> 4. OPERATIONAL IMPACT & FEASIBILITY
+[?2004l[?2004h> --------------------------------------------------------------------------------
+[?2004l[?2004h> * Recommended Daily Workload: 1,480.3 alerts per day.
+[?2004l[?2004h> * Fits Within Capacity? YES. It fits tightly within our current review capacity of 1,500 alerts/day.
+[?2004l[?2004h> * Operational Review:
+[?2004l[?2004h>   - The current team consists of 12 analysts working 8-hour shifts (96 labor hours per day).
+[?2004l[?2004h>   - At 1,480.3 alerts per day, each analyst will handle an average of 123.4 alerts per 8-hour shift, or approximately 15.4 alerts per hour.
+[?2004l[?2004h>   - This allows an average of 3.89 minutes per investigation, which is highly feasible and aligns with industry standards for manual transaction review.
+[?2004l[?2004h>   - If the transaction volume fluctuates and exceeds 1,500 alerts on peak days, the team can temporarily queue low-risk alerts (probabilities close to the 0.644 threshold) or implement automated micro-rules.
+[?2004l[?2004h> 
+[?2004l[?2004h> CONCLUSION & NEXT STEPS
+[?2004l[?2004h> ------------------------
+[?2004l[?2004h> 1. Authorize deployment of the XGBoost v4.2.1 model to production immediately.
+[?2004l[?2004h> 2. Configure the production decision engine with a classification threshold of 0.644.
+[?2004l[?2004h> 3. Implement real-time monitoring of daily alert volumes and queue size to ensure they remain aligned with the 1,500/day capacity.
+[?2004l[?2004h> 4. Retrain the model on Q4 2025 and Q1 2026 data before the next Q3 review to improve recall and reduce false positives further.
+[?2004l[?2004h> """
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/output/recommendation.txt', 'w') as f:
+[?2004l[?2004h>     f.write(recommendation_text)
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Successfully created /output/recommendation.txt")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@831ed0f33a44:/workspace# python3 make_recommendation.py
+[?2004lSuccessfully created /output/recommendation.txt
+[?2004hroot@831ed0f33a44:/workspace# ls -la /output
+[?2004ltotal 28
+drwxr-xr-x 1 root root 4096 May 27 04:47 .
+drwxr-xr-x 1 root root 4096 May 27 04:44 ..
+-rw-r--r-- 1 root root 8034 May 27 04:46 audit_findings.txt
+-rw-r--r-- 1 root root  463 May 27 04:46 metrics.json
+-rw-r--r-- 1 root root 6304 May 27 04:47 recommendation.txt
+[?2004hroot@831ed0f33a44:/workspace# head -n 15 /output/recommendation.txt
+[?2004lDEPLOYMENT RECOMMENDATION & OPERATIONAL ANALYSIS
+================================================
+Prepared for: Fraud Operations Team & Quarterly Business Review
+Prepared by: Lead Fraud Analyst / Senior AI Consultant
+Date: May 27, 2026
+Subject: Deployment and Threshold Recommendation for XGBoost Fraud Detection Model
+
+EXECUTIVE SUMMARY
+-----------------
+Following a comprehensive audit of the junior analyst's draft report and rigorous financial modeling of the XGBoost fraud detection model (v4.2.1), we recommend DEPLOYING the model, but with a TUNED classification threshold of 0.644. 
+
+Deploying the model as-is at the draft's proposed 0.5 threshold is strongly rejected due to severe operational overload. Rejecting the model entirely is also rejected as it would cost the business $448.11 million per quarter. Deploying the model at our recommended 0.644 threshold will generate a net quarterly savings of $255.38 million (a 57% cost reduction) compared to the baseline, while remaining strictly within the Fraud Operations team's review capacity.
+
+--------------------------------------------------------------------------------
+1. DEPLOYMENT DECISION: TUNED DEPLOYMENT
+[?2004hroot@831ed0f33a44:/workspace# cat /output/metrics.json
+[?2004l{
+  "auc_roc": 0.905062,
+  "precision_at_0.5": 0.206304,
+  "recall_at_0.5": 0.746114,
+  "f1_score_at_0.5": 0.323232,
+  "accuracy_at_0.5": 0.880948,
+  "precision_at_recommended_threshold_0.644": 0.46473,
+  "recall_at_recommended_threshold_0.644": 0.580311,
+  "f1_score_at_recommended_threshold_0.644": 0.516129,
+  "accuracy_at_recommended_threshold_0.644": 0.958539,
+  "holdout_dataset_size": 5065,
+  "holdout_fraud_cases": 193,
+  "holdout_non_fraud_cases": 4872
+}[?2004hroot@831ed0f33a44:/workspace# 

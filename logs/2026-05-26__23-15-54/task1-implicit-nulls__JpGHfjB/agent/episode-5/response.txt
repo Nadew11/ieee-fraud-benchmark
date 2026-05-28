@@ -1,0 +1,14 @@
+{
+  "analysis": "Wait, the terminal state looks like it didn't execute properly. Let's send a Control-C to clear any pending prompt.",
+  "plan": "Send Ctrl-C and then run `ls -la /data /output`.",
+  "commands": [
+    {
+      "keystrokes": "C-c",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "ls -la /data /output\n",
+      "duration": 1.0
+    }
+  ]
+}

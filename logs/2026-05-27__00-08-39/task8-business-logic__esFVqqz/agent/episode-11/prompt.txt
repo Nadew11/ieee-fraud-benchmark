@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# python3 -c "import pandas as pd; df=pd.read_csv('/data/transactions.csv'); rm=pd.read_csv('/data/region_map.csv'); print(set(df.co
+untry_code.unique()) - set(rm.country_code.unique()))"
+{'JP'}
+root@b9e5a18b679d:/workspace#

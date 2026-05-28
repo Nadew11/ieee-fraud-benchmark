@@ -1,0 +1,14 @@
+{
+  "analysis": "Ah, the shell is probably stuck or waiting, or my keystrokes were not registered correctly. Let me send a Ctrl+C to clear the buffer, then try running a simple command.",
+  "plan": "Send Ctrl+C to reset the prompt.",
+  "commands": [
+    {
+      "keystrokes": "C-c",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "ls -la /logs/agent/\n",
+      "duration": 1.0
+    }
+  ]
+}

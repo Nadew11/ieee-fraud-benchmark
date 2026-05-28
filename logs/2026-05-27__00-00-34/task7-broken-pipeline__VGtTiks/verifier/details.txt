@@ -1,0 +1,9 @@
+=== Task 7 Verifier — Wed May 27 05:08:27 UTC 2026 ===
+PASS [1/5] auc.txt = 1.0000
+PASS [2/5] AUC 1.0000 ≥ 0.85 — pipeline correctly fixed
+PASS [3/5] bug_report.txt exists (2361 chars)
+PASS [4/5] Bug 1 (eval_metric=rmse) identified in report
+FAIL [5/5] Bug 3 (scaler leakage) found but Bug 2 (stratify) missed
+
+SCORE: 4/5 — reward: 0.0
+=== Final reward: 0.0 ===

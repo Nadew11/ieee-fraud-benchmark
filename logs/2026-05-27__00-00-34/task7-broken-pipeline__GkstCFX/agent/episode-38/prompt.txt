@@ -1,0 +1,66 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# cat << 'EOF' > /workspace/pipeline.py
+> #!/usr/bin/env python3
+> """
+> Fraud Detection Pipeline — Corrected v1.3
+> """
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+> import warnings
+> warnings.filterwarnings("ignore")
+>
+> # Load data
+> print("Loading data...")
+> df = pd.read_csv("/data/train_transaction.csv")
+> print(f"Shape: {df.shape}")
+>
+> # Features / target
+> TARGET = "isFraud"
+>
+> # Keep and encode categorical features instead of dropping them
+> cat_cols = ["ProductCD", "card4", "card6"]
+> for col in cat_cols:
+>     df[col] = df[col].astype("category")
+>
+> features = [c for c in df.columns if c not in ["TransactionID", TARGET]]
+>
+> X = df[features]
+> y = df[TARGET].values
+>
+> # Split into train and validation (using stratified split to preserve class ratio)
+> X_train, X_val, y_train, y_val = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+> print(f"Train: {len(X_train)}, Val: {len(X_val)}")
+> print(f"Val fraud rate: {y_val.mean():.4f}")
+>
+> # Train XGBoost with proper classification eval_metric and categorical support
+> model = xgb.XGBClassifier(
+>     objective="binary:logistic",
+>     eval_metric="auc",
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+>     enable_categorical=True,
+> )
+> model.fit(
+>     X_train, y_train,
+>     eval_set=[(X_val, y_val)],
+>     verbose=False,
+> )
+>
+> probs = model.predict_proba(X_val)[:, 1]
+> auc   = roc_auc_score(y_val, probs)
+> print(f"\nValidation AUC: {auc:.4f}")
+> EOF
+root@549b54a67146:/workspace# chmod +x /workspace/pipeline.py
+root@549b54a67146:/workspace#

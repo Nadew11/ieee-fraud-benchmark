@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 314 (char 315) | Content preview: '{\n  "analysis": "There are no files in `/output` yet. Let\'s think: is there a bug in how standard sc'...
+
+Please fix these issues and provide a proper JSON response.

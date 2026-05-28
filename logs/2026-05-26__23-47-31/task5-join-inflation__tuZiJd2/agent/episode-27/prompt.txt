@@ -1,0 +1,13 @@
+Current terminal state:
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# ls -la /workspace
+total 12
+drwxr-xr-x 1 root root 4096 May 27 04:50 .
+drwxr-xr-x 1 root root 4096 May 27 04:48 ..
+-rw-r--r-- 1 root root 1138 May 27 04:50 run_solution.py
+root@7e0b471406a5:/workspace# rm -f /workspace/run_solution.py
+root@7e0b471406a5:/workspace#
+
+
+Are you sure you want to mark the task as complete? This will trigger your solution to be graded and you won't be able to make any further corrections. If so, include "task_complete": true in your JSON response again.

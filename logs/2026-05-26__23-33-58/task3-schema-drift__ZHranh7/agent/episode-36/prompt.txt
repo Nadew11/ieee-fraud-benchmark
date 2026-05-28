@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# python3 -u forward_selection.py
+
+Step 1: Added id_31, Validation AUC = 0.552786
+

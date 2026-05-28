@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# find / -name "*.py" 2>/dev/null | grep -v "/usr" | grep -v "/lib" | grep -v "/setup"
+/etc/python3.13/sitecustomize.py
+root@cc7b6f7834c9:/workspace#

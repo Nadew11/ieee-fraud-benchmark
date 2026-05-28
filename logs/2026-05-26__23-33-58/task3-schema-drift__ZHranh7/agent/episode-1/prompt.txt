@@ -1,0 +1,41 @@
+New Terminal Output:
+root@16de4ef61b18:/workspace# ls -l /data
+total 1812
+-rw-r--r-- 1 root root  366823 May 27 03:24 test_identity.csv
+-rw-r--r-- 1 root root 1485026 May 27 03:24 train_identity.csv
+root@16de4ef61b18:/workspace# python3 -c "import pandas as pd; train = pd.read_csv('/data/train_identity.csv', nrows=5); print('Train shape preview:', train.sha
+pe); print(train.columns.tolist())"
+python3 -c "import pandas as pd; test = pd.read_csv('/data/test_identity.csv', nrows=5); print('Test shape preview:', test.shape); print(test.columns.tolist())"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

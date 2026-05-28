@@ -1,0 +1,11 @@
+New Terminal Output:
+
+python3 test_imports.py
+sklearn: available
+python3 test_imports.py
+openpyxl: available
+lightgbm: NOT available
+xgboost: available
+root@16de4ef61b18:/workspace#
+root@16de4ef61b18:/workspace# python3 test_imports.py
+

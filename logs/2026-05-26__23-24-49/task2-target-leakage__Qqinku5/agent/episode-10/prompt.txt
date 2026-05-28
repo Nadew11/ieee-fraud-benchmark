@@ -1,0 +1,21 @@
+New Terminal Output:
+
+root@bb21c86eed4d:/workspace# ls -la /workspace
+total 12
+drwxr-xr-x 1 root root 4096 May 27 04:26 .
+drwxr-xr-x 1 root root 4096 May 27 04:25 ..
+-rw-r--r-- 1 root root 1936 May 27 04:26 train.py
+root@bb21c86eed4d:/workspace# head -n 10 /output/predictions.csv
+TransactionID,fraud_prob
+3476394,9.335134e-05
+3053569,0.00010691998
+3353921,7.896926e-05
+3516024,0.00015909369
+3343874,7.896926e-05
+3261769,7.896926e-05
+2996543,8.180036e-05
+3173386,8.180036e-05
+3137644,8.180036e-05
+root@bb21c86eed4d:/workspace# cat /output/auc.txt
+1.000000
+root@bb21c86eed4d:/workspace#

@@ -1,0 +1,4 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# python3 pipeline_test.py
+

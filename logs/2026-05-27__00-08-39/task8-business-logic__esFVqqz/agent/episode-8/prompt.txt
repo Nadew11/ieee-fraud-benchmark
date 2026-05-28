@@ -1,0 +1,16 @@
+New Terminal Output:
+
+> "
+['GBP' 'ETB' 'NGN' 'EUR']
+2023-09-25 2024-01-05
+         date currency  rate_to_usd
+0  2023-09-25      GBP     1.212545
+1  2023-09-25      ETB     0.018022
+2  2023-09-25      NGN     0.001251
+3  2023-09-26      EUR     1.100633
+4  2023-09-26      GBP     1.264697
+root@b9e5a18b679d:/workspace# python3 -c "import pandas as pd; fx=pd.read_csv('/data/fx_rates.csv'); print(fx.currency.unique()); print(fx.date.min(), fx.date.m
+ax())"
+['GBP' 'ETB' 'NGN' 'EUR']
+2023-09-25 2024-01-05
+root@b9e5a18b679d:/workspace#

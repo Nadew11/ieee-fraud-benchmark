@@ -1,0 +1,41 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "
+> import pandas as pd, numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.preprocessing import StandardScaler
+> import xgboost as xgb
+> df = pd.read_csv('/data/train_transaction.csv')
+> features = [c for c in df.columns if c not in ['TransactionID', 'isFraud', 'ProductCD', 'card4', 'card6']]
+> X = df[features].fillna(-999).values
+> y = df['isFraud'].values
+> scaler = StandardScaler()
+> X = scaler.fit_transform(X)
+> X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+> model = xgb.XGBClassifier(objective='binary:logistic', eval_metric='rmse', n_estimators=300, max_depth=6, learning_rate=0.05, subsample=0.8, colsample_bytree=
+0.8, random_state=42, use_label_encoder=False, verbosity=0)
+> model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
+> importances = dict(zip(features, model.feature_importances_))
+> print('Feature importances:')
+> for k, v in sorted(importances.items(), key=lambda x: x[1], reverse=True):
+>     print(f'{k}: {v:.4f}')
+> "
+Feature importances:
+C1: 0.2556
+addr1: 0.1789
+C2: 0.1379
+card2: 0.0928
+V5: 0.0554
+C5: 0.0547
+C4: 0.0495
+card1: 0.0493
+dist1: 0.0438
+V1: 0.0370
+V2: 0.0311
+TransactionAmt: 0.0090
+V3: 0.0013
+V4: 0.0012
+TransactionDT: 0.0010
+C6: 0.0010
+C3: 0.0004
+root@549b54a67146:/workspace#

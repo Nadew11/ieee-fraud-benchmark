@@ -1,0 +1,38 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# cat << 'EOF' > analyze.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score, confusion_matrix, accuracy_score
+>
+> # Load dataset
+> df = pd.read_csv('/data/predictions.csv')
+> print(f"Dataset shape: {df.shape}")
+> print(f"Unique TransactionIDs: {df['TransactionID'].nunique()}")
+> print(f"Missing values:\n{df.isnull().sum()}")
+> print(f"y_true counts:\n{df['y_true'].value_counts()}")
+>
+> # Compute metrics at threshold 0.5
+> y_true = df['y_true']
+> y_pred_prob = df['y_pred_prob']
+> y_pred_05 = (y_pred_prob >= 0.5).astype(int)
+>
+> auc = roc_auc_score(y_true, y_pred_prob)
+> acc = accuracy_score(y_true, y_pred_05)
+> cm = confusion_matrix(y_true, y_pred_05)
+> tn, fp, fn, tp = cm.ravel()
+>
+> print(f"\nAt 0.5 threshold:")
+> print(f"AUC-ROC: {auc:.4f}")
+> print(f"Accuracy: {acc:.4f}")
+> print(f"Confusion Matrix:")
+> print(f"TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}")
+>
+> # Let's check duplicates of TransactionID
+> dup = df[df.duplicated(subset=['TransactionID'], keep=False)]
+> print(f"\nNumber of duplicate TransactionID rows: {len(dup)}")
+> if len(dup) > 0:
+>     print(dup.sort_values(by='TransactionID').head(10))
+> EOF
+root@831ed0f33a44:/workspace# python3 analyze.py
+

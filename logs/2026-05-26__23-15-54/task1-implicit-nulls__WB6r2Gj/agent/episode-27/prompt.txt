@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/setup/source_identity.csv'); print('-999 in id_01:', (df['id_01'] == -999.0).s
+um()); print('unknown in id_12:', (df['id_12'] == 'unknown').sum()); print('empty in id_15:', (df['id_15'] == '').sum())"
+-999 in id_01: 0
+unknown in id_12: 0
+empty in id_15: 0
+root@cc7b6f7834c9:/workspace#

@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/setup/source_identity.csv'); print(df[['id_01', 'id_12', 'id_15']].isna().sum(
+))"
+id_01      0
+id_12      0
+id_15    271
+dtype: int64
+root@cc7b6f7834c9:/workspace#

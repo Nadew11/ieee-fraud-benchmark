@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 70 (char 71) | Content preview: '{\n  "analysis": "There is only one file, `/data/train_transaction.csv`.\nWait, let\'s look at the feat'...
+
+Please fix these issues and provide a proper JSON response.

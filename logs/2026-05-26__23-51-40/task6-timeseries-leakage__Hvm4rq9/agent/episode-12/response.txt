@@ -1,0 +1,10 @@
+{
+  "analysis": "The script is running. It's importing from `run_baseline`, which means it re-runs the entire pipeline. Let's wait for it to complete.",
+  "plan": "Wait for `print_importance.py` execution to finish.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 5.0
+    }
+  ]
+}

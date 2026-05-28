@@ -1,0 +1,42 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# cat << 'EOF' > /workspace/clean_data.py
+> import os
+> import pandas as pd
+> import numpy as np
+>
+> # 1. Read dataset
+> df = pd.read_csv('/data/train_identity.csv')
+> print(f"Initial shape: {df.shape}")
+>
+> # 2. Remove duplicates on TransactionID (keep the first occurrence as duplicates were appended)
+> df = df.drop_duplicates(subset=['TransactionID'], keep='first')
+> print(f"After removing duplicates: {df.shape}")
+>
+> # 3. Clean up sentinel/implicit null values
+> # Replace -999.0 with NaN in id_01
+> df['id_01'] = df['id_01'].replace(-999.0, np.nan)
+>
+> # Replace 'unknown' with NaN in id_12
+> df['id_12'] = df['id_12'].replace('unknown', np.nan)
+>
+> # Replace empty string or whitespace with NaN in id_15
+> df['id_15'] = df['id_15'].replace('', np.nan)
+> # In case there are strings like ' ' or literal empty strings if read as string
+> df['id_15'] = df['id_15'].replace(r'^\s*$', np.nan, regex=True)
+>
+> # 4. Correct data types
+> # Ensure TransactionID is integer (int64)
+> df['TransactionID'] = df['TransactionID'].astype(np.int64)
+>
+> # Let's double check other dtypes
+> print("TransactionID dtype:", df['TransactionID'].dtype)
+>
+> # Ensure output directory exists
+> os.makedirs('/output', exist_ok=True)
+>
+> # Save the cleaned dataset
+> df.to_csv('/output/cleaned.csv', index=False)
+> print("Saved cleaned dataset to /output/cleaned.csv")
+> EOF
+root@666a44d996ad:/workspace#

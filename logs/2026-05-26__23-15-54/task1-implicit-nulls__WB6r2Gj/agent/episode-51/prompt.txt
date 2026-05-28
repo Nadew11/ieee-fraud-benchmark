@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 55 (char 56) | Content preview: '{\n  "analysis": "Wow, this is hilarious and super clear!\nThe generator printed:\n`[inject] id_01 sent'...
+
+Please fix these issues and provide a proper JSON response.

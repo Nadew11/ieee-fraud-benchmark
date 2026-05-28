@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 71 (char 72) | Content preview: '{\n  "analysis": "Wait, the counts are almost the exact same. In Q4 2023:\nisFraud=1, chargeback_rever'...
+
+Please fix these issues and provide a proper JSON response.

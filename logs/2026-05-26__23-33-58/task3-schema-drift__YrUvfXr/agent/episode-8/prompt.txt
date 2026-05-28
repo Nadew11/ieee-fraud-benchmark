@@ -1,0 +1,19 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# cat << 'EOF' > check_ids.py
+> import pandas as pd
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> print("Train transaction IDs duplicated:", train['TransactionID'].duplicated().sum())
+> print("Test transaction IDs duplicated:", test['TransactionID'].duplicated().sum())
+> print("Overlap between train and test transaction IDs:", len(set(train['TransactionID']).intersection(set(test['TransactionID']))))
+> print("Train TransactionID range:", train['TransactionID'].min(), "-", train['TransactionID'].max())
+> print("Test TransactionID range:", test['TransactionID'].min(), "-", test['TransactionID'].max())
+> EOF
+root@8b9ff8325d75:/workspace# python3 check_ids.py
+Train transaction IDs duplicated: 0
+Test transaction IDs duplicated: 0
+Overlap between train and test transaction IDs: 0
+Train TransactionID range: 2987004 - 3577486
+Test TransactionID range: 2987376 - 3577082
+root@8b9ff8325d75:/workspace#

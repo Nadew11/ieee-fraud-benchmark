@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 88 (char 89) | Content preview: '{\n  "analysis": "Aha! The number of original nulls in the sampled `id_15` is exactly 235!\nAnd look a'...
+
+Please fix these issues and provide a proper JSON response.

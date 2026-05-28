@@ -1,0 +1,35 @@
+{
+  "analysis": "The dataset has 30,000 entries.
+Columns:
+- `TransactionID` (30000 non-null)
+- `TransactionDT` (30000 non-null)
+- `isFraud` (30000 non-null, mean ~4.56%)
+- `TransactionAmt` (30000 non-null)
+- `card1` (30000 non-null, 14086 unique card1 values)
+- `ProductCD` (30000 non-null, categorical with 'C', 'W', 'S', 'H', 'R')
+- `addr1` (30000 non-null, 0 nulls, numerical/categorical)
+- `C1`, `C2` (30000 non-null, numerical)
+
+Let's understand feature engineering derived from historical transaction patterns:
+Requirement: 'Engineer at least one feature derived from historical transaction patterns.'
+Because `TransactionDT` represents time elapsed (seconds) and is sorted sequentially (let's verify if it's strictly increasing or sorted, but either way we can sort by `TransactionDT` before we compute history features), we can group by a client identifier such as `card1`, `addr1` or combinations, and compute:
+1. Cumulative count of transactions for the same `card1` up to the current transaction. Since the data is ordered by `TransactionDT`, we can compute a cumulative count: `df.groupby('card1').cumcount()` or `df.groupby('card1')['TransactionID'].cumcount()`.
+2. Time difference (delta) since the last transaction of the same `card1`: `df.groupby('card1')['TransactionDT'].diff()`. Fill NA with a default large value (e.g. -1 or a very large number, or the median).
+3. The rolling count or sum of transactions over a time window (e.g., number of transactions from the same `card1` in the last 24 hours/86400 seconds).
+4. Standard deviation or mean of transaction amounts for the same `card1` up to the current transaction (e.g., expanding mean of `TransactionAmt` grouped by `card1`).
+
+Let's verify if `TransactionDT` is sorted.",
+  "plan": "Check if `TransactionDT` is sorted, and see the distribution of transaction time spans.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"
+import pandas as pd
+df = pd.read_csv('/data/transactions.csv')
+print('Is sorted by TransactionDT:', df['TransactionDT'].is_monotonic_increasing)
+print('Min DT:', df['TransactionDT'].min(), 'Max DT:', df['TransactionDT'].max())
+print('Time span in days:', (df['TransactionDT'].max() - df['TransactionDT'].min()) / 86400)
+\"\n",
+      "duration": 1.0
+    }
+  ]
+}

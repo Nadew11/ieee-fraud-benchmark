@@ -1,0 +1,887 @@
+[?2004hroot@a7f99ad36897:/workspace# asciinema rec --stdin /logs/agent/recording.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent/recording.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+[?2004hroot@a7f99ad36897:/workspace# clear
+[?2004l[H[J[3J[?2004hroot@a7f99ad36897:/workspace# ls -la /data
+[?2004ltotal 240
+drwxr-xr-x 1 root root   4096 May 27 03:27 .
+drwxr-xr-x 1 root root   4096 May 27 04:44 ..
+-rw-rw-rw- 1 root root    483 May 26 21:58 cost_assumptions.txt
+-rw-rw-rw- 1 root root    640 May 26 22:48 dataset_info.txt
+-rw-rw-rw- 1 root root   1070 May 26 21:58 draft_evaluation.txt
+-rw-rw-rw- 1 root root 224175 May 26 22:50 predictions.csv
+[?2004hroot@a7f99ad36897:/workspace# cat /data/cost_assumptions.txt
+[?2004lFraud Operations - Cost Parameters (Q1 2026)
+
+Average loss per undetected fraud case:     $4,200
+Cost per manual investigation (per alert):  $35
+Daily review team capacity:                 1,500 alerts/day
+Quarterly transaction volume:               2,800,000
+
+Notes:
+  - Investigation cost includes analyst time ($28/hr avg) plus tooling overhead.
+  - Review capacity assumes current team of 12 analysts, 8-hour shifts.
+  - Parameters validated by Finance in Q4 2025 budget review.
+[?2004hroot@a7f99ad36897:/workspace# cat /data/dataset_info.txt
+[?2004lDataset: Fraud Detection Model - Holdout Evaluation Export
+Source: IEEE-CIS transaction scoring pipeline v4.2.1
+Export date: 2026-05-01
+
+Overall Statistics (as exported):
+  Columns: TransactionID, y_true, y_pred_prob, scored_at, batch_id
+  Model: XGBoost v2.0.3, trained on Q1-Q3 2025 data
+  Scoring period: January 15 - April 30, 2026
+
+Note: This export was generated from the raw scoring pipeline output
+and has not been pre-processed or filtered. The export contains all
+scored records from the evaluation period.
+
+Fraud labels (y_true) are finalized after chargeback window closure
+(45 days). Labels in this export are considered final.[?2004hroot@a7f99ad36897:/workspace# cat /data/draft_evaluation.txt
+[?2004lDRAFT - Model Performance Evaluation
+Prepared by: Alex Chen (Junior Data Analyst)
+Date: 2026-05-15
+Status: Pending review
+
+Executive Summary:
+The XGBoost fraud detection model was evaluated against 5,650 held-out
+transactions. The model demonstrates strong performance across key metrics.
+
+Performance Metrics:
+  Accuracy:  88.3%
+  AUC-ROC:   0.9182
+
+The model correctly classifies 88.3% of all transactions and achieves
+an AUC of 0.9182, which exceeds our deployment threshold of 0.80.
+
+Confusion Matrix (threshold = 0.5):
+  True Positives:      194
+  False Positives:     604
+  False Negatives:      57
+  True Negatives:    4,795
+
+Recommendation:
+Based on the strong AUC of 0.9182 and accuracy of 88.3%,
+this model meets our performance targets and is recommended for production
+deployment. No further tuning is required.
+
+Methodology:
+  - Loaded predictions export (5,650 rows)
+  - Computed AUC-ROC using sklearn.metrics.roc_auc_score
+  - Applied threshold of 0.5 for binary classification metrics
+  - Compared against deployment targets (AUC > 0.80, Accuracy > 95%)
+[?2004hroot@a7f99ad36897:/workspace# head -n 10 /data/predictions.csv
+[?2004lTransactionID,y_true,y_pred_prob,scored_at,batch_id
+3003574,0,0.1522,2026-03-25 10:00:00,17
+3004160,0,0.233,2026-03-26 11:00:00,21
+3000381,0,0.1753,2026-02-04 09:00:00,9
+3004334,0,0.399,2026-02-09 13:00:00,38
+3003844,0,0.573,2026-01-21 00:00:00,3
+3000167,0,0.4806,2026-02-04 15:00:00,21
+3000555,0,0.292,2026-02-27 03:00:00,17
+3003836,0,0.3948,2026-02-20 00:00:00,25
+3003700,0,0.4766,2026-01-31 22:00:00,40
+[?2004hroot@a7f99ad36897:/workspace# wc -l /data/predictions.csv
+[?2004l5651 /data/predictions.csv
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > analyze.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score, confusion_matrix, accuracy_score
+[?2004l[?2004h> 
+[?2004l[?2004h> df = pd.read_csv('/data/predictions.csv')
+[?2004l[?2004h> print("Shape:", df.shape)
+[?2004l[?2004h> print("Unique TransactionIDs:", df['TransactionID'].nunique())
+[?2004l[?2004h> print("Duplicated TransactionIDs:", df.duplicated(subset=['TransactionID']).sum())
+[?2004l[?2004h> print(df.head())
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 analyze.py
+[?2004lpython3 analyze.py
+python3 -c "print('Hello')"
+^CTraceback (most recent call last):
+  File "/workspace/analyze.py", line 3, in <module>
+    from sklearn.metrics import roc_auc_score, confusion_matrix, accuracy_score
+  File "/usr/local/lib/python3.11/site-packages/sklearn/__init__.py", line 87, in <module>
+    from .base import clone
+  File "/usr/local/lib/python3.11/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils import _IS_32BIT
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/__init__.py", line 22, in <module>
+    from ._estimator_html_repr import estimator_html_repr
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/_estimator_html_repr.py", line 10, in <module>
+    from .fixes import parse_version
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/fixes.py", line 17, in <module>
+    import scipy.stats
+  File "/usr/local/lib/python3.11/site-packages/scipy/stats/__init__.py", line 626, in <module>
+    from ._stats_py import *
+  File "/usr/local/lib/python3.11/site-packages/scipy/stats/_stats_py.py", line 42, in <module>
+    from scipy.optimize import milp, LinearConstraint
+  File "/usr/local/lib/python3.11/site-packages/scipy/optimize/__init__.py", line 424, in <module>
+    from ._root import *
+  File "/usr/local/lib/python3.11/site-packages/scipy/optimize/_root.py", line 17, in <module>
+    from . import _nonlin as nonlin
+  File "/usr/local/lib/python3.11/site-packages/scipy/optimize/_nonlin.py", line 19, in <module>
+    from difflib import get_close_matches
+  File "<frozen importlib._bootstrap>", line 1176, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1138, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 1078, in _find_spec
+  File "<frozen importlib._bootstrap_external>", line 1507, in find_spec
+  File "<frozen importlib._bootstrap_external>", line 1479, in _get_spec
+  File "<frozen importlib._bootstrap_external>", line 1648, in find_spec
+  File "<frozen importlib._bootstrap_external>", line 161, in _path_isfile
+  File "<frozen importlib._bootstrap_external>", line 153, in _path_is_mode_type
+  File "<frozen importlib._bootstrap_external>", line 147, in _path_stat
+KeyboardInterrupt
+
+[?2004hroot@a7f99ad36897:/workspace# echo 'Testing responsive terminal'
+[?2004lTesting responsive terminal
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > fast_analyze.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     print("Header:", header)
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Count rows, duplicates, unique IDs
+[?2004l[?2004h>     ids = []
+[?2004l[?2004h>     rows = []
+[?2004l[?2004h>     for r in reader:
+[?2004l[?2004h>         # r: TransactionID,y_true,y_pred_prob,scored_at,batch_id
+[?2004l[?2004h>         ids.append(r[0])
+[?2004l[?2004h>         rows.append(r)
+[?2004l[?2004h>         
+[?2004l[?2004h> print("Total rows:", len(rows))
+[?2004l[?2004h> print("Unique IDs:", len(set(ids)))
+[?2004l[?2004h> print("Duplicated IDs:", len(ids) - len(set(ids)))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 fast_analyze.py
+[?2004lHeader: ['TransactionID', 'y_true', 'y_pred_prob', 'scored_at', 'batch_id']
+Total rows: 5650
+Unique IDs: 5150
+Duplicated IDs: 500
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > fast_analyze.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> from collections import Counter
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [tuple(r) for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Total rows:", len(rows))
+[?2004l[?2004h> unique_rows = set(rows)
+[?2004l[?2004h> print("Unique rows:", len(unique_rows))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's see some duplicates
+[?2004l[?2004h> trans_counts = Counter([r[0] for r in rows])
+[?2004l[?2004h> dup_ids = [tid for tid, count in trans_counts.items() if count > 1]
+[?2004l[?2004h> print("Number of duplicate IDs:", len(dup_ids))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Look at some examples
+[?2004l[?2004h> print("Examples of duplicates:")
+[?2004l[?2004h> count = 0
+[?2004l[?2004h> for tid in dup_ids:
+[?2004l[?2004h>     matching = [r for r in rows if r[0] == tid]
+[?2004l[?2004h>     print(f"ID {tid}:")
+[?2004l[?2004h>     for m in matching:
+[?2004l[?2004h>         print("  ", m)
+[?2004l[?2004h>     count += 1
+[?2004l[?2004h>     if count >= 5:
+[?2004l[?2004h>         break
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 fast_analyze.py
+[?2004lTotal rows: 5650
+Unique rows: 5650
+Number of duplicate IDs: 500
+Examples of duplicates:
+ID 3003238:
+   ('3003238', '0', '0.2394', '2026-05-10 10:00:00', '35')
+   ('3003238', '0', '0.2507', '2026-04-21 17:00:00', '26')
+ID 3003352:
+   ('3003352', '0', '0.0891', '2026-03-06 19:00:00', '8')
+   ('3003352', '0', '0.1081', '2026-05-09 09:00:00', '38')
+ID 3003115:
+   ('3003115', '0', '0.3081', '2026-05-07 12:00:00', '35')
+   ('3003115', '0', '0.33', '2026-02-07 14:00:00', '5')
+ID 3002731:
+   ('3002731', '0', '0.0934', '2026-05-08 19:00:00', '31')
+   ('3002731', '0', '0.0732', '2026-04-19 12:00:00', '32')
+ID 3003013:
+   ('3003013', '0', '0.1566', '2026-05-10 01:00:00', '41')
+   ('3003013', '0', '0.1574', '2026-01-30 20:00:00', '25')
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > time_analyze.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> from datetime import datetime
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [r for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Header: ['TransactionID', 'y_true', 'y_pred_prob', 'scored_at', 'batch_id']
+[?2004l[?2004h> dates = [datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') for r in rows]
+[?2004l[?2004h> min_date = min(dates)
+[?2004l[?2004h> max_date = max(dates)
+[?2004l[?2004h> print(f"Overall date range: {min_date} to {max_date}")
+[?2004l[?2004h> 
+[?2004l[?2004h> out_of_bounds = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') > datetime(2026, 4, 30, 23, 59, 59)]
+[?2004l[?2004h> print(f"Number of rows with scored_at > 2026-04-30: {len(out_of_bounds)}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's see if all these out_of_bounds are duplicate TransactionIDs
+[?2004l[?2004h> # are they duplicate of some in-bound TransactionIDs?
+[?2004l[?2004h> out_of_bounds_ids = set([r[0] for r in out_of_bounds])
+[?2004l[?2004h> in_bound = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') <= datetime(2026, 4, 30, 23, 59, 59)]
+[?2004l[?2004h> in_bound_ids = set([r[0] for r in in_bound])
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Are out_of_bounds_ids in in_bound_ids?", out_of_bounds_ids.issubset(in_bound_ids))
+[?2004l[?2004h> print("Intersection size:", len(out_of_bounds_ids.intersection(in_bound_ids)))
+[?2004l[?2004h> print("Difference size (out of bounds but not in-bound):", len(out_of_bounds_ids - in_bound_ids))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 time_analyze.py
+[?2004lOverall date range: 2026-01-15 00:00:00 to 2026-05-11 15:00:00
+Number of rows with scored_at > 2026-04-30: 585
+Are out_of_bounds_ids in in_bound_ids? False
+Intersection size: 500
+Difference size (out of bounds but not in-bound): 85
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > detailed_time.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> from datetime import datetime
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [r for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Group by scored_at month or day
+[?2004l[?2004h> from collections import defaultdict
+[?2004l[?2004h> by_day = defaultdict(int)
+[?2004l[?2004h> for r in rows:
+[?2004l[?2004h>     dt = r[3].split()[0]  # YYYY-MM-DD
+[?2004l[?2004h>     by_day[dt] += 1
+[?2004l[?2004h> 
+[?2004l[?2004h> for d in sorted(by_day.keys()):
+[?2004l[?2004h>     print(f"{d}: {by_day[d]} rows")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 detailed_time.py
+[?2004l2026-01-15: 52 rows
+2026-01-16: 44 rows
+2026-01-17: 51 rows
+2026-01-18: 59 rows
+2026-01-19: 55 rows
+2026-01-20: 37 rows
+2026-01-21: 53 rows
+2026-01-22: 66 rows
+2026-01-23: 41 rows
+2026-01-24: 53 rows
+2026-01-25: 61 rows
+2026-01-26: 53 rows
+2026-01-27: 63 rows
+2026-01-28: 49 rows
+2026-01-29: 49 rows
+2026-01-30: 54 rows
+2026-01-31: 52 rows
+2026-02-01: 43 rows
+2026-02-02: 48 rows
+2026-02-03: 34 rows
+2026-02-04: 41 rows
+2026-02-05: 62 rows
+2026-02-06: 44 rows
+2026-02-07: 66 rows
+2026-02-08: 45 rows
+2026-02-09: 50 rows
+2026-02-10: 43 rows
+2026-02-11: 54 rows
+2026-02-12: 52 rows
+2026-02-13: 55 rows
+2026-02-14: 55 rows
+2026-02-15: 54 rows
+2026-02-16: 59 rows
+2026-02-17: 48 rows
+2026-02-18: 48 rows
+2026-02-19: 49 rows
+2026-02-20: 44 rows
+2026-02-21: 45 rows
+2026-02-22: 52 rows
+2026-02-23: 64 rows
+2026-02-24: 46 rows
+2026-02-25: 58 rows
+2026-02-26: 37 rows
+2026-02-27: 50 rows
+2026-02-28: 49 rows
+2026-03-01: 45 rows
+2026-03-02: 44 rows
+2026-03-03: 52 rows
+2026-03-04: 56 rows
+2026-03-05: 35 rows
+2026-03-06: 57 rows
+2026-03-07: 44 rows
+2026-03-08: 56 rows
+2026-03-09: 61 rows
+2026-03-10: 62 rows
+2026-03-11: 47 rows
+2026-03-12: 40 rows
+2026-03-13: 56 rows
+2026-03-14: 49 rows
+2026-03-15: 57 rows
+2026-03-16: 58 rows
+2026-03-17: 45 rows
+2026-03-18: 44 rows
+2026-03-19: 49 rows
+2026-03-20: 40 rows
+2026-03-21: 54 rows
+2026-03-22: 46 rows
+2026-03-23: 46 rows
+2026-03-24: 53 rows
+2026-03-25: 63 rows
+2026-03-26: 53 rows
+2026-03-27: 41 rows
+2026-03-28: 59 rows
+2026-03-29: 42 rows
+2026-03-30: 52 rows
+2026-03-31: 53 rows
+2026-04-01: 47 rows
+2026-04-02: 50 rows
+2026-04-03: 51 rows
+2026-04-04: 63 rows
+2026-04-05: 40 rows
+2026-04-06: 50 rows
+2026-04-07: 42 rows
+2026-04-08: 42 rows
+2026-04-09: 39 rows
+2026-04-10: 48 rows
+2026-04-11: 54 rows
+2026-04-12: 43 rows
+2026-04-13: 47 rows
+2026-04-14: 50 rows
+2026-04-15: 54 rows
+2026-04-16: 52 rows
+2026-04-17: 50 rows
+2026-04-18: 46 rows
+2026-04-19: 55 rows
+2026-04-20: 44 rows
+2026-04-21: 51 rows
+2026-04-22: 39 rows
+2026-04-23: 56 rows
+2026-04-24: 41 rows
+2026-04-29: 30 rows
+2026-04-30: 35 rows
+2026-05-01: 29 rows
+2026-05-02: 43 rows
+2026-05-03: 53 rows
+2026-05-04: 70 rows
+2026-05-05: 67 rows
+2026-05-06: 53 rows
+2026-05-07: 50 rows
+2026-05-08: 66 rows
+2026-05-09: 71 rows
+2026-05-10: 53 rows
+2026-05-11: 30 rows
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > dup_check.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> from datetime import datetime
+[?2004l[?2004h> from collections import defaultdict
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [r for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> by_id = defaultdict(list)
+[?2004l[?2004h> for r in rows:
+[?2004l[?2004h>     by_id[r[0]].append(r)
+[?2004l[?2004h> 
+[?2004l[?2004h> dup_info = []
+[?2004l[?2004h> for tid, records in by_id.items():
+[?2004l[?2004h>     if len(records) > 1:
+[?2004l[?2004h>         dup_info.append((tid, records))
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Total duplicates (by ID):", len(dup_info))
+[?2004l[?2004h> # Let's see if one of the records in duplicate is always in May
+[?2004l[?2004h> may_count = 0
+[?2004l[?2004h> both_in_period = 0
+[?2004l[?2004h> for tid, records in dup_info:
+[?2004l[?2004h>     dates = [datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') for r in records]
+[?2004l[?2004h>     has_may = any(d >= datetime(2026, 5, 1) for d in dates)
+[?2004l[?2004h>     all_period = all(d < datetime(2026, 5, 1) for d in dates)
+[?2004l[?2004h>     if has_may:
+[?2004l[?2004h>         may_count += 1
+[?2004l[?2004h>     if all_period:
+[?2004l[?2004h>         both_in_period += 1
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Duplicates with at least one record in May:", may_count)
+[?2004l[?2004h> print("Duplicates with both records in the scoring period (before May 1):", both_in_period)
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 dup_check.py
+[?2004lTotal duplicates (by ID): 500
+Duplicates with at least one record in May: 500
+Duplicates with both records in the scoring period (before May 1): 0
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > test_analyst.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [r for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Calculate confusion matrix for threshold = 0.5
+[?2004l[?2004h> tp, fp, fn, tn = 0, 0, 0, 0
+[?2004l[?2004h> for r in rows:
+[?2004l[?2004h>     y_true = int(r[1])
+[?2004l[?2004h>     y_prob = float(r[2])
+[?2004l[?2004h>     y_pred = 1 if y_prob >= 0.5 else 0
+[?2004l[?2004h>     if y_true == 1 and y_pred == 1:
+[?2004l[?2004h>         tp += 1
+[?2004l[?2004h>     elif y_true == 0 and y_pred == 1:
+[?2004l[?2004h>         fp += 1
+[?2004l[?2004h>     elif y_true == 1 and y_pred == 0:
+[?2004l[?2004h>         fn += 1
+[?2004l[?2004h>     elif y_true == 0 and y_pred == 0:
+[?2004l[?2004h>         tn += 1
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}")
+[?2004l[?2004h> print("Accuracy:", (tp + tn) / len(rows))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's import roc_auc_score to verify AUC on the full dataset
+[?2004l[?2004h> # Using standard sklearn
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> y_true_all = [int(r[1]) for r in rows]
+[?2004l[?2004h> y_prob_all = [float(r[2]) for r in rows]
+[?2004l[?2004h> print("AUC:", roc_auc_score(y_true_all, y_prob_all))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 test_analyst.py
+[?2004lTP: 194, FP: 604, FN: 57, TN: 4795
+Accuracy: 0.8830088495575221
+AUC: 0.918213421549955
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > filter_check.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> from datetime import datetime
+[?2004l[?2004h> from collections import Counter
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [r for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> filtered_rows = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') < datetime(2026, 5, 1)]
+[?2004l[?2004h> print("Filtered rows (scored before May 1):", len(filtered_rows))
+[?2004l[?2004h> 
+[?2004l[?2004h> tids = [r[0] for r in filtered_rows]
+[?2004l[?2004h> counts = Counter(tids)
+[?2004l[?2004h> dups = [tid for tid, count in counts.items() if count > 1]
+[?2004l[?2004h> print("Duplicates in filtered dataset:", len(dups))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's see basic counts for filtered dataset
+[?2004l[?2004h> tp, fp, fn, tn = 0, 0, 0, 0
+[?2004l[?2004h> for r in filtered_rows:
+[?2004l[?2004h>     y_true = int(r[1])
+[?2004l[?2004h>     y_prob = float(r[2])
+[?2004l[?2004h>     y_pred = 1 if y_prob >= 0.5 else 0
+[?2004l[?2004h>     if y_true == 1 and y_pred == 1:
+[?2004l[?2004h>         tp += 1
+[?2004l[?2004h>     elif y_true == 0 and y_pred == 1:
+[?2004l[?2004h>         fp += 1
+[?2004l[?2004h>     elif y_true == 1 and y_pred == 0:
+[?2004l[?2004h>         fn += 1
+[?2004l[?2004h>     elif y_true == 0 and y_pred == 0:
+[?2004l[?2004h>         tn += 1
+[?2004l[?2004h> 
+[?2004l[?2004h> print(f"Filtered TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}")
+[?2004l[?2004h> accuracy = (tp + tn) / len(filtered_rows)
+[?2004l[?2004h> print("Filtered Accuracy:", accuracy)
+[?2004l[?2004h> 
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> y_true_filt = [int(r[1]) for r in filtered_rows]
+[?2004l[?2004h> y_prob_filt = [float(r[2]) for r in filtered_rows]
+[?2004l[?2004h> print("Filtered AUC:", roc_auc_score(y_true_filt, y_prob_filt))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 filter_check.py
+[?2004lFiltered rows (scored before May 1): 5065
+Duplicates in filtered dataset: 0
+Filtered TP: 144, FP: 554, FN: 49, TN: 4318
+Filtered Accuracy: 0.8809476801579467
+Filtered AUC: 0.9050623420710073
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > optimize_threshold.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> from datetime import datetime
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [r for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Filter to scoring period: before May 1, 2026
+[?2004l[?2004h> filtered_rows = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') < datetime(2026, 5, 1)]
+[?2004l[?2004h> 
+[?2004l[?2004h> y_true = np.array([int(r[1]) for r in filtered_rows])
+[?2004l[?2004h> y_prob = np.array([float(r[2]) for r in filtered_rows])
+[?2004l[?2004h> 
+[?2004l[?2004h> N = len(filtered_rows)
+[?2004l[?2004h> num_pos = sum(y_true)
+[?2004l[?2004h> num_neg = N - num_pos
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Filtered dataset length:", N)
+[?2004l[?2004h> print("Positives:", num_pos)
+[?2004l[?2004h> print("Negatives:", num_neg)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Cost parameters
+[?2004l[?2004h> loss_per_fn = 4200.0
+[?2004l[?2004h> cost_per_alert = 35.0
+[?2004l[?2004h> capacity_daily = 1500.0
+[?2004l[?2004h> quarterly_volume = 2800000.0
+[?2004l[?2004h> 
+[?2004l[?2004h> daily_volume = quarterly_volume / 90.0
+[?2004l[?2004h> print(f"Daily transaction volume: {daily_volume:.2f}")
+[?2004l[?2004h> 
+[?2004l[?2004h> best_overall_cost = float('inf')
+[?2004l[?2004h> best_overall_t = None
+[?2004l[?2004h> best_overall_metrics = {}
+[?2004l[?2004h> 
+[?2004l[?2004h> best_feas_cost = float('inf')
+[?2004l[?2004h> best_feas_t = None
+[?2004l[?2004h> best_feas_metrics = {}
+[?2004l[?2004h> 
+[?2004l[?2004h> # Scan thresholds from 0 to 1
+[?2004l[?2004h> for t in np.linspace(0.0, 1.0, 1001):
+[?2004l[?2004h>     y_pred = (y_prob >= t).astype(int)
+[?2004l[?2004h>     tp = int(sum((y_true == 1) & (y_pred == 1)))
+[?2004l[?2004h>     fp = int(sum((y_true == 0) & (y_pred == 1)))
+[?2004l[?2004h>     fn = int(sum((y_true == 1) & (y_pred == 0)))
+[?2004l[?2004h>     tn = int(sum((y_true == 0) & (y_pred == 0)))
+[?2004l[?2004h>     
+[?2004l[?2004h>     tp_rate = tp / N
+[?2004l[?2004h>     fp_rate = fp / N
+[?2004l[?2004h>     fn_rate = fn / N
+[?2004l[?2004h>     tn_rate = tn / N
+[?2004l[?2004h>     
+[?2004l[?2004h>     tp_q = tp_rate * quarterly_volume
+[?2004l[?2004h>     fp_q = fp_rate * quarterly_volume
+[?2004l[?2004h>     fn_q = fn_rate * quarterly_volume
+[?2004l[?2004h>     tn_q = tn_rate * quarterly_volume
+[?2004l[?2004h>     
+[?2004l[?2004h>     alerts_q = tp_q + fp_q
+[?2004l[?2004h>     alerts_daily = alerts_q / 90.0
+[?2004l[?2004h>     
+[?2004l[?2004h>     cost_fn = fn_q * loss_per_fn
+[?2004l[?2004h>     cost_alert = alerts_q * cost_per_alert
+[?2004l[?2004h>     total_cost = cost_fn + cost_alert
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check overall
+[?2004l[?2004h>     if total_cost < best_overall_cost:
+[?2004l[?2004h>         best_overall_cost = total_cost
+[?2004l[?2004h>         best_overall_t = t
+[?2004l[?2004h>         best_overall_metrics = {
+[?2004l[?2004h>             'threshold': t,
+[?2004l[?2004h>             'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+[?2004l[?2004h>             'alerts_daily': alerts_daily,
+[?2004l[?2004h>             'total_cost': total_cost
+[?2004l[?2004h>         }
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Check feasible
+[?2004l[?2004h>     if alerts_daily <= capacity_daily:
+[?2004l[?2004h>         if total_cost < best_feas_cost:
+[?2004l[?2004h>             best_feas_cost = total_cost
+[?2004l[?2004h>             best_feas_t = t
+[?2004l[?2004h>             best_feas_metrics = {
+[?2004l[?2004h>                 'threshold': t,
+[?2004l[?2004h>                 'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+[?2004l[?2004h>                 'alerts_daily': alerts_daily,
+[?2004l[?2004h>                 'total_cost': total_cost
+[?2004l[?2004h>             }
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Unconstrained:")
+[?2004l[?2004h> print(best_overall_metrics)
+[?2004l[?2004h> print("Feasible:")
+[?2004l[?2004h> print(best_feas_metrics)
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 optimize_threshold.py
+[?2004lFiltered dataset length: 5065
+Positives: 193
+Negatives: 4872
+Daily transaction volume: 31111.11
+Unconstrained:
+{'threshold': 0.29, 'tp': 185, 'fp': 2142, 'fn': 8, 'tn': 2730, 'alerts_daily': 14293.298234068225, 'total_cost': 63598420.53307009}
+Feasible:
+{'threshold': 0.644, 'tp': 112, 'fp': 129, 'fn': 81, 'tn': 4743, 'alerts_daily': 1480.3115059778438, 'total_cost': 192730108.58835143}
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > evaluate_thresholds.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> from datetime import datetime
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [r for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Filter to scoring period: before May 1, 2026
+[?2004l[?2004h> filtered_rows = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') < datetime(2026, 5, 1)]
+[?2004l[?2004h> y_true = np.array([int(r[1]) for r in filtered_rows])
+[?2004l[?2004h> y_prob = np.array([float(r[2]) for r in filtered_rows])
+[?2004l[?2004h> 
+[?2004l[?2004h> N = len(filtered_rows)
+[?2004l[?2004h> loss_per_fn = 4200.0
+[?2004l[?2004h> cost_per_alert = 35.0
+[?2004l[?2004h> quarterly_volume = 2800000.0
+[?2004l[?2004h> 
+[?2004l[?2004h> def eval_t(t):
+[?2004l[?2004h>     if t == 1.0:
+[?2004l[?2004h>         y_pred = np.zeros_like(y_true)
+[?2004l[?2004h>     elif t == 0.0:
+[?2004l[?2004h>         y_pred = np.ones_like(y_true)
+[?2004l[?2004h>     else:
+[?2004l[?2004h>         y_pred = (y_prob >= t).astype(int)
+[?2004l[?2004h>     
+[?2004l[?2004h>     tp = int(sum((y_true == 1) & (y_pred == 1)))
+[?2004l[?2004h>     fp = int(sum((y_true == 0) & (y_pred == 1)))
+[?2004l[?2004h>     fn = int(sum((y_true == 1) & (y_pred == 0)))
+[?2004l[?2004h>     tn = int(sum((y_true == 0) & (y_pred == 0)))
+[?2004l[?2004h>     
+[?2004l[?2004h>     tp_rate = tp / N
+[?2004l[?2004h>     fp_rate = fp / N
+[?2004l[?2004h>     fn_rate = fn / N
+[?2004l[?2004h>     tn_rate = tn / N
+[?2004l[?2004h>     
+[?2004l[?2004h>     tp_q = tp_rate * quarterly_volume
+[?2004l[?2004h>     fp_q = fp_rate * quarterly_volume
+[?2004l[?2004h>     fn_q = fn_rate * quarterly_volume
+[?2004l[?2004h>     tn_q = tn_rate * quarterly_volume
+[?2004l[?2004h>     
+[?2004l[?2004h>     alerts_q = tp_q + fp_q
+[?2004l[?2004h>     alerts_daily = alerts_q / 90.0
+[?2004l[?2004h>     
+[?2004l[?2004h>     cost_fn = fn_q * loss_per_fn
+[?2004l[?2004h>     cost_alert = alerts_q * cost_per_alert
+[?2004l[?2004h>     total_cost = cost_fn + cost_alert
+[?2004l[?2004h>     
+[?2004l[?2004h>     return {
+[?2004l[?2004h>         'threshold': t,
+[?2004l[?2004h>         'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+[?2004l[?2004h>         'alerts_daily': alerts_daily,
+[?2004l[?2004h>         'cost_fn': cost_fn,
+[?2004l[?2004h>         'cost_alert': cost_alert,
+[?2004l[?2004h>         'total_cost': total_cost
+[?2004l[?2004h>     }
+[?2004l[?2004h> 
+[?2004l[?2004h> for t in [0.0, 0.1, 0.2, 0.29, 0.5, 0.6, 0.644, 0.7, 0.8, 0.9, 1.0]:
+[?2004l[?2004h>     res = eval_t(t)
+[?2004l[?2004h>     print(f"Threshold: {res['threshold']:.3f} | TP: {res['tp']}, FP: {res['fp']}, FN: {res['fn']}, TN: {res['tn']} | Daily Alerts: {res['alerts_daily']:.1f} | Cost FN: ${res['cost_fn']:,.2f} | Cost Alert: ${res['cost_alert']:,.2f} | Total: ${res['total_cost']:,.2f}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 evaluate_thresholds.py
+[?2004lThreshold: 0.000 | TP: 193, FP: 4872, FN: 0, TN: 0 | Daily Alerts: 31111.1 | Cost FN: $0.00 | Cost Alert: $98,000,000.00 | Total: $98,000,000.00
+Threshold: 0.100 | TP: 193, FP: 4190, FN: 0, TN: 682 | Daily Alerts: 26922.0 | Cost FN: $0.00 | Cost Alert: $84,804,343.53 | Total: $84,804,343.53
+Threshold: 0.200 | TP: 189, FP: 3171, FN: 4, TN: 1701 | Daily Alerts: 20638.4 | Cost FN: $9,287,265.55 | Cost Alert: $65,010,858.84 | Total: $74,298,124.38
+Threshold: 0.290 | TP: 185, FP: 2142, FN: 8, TN: 2730 | Daily Alerts: 14293.3 | Cost FN: $18,574,531.10 | Cost Alert: $45,023,889.44 | Total: $63,598,420.53
+Threshold: 0.500 | TP: 144, FP: 554, FN: 49, TN: 4318 | Daily Alerts: 4287.4 | Cost FN: $113,769,002.96 | Cost Alert: $13,505,231.98 | Total: $127,274,234.95
+Threshold: 0.600 | TP: 122, FP: 201, FN: 71, TN: 4671 | Daily Alerts: 1984.0 | Cost FN: $164,848,963.47 | Cost Alert: $6,249,555.77 | Total: $171,098,519.25
+Threshold: 0.644 | TP: 112, FP: 129, FN: 81, TN: 4743 | Daily Alerts: 1480.3 | Cost FN: $188,067,127.34 | Cost Alert: $4,662,981.24 | Total: $192,730,108.59
+Threshold: 0.700 | TP: 97, FP: 61, FN: 96, TN: 4811 | Daily Alerts: 970.5 | Cost FN: $222,894,373.15 | Cost Alert: $3,057,058.24 | Total: $225,951,431.39
+Threshold: 0.800 | TP: 57, FP: 14, FN: 136, TN: 4858 | Daily Alerts: 436.1 | Cost FN: $315,767,028.63 | Cost Alert: $1,373,741.36 | Total: $317,140,769.99
+Threshold: 0.900 | TP: 37, FP: 1, FN: 156, TN: 4871 | Daily Alerts: 233.4 | Cost FN: $362,203,356.37 | Cost Alert: $735,241.86 | Total: $362,938,598.22
+Threshold: 1.000 | TP: 0, FP: 0, FN: 193, TN: 4872 | Daily Alerts: 0.0 | Cost FN: $448,110,562.69 | Cost Alert: $0.00 | Total: $448,110,562.69
+[?2004hroot@a7f99ad36897:/workspace# mkdir -p /output
+[?2004l[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > make_json.py
+[?2004l[?2004h> import csv
+[?2004l[?2004h> from datetime import datetime
+[?2004l[?2004h> import json
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/data/predictions.csv', 'r') as f:
+[?2004l[?2004h>     reader = csv.reader(f)
+[?2004l[?2004h>     header = next(reader)
+[?2004l[?2004h>     rows = [r for r in reader]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Filter to scoring period
+[?2004l[?2004h> filtered_rows = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') < datetime(2026, 5, 1)]
+[?2004l[?2004h> y_true = [int(r[1]) for r in filtered_rows]
+[?2004l[?2004h> y_prob = [float(r[2]) for r in filtered_rows]
+[?2004l[?2004h> 
+[?2004l[?2004h> N = len(filtered_rows)
+[?2004l[?2004h> pos = sum(y_true)
+[?2004l[?2004h> neg = N - pos
+[?2004l[?2004h> 
+[?2004l[?2004h> auc_roc = roc_auc_score(y_true, y_prob)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Recommended threshold metrics
+[?2004l[?2004h> t_rec = 0.644
+[?2004l[?2004h> tp_rec = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 1 and yp >= t_rec)
+[?2004l[?2004h> fp_rec = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 0 and yp >= t_rec)
+[?2004l[?2004h> fn_rec = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 1 and yp < t_rec)
+[?2004l[?2004h> tn_rec = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 0 and yp < t_rec)
+[?2004l[?2004h> 
+[?2004l[?2004h> precision_rec = tp_rec / (tp_rec + fp_rec) if (tp_rec + fp_rec) > 0 else 0.0
+[?2004l[?2004h> recall_rec = tp_rec / (tp_rec + fn_rec) if (tp_rec + fn_rec) > 0 else 0.0
+[?2004l[?2004h> f1_rec = 2 * precision_rec * recall_rec / (precision_rec + recall_rec) if (precision_rec + recall_rec) > 0 else 0.0
+[?2004l[?2004h> accuracy_rec = (tp_rec + tn_rec) / N
+[?2004l[?2004h> 
+[?2004l[?2004h> # Analyst threshold (0.5) metrics
+[?2004l[?2004h> t_05 = 0.5
+[?2004l[?2004h> tp_05 = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 1 and yp >= t_05)
+[?2004l[?2004h> fp_05 = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 0 and yp >= t_05)
+[?2004l[?2004h> fn_05 = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 1 and yp < t_05)
+[?2004l[?2004h> tn_05 = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 0 and yp < t_05)
+[?2004l[?2004h> 
+[?2004l[?2004h> precision_05 = tp_05 / (tp_05 + fp_05) if (tp_05 + fp_05) > 0 else 0.0
+[?2004l[?2004h> recall_05 = tp_05 / (tp_05 + fn_05) if (tp_05 + fn_05) > 0 else 0.0
+[?2004l[?2004h> f1_05 = 2 * precision_05 * recall_05 / (precision_05 + recall_05) if (precision_05 + recall_05) > 0 else 0.0
+[?2004l[?2004h> accuracy_05 = (tp_05 + tn_05) / N
+[?2004l[?2004h> 
+[?2004l[?2004h> metrics = {
+[?2004l[?2004h>     "auc_roc": float(auc_roc),
+[?2004l[?2004h>     "unfiltered_auc_roc_reported_by_analyst": 0.918213421549955,
+[?2004l[?2004h>     
+[?2004l[?2004h>     "recommended_threshold": float(t_rec),
+[?2004l[?2004h>     "precision_at_recommended_threshold": float(precision_rec),
+[?2004l[?2004h>     "recall_at_recommended_threshold": float(recall_rec),
+[?2004l[?2004h>     "f1_score_at_recommended_threshold": float(f1_rec),
+[?2004l[?2004h>     "accuracy_at_recommended_threshold": float(accuracy_rec),
+[?2004l[?2004h>     
+[?2004l[?2004h>     "precision_at_analyst_threshold_0.5": float(precision_05),
+[?2004l[?2004h>     "recall_at_analyst_threshold_0.5": float(recall_05),
+[?2004l[?2004h>     "f1_score_at_analyst_threshold_0.5": float(f1_05),
+[?2004l[?2004h>     "accuracy_at_analyst_threshold_0.5": float(accuracy_05),
+[?2004l[?2004h>     
+[?2004l[?2004h>     "total_eval_samples": int(N),
+[?2004l[?2004h>     "total_eval_fraud_cases": int(pos),
+[?2004l[?2004h>     "fraud_rate_pct": float(pos / N * 100.0),
+[?2004l[?2004h>     
+[?2004l[?2004h>     "quarterly_loss_no_model": 448110562.68509376,
+[?2004l[?2004h>     "quarterly_loss_at_recommended_threshold": 192730108.58835143,
+[?2004l[?2004h>     "quarterly_savings_at_recommended_threshold": 448110562.68509376 - 192730108.58835143
+[?2004l[?2004h> }
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/output/metrics.json', 'w') as out_f:
+[?2004l[?2004h>     json.dump(metrics, out_f, indent=2)
+[?2004l[?2004h>     
+[?2004l[?2004h> print("Saved metrics.json successfully!")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 make_json.py
+[?2004lSaved metrics.json successfully!
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > make_audit.py
+[?2004l[?2004h> text = """AUDIT FINDINGS AND REPORT EVALUATION
+[?2004l[?2004h> =======================================
+[?2004l[?2004h> 
+[?2004l[?2004h> We have completed a comprehensive audit of the junior analyst's draft evaluation of the XGBoost fraud detection model (v4.2.1). Below, we outline four critical errors, misleading claims, and missing analyses in the draft report, explaining why each matters and how they must be corrected.
+[?2004l[?2004h> 
+[?2004l[?2004h> 1. Inclusion of Out-of-Bounds Data and Duplicate Records (Data Quality Issue)
+[?2004l[?2004h> ----------------------------------------------------------------------------
+[?2004l[?2004h> - Finding: The analyst used the raw predictions export of 5,650 records without any pre-processing, validation, or filtering. 
+[?2004l[?2004h> - Analysis: The official holdout scoring period was specified as January 15 - April 30, 2026. However, the predictions file contained 585 records scored between May 1 and May 11, 2026. Within these 585 records, 500 records were exact duplicates of TransactionIDs that had already been scored earlier (in the official scoring window), but they had different predictions, batch IDs, and timestamps. This indicates a major upstream scoring pipeline duplication bug. 
+[?2004l[?2004h> - Why it matters: This data spill and duplication artificially inflated the model's apparent performance. When evaluated on the entire 5,650 rows, the model achieved an AUC-ROC of 0.9182. However, when the out-of-bounds and duplicate May data are removed to restrict the analysis to the official evaluation window (5,065 unique records), the actual AUC-ROC is 0.9051. Relying on unvetted data led to overestimating the model's performance and masked a technical system issue that needs engineering attention.
+[?2004l[?2004h> 
+[?2004l[?2004h> 2. Conceptual Misunderstanding of Performance Metrics (Misleading Accuracy Claim)
+[?2004l[?2004h> -----------------------------------------------------------------------------------
+[?2004l[?2004h> - Finding: The analyst evaluated and praised the model's accuracy (reported as 88.3%). 
+[?2004l[?2004h> - Analysis: In fraud detection, the positive class is highly imbalanced. Within the corrected, official evaluation window, the actual fraud rate is only 3.81% (193 fraud cases out of 5,065 total transactions). A trivial baseline classifier that predicts 'no fraud' for every transaction would achieve an accuracy of 96.19%. The model's actual accuracy (88.1% on the corrected dataset) is worse than this baseline.
+[?2004l[?2004h> - Why it matters: Using accuracy as a key performance indicator in highly imbalanced datasets is a critical conceptual error. It gives a false sense of security. Additionally, the analyst's own stated target for accuracy was >95%. The model's accuracy of 88.3% failed to meet this target, yet the analyst still claimed that the model 'meets our performance targets' and recommended deployment. This is a clear contradiction.
+[?2004l[?2004h> 
+[?2004l[?2004h> 3. Disregard of Operational Capacity Constraints
+[?2004l[?2004h> -------------------------------------------------
+[?2004l[?2004h> - Finding: The analyst evaluated performance at a default threshold of 0.5 without checking operational feasibility.
+[?2004l[?2004h> - Analysis: At a 0.5 threshold on the corrected evaluation set, the alert rate is 13.78% (698 alerts flagged out of 5,065 transactions). When scaled to our quarterly volume of 2,800,000 transactions, this results in approximately 385,863 alerts per quarter, or 4,287.4 alerts per day. 
+[?2004l[?2004h> - Why it matters: Our manual investigation team has a hard daily capacity of 1,500 alerts (12 analysts working 8-hour shifts). Flagging 4,287.4 alerts per day exceeds our capacity by 185.8% (almost 3x). This would completely overwhelm the team, lead to massive backlogs, cause critical delays, and leave the majority of alerts unreviewed, rendering the model ineffective in production.
+[?2004l[?2004h> 
+[?2004l[?2004h> 4. Lack of Financial Cost-Benefit Analysis
+[?2004l[?2004h> ------------------------------------------
+[?2004l[?2004h> - Finding: The analyst failed to use the cost parameters provided by the fraud operations team to optimize the model's decision threshold.
+[?2004l[?2004h> - Analysis: The team has a high cost for undetected fraud ($4,200 per undetected case) and a cost of $35 per alert. A default threshold of 0.5 results in a quarterly cost of $127.27M. Doing nothing (no model) costs $448.11M per quarter in fraud losses.
+[?2004l[?2004h> - Why it matters: To maximize the business value, we must choose a threshold that minimizes the total cost of ownership (fraud losses + investigation costs) subject to operational capacity constraints. Failing to perform this optimization means leaving hundreds of millions of dollars of potential savings on the table.
+[?2004l[?2004h> """
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/output/audit_findings.txt', 'w') as f:
+[?2004l[?2004h>     f.write(text)
+[?2004l[?2004h> print("Saved audit_findings.txt successfully!")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 make_audit.py
+[?2004lSaved audit_findings.txt successfully!
+[?2004hroot@a7f99ad36897:/workspace# cat << 'EOF' > make_rec.py
+[?2004l[?2004h> text = """DEPLOYMENT RECOMMENDATION AND FINANCIAL ANALYSIS
+[?2004l[?2004h> ===============================================
+[?2004l2. Implement Dynamic Thresholdin[?2004h> 
+[?2004l[?2004h> To: Fraud Operations Team & Quarterly Review Board
+[?2004ltions capacity grows (e.g., if we h[?2004h> From: Lead AI Audit Assistant
+[?2004l[?2004h> Date: 2026-05-27
+[?2004l[?2004h> Subject: Deployment Recommendation for XGBoost Fraud Detection Model (v4.2.1)
+[?2004lthres[?2004h> 
+[?2004l[?2004h> Executive Recommendation
+[?2004l[?2004h> ------------------------
+[?2004ld [?2004h> We recommend that the XGBoost fraud detection model (v4.2.1) be DEPLOYED with a TUNED classification threshold of 0.644, rather than deployed as-is (with the analyst's default threshold of 0.5) or rejected. This recommendation is based on a rigorous cost-benefit optimization that balances the high cost of undetected fraud against the manual investigation capacity of our fraud operations team.
+[?2004l[?2004h> 
+[?2004l[?2004h> Recommended Classification Threshold
+[?2004l[?2004h> ------------------------------------
+[?2004l[?2004h> We recommend setting the decision threshold to exactly 0.644. 
+[?2004l[?2004h> 
+[?2004l[?2004h> Why this threshold?
+[?2004l[?2004h> - Operational Feasibility: Our manual investigation team of 12 analysts has a hard capacity limit of 1,500 alerts/day. At a threshold of 0.644, the model flags approximately 1,480.3 alerts per day. This represents a 98.7% capacity utilization rate, meaning the team can handle the volume without any additional headcount or backlog buildup.
+[?2004l[?2004h> - Cost-Benefit Optimization: Under the constraint that daily alerts must not exceed 1,500, a threshold of 0.644 is the mathematically optimal choice. It minimizes the total quarterly cost to $192.73M. Lower thresholds would generate a volume of alerts that our team cannot review, while higher thresholds would let too many high-loss fraud cases go undetected.
+[?2004l[?2004h> 
+[?2004l[?2004h> Expected Financial Impact (Per Quarter)
+[?2004l[?2004h> ---------------------------------------
+[?2004l[?2004h> Based on Finance-validated cost parameters ($4,200 loss per undetected fraud case, $35 cost per manual investigation) and our quarterly transaction volume of 2,800,000, we have modeled the financial outcomes for different operational scenarios:
+[?2004l[?2004h> 
+[?2004l[?2004h> 1. Baseline Scenario: No Model Deployed (Flag Nothing)
+[?2004l[?2004h>    - Description: All fraud cases pass through undetected. We incur no manual investigation costs but suffer full fraud losses.
+[?2004l[?2004h>    - Fraud Loss: $448,110,562.69
+[?2004l[?2004h>    - Investigation Cost: $0.00
+[?2004l[?2004h>    - Total Quarterly Cost: $448,110,562.69
+[?2004l[?2004h> 
+[?2004l[?2004h> 2. Feasible Deployment Scenario: Tuned Model (Threshold = 0.644)
+[?2004l[?2004h>    - Description: The model is deployed with the recommended threshold. Daily alerts are capped within team capacity.
+[?2004l[?2004h>    - Fraud Loss (Undetected Fraud): $188,067,127.34  (representing 44,778 undetected fraud cases)
+[?2004l[?2004h>    - Investigation Cost: $4,662,981.24  (representing 133,228 investigations)
+[?2004l[?2004h>    - Total Quarterly Cost: $192,730,108.59
+[?2004l[?2004h>    - Net Quarterly Savings vs. Baseline: $255,380,454.10
+[?2004l[?2004h> 
+[?2004l[?2004h> 3. Analyst Draft Scenario: Unfeasible Model (Threshold = 0.5)
+[?2004l[?2004h>    - Description: This is the default threshold recommended by the analyst. It is operationally impossible because it flags 4,287.4 alerts per day (285.8% of team capacity).
+[?2004l[?2004h>    - Fraud Loss (Undetected Fraud): $113,769,002.96
+[?2004l[?2004h>    - Investigation Cost: $13,505,231.98  (assuming all could be investigated)
+[?2004l[?2004h>    - Total Quarterly Cost: $127,274,234.95
+[?2004l[?2004h>    - Note: Because our team capacity is capped at 1,500 alerts/day, we would actually not be able to achieve these savings. The unreviewed alerts would overflow, leading to unmitigated fraud and a breakdown of fraud operations.
+[?2004l[?2004h> 
+[?2004l[?2004h> Daily Operational Volume and Capacity Fit
+[?2004l[?2004h> -----------------------------------------
+[?2004l[?2004h> At the recommended threshold of 0.644:
+[?2004l[?2004h> - Daily Transaction Volume: 31,111.11 transactions/day
+[?2004l[?2004h> - Daily Flagged Transactions (Alerts): 1,480.3 alerts/day (an alert rate of 4.76% of transactions)
+[?2004l[?2004h> - Capacity Capacity Margin: 19.7 alerts/day remaining before reaching the 1,500 limit.
+[?2004l[?2004h> - Capacity Status: FITS. No additional hiring or overtime is required. The team will operate at maximum efficiency, blocking a substantial amount of fraud while keeping the workload manageable.
+[?2004l[?2004h> 
+[?2004l[?2004h> Strategic Next Steps
+[?2004l[?2004h> --------------------
+[?2004l[?2004h> 1. Fix Upstream Scoring Pipeline: Prioritize an engineering ticket to investigate why 585 out-of-bounds records (including 500 duplicates) were included in the raw export. Ensure the scoring pipeline does not re-score or append duplicate records in production.
+[?2004l[?2004h> 2. Implement Dynamic Thresholding: As fraud operations capacity grows (e.g., if we hire more analysts) or if we implement automation tools that lower the cost of investigation below $35, we can lower the threshold (down towards 0.29) to capture more fraud and unlock additional millions of dollars in savings.
+[?2004l[?2004h> """
+[?2004l[?2004h> 
+[?2004l[?2004h> with open('/output/recommendation.txt', 'w') as f:
+[?2004l[?2004h>     f.write(text)
+[?2004l[?2004h> print("Saved recommendation.txt successfully!")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@a7f99ad36897:/workspace# python3 make_rec.py
+[?2004lSaved recommendation.txt successfully!
+[?2004hroot@a7f99ad36897:/workspace# ls -la /output
+[?2004ltotal 28
+drwxr-xr-x 1 root root 4096 May 27 04:46 .
+drwxr-xr-x 1 root root 4096 May 27 04:44 ..
+-rw-r--r-- 1 root root 4405 May 27 04:46 audit_findings.txt
+-rw-r--r-- 1 root root  889 May 27 04:46 metrics.json
+-rw-r--r-- 1 root root 4470 May 27 04:46 recommendation.txt
+[?2004hroot@a7f99ad36897:/workspace# cat /output/metrics.json
+[?2004l{
+  "auc_roc": 0.9050623420710073,
+  "unfiltered_auc_roc_reported_by_analyst": 0.918213421549955,
+  "recommended_threshold": 0.644,
+  "precision_at_recommended_threshold": 0.46473029045643155,
+  "recall_at_recommended_threshold": 0.5803108808290155,
+  "f1_score_at_recommended_threshold": 0.5161290322580645,
+  "accuracy_at_recommended_threshold": 0.9585389930898321,
+  "precision_at_analyst_threshold_0.5": 0.20630372492836677,
+  "recall_at_analyst_threshold_0.5": 0.7461139896373057,
+  "f1_score_at_analyst_threshold_0.5": 0.3232323232323232,
+  "accuracy_at_analyst_threshold_0.5": 0.8809476801579467,
+  "total_eval_samples": 5065,
+  "total_eval_fraud_cases": 193,
+  "fraud_rate_pct": 3.8104639684106614,
+  "quarterly_loss_no_model": 448110562.68509376,
+  "quarterly_loss_at_recommended_threshold": 192730108.58835143,
+  "quarterly_savings_at_recommended_threshold": 255380454.09674233
+}[?2004hroot@a7f99ad36897:/workspace# rm -f analyze.py fast_analyze.py time_analyze.py detailed_time.py dup_check.py test_analyst.py filter_check.py optimize_threshold.py evaluate_thresholds.py make_json.py make_audit.py make_rec.py
+[?2004l[?2004hroot@a7f99ad36897:/workspace# 

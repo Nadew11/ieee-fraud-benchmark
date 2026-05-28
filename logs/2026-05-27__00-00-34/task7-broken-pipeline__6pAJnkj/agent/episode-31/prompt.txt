@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "import pandas as pd, numpy as np, xgboost as xgb; from sklearn.metrics import roc_auc_score; from sklearn.preprocessin
+g import LabelEncoder; df = pd.read_csv('/data/train_transaction.csv').sort_values('TransactionDT').reset_index(drop=True); [df.__setitem__(col, LabelEncoder().
+fit_transform(df[col].astype(str))) for col in ['ProductCD', 'card4', 'card6']]; features = [c for c in df.columns if c not in ['TransactionID', 'isFraud', 'Tra
+nsactionDT']]; split_idx = int(len(df) * 0.8); train_df = df.iloc[:split_idx]; val_df = df.iloc[split_idx:]; X_train, y_train = train_df[features].values, train
+_df['isFraud'].values; X_val, y_val = val_df[features].values, val_df['isFraud'].values; model = xgb.XGBClassifier(objective='binary:logistic', eval_metric='auc
+', n_estimators=300, max_depth=6, learning_rate=0.05, subsample=0.8, colsample_bytree=0.8, random_state=42); model.fit(X_train, y_train); print('Chronological s
+plit AUC:', roc_auc_score(y_val, model.predict_proba(X_val)[:, 1]))"
+Chronological split AUC: 0.9999973945577523
+root@e9645eb65f5b:/workspace#

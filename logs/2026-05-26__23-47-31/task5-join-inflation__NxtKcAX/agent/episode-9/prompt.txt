@@ -1,0 +1,4 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# python3 -c "import pandas as pd; ident = pd.read_csv('/data/identity.csv'); print(ident['DeviceType'].dropna().unique())"
+

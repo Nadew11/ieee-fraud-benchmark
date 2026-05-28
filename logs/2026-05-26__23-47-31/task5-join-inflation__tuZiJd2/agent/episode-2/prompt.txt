@@ -1,0 +1,34 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# python3 -c "
+> import pandas as pd
+> tx = pd.read_csv('/data/transactions.csv')
+> id_df = pd.read_csv('/data/identity.csv')
+> print('Transactions shape:', tx.shape)
+> print('Identity shape:', id_df.shape)
+> print('isFraud distribution:\n', tx['isFraud'].value_counts())
+> print('DeviceType distribution:\n', id_df['DeviceType'].value_counts(dropna=False))
+> mrg = pd.merge(tx, id_df, on='TransactionID', how='left')
+> print('Merged fraud by DeviceType (including NaN):\n', mrg[mrg['isFraud'] == 1].groupby('DeviceType', dropna=False).agg(total_amt=('TransactionAmt', 'sum'), c
+ount=('TransactionAmt', 'count')))
+> "
+Transactions shape: (10000, 3)
+Identity shape: (2953, 6)
+isFraud distribution:
+ isFraud
+0    9649
+1     351
+Name: count, dtype: int64
+DeviceType distribution:
+ DeviceType
+desktop    1757
+mobile     1128
+NaN          68
+Name: count, dtype: int64
+Merged fraud by DeviceType (including NaN):
+             total_amt  count
+DeviceType
+desktop     11283.189    138
+mobile      10890.288     94
+NaN         29634.877    153
+root@7e0b471406a5:/workspace#

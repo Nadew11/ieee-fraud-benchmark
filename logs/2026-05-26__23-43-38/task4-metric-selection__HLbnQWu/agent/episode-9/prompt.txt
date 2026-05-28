@@ -1,0 +1,17 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# python3 analyze_period_metrics.py
+Corrected dataset size: 5065
+Corrected y_true counts:
+y_true
+0    4872
+1     193
+Name: count, dtype: int64
+Corrected AUC-ROC: 0.9051
+Corrected Accuracy: 0.8809
+Corrected Confusion Matrix (at threshold 0.5):
+TP: 144, FP: 554, FN: 49, TN: 4318
+Out of period records: 585
+Out of period unique IDs: 585
+Overlap of IDs between in-period and out-of-period: 500
+root@831ed0f33a44:/workspace#

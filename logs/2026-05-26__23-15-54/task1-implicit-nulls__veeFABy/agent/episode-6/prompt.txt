@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); ids_first = set(df.iloc[:10000]["TransactionID"]);
+ids_second = set(df.iloc[10000:]["TransactionID"]); print("Intersection size:", len(ids_first.intersection(ids_second))); print("Is every second ID in first?",
+ids_second.issubset(ids_first))'
+Intersection size: 500
+Is every second ID in first? True
+root@803b650a44b8:/workspace#

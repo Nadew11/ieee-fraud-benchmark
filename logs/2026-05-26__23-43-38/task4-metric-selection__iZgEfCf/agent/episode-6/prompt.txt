@@ -1,0 +1,56 @@
+New Terminal Output:
+
+python3 inspect_data.py
+Columns: ['TransactionID', 'y_true', 'y_pred_prob', 'scored_at', 'batch_id']
+Shape: (5650, 5)
+True class distribution:
+y_true
+0    5399
+1     251
+Name: count, dtype: int64
+TN: 4795, FP: 604, FN: 57, TP: 194
+Accuracy: 0.8830
+AUC-ROC: 0.9182
+Min date: 2026-01-15 00:00:00
+Max date: 2026-05-11 15:00:00
+Records outside January 15 - April 30, 2026: 585
+    TransactionID  y_true  y_pred_prob           scored_at  batch_id  y_pred
+9         9000108       0       0.0010 2026-05-02 16:00:00        99       0
+17        3003238       0       0.2394 2026-05-10 10:00:00        35       0
+23        3003115       0       0.3081 2026-05-07 12:00:00        35       0
+26        3002731       0       0.0934 2026-05-08 19:00:00        31       0
+32        3003013       0       0.1566 2026-05-10 01:00:00        41       0
+39        3002943       0       0.2440 2026-05-04 19:00:00        44       0
+47        3003368       0       0.3508 2026-05-11 04:00:00         7       0
+49        3001613       0       0.3893 2026-05-07 17:00:00        28       0
+52        3002603       0       0.2013 2026-05-05 04:00:00        30       0
+55        3004390       0       0.2768 2026-05-03 12:00:00        41       0
+root@58fc9c5bb0bf:/workspace# python3 inspect_data.py
+Columns: ['TransactionID', 'y_true', 'y_pred_prob', 'scored_at', 'batch_id']
+Shape: (5650, 5)
+True class distribution:
+y_true
+0    5399
+1     251
+Name: count, dtype: int64
+TN: 4795, FP: 604, FN: 57, TP: 194
+Accuracy: 0.8830
+AUC-ROC: 0.9182
+Min date: 2026-01-15 00:00:00
+Max date: 2026-05-11 15:00:00
+Records outside January 15 - April 30, 2026: 585
+    TransactionID  y_true  y_pred_prob           scored_at  batch_id  y_pred
+9         9000108       0       0.0010 2026-05-02 16:00:00        99       0
+17        3003238       0       0.2394 2026-05-10 10:00:00        35       0
+23        3003115       0       0.3081 2026-05-07 12:00:00        35       0
+26        3002731       0       0.0934 2026-05-08 19:00:00        31       0
+32        3003013       0       0.1566 2026-05-10 01:00:00        41       0
+39        3002943       0       0.2440 2026-05-04 19:00:00        44       0
+47        3003368       0       0.3508 2026-05-11 04:00:00         7       0
+49        3001613       0       0.3893 2026-05-07 17:00:00        28       0
+52        3002603       0       0.2013 2026-05-05 04:00:00        30       0
+55        3004390       0       0.2768 2026-05-03 12:00:00        41       0
+python3 -c "import pandas; print(pandas.__version__)"
+root@58fc9c5bb0bf:/workspace# python3 -c "import pandas; print(pandas.__version__)"
+2.1.4
+root@58fc9c5bb0bf:/workspace#

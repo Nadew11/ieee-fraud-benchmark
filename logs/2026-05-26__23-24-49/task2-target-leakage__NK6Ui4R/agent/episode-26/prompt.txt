@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# python3 tune_model.py
+lr=0.03, max_iter=100, max_leaf_nodes=31 -> AUC=0.898003
+

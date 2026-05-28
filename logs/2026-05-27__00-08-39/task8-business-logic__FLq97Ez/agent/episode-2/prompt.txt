@@ -1,0 +1,39 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# head -n 5 /data/fee_schedule.csv /data/region_map.csv /data/ground_truth.json
+==> /data/fee_schedule.csv <==
+merchant_category,fee_rate
+retail,0.025
+travel,0.03
+digital_goods,0.035
+gambling,0.045
+
+==> /data/region_map.csv <==
+country_code,region
+US,North America
+CA,North America
+ET,Africa
+DE,Europe
+
+==> /data/ground_truth.json <==
+{
+  "q4_net_fraud_total_usd": 26755.09,
+  "q4_gross_fraud_total_usd": 30212.56,
+  "total_processing_fees": 1021.58,
+  "total_recoveries": 2435.89,
+root@474ebd5bd0a4:/workspace# head -n 5 /data/fx_rates.csv /data/transactions.csv
+==> /data/fx_rates.csv <==
+date,currency,rate_to_usd
+2023-09-25,GBP,1.212545
+2023-09-25,ETB,0.018022
+2023-09-25,NGN,0.001251
+2023-09-26,EUR,1.100633
+
+==> /data/transactions.csv <==
+TransactionID,isFraud,TransactionAmt,ProductCD,card4,card6,addr1,addr2,transaction_date,timestamp,currency,country_code,merchant_category,settlement_status,tran
+saction_type
+3333560,0,41.0,W,mastercard,debit,126.0,87.0,2023-10-26,2023-10-26 18:04:13,USD,GB,crypto,settled,purchase
+3259516,0,76.95,W,mastercard,credit,441.0,87.0,2023-11-20,2023-11-20 03:48:44,USD,DE,crypto,settled,purchase
+3437864,0,68.5,W,visa,debit,251.0,87.0,2023-10-08,2023-10-08 09:30:18,USD,GB,travel,settled,purchase
+3350478,0,310.95,W,visa,debit,184.0,87.0,2023-11-20,2023-11-20 07:51:15,NGN,US,travel,declined,purchase
+root@474ebd5bd0a4:/workspace#

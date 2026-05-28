@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 34 (char 35) | Content preview: '{\n  "analysis": "Wow! Look at that!\nFor `round_both`:\n- `Gross` is exactly 30212.56! This is an EXAC'...
+
+Please fix these issues and provide a proper JSON response.

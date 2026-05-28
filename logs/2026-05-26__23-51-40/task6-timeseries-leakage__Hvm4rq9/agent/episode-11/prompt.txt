@@ -1,0 +1,8 @@
+New Terminal Output:
+
+Engineering historical features...
+Train shape: (24000, 21) Test shape: (6000, 21)
+Train fraud rate: 0.04608333333333333 Test fraud rate: 0.043666666666666666
+Train AUC: 0.87806
+Test AUC: 0.86054
+root@9da0ecea1a80:/workspace#

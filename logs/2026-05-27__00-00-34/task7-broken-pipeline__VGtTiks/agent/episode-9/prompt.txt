@@ -1,0 +1,19 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.corr()['isFraud'].sort_values())"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/frame.py", line 10704, in corr
+    mat = data.to_numpy(dtype=float, na_value=np.nan, copy=False)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/frame.py", line 1889, in to_numpy
+    result = self._mgr.as_array(dtype=dtype, copy=copy, na_value=na_value)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/internals/managers.py", line 1656, in as_array
+    arr = self._interleave(dtype=dtype, na_value=na_value)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/pandas/core/internals/managers.py", line 1715, in _interleave
+    result[rl.indexer] = arr
+    ~~~~~~^^^^^^^^^^^^
+ValueError: could not convert string to float: 'W'
+root@0d5e255b62ea:/workspace#

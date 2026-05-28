@@ -1,0 +1,69 @@
+New Terminal Output:
+
+C2 unique values count: 7
+root@9da0ecea1a80:/workspace# cat << 'EOF' > run_hist_gb.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> from sklearn.ensemble import HistGradientBoostingClassifier
+>
+> # Load and sort
+> df = pd.read_csv('/data/transactions.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> # --- Feature Engineering ---
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+> df['day_of_week'] = (df['TransactionDT'] // 86400) % 7
+>
+> # Historical features
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(999999999)
+> df['card1_cum_amt_mean'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(0)
+> df['card1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_cum_amt_mean'] + 1e-5)
+>
+> df['card1_addr1'] = df['card1'].astype(str) + '_' + df['addr1'].astype(str)
+> df['card1_addr1_cum_count'] = df.groupby('card1_addr1').cumcount()
+> df['card1_addr1_time_diff'] = df.groupby('card1_addr1')['TransactionDT'].diff().fillna(999999999)
+> df['card1_addr1_cum_amt_mean'] = df.groupby('card1_addr1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(0)
+> df['card1_addr1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_addr1_cum_amt_mean'] + 1e-5)
+>
+> df['card1_freq'] = df.groupby('card1')['TransactionDT'].transform('count')
+> df['addr1_freq'] = df.groupby('addr1')['TransactionDT'].transform('count')
+>
+> # ProductCD - let's treat it as categorical directly for HistGradientBoosting!
+> # We can convert ProductCD to category type
+> df['ProductCD'] = df['ProductCD'].astype('category')
+>
+> features_to_drop = ['TransactionID', 'TransactionDT', 'isFraud', 'card1_addr1']
+> features = [c for c in df.columns if c not in features_to_drop]
+>
+> # Split
+> split_idx = int(len(df) * 0.8)
+> train_df = df.iloc[:split_idx]
+> test_df = df.iloc[split_idx:]
+>
+> X_train, y_train = train_df[features], train_df['isFraud']
+> X_test, y_test = test_df[features], test_df['isFraud']
+>
+> categorical_features = ['ProductCD']
+>
+> for max_depth in [3, 4, 5, 6]:
+>     for lr in [0.01, 0.03, 0.05]:
+>         model = HistGradientBoostingClassifier(
+>             max_depth=max_depth,
+>             learning_rate=lr,
+>             max_iter=150,
+>             categorical_features=categorical_features,
+>             random_state=42
+>         )
+>         model.fit(X_train, y_train)
+>
+>         preds_train = model.predict_proba(X_train)[:, 1]
+>         preds_test = model.predict_proba(X_test)[:, 1]
+>
+>         auc_train = roc_auc_score(y_train, preds_train)
+>         auc_test = roc_auc_score(y_test, preds_test)
+>         print(f"depth={max_depth}, lr={lr} -> Train AUC: {auc_train:.5f}, Test AUC: {auc_test:.5f}")
+> EOF
+root@9da0ecea1a80:/workspace# python3 run_hist_gb.py
+

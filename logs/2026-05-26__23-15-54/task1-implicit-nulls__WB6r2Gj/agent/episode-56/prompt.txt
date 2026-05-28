@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_identity.csv', keep_default_na=False); print(df['id_15'].unique())"
+['Found' '' 'New' 'Unknown']
+root@cc7b6f7834c9:/workspace#

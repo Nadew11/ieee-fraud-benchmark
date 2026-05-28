@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; orig = pd.read_csv('/setup/source_identity.csv'); train = pd.read_csv('/data/train_identity.csv')
+; diff = [];
+> for col in orig.columns:
+>     if orig[col].dtype != train[col].dtype:
+>         diff.append((col, orig[col].dtype, train[col].dtype))
+> print(diff)"
+[('TransactionID', dtype('int64'), dtype('float64'))]
+root@cc7b6f7834c9:/workspace#

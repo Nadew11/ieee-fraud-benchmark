@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's wait for the script to finish running or run it again if it hasn't printed anything yet.",
+  "plan": "Wait or check if output is still generating.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

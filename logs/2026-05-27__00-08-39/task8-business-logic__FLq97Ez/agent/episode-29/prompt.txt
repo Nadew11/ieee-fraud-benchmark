@@ -1,0 +1,77 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > test_regional.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+> regions = pd.read_csv('/data/region_map.csv')
+>
+> # Convert dates
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> # Build FX rates lookup
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = (df['TransactionAmt'] * df['fx_rate']).round(2)
+>
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee_usd'] = (df['amount_usd'] * df['fee_rate']).round(2)
+>
+> region_dict = regions.set_index('country_code')['region'].to_dict()
+> df['region'] = df['country_code'].map(region_dict).fillna('Other')
+>
+> # Drop duplicates on TransactionID keeping 'first'
+> df_dedup = df.drop_duplicates(subset=['TransactionID'], keep='first')
+>
+> # Q4 subset and not declined
+> df_q4 = df_dedup[(df_dedup['transaction_date'] >= '2023-10-01') & (df_dedup['transaction_date'] <= '2023-12-31')]
+> df_q4 = df_q4[df_q4['settlement_status'] != 'declined']
+>
+> # Let's filter fraud transactions in Q4
+> purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')]
+> refunds = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'refund')]
+>
+> # Group by region
+> reg_gross = purchases.groupby('region')['amount_usd'].sum().reset_index(name='gross_fraud_usd')
+> reg_fees = purchases.groupby('region')['processing_fee_usd'].sum().reset_index(name='processing_fees')
+> reg_count = purchases.groupby('region').size().reset_index(name='q4_fraud_count')
+> reg_avg = purchases.groupby('region')['amount_usd'].mean().reset_index(name='q4_avg_ticket_usd')
+> reg_recoveries = refunds.groupby('region')['amount_usd'].sum().reset_index(name='recoveries_usd')
+>
+> # Merge regional summary
+> all_regions = ['Africa', 'Europe', 'North America', 'Other']
+> reg_df = pd.DataFrame(all_regions, columns=['region'])
+> reg_df = reg_df.merge(reg_gross, on='region', how='left') \
+>                .merge(reg_recoveries, on='region', how='left') \
+>                .merge(reg_fees, on='region', how='left') \
+>                .merge(reg_count, on='region', how='left') \
+>                .merge(reg_avg, on='region', how='left')
+>
+> reg_df = reg_df.fillna(0)
+> reg_df['q4_net_fraud_usd'] = reg_df['gross_fraud_usd'] - reg_df['recoveries_usd'] - reg_df['processing_fees']
+>
+> total_net_fraud = reg_df['q4_net_fraud_usd'].sum()
+> reg_df['pct_of_total'] = reg_df['q4_net_fraud_usd'] / total_net_fraud
+>
+> print(reg_df[['region', 'q4_net_fraud_usd', 'q4_fraud_count', 'q4_avg_ticket_usd', 'pct_of_total']])
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 test_regional.py
+          region  q4_net_fraud_usd  q4_fraud_count  q4_avg_ticket_usd  pct_of_total
+0         Africa           4435.12              49         108.101837      0.165767
+1         Europe           8065.63              88         105.271932      0.301462
+2  North America          11971.48             106         122.200943      0.447447
+3          Other           2282.86              20         134.917000      0.085324
+root@474ebd5bd0a4:/workspace#

@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# ls -la
+total 8
+drwxr-xr-x 2 root root 4096 May 26 02:54 .
+drwxr-xr-x 1 root root 4096 May 27 04:17 ..
+root@666a44d996ad:/workspace# find / -name "*fraud*" -o -name "*identity*" 2>/dev/null
+

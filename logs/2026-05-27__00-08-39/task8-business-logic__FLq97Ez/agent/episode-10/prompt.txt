@@ -1,0 +1,56 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > test_fx.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+> regions = pd.read_csv('/data/region_map.csv')
+>
+> # Dates to datetime
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> # Build the FX rate dictionary
+> # For each currency, we want a complete date index from fx['date'].min() to max transaction_date
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {}
+> # For USD, rate is always 1.0
+> fx_lookup['USD'] = pd.Series(1.0, index=all_dates)
+>
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd']
+>     # Reindex to all_dates, ffill
+>     # Note: we must sort index to ffill properly
+>     cur_rates = cur_rates.sort_index()
+>     # We reindex to all_dates
+>     cur_rates_reindexed = cur_rates.reindex(all_dates)
+>     # ffill
+>     cur_rates_ffilled = cur_rates_reindexed.ffill()
+>     fx_lookup[cur] = cur_rates_ffilled
+>
+> # Add rate column to transactions
+> def get_rate(row):
+>     curr = row['currency']
+>     dt = row['transaction_date']
+>     return fx_lookup[curr].loc[dt]
+>
+> df['fx_rate'] = df.apply(get_rate, axis=1)
+> df['amount_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> print("Done fx rate mapping. Checking some NGN rates:")
+> print(df[df['currency'] == 'NGN'][['transaction_date', 'currency', 'TransactionAmt', 'fx_rate', 'amount_usd']].head())
+> EOF
+root@474ebd5bd0a4:/workspace# python3 test_fx.py
+Done fx rate mapping. Checking some NGN rates:
+   transaction_date currency  TransactionAmt   fx_rate  amount_usd
+3        2023-11-20      NGN         310.950  0.001276    0.396772
+10       2023-10-30      NGN         107.950  0.001221    0.131807
+20       2023-11-15      NGN         112.869  0.001236    0.139506
+23       2023-10-11      NGN         141.000  0.001268    0.178788
+52       2023-12-30      NGN         226.000  0.001275    0.288150
+root@474ebd5bd0a4:/workspace#

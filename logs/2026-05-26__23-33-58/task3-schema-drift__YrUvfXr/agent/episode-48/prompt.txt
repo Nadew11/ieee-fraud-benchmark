@@ -1,0 +1,50 @@
+Previous response had warnings:
+WARNINGS: - Extra text detected after JSON object
+
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# python3 inspect_excel.py
+Sheet names: ['Predictions', 'Data Quality Report']
+--- Data Quality Report ---
+Row 1 values: ['total_train_rows', 8000, None]
+Row 1 types: [<class 'str'>, <class 'int'>, <class 'NoneType'>]
+Row 2 values: ['total_test_rows', 2000, None]
+Row 2 types: [<class 'str'>, <class 'int'>, <class 'NoneType'>]
+Row 3 values: ['shared_feature_count', 41, None]
+Row 3 types: [<class 'str'>, <class 'int'>, <class 'NoneType'>]
+Row 4 values: ['model_auc_on_train_holdout', 0.5653604001176816, None]
+Row 4 types: [<class 'str'>, <class 'float'>, <class 'NoneType'>]
+Row 5 values: [None, None, None]
+Row 5 types: [<class 'NoneType'>, <class 'NoneType'>, <class 'NoneType'>]
+Row 6 values: ['issue_number', 'description', 'resolution']
+Row 6 types: [<class 'str'>, <class 'str'>, <class 'str'>]
+Row 7 values: [1, 'The feature naming convention differed between datasets. Training features used underscores (e.g., id_01 to id_38), while test features used
+hyphens (e.g., id-01 to id-38).', 'Standardized the column names of the test dataset by replacing all hyphens with underscores, matching the training schema exa
+ctly.']
+Row 7 types: [<class 'int'>, <class 'str'>, <class 'str'>]
+Row 8 values: [2, 'Highly sparse features exist in both datasets, with some identity columns (e.g., id_07, id_08, id_21 to id_27) containing over 95% missing va
+lues.', "Selected the most robust features ('id_05', 'id_37', 'DeviceType') and used Median Imputation for numeric and Ordinal Encoding for categorical features
+ to prevent model overfitting."]
+Row 8 types: [<class 'int'>, <class 'str'>, <class 'str'>]
+Row 9 values: [3, 'High risk of severe overfitting on training set due to high dimensionality (40 features) relative to a small number of positive fraud cases (
+274 positives).', 'Trained a simple, highly regularized Logistic Regression classifier (C=0.1) on the selected subset of robust features, achieving a holdout AU
+C of 0.5654 and avoiding overfitting.']
+Row 9 types: [<class 'int'>, <class 'str'>, <class 'str'>]
+Row 10 values: [4, 'Unseen categorical levels or novel values exist in categorical features (e.g., id_30, id_31, id_33) in the test set compared to the training
+ set.', "Used robust categorical conversion (pandas category codes / OrdinalEncoder with handle_unknown='use_encoded_value') to map any unseen test categories t
+o a default category or indicator value."]
+Row 10 types: [<class 'int'>, <class 'str'>, <class 'str'>]
+Row 11 values: [None, None, None]
+Row 11 types: [<class 'NoneType'>, <class 'NoneType'>, <class 'NoneType'>]
+--- Predictions ---
+Row 1 values: ['TransactionID', 'fraud_prob']
+Row 1 types: [<class 'str'>, <class 'str'>]
+Row 2 values: [3108472, 0.03092319558560585]
+Row 2 types: [<class 'int'>, <class 'float'>]
+Row 3 values: [3430514, 0.03092319558560585]
+Row 3 types: [<class 'int'>, <class 'float'>]
+Row 4 values: [3001935, 0.03212342864596688]
+Row 4 types: [<class 'int'>, <class 'float'>]
+Total Prediction rows: 2001
+root@8b9ff8325d75:/workspace#
+root@8b9ff8325d75:/workspace#

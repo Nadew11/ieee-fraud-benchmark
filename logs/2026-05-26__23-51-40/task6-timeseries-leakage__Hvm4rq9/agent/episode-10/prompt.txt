@@ -1,0 +1,83 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat << 'EOF' > run_baseline.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # 1. Load data
+> df = pd.read_csv('/data/transactions.csv')
+>
+> # 2. Sort chronologically
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> # 3. Feature Engineering: Historical pattern features
+> print("Engineering historical features...")
+>
+> # Client key 1: card1
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff()
+> # To handle NaN in time diff, we can use a large value or a flag
+> df['card1_time_diff_nan'] = df['card1_time_diff'].isna().astype(int)
+> df['card1_time_diff'] = df['card1_time_diff'].fillna(999999999) # large number
+>
+> df['card1_cum_amt_mean'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean())
+> df['card1_cum_amt_mean_nan'] = df['card1_cum_amt_mean'].isna().astype(int)
+> df['card1_cum_amt_mean'] = df['card1_cum_amt_mean'].fillna(0)
+>
+> # Ratio of current transaction amount to the average historical amount
+> df['card1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_cum_amt_mean'] + 1e-5)
+>
+> # Client key 2: card1 + addr1
+> df['card1_addr1'] = df['card1'].astype(str) + '_' + df['addr1'].astype(str)
+> df['card1_addr1_cum_count'] = df.groupby('card1_addr1').cumcount()
+> df['card1_addr1_time_diff'] = df.groupby('card1_addr1')['TransactionDT'].diff()
+> df['card1_addr1_time_diff_nan'] = df['card1_addr1_time_diff'].isna().astype(int)
+> df['card1_addr1_time_diff'] = df['card1_addr1_time_diff'].fillna(999999999)
+>
+> df['card1_addr1_cum_amt_mean'] = df.groupby('card1_addr1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean())
+> df['card1_addr1_cum_amt_mean_nan'] = df['card1_addr1_cum_amt_mean'].isna().astype(int)
+> df['card1_addr1_cum_amt_mean'] = df['card1_addr1_cum_amt_mean'].fillna(0)
+>
+> df['card1_addr1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_addr1_cum_amt_mean'] + 1e-5)
+>
+> # 4. Standard features (categorical and numerical)
+> # ProductCD - categorical target/label encoding or dummy
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+>
+> # Drop helper string columns and target
+> features_to_drop = ['TransactionID', 'TransactionDT', 'isFraud', 'card1_addr1']
+> features = [c for c in df.columns if c not in features_to_drop]
+>
+> # 5. Split train and test
+> # Chronological split: 80% train, 20% test
+> split_idx = int(len(df) * 0.8)
+> train_df = df.iloc[:split_idx]
+> test_df = df.iloc[split_idx:]
+>
+> X_train = train_df[features]
+> y_train = train_df['isFraud']
+> X_test = test_df[features]
+> y_test = test_df['isFraud']
+>
+> print("Train shape:", X_train.shape, "Test shape:", X_test.shape)
+> print("Train fraud rate:", y_train.mean(), "Test fraud rate:", y_test.mean())
+>
+> # 6. Model Training
+> model = xgb.XGBClassifier(n_estimators=100, max_depth=6, learning_rate=0.05, random_state=42, eval_metric='auc')
+> model.fit(X_train, y_train)
+>
+> # 7. Evaluation
+> preds_train = model.predict_proba(X_train)[:, 1]
+> preds_test = model.predict_proba(X_test)[:, 1]
+>
+> auc_train = roc_auc_score(y_train, preds_train)
+> auc_test = roc_auc_score(y_test, preds_test)
+>
+> print(f"Train AUC: {auc_train:.5f}")
+> print(f"Test AUC: {auc_test:.5f}")
+> EOF
+root@9da0ecea1a80:/workspace# python3 run_baseline.py
+Engineering historical features...
+

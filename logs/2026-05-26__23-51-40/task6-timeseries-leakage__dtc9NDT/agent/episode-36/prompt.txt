@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 test_c_features.py
+lr: 0.02, n_est: 80 -> Test AUC: 0.86347
+lr: 0.02, n_est: 100 -> Test AUC: 0.86356
+lr: 0.02, n_est: 120 -> Test AUC: 0.86316
+

@@ -1,0 +1,81 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# mkdir -p /output
+root@a7f99ad36897:/workspace# cat << 'EOF' > make_json.py
+> import csv
+> from datetime import datetime
+> import json
+> from sklearn.metrics import roc_auc_score
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     rows = [r for r in reader]
+>
+> # Filter to scoring period
+> filtered_rows = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') < datetime(2026, 5, 1)]
+> y_true = [int(r[1]) for r in filtered_rows]
+> y_prob = [float(r[2]) for r in filtered_rows]
+>
+> N = len(filtered_rows)
+> pos = sum(y_true)
+> neg = N - pos
+>
+> auc_roc = roc_auc_score(y_true, y_prob)
+>
+> # Recommended threshold metrics
+> t_rec = 0.644
+> tp_rec = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 1 and yp >= t_rec)
+> fp_rec = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 0 and yp >= t_rec)
+> fn_rec = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 1 and yp < t_rec)
+> tn_rec = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 0 and yp < t_rec)
+>
+> precision_rec = tp_rec / (tp_rec + fp_rec) if (tp_rec + fp_rec) > 0 else 0.0
+> recall_rec = tp_rec / (tp_rec + fn_rec) if (tp_rec + fn_rec) > 0 else 0.0
+> f1_rec = 2 * precision_rec * recall_rec / (precision_rec + recall_rec) if (precision_rec + recall_rec) > 0 else 0.0
+> accuracy_rec = (tp_rec + tn_rec) / N
+>
+> # Analyst threshold (0.5) metrics
+> t_05 = 0.5
+> tp_05 = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 1 and yp >= t_05)
+> fp_05 = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 0 and yp >= t_05)
+> fn_05 = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 1 and yp < t_05)
+> tn_05 = sum(1 for yt, yp in zip(y_true, y_prob) if yt == 0 and yp < t_05)
+>
+> precision_05 = tp_05 / (tp_05 + fp_05) if (tp_05 + fp_05) > 0 else 0.0
+> recall_05 = tp_05 / (tp_05 + fn_05) if (tp_05 + fn_05) > 0 else 0.0
+> f1_05 = 2 * precision_05 * recall_05 / (precision_05 + recall_05) if (precision_05 + recall_05) > 0 else 0.0
+> accuracy_05 = (tp_05 + tn_05) / N
+>
+> metrics = {
+>     "auc_roc": float(auc_roc),
+>     "unfiltered_auc_roc_reported_by_analyst": 0.918213421549955,
+>
+>     "recommended_threshold": float(t_rec),
+>     "precision_at_recommended_threshold": float(precision_rec),
+>     "recall_at_recommended_threshold": float(recall_rec),
+>     "f1_score_at_recommended_threshold": float(f1_rec),
+>     "accuracy_at_recommended_threshold": float(accuracy_rec),
+>
+>     "precision_at_analyst_threshold_0.5": float(precision_05),
+>     "recall_at_analyst_threshold_0.5": float(recall_05),
+>     "f1_score_at_analyst_threshold_0.5": float(f1_05),
+>     "accuracy_at_analyst_threshold_0.5": float(accuracy_05),
+>
+>     "total_eval_samples": int(N),
+>     "total_eval_fraud_cases": int(pos),
+>     "fraud_rate_pct": float(pos / N * 100.0),
+>
+>     "quarterly_loss_no_model": 448110562.68509376,
+>     "quarterly_loss_at_recommended_threshold": 192730108.58835143,
+>     "quarterly_savings_at_recommended_threshold": 448110562.68509376 - 192730108.58835143
+> }
+>
+> with open('/output/metrics.json', 'w') as out_f:
+>     json.dump(metrics, out_f, indent=2)
+>
+> print("Saved metrics.json successfully!")
+> EOF
+root@a7f99ad36897:/workspace# python3 make_json.py
+Saved metrics.json successfully!
+root@a7f99ad36897:/workspace#

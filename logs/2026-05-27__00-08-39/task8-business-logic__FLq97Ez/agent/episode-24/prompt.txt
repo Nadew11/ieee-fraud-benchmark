@@ -1,0 +1,54 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > test_dedup_all.py
+> import pandas as pd
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee_usd'] = df['amount_usd'] * df['fee_rate']
+>
+> # Let's test different dedup stages
+> # 1. Dedup on entire df
+> for keep_strat in ['first', 'last']:
+>     d1 = df.drop_duplicates(subset=['TransactionID'], keep=keep_strat)
+>     d1_q4 = d1[(d1['transaction_date'] >= '2023-10-01') & (d1['transaction_date'] <= '2023-12-31')]
+>     # Filter out declined
+>     d1_q4 = d1_q4[d1_q4['settlement_status'] != 'declined']
+>     purchases = d1_q4[(d1_q4['isFraud'] == 1) & (d1_q4['transaction_type'] == 'purchase')]
+>     print(f"Dedup entire df ({keep_strat}) -> count: {len(purchases)}, gross: {purchases['amount_usd'].sum():.4f}, fees: {purchases['processing_fee_usd'].sum(
+):.4f}")
+>
+> # 2. Dedup on df_q4 (before or after filtering out declined?)
+> for keep_strat in ['first', 'last']:
+>     q4_df = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+>     d2 = q4_df.drop_duplicates(subset=['TransactionID'], keep=keep_strat)
+>     d2 = d2[d2['settlement_status'] != 'declined']
+>     purchases = d2[(d2['isFraud'] == 1) & (d2['transaction_type'] == 'purchase')]
+>     print(f"Dedup Q4 df ({keep_strat}) -> count: {len(purchases)}, gross: {purchases['amount_usd'].sum():.4f}, fees: {purchases['processing_fee_usd'].sum():.4
+f}")
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 test_dedup_all.py
+Dedup entire df (first) -> count: 263, gross: 30212.6579, fees: 1021.4958
+Dedup entire df (last) -> count: 263, gross: 30218.6094, fees: 1021.7143
+Dedup Q4 df (first) -> count: 263, gross: 30212.6579, fees: 1021.4958
+Dedup Q4 df (last) -> count: 263, gross: 30218.6094, fees: 1021.7143
+root@474ebd5bd0a4:/workspace#

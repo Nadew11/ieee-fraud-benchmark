@@ -1,0 +1,133 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# cat << 'EOF' > inspect_anomalies.py
+> import pandas as pd
+> df = pd.read_csv('/data/predictions.csv')
+>
+> # Look at TransactionID patterns
+> df['id_prefix'] = df['TransactionID'].astype(str).str[:4]
+> print("TransactionID prefixes:")
+> print(df['id_prefix'].value_counts())
+>
+> # Let's filter by prefixes and see scored_at and batch_id
+> for prefix in df['id_prefix'].unique():
+>     sub = df[df['id_prefix'] == prefix]
+>     print(f"\nPrefix: {prefix}")
+>     print(f"Count: {len(sub)}")
+>     print(f"Batch IDs: {sub['batch_id'].unique()}")
+>     print(f"Min Date: {sub['scored_at'].min()}")
+>     print(f"Max Date: {sub['scored_at'].max()}")
+>     print(f"True Class Balance: {sub['y_true'].value_counts().to_dict()}")
+>
+> # Let's see the batch_id distribution
+> print("\nBatch ID distribution:")
+> print(df['batch_id'].value_counts().sort_index())
+> EOF
+root@58fc9c5bb0bf:/workspace# python3 inspect_anomalies.py
+TransactionID prefixes:
+id_prefix
+3004    1108
+3002    1105
+3001    1105
+3000    1102
+3003    1080
+9000     150
+Name: count, dtype: int64
+
+Prefix: 3003
+Count: 1080
+Batch IDs: [17  3 25 40 45  7 35  8 41 20 12 24  4 27 31 21  6 14 10 11  1 43  9 32
+ 13 18 36 38 28 23 44  2 22 33 42 19 26 34 29 37  5 16 30 39 15]
+Min Date: 2026-01-15 10:00:00
+Max Date: 2026-05-11 05:00:00
+True Class Balance: {0: 1045, 1: 35}
+
+Prefix: 3004
+Count: 1108
+Batch IDs: [21 38 44 33 11 29 32 30  9 41 19 15  4  1  2 34 25 36 13  7 16 35  8 22
+ 12 26 31 23 45 27 28  5 37 18 20 24 43 14 17 39  6 42 10 40  3]
+Min Date: 2026-01-15 00:00:00
+Max Date: 2026-05-11 14:00:00
+True Class Balance: {0: 1067, 1: 41}
+
+Prefix: 3000
+Count: 1102
+Batch IDs: [ 9 21 17 41  3  8 19 40 44 31 25 34  5 32 29 37  4 39 11 18 30 16 24 20
+  2 42 13 27 23 12 15  6 35 38  1 28  7 33 14 26 36 22 45 43 10]
+Min Date: 2026-01-15 00:00:00
+Max Date: 2026-05-11 15:00:00
+True Class Balance: {0: 1067, 1: 35}
+
+Prefix: 9000
+Count: 150
+Batch IDs: [99]
+Min Date: 2026-04-29 04:00:00
+Max Date: 2026-05-03 07:00:00
+True Class Balance: {0: 77, 1: 73}
+
+Prefix: 3002
+Count: 1105
+Batch IDs: [35 40  5 31 45 30 44 26 11 36 43 16 42  9 14 12 39  8 19  6  4  2 15 23
+ 41  3 20 34 37 25 22 38 17 21 27  7 10 32 33  1 24 13 18 28 29]
+Min Date: 2026-01-15 02:00:00
+Max Date: 2026-05-11 15:00:00
+True Class Balance: {0: 1063, 1: 42}
+
+Prefix: 3001
+Count: 1105
+Batch IDs: [42  8 31  2  6 24 41 10 28 18 37 32 29 36 13 22 30 11 27 25 21  9 33  7
+ 26  4 20  1  5 12 44 23 16 19 38 15 14 35 39 43 40 34 17 45  3]
+Min Date: 2026-01-15 00:00:00
+Max Date: 2026-05-11 15:00:00
+True Class Balance: {0: 1080, 1: 25}
+
+Batch ID distribution:
+batch_id
+1     126
+2     131
+3     114
+4     135
+5     107
+6     132
+7     105
+8     125
+9     124
+10    144
+11    125
+12    134
+13    117
+14    124
+15    104
+16    126
+17    104
+18    125
+19    128
+20    118
+21    139
+22    113
+23    107
+24    117
+25    110
+26    132
+27    119
+28    119
+29    123
+30    121
+31    129
+32    125
+33    146
+34    133
+35    119
+36    116
+37    120
+38    132
+39    111
+40    121
+41    115
+42    120
+43    129
+44    120
+45    116
+99    150
+Name: count, dtype: int64
+root@58fc9c5bb0bf:/workspace#

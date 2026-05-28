@@ -1,0 +1,68 @@
+New Terminal Output:
+
+root@d8276d655354:/workspace# cat << 'EOF' > tune.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # Load data
+> df = pd.read_csv('/data/train_transaction.csv')
+>
+> # Drop leakage
+> leakage_cols = ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+> existing_leaks = [col for col in leakage_cols if col in df.columns]
+> df_clean = df.drop(columns=existing_leaks)
+>
+> X = df_clean.drop(columns=['isFraud', 'TransactionID'])
+> y = df_clean['isFraud']
+>
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+> from sklearn.preprocessing import LabelEncoder
+> for col in cat_cols:
+>     X[col] = X[col].fillna('Missing').astype(str)
+>     le = LabelEncoder()
+>     X[col] = le.fit_transform(X[col])
+>
+> X_train, X_val, y_train, y_val = train_test_split(
+>     X, y, test_size=0.20, random_state=42, stratify=y
+> )
+>
+> # Let's try a few combinations of max_depth, learning_rate, subsample, and colsample_bytree
+> best_auc = 0
+> best_params = {}
+>
+> for max_depth in [4, 6, 8]:
+>     for lr in [0.03, 0.05, 0.1]:
+>         for sub in [0.8, 1.0]:
+>             clf = xgb.XGBClassifier(
+>                 n_estimators=300,
+>                 learning_rate=lr,
+>                 max_depth=max_depth,
+>                 subsample=sub,
+>                 colsample_bytree=0.8,
+>                 random_state=42,
+>                 use_label_encoder=False,
+>                 eval_metric='auc'
+>             )
+>             clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
+>             preds = clf.predict_proba(X_val)[:, 1]
+>             auc = roc_auc_score(y_val, preds)
+>             print(f"depth={max_depth}, lr={lr}, sub={sub} -> AUC: {auc:.6f}")
+>             if auc > best_auc:
+>                 best_auc = auc
+>                 best_params = {'max_depth': max_depth, 'learning_rate': lr, 'subsample': sub}
+>
+> print("Best AUC:", best_auc)
+> print("Best params:", best_params)
+> EOF
+root@d8276d655354:/workspace# python3 tune.py
+depth=4, lr=0.03, sub=0.8 -> AUC: 0.887692
+depth=4, lr=0.03, sub=1.0 -> AUC: 0.881481
+depth=4, lr=0.05, sub=0.8 -> AUC: 0.891141
+depth=4, lr=0.05, sub=1.0 -> AUC: 0.881120
+depth=4, lr=0.1, sub=0.8 -> AUC: 0.885277
+depth=4, lr=0.1, sub=1.0 -> AUC: 0.885401
+depth=6, lr=0.03, sub=0.8 -> AUC: 0.899604
+

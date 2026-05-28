@@ -1,0 +1,5 @@
+New Terminal Output:
+
+depth=6, lr=0.03 -> Train AUC: 0.88427, Test AUC: 0.85990
+depth=6, lr=0.05 -> Train AUC: 0.89962, Test AUC: 0.85622
+root@9da0ecea1a80:/workspace#

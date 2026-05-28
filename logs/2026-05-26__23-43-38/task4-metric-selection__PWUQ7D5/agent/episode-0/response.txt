@@ -1,0 +1,10 @@
+{
+  "analysis": "Starting the task. First, I need to list the files in `/data` and examine their contents to understand the dataset, cost assumptions, and the junior analyst's draft evaluation.",
+  "plan": "I will run `ls -la /data` to verify the files, and then read their contents.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /data\n",
+      "duration": 0.5
+    }
+  ]
+}

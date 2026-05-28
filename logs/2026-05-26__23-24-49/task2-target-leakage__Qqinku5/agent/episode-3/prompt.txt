@@ -1,0 +1,25 @@
+New Terminal Output:
+
+root@bb21c86eed4d:/workspace# python3 -c "import pandas, sklearn, lightgbm, xgboost; print('imported')"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+root@bb21c86eed4d:/workspace#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

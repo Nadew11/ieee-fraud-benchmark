@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# python3 check_orig_temporal.py
+python3 check_orig_temporal.py
+Original pipeline (temporal split) AUC: 1.0000
+

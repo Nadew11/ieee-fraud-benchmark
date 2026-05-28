@@ -1,0 +1,72 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# cat /setup/generate_data.py
+"""
+Task 1: Implicit Null Detection
+Reads real IEEE-CIS identity data, samples 10K rows, then injects:
+  1. Replace NaN in id_01 with sentinel -999 (800 rows)
+  2. Replace NaN in id_12 with sentinel 'unknown' (600 rows)
+  3. Replace NaN in id_15 with empty string '' (500 rows)
+  4. Cast TransactionID to float64 (should be int)
+  5. Inject 500 duplicate TransactionIDs
+
+Seeds are fixed so the verifier has deterministic ground truth.
+"""
+
+import json
+import numpy as np
+import pandas as pd
+
+RNG = np.random.default_rng(42)
+N = 10_000
+
+# ── Load real IEEE-CIS identity data (pre-sampled)
+df = pd.read_csv("/setup/source_identity.csv")
+df = df.sample(n=N, random_state=42).reset_index(drop=True)
+print(f"[load] Sampled {len(df):,} rows from real IEEE-CIS identity data")
+
+# ── INJECTION 1: Replace NaN in id_01 with sentinel -999
+id01_null_idx = df.index[df["id_01"].isna()]
+inject_idx = id01_null_idx[:800] if len(id01_null_idx) >= 800 else id01_null_idx
+df.loc[inject_idx, "id_01"] = -999.0
+print(f"[inject] id_01 sentinel -999: {len(inject_idx)} rows")
+
+# ── INJECTION 2: Replace NaN in id_12 with sentinel 'unknown'
+id12_null_idx = df.index[df["id_12"].isna()]
+inject_idx = id12_null_idx[:600] if len(id12_null_idx) >= 600 else id12_null_idx
+df.loc[inject_idx, "id_12"] = "unknown"
+print(f"[inject] id_12 sentinel 'unknown': {len(inject_idx)} rows")
+
+# ── INJECTION 3: Replace NaN in id_15 with empty string ''
+id15_null_idx = df.index[df["id_15"].isna()]
+inject_idx = id15_null_idx[:500] if len(id15_null_idx) >= 500 else id15_null_idx
+df.loc[inject_idx, "id_15"] = ""
+print(f"[inject] id_15 empty string: {len(inject_idx)} rows")
+
+# ── INJECTION 4: Cast TransactionID to float (simulates int→float type corruption)
+df["TransactionID"] = df["TransactionID"].astype(np.float64)
+print("[inject] TransactionID cast to float64")
+
+# ── INJECTION 5: Duplicate 500 TransactionIDs
+dup_source_idx = RNG.choice(df.index, size=500, replace=False)
+duplicates = df.loc[dup_source_idx].copy()
+duplicates["id_02"] = duplicates["id_02"] + RNG.uniform(-5, 5, 500)
+df = pd.concat([df, duplicates], ignore_index=True)
+print(f"[inject] 500 duplicate TransactionIDs injected -> total rows: {len(df)}")
+
+# ── Save
+df.to_csv("/data/train_identity.csv", index=False)
+print("[done] /data/train_identity.csv written")
+
+# ── Save ground truth for verifier
+ground_truth = {
+    "clean_row_count": N,
+    "sentinel_999_count": 0,
+    "sentinel_unknown_count": 0,
+    "sentinel_empty_count": 0,
+    "transaction_id_dtype": "int",
+}
+with open("/data/ground_truth.json", "w") as f:
+    json.dump(ground_truth, f)
+print("[done] /data/ground_truth.json written")
+root@cc7b6f7834c9:/workspace#

@@ -1,0 +1,10 @@
+{
+  "analysis": "The script is running. Let's wait for it to complete.",
+  "plan": "Wait 10 seconds for the final script to run and write files to /output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 10.0
+    }
+  ]
+}

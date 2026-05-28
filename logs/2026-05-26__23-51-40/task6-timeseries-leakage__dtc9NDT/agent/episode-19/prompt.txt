@@ -1,0 +1,7 @@
+New Terminal Output:
+
+N_estimators: 100, Test AUC: 0.86280
+N_estimators: 120, Test AUC: 0.86306
+N_estimators: 150, Test AUC: 0.86230
+N_estimators: 200, Test AUC: 0.85766
+root@81a3fc64145d:/workspace#

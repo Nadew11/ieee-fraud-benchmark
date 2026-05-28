@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 94 (char 95) | Content preview: '{\n  "analysis": "In `/setup/source_identity.csv`, NaNs are written as empty fields (e.g., `,`).\nWait'...
+
+Please fix these issues and provide a proper JSON response.

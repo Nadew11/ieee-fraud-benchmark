@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 6 column 131 (char 7141) | Content preview: '{\n  "analysis": "Excellent! The `metrics.json` file is successfully written. The values look mathema'...
+
+Please fix these issues and provide a proper JSON response.

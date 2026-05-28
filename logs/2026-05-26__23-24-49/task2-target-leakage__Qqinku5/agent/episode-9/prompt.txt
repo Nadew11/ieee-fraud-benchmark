@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@bb21c86eed4d:/workspace# python3 /workspace/train.py
+Validation AUC: 1.000000
+Saved predictions to /output/predictions.csv
+Saved AUC to /output/auc.txt
+root@bb21c86eed4d:/workspace#

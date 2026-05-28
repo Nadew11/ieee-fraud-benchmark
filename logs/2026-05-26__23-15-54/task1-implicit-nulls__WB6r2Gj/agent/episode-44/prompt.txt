@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_identity.csv', keep_default_na=False); print(df['id_01'].unique()[:
+20]); print(df['id_12'].unique())"
+[  -5.  -15.    0.  -20.  -40.  -10.  -25.  -60.  -85. -100.  -35.  -50.
+  -45.  -80.  -30.  -90.  -11.  -55.  -95.  -65.]
+['NotFound' 'Found']
+root@cc7b6f7834c9:/workspace#

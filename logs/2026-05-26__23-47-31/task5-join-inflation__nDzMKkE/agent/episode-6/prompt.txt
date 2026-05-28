@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# python3 -c "import pandas as pd; ident=pd.read_csv('/data/identity.csv'); dups_diff_dev = ident.groupby('TransactionID')['DeviceTy
+pe'].nunique(); print('Num TransactionIDs with different DeviceType:', (dups_diff_dev > 1).sum())"
+Num TransactionIDs with different DeviceType: 0
+root@10499a3d6cec:/workspace#

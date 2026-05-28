@@ -1,0 +1,11 @@
+New Terminal Output:
+
+[5 rows x 15 columns]
+root@b9e5a18b679d:/workspace# python3 -c "
+> import pandas as pd
+> fx = pd.read_csv('/data/fx_rates.csv')
+> print(fx['currency'].unique())
+> print(fx['date'].min(), fx['date'].max())
+> print(fx.head())
+> "
+

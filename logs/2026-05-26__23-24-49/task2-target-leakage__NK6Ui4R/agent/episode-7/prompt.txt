@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# ls -l /data
+total 3200
+-rw-r--r-- 1 root root 3273929 May 27 03:22 train_transaction.csv
+root@f6fdec80eb9d:/workspace#

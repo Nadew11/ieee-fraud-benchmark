@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 92 (char 93) | Content preview: '{\n  "analysis": "There are no python files representing the test runner in other directories.\nSo the'...
+
+Please fix these issues and provide a proper JSON response.

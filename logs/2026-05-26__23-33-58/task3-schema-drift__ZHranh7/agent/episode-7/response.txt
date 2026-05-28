@@ -1,0 +1,10 @@
+{
+  "analysis": "The output of test_imports.py is about to run. Let's see what is printed to understand which models we can use.",
+  "plan": "I will wait for the output of test_imports.py to finish printing and analyze which libraries are available.",
+  "commands": [
+    {
+      "keystrokes": "\n",
+      "duration": 1.0
+    }
+  ]
+}

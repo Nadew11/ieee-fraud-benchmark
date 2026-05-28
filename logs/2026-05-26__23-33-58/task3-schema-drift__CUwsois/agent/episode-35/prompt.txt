@@ -1,0 +1,47 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# cat << 'EOF' > verify_xlsx.py
+> import openpyxl
+>
+> wb = openpyxl.load_workbook('/output/fraud_risk.xlsx')
+> print("Sheet names:", wb.sheetnames)
+>
+> ws_pred = wb['Predictions']
+> print("Predictions sheet min/max row:", ws_pred.min_row, ws_pred.max_row)
+> print("Predictions header:", [cell.value for cell in ws_pred[1]])
+> print("Predictions sample row 2:", [cell.value for cell in ws_pred[2]], "types:", [type(cell.value) for cell in ws_pred[2]])
+>
+> ws_dq = wb['Data Quality Report']
+> print("Data Quality Report contents:")
+> for r in range(1, 5):
+>     print(f"  {ws_dq.cell(row=r, column=1).value}: {ws_dq.cell(row=r, column=2).value} (type B={type(ws_dq.cell(row=r, column=2).value)})")
+>
+> print("Row 6:", [ws_dq.cell(row=6, column=col).value for col in range(1, 4)])
+> for r in range(7, 11):
+>     print(f"  Row {r}:", [ws_dq.cell(row=r, column=col).value for col in range(1, 4)])
+>
+> EOF
+root@27e59b3c4e79:/workspace# python3 verify_xlsx.py
+Sheet names: ['Predictions', 'Data Quality Report']
+Predictions sheet min/max row: 1 2001
+Predictions header: ['TransactionID', 'fraud_prob']
+Predictions sample row 2: [3108472, 0.4670987023462802] types: [<class 'int'>, <class 'float'>]
+Data Quality Report contents:
+  total_train_rows: 8000 (type B=<class 'int'>)
+  total_test_rows: 2000 (type B=<class 'int'>)
+  shared_feature_count: 41 (type B=<class 'int'>)
+  model_auc_on_train_holdout: 0.5639305678140629 (type B=<class 'float'>)
+Row 6: ['issue_number', 'description', 'resolution']
+  Row 7: [1, 'Column naming mismatch between source systems: System A (train) uses underscore separators (e.g., id_01) while System B (test) uses hyphen separat
+ors (e.g., id-01).', "Standardized the column names of System B (test) by replacing all hyphens with underscores, aligning them perfectly with System A's naming
+ schema to enable consistent pipeline ingestion."]
+  Row 8: [2, 'High rate of missing values (NaNs) across features: There are 12 columns in train and 13 columns in test with missingness rates exceeding 50%.', "
+Applied robust imputation strategies in the preprocessing pipeline: used median values for numerical columns and introduced a dedicated 'missing' string categor
+y for categorical columns."]
+  Row 9: [3, 'Inconsistent categorical levels (Out of Vocabulary values) in test features: Columns like id_30, id_31, id_33, id_34, and DeviceInfo contain uniqu
+e categories in test not seen in train.', "Configured scikit-learn OneHotEncoder with the 'handle_unknown=ignore' parameter to ensure the model pipeline process
+es unseen categorical values gracefully without causing errors or failures."]
+  Row 10: [4, "Severe target class imbalance: The 'isFraud' target variable contains only 274 fraud cases (3.42%) out of 8,000 observations in the training data
+set.", "Employed class-weighted loss adjustment ('class_weight=balanced') in Logistic Regression, and applied stratified splitting during holdout evaluation to
+ensure equal target distribution in splits."]
+root@27e59b3c4e79:/workspace#

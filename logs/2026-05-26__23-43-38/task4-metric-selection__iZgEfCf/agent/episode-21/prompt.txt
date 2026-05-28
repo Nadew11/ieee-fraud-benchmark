@@ -1,0 +1,4 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# rm -f evaluate_filters.py inspect_anomalies.py inspect_b99.py inspect_data.py optimize_threshold.py compute_metrics.py
+root@58fc9c5bb0bf:/workspace#

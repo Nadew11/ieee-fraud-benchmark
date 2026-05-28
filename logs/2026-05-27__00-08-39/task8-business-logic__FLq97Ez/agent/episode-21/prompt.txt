@@ -1,0 +1,52 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > find_single_tx.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+> regions = pd.read_csv('/data/region_map.csv')
+>
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee_usd'] = df['amount_usd'] * df['fee_rate']
+>
+> # Join regions
+> region_dict = regions.set_index('country_code')['region'].to_dict()
+> df['region'] = df['country_code'].map(region_dict).fillna('Other')
+>
+> df_q4 = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+> settled_p_sf = df_q4[(df_q4['settlement_status'] == 'settled') & (df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')]
+>
+> target_gross = 30212.56
+> target_fees = 1021.58
+>
+> # Let's see if we can find a single row that matches
+> for idx, row in settled_p_sf.iterrows():
+>     rem_gross = settled_p_sf['amount_usd'].sum() - row['amount_usd']
+>     rem_fees = settled_p_sf['processing_fee_usd'].sum() - row['processing_fee_usd']
+>
+>     if abs(rem_gross - target_gross) < 0.1 and abs(rem_fees - target_fees) < 0.1:
+>         print(f"MATCH FOUND! Row index: {idx}")
+>         print(row)
+>         print(f"New Gross: {rem_gross:.4f}, New Fees: {rem_fees:.4f}")
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 find_single_tx.py
+root@474ebd5bd0a4:/workspace#

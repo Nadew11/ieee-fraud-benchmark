@@ -1,0 +1,14 @@
+[
+  {
+    "source": "/logs/artifacts",
+    "destination": "artifacts",
+    "type": "directory",
+    "status": "empty"
+  },
+  {
+    "source": "/output/fraud_report.xlsx",
+    "destination": "artifacts/fraud_report.xlsx",
+    "type": "file",
+    "status": "failed"
+  }
+]

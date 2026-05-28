@@ -1,0 +1,50 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# cat << 'EOF' > run_solution.py
+> import pandas as pd
+>
+> # Load inputs
+> tx = pd.read_csv('/data/transactions.csv')
+> ident = pd.read_csv('/data/identity.csv')
+>
+> # Deduplicate identity table on TransactionID to recover clean data
+> ident_clean = ident.drop_duplicates(subset=['TransactionID'])
+>
+> # Join on TransactionID
+> merged = tx.merge(ident_clean, on='TransactionID', how='left')
+>
+> # Filter for fraud cases
+> fraud_df = merged[merged['isFraud'] == 1]
+>
+> # Compute total fraud amount broken down by DeviceType
+> fraud_by_device = (
+>     fraud_df.groupby('DeviceType', dropna=False)
+>     .agg(
+>         total_fraud_amount=('TransactionAmt', 'sum'),
+>         fraud_transaction_count=('TransactionID', 'count')
+>     )
+>     .reset_index()
+> )
+>
+> # Save to /output/fraud_by_device.csv
+> fraud_by_device.to_csv('/output/fraud_by_device.csv', index=False)
+>
+> # Compute overall total fraud amount
+> total_fraud = float(tx[tx['isFraud'] == 1]['TransactionAmt'].sum())
+>
+> # Save overall total to /output/total_fraud.txt
+> with open('/output/total_fraud.txt', 'w') as f:
+>     f.write(f"{total_fraud:.2f}\n")
+>
+> print("Saved fraud_by_device.csv:")
+> print(fraud_by_device)
+> print(f"Saved total_fraud.txt: {total_fraud:.2f}")
+> EOF
+root@7e0b471406a5:/workspace# python3 run_solution.py
+Saved fraud_by_device.csv:
+  DeviceType  total_fraud_amount  fraud_transaction_count
+0    desktop            9897.656                      118
+1     mobile            9523.986                       80
+2        NaN           29634.877                      153
+Saved total_fraud.txt: 49056.52
+

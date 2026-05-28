@@ -1,0 +1,22 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# python3 -c "
+> import pandas as pd
+> tx = pd.read_csv('/data/transactions.csv')
+> ident = pd.read_csv('/data/identity.csv')
+> print('Unique IDs in ident:', ident['TransactionID'].nunique())
+> # Since we know duplicates were injected by copying existing rows (and modifying DeviceInfo),
+> # we can deduplicate 'ident' on 'TransactionID' and get the exact original 'ident_df'!
+> ident_clean = ident.drop_duplicates(subset=['TransactionID'])
+> merged = tx.merge(ident_clean, on='TransactionID', how='left')
+> print(merged[merged['isFraud'] == 1].groupby('DeviceType', dropna=False).agg(
+>     total_fraud_amount=('TransactionAmt', 'sum'),
+>     fraud_transaction_count=('TransactionID', 'count')
+> ).reset_index())
+> "
+Unique IDs in ident: 2461
+  DeviceType  total_fraud_amount  fraud_transaction_count
+0    desktop            9897.656                      118
+1     mobile            9523.986                       80
+2        NaN           29634.877                      153
+root@7e0b471406a5:/workspace#

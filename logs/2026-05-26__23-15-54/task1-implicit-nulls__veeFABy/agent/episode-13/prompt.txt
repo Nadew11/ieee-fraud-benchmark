@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); df_clean = df.drop_duplicates(subset=["TransactionI
+D"], keep="first"); print("Clean shape:", df_clean.shape); print("Are indices identical to 0-9999?", (df_clean.index == range(10000)).all())'
+Clean shape: (10000, 41)
+Are indices identical to 0-9999? True
+root@803b650a44b8:/workspace#

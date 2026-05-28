@@ -1,0 +1,10 @@
+{
+  "analysis": "There are no other files or instructions. Let's find out if there are any other files or instructions in other folders of the container.",
+  "plan": "I will run a search for files across the filesystem to see if there are any scripts, guidelines, or templates that indicate the expected format or imputation strategy.",
+  "commands": [
+    {
+      "keystrokes": "find / -name \"*fraud*\" -o -name \"*identity*\" -o -name \"*clean*\" 2>/dev/null | grep -v \"/proc\" | grep -v \"/sys\"\n",
+      "duration": 5.0
+    }
+  ]
+}

@@ -1,0 +1,874 @@
+[?2004hroot@f6fdec80eb9d:/workspace# asciinema rec --stdin /logs/agent/recording.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent/recording.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+[?2004hroot@f6fdec80eb9d:/workspace# clear
+[?2004l[H[J[3J[?2004hroot@f6fdec80eb9d:/workspace# head -n 5 /data/train_transaction.csv
+[?2004lTransactionID,isFraud,TransactionDT,TransactionAmt,ProductCD,card1,card2,card3,card4,card5,card6,addr1,addr2,dist1,dist2,P_emaildomain,R_emaildomain,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,M1,M2,M3,M4,M5,M6,M7,M8,M9,chargeback_amount,fraud_score,days_to_chargeback
+3539620,0,14597586,107.95,W,7648,357.0,150.0,visa,226.0,debit,184.0,87.0,857.0,,gmail.com,,3.0,1.0,0.0,0.0,1.0,1.0,0.0,0.0,2.0,0.0,1.0,0.0,16.0,3.0,0.0,,,434.0,27.0,,,,,531.0,49.0,,,,602.0,T,F,F,,,T,F,F,F,0.0,0.0871,303.0
+3076706,0,1881836,100.0,R,18366,111.0,150.0,visa,226.0,debit,299.0,87.0,,2420.0,gmail.com,gmail.com,2.0,1.0,0.0,1.0,0.0,1.0,0.0,2.0,0.0,2.0,1.0,0.0,2.0,2.0,0.0,,,,,,,42.75,0.75,0.0,,,,,,,,,,,,,,,0.0,0.0885,149.0
+3259930,0,6629582,117.0,W,17055,393.0,150.0,mastercard,117.0,debit,325.0,87.0,5.0,,aol.com,,1.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,2.0,0.0,2.0,0.0,48.0,1.0,555.0,539.0,2.0,14.0,2.0,,,,,555.0,503.0,,,,14.0,T,T,F,M1,F,T,F,F,T,0.0,0.08,178.0
+3545212,0,14769374,80.17,C,15178,277.0,144.0,mastercard,224.0,credit,,,,,gmail.com,gmail.com,1.0,1.0,0.0,1.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,,,0.0,,0.0,,0.9166659712791444,0.9166659712791444,0.0,,0.0,0.0,0.0,0.0,,,,M2,,,,,,0.0,0.0676,305.0
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import pandas, sklearn, lightgbm; print('Imports successful')"
+[?2004lTraceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import pandas; print('pandas ok'); import sklearn; print('sklearn ok'); import lightgbm; print('lgb ok')"
+[?2004lpandas ok
+python3 -c "import xgboost; print('xgb ok')"
+sklearn ok
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import xgboost; print('xgb ok')"
+[?2004lxgb ok
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import xgboost; print('xgb ok')"
+[?2004lpython3 -c "from sklearn.ensemble import HistGradientBoostingClassifier; print('HistGB ok')"
+xgb ok
+pip list
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "from sklearn.ensemble import HistGradientBoostingClassifier; print('HistGB ok')"
+[?2004lHistGB ok
+[?2004hroot@f6fdec80eb9d:/workspace# pip list
+[?2004lPackage         Version
+--------------- -----------
+joblib          1.5.3
+numpy           1.26.3
+pandas          2.1.4
+pip             24.0
+python-dateutil 2.9.0.post0
+pytz            2026.2
+scikit-learn    1.4.0
+scipy           1.16.3
+setuptools      79.0.1
+six             1.17.0
+threadpoolctl   3.6.0
+tzdata          2026.2
+wheel           0.45.1
+xgboost         2.0.3
+
+[1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m A new release of pip is available: [0m[31;49m24.0[0m[39;49m -> [0m[32;49m26.1.1[0m
+[1m[[0m[34;49mnotice[0m[1;39;49m][0m[39;49m To update, run: [0m[32;49mpip install --upgrade pip[0m
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv', nrows=5); print(df.dtypes.to_string())"
+[?2004lTransactionID           int64
+isFraud                 int64
+TransactionDT           int64
+TransactionAmt        float64
+ProductCD              object
+card1                   int64
+card2                 float64
+card3                 float64
+card4                  object
+card5                 float64
+card6                  object
+addr1                 float64
+addr2                 float64
+dist1                 float64
+dist2                 float64
+P_emaildomain          object
+R_emaildomain          object
+C1                    float64
+C2                    float64
+C3                    float64
+C4                    float64
+C5                    float64
+C6                    float64
+C7                    float64
+C8                    float64
+C9                    float64
+C10                   float64
+C11                   float64
+C12                   float64
+C13                   float64
+C14                   float64
+D1                    float64
+D2                    float64
+D3                    float64
+D4                    float64
+D5                    float64
+D6                    float64
+D7                    float64
+D8                    float64
+D9                    float64
+D10                   float64
+D11                   float64
+D12                   float64
+D13                   float64
+D14                   float64
+D15                   float64
+M1                     object
+M2                     object
+M3                     object
+M4                     object
+M5                     object
+M6                     object
+M7                     object
+M8                     object
+M9                     object
+chargeback_amount     float64
+fraud_score           float64
+days_to_chargeback    float64
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.shape); print(df['isFraud'].value_counts())"
+[?2004l(15000, 58)
+isFraud
+0    14469
+1      531
+Name: count, dtype: int64
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df[['chargeback_amount', 'fraud_score', 'days_to_chargeback', 'isFraud']].groupby('isFraud').describe().T.to_string())"
+[?2004lisFraud                              0            1
+chargeback_amount  count  14469.000000   531.000000
+                   mean       0.000000   151.123032
+                   std        0.000000   231.351005
+                   min        0.000000     3.510000
+                   25%        0.000000    37.310000
+                   50%        0.000000    77.000000
+                   75%        0.000000   150.000000
+                   max        0.000000  2161.000000
+fraud_score        count  14469.000000   531.000000
+                   mean       0.053071     0.941961
+                   std        0.036528     0.029688
+                   min        0.001000     0.848100
+                   25%        0.023700     0.922650
+                   50%        0.051000     0.941600
+                   75%        0.078100     0.963450
+                   max        0.197300     0.999000
+days_to_chargeback count  14469.000000   531.000000
+                   mean     227.985555    14.969868
+                   std       79.811814     8.504329
+                   min       90.000000     1.000000
+                   25%      159.000000     8.000000
+                   50%      228.000000    15.000000
+                   75%      298.000000    22.000000
+                   max      365.000000    30.000000
+[?2004hroot@f6fdec80eb9d:/workspace# ls -l /data
+[?2004ltotal 3200
+-rw-r--r-- 1 root root 3273929 May 27 03:22 train_transaction.csv
+[?2004hroot@f6fdec80eb9d:/workspace# cat << 'EOF' > test_model.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.ensemble import HistGradientBoostingClassifier
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load data
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Separate features and target
+[?2004l[?2004h> target = 'isFraud'
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's inspect categorical columns
+[?2004l[?2004h> cat_cols = df.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> print("Categorical columns:", cat_cols)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Convert categorical columns to category dtypes for HistGradientBoostingClassifier
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     df[col] = df[col].astype('category')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split
+[?2004l[?2004h> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Define feature sets
+[?2004l[?2004h> # 1. All features (excluding TransactionID and isFraud)
+[?2004l[?2004h> features_all = [c for c in df.columns if c not in ['TransactionID', target]]
+[?2004l[?2004h> 
+[?2004l[?2004h> # 2. Features excluding potential leakage: 'chargeback_amount', 'days_to_chargeback', 'fraud_score'
+[?2004l[?2004h> features_no_leak = [c for c in features_all if c not in ['chargeback_amount', 'days_to_chargeback', 'fraud_score']]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Train model 1 (all features)
+[?2004l[?2004h> clf1 = HistGradientBoostingClassifier(categorical_features=[features_all.index(c) for c in cat_cols if c in features_all], random_state=42)
+[?2004l[?2004h> clf1.fit(train_df[features_all], train_df[target])
+[?2004l[?2004h> preds1 = clf1.predict_proba(val_df[features_all])[:, 1]
+[?2004l[?2004h> auc1 = roc_auc_score(val_df[target], preds1)
+[?2004l[?2004h> print(f"AUC with all features: {auc1:.6f}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Train model 2 (no leak)
+[?2004l[?2004h> clf2 = HistGradientBoostingClassifier(categorical_features=[features_no_leak.index(c) for c in cat_cols if c in features_no_leak], random_state=42)
+[?2004l[?2004h> clf2.fit(train_df[features_no_leak], train_df[target])
+[?2004l[?2004h> preds2 = clf2.predict_proba(val_df[features_no_leak])[:, 1]
+[?2004l[?2004h> auc2 = roc_auc_score(val_df[target], preds2)
+[?2004l[?2004h> print(f"AUC without leaky features: {auc2:.6f}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@f6fdec80eb9d:/workspace# python3 test_model.py
+[?2004lCategorical columns: ['ProductCD', 'card4', 'card6', 'P_emaildomain', 'R_emaildomain', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9']
+AUC with all features: 1.000000
+AUC without leaky features: 0.895147
+[?2004hroot@f6fdec80eb9d:/workspace# find . -maxdepth 3 -type f
+[?2004l./test_model.py
+[?2004hroot@f6fdec80eb9d:/workspace# find / -name "*test*" -path "*workspace*" -o -path "*app*" 2>/dev/null
+[?2004l/usr/lib/python3.13/_apple_support.py
+/usr/lib/python3.13/__pycache__/_apple_support.cpython-313.pyc
+/usr/lib/python3.13/__pycache__/zipapp.cpython-313.pyc
+/usr/lib/python3.13/email/mime/application.py
+/usr/lib/python3.13/email/mime/__pycache__/application.cpython-313.pyc
+/usr/lib/python3.13/zipapp.py
+/usr/local/lib/python3.11/site-packages/pip/_vendor/cachecontrol/filewrapper.py
+/usr/local/lib/python3.11/site-packages/pip/_vendor/cachecontrol/__pycache__/wrapper.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pip/_vendor/cachecontrol/__pycache__/filewrapper.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pip/_vendor/cachecontrol/wrapper.py
+/usr/local/lib/python3.11/site-packages/pip/_vendor/pygments/lexers/__pycache__/_mapping.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pip/_vendor/pygments/lexers/_mapping.py
+/usr/local/lib/python3.11/site-packages/pip/_vendor/pygments/formatters/_mapping.py
+/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/contrib/appengine.py
+/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/contrib/_appengine_environ.py
+/usr/local/lib/python3.11/site-packages/pip/_vendor/urllib3/contrib/__pycache__/_appengine_environ.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pip/_internal/utils/appdirs.py
+/usr/local/lib/python3.11/site-packages/pip/_internal/utils/__pycache__/appdirs.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/setuptools/config/_apply_pyprojecttoml.py
+/usr/local/lib/python3.11/site-packages/joblib/externals/loky/cloudpickle_wrapper.py
+/usr/local/lib/python3.11/site-packages/joblib/externals/loky/__pycache__/cloudpickle_wrapper.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/joblib/test/test_memmapping.py
+/usr/local/lib/python3.11/site-packages/joblib/test/__pycache__/test_memmapping.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/joblib/test/__pycache__/test_cloudpickle_wrapper.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/joblib/test/test_cloudpickle_wrapper.py
+/usr/local/lib/python3.11/site-packages/joblib/__pycache__/_cloudpickle_wrapper.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/joblib/__pycache__/_memmapping_reducer.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/joblib/_memmapping_reducer.py
+/usr/local/lib/python3.11/site-packages/joblib/_cloudpickle_wrapper.py
+/usr/local/lib/python3.11/site-packages/sklearn/tests/test_kernel_approximation.py
+/usr/local/lib/python3.11/site-packages/sklearn/tests/__pycache__/test_kernel_approximation.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/sklearn/kernel_approximation.py
+/usr/local/lib/python3.11/site-packages/sklearn/__pycache__/kernel_approximation.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/scipy/stats/_unuran/unuran_wrapper.cpython-311-aarch64-linux-gnu.so
+/usr/local/lib/python3.11/site-packages/scipy/stats/_unuran/unuran_wrapper.pyi
+/usr/local/lib/python3.11/site-packages/scipy/signal/_upfirdn_apply.cpython-311-aarch64-linux-gnu.so
+/usr/local/lib/python3.11/site-packages/scipy/optimize/_highspy/__pycache__/_highs_wrapper.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/scipy/optimize/_highspy/_highs_wrapper.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/conftest.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/test_series_transform.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/test_series_apply_relabeling.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/test_frame_transform.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/test_frame_apply_relabeling.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/common.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/test_frame_apply.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/test_invalid_arg.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/test_frame_apply_relabeling.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/test_series_transform.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/test_frame_transform.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/test_series_apply_relabeling.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/test_invalid_arg.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/test_str.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/__init__.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/conftest.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/test_frame_apply.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/common.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__pycache__/test_series_apply.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/test_series_apply.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/test_str.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/apply/__init__.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/io/pytables/__pycache__/test_append.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/io/pytables/test_append.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/io/data/orc/TestOrcFile.testSnappy.orc
+/usr/local/lib/python3.11/site-packages/pandas/tests/reshape/concat/__pycache__/test_append_common.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/reshape/concat/__pycache__/test_append.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/reshape/concat/test_append_common.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/reshape/concat/test_append.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/groupby/test_apply.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/groupby/test_apply_mutate.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/groupby/__pycache__/test_apply.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/groupby/__pycache__/test_apply_mutate.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/indexes/categorical/__pycache__/test_append.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/tests/indexes/categorical/test_append.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/window/test_apply.py
+/usr/local/lib/python3.11/site-packages/pandas/tests/window/__pycache__/test_apply.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/io/parsers/arrow_parser_wrapper.py
+/usr/local/lib/python3.11/site-packages/pandas/io/parsers/__pycache__/arrow_parser_wrapper.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/io/parsers/__pycache__/c_parser_wrapper.cpython-311.pyc
+/usr/local/lib/python3.11/site-packages/pandas/io/parsers/c_parser_wrapper.py
+/usr/local/lib/python3.11/site-packages/pandas/core/apply.py
+/usr/local/lib/python3.11/site-packages/pandas/core/__pycache__/apply.cpython-311.pyc
+/usr/local/lib/python3.11/lib2to3/fixes/fix_apply.py
+/usr/local/lib/python3.11/email/mime/application.py
+/usr/local/lib/python3.11/zipapp.py
+/usr/share/applications
+/usr/share/applications/python3.13.desktop
+/sys/kernel/mm/transparent_hugepage/hugepages-32kB/stats/nr_anon_partially_mapped
+/sys/kernel/mm/transparent_hugepage/hugepages-512kB/stats/nr_anon_partially_mapped
+/sys/kernel/mm/transparent_hugepage/hugepages-2048kB/stats/nr_anon_partially_mapped
+/sys/kernel/mm/transparent_hugepage/hugepages-1024kB/stats/nr_anon_partially_mapped
+/sys/kernel/mm/transparent_hugepage/hugepages-64kB/stats/nr_anon_partially_mapped
+/sys/kernel/mm/transparent_hugepage/hugepages-16kB/stats/nr_anon_partially_mapped
+/sys/kernel/mm/transparent_hugepage/hugepages-256kB/stats/nr_anon_partially_mapped
+/sys/kernel/mm/transparent_hugepage/hugepages-128kB/stats/nr_anon_partially_mapped
+/sys/class/misc/device-mapper
+/sys/devices/platform/40000000.pci/pci0000:00/0000:00:07.0/virtio3/block/vdb/queue/zone_append_max_bytes
+/sys/devices/platform/40000000.pci/pci0000:00/0000:00:06.0/virtio2/block/vda/queue/zone_append_max_bytes
+/sys/devices/virtual/misc/device-mapper
+/sys/devices/virtual/misc/device-mapper/uevent
+/sys/devices/virtual/misc/device-mapper/dev
+/sys/devices/virtual/misc/device-mapper/subsystem
+/sys/devices/virtual/block/loop1/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram2/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd3/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd15/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram0/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd1/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd13/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram9/queue/zone_append_max_bytes
+/sys/devices/virtual/block/loop6/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd11/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram14/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram7/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd8/queue/zone_append_max_bytes
+/sys/devices/virtual/block/loop4/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram12/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram5/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd6/queue/zone_append_max_bytes
+/sys/devices/virtual/block/loop2/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram10/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram3/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd4/queue/zone_append_max_bytes
+/sys/devices/virtual/block/loop0/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram1/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd2/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd14/queue/zone_append_max_bytes
+/sys/devices/virtual/block/loop7/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd0/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd12/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram15/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram8/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd9/queue/zone_append_max_bytes
+/sys/devices/virtual/block/loop5/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd10/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram13/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram6/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd7/queue/zone_append_max_bytes
+/sys/devices/virtual/block/loop3/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram11/queue/zone_append_max_bytes
+/sys/devices/virtual/block/ram4/queue/zone_append_max_bytes
+/sys/devices/virtual/block/nbd5/queue/zone_append_max_bytes
+/sys/module/nfsd/parameters/nfs4_disable_idmapping
+/sys/module/nfs/parameters/nfs4_disable_idmapping
+/proc/sys/net/ipv4/neigh/erspan0/app_solicit
+/proc/sys/net/ipv4/neigh/eth0/app_solicit
+/proc/sys/net/ipv4/neigh/gre0/app_solicit
+/proc/sys/net/ipv4/neigh/gretap0/app_solicit
+/proc/sys/net/ipv4/neigh/ip6_vti0/app_solicit
+/proc/sys/net/ipv4/neigh/ip6gre0/app_solicit
+/proc/sys/net/ipv4/neigh/ip6tnl0/app_solicit
+/proc/sys/net/ipv4/neigh/ip_vti0/app_solicit
+/proc/sys/net/ipv4/neigh/lo/app_solicit
+/proc/sys/net/ipv4/neigh/sit0/app_solicit
+/proc/sys/net/ipv4/neigh/tunl0/app_solicit
+/proc/sys/net/ipv4/tcp_app_win
+/proc/sys/net/ipv6/neigh/erspan0/app_solicit
+/proc/sys/net/ipv6/neigh/eth0/app_solicit
+/proc/sys/net/ipv6/neigh/gretap0/app_solicit
+/proc/sys/net/ipv6/neigh/ip6_vti0/app_solicit
+/proc/sys/net/ipv6/neigh/ip6gre0/app_solicit
+/proc/sys/net/ipv6/neigh/ip6tnl0/app_solicit
+/proc/sys/net/ipv6/neigh/lo/app_solicit
+/proc/sys/net/ipv6/neigh/sit0/app_solicit
+/proc/sys/vm/swappiness
+/proc/1/task/1/net/ip_vs_app
+/proc/1/net/ip_vs_app
+/proc/7/task/7/net/ip_vs_app
+/proc/7/net/ip_vs_app
+/proc/481/task/481/net/ip_vs_app
+/proc/481/net/ip_vs_app
+/proc/482/task/482/net/ip_vs_app
+/proc/482/net/ip_vs_app
+/proc/483/task/483/net/ip_vs_app
+/proc/483/net/ip_vs_app
+/proc/485/task/485/net/ip_vs_app
+/proc/485/net/ip_vs_app
+/proc/498/task/498/net/ip_vs_app
+/proc/498/task/503/net/ip_vs_app
+/proc/498/net/ip_vs_app
+/proc/499/task/499/net/ip_vs_app
+/proc/499/net/ip_vs_app
+/proc/500/task/500/net/ip_vs_app
+/proc/500/net/ip_vs_app
+/proc/501/task/501/net/ip_vs_app
+/proc/501/net/ip_vs_app
+/proc/502/task/502/net/ip_vs_app
+/proc/502/net/ip_vs_app
+/proc/827/task/827/net/ip_vs_app
+/proc/827/net/ip_vs_app
+/workspace/test_model.py
+[?2004hroot@f6fdec80eb9d:/workspace# cat << 'EOF' > test_xgb.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from xgboost import XGBClassifier
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> 
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> target = 'isFraud'
+[?2004l[?2004h> 
+[?2004l[?2004h> # Convert categorical columns to category dtypes
+[?2004l[?2004h> cat_cols = df.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     df[col] = df[col].astype('category')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split
+[?2004l[?2004h> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Exclude leakage features
+[?2004l[?2004h> features_no_leak = [c for c in df.columns if c not in ['TransactionID', target, 'chargeback_amount', 'days_to_chargeback']]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Train XGBoost with categorical support
+[?2004l[?2004h> xgb = XGBClassifier(enable_categorical=True, random_state=42, eval_metric='auc')
+[?2004l[?2004h> xgb.fit(train_df[features_no_leak], train_df[target])
+[?2004l[?2004h> preds_xgb = xgb.predict_proba(val_df[features_no_leak])[:, 1]
+[?2004l[?2004h> auc_xgb = roc_auc_score(val_df[target], preds_xgb)
+[?2004l[?2004h> print(f"XGB AUC without explicit chargeback leaks: {auc_xgb:.6f}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # What if we also exclude fraud_score?
+[?2004l[?2004h> features_no_score = [c for c in features_no_leak if c != 'fraud_score']
+[?2004l[?2004h> xgb2 = XGBClassifier(enable_categorical=True, random_state=42, eval_metric='auc')
+[?2004l[?2004h> xgb2.fit(train_df[features_no_score], train_df[target])
+[?2004l[?2004h> preds_xgb2 = xgb2.predict_proba(val_df[features_no_score])[:, 1]
+[?2004l[?2004h> auc_xgb2 = roc_auc_score(val_df[target], preds_xgb2)
+[?2004l[?2004h> print(f"XGB AUC without fraud_score or chargeback: {auc_xgb2:.6f}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@f6fdec80eb9d:/workspace# python3 test_xgb.py
+[?2004lXGB AUC without explicit chargeback leaks: 0.999967
+XGB AUC without fraud_score or chargeback: 0.892875
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.isna().sum().to_string())"
+[?2004lTransactionID             0
+isFraud                   0
+TransactionDT             0
+TransactionAmt            0
+ProductCD                 0
+card1                     0
+card2                   238
+card3                    47
+card4                    47
+card5                   108
+card6                    48
+addr1                  1610
+addr2                  1610
+dist1                  8817
+dist2                 14014
+P_emaildomain          2414
+R_emaildomain         11558
+C1                        0
+C2                        0
+C3                        0
+C4                        0
+C5                        0
+C6                        0
+C7                        0
+C8                        0
+C9                        0
+C10                       0
+C11                       0
+C12                       0
+C13                       0
+C14                       0
+D1                       34
+D2                     7073
+D3                     6656
+D4                     4354
+D5                     7902
+D6                    13216
+D7                    14062
+D8                    13095
+D9                    13095
+D10                    1980
+D11                    7030
+D12                   13422
+D13                   13488
+D14                   13466
+D15                    2295
+M1                     6810
+M2                     6810
+M3                     6810
+M4                     7125
+M5                     8809
+M6                     4264
+M7                     8789
+M8                     8788
+M9                     8788
+chargeback_amount         0
+fraud_score               0
+days_to_chargeback        0
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); missing = df.isna().sum(); print(missing[missing > 0])"
+[?2004lcard2              238
+card3               47
+card4               47
+card5              108
+card6               48
+addr1             1610
+addr2             1610
+dist1             8817
+dist2            14014
+P_emaildomain     2414
+R_emaildomain    11558
+D1                  34
+D2                7073
+D3                6656
+D4                4354
+D5                7902
+D6               13216
+D7               14062
+D8               13095
+D9               13095
+D10               1980
+D11               7030
+D12              13422
+D13              13488
+D14              13466
+D15               2295
+M1                6810
+M2                6810
+M3                6810
+M4                7125
+M5                8809
+M6                4264
+M7                8789
+M8                8788
+M9                8788
+dtype: int64
+[?2004hroot@f6fdec80eb9d:/workspace# cat << 'EOF' > pipeline_test.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder
+[?2004l[?2004h> from sklearn.ensemble import HistGradientBoostingClassifier
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> target = 'isFraud'
+[?2004l[?2004h> 
+[?2004l[?2004h> # 80/20 train/val split
+[?2004l[?2004h> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Identify column types
+[?2004l[?2004h> cat_cols = df.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> 
+[?2004l[?2004h> def run_pipeline(exclude_cols):
+[?2004l[?2004h>     features = [c for c in df.columns if c not in ['TransactionID', target] + exclude_cols]
+[?2004l[?2004h>     
+[?2004l[?2004h>     num_features = [c for c in features if c not in cat_cols]
+[?2004l[?2004h>     cat_features = [c for c in features if c in cat_cols]
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Preprocessing
+[?2004l[?2004h>     num_transformer = SimpleImputer(strategy='median')
+[?2004l[?2004h>     cat_transformer = Pipeline(steps=[
+[?2004l[?2004h>         ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004l[?2004h>         ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+[?2004l[?2004h>     ])
+[?2004l[?2004h>     
+[?2004l[?2004h>     preprocessor = ColumnTransformer(transformers=[
+[?2004l[?2004h>         ('num', num_transformer, num_features),
+[?2004l[?2004h>         ('cat', cat_transformer, cat_features)
+[?2004l[?2004h>     ])
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Pipeline
+[?2004l[?2004h>     model = Pipeline(steps=[
+[?2004l[?2004h>         ('preprocessor', preprocessor),
+[?2004l[?2004h>         ('classifier', HistGradientBoostingClassifier(random_state=42))
+[?2004l[?2004h>     ])
+[?2004l[?2004h>     
+[?2004l[?2004h>     model.fit(train_df[features], train_df[target])
+[?2004l[?2004h>     preds = model.predict_proba(val_df[features])[:, 1]
+[?2004l[?2004h>     auc = roc_auc_score(val_df[target], preds)
+[?2004l[?2004h>     return auc
+[?2004l[?2004h> 
+[?2004l[?2004h> print("AUC excluding chargeback leaks:", run_pipeline(['chargeback_amount', 'days_to_chargeback']))
+[?2004l[?2004h> print("AUC excluding chargeback leaks & fraud_score:", run_pipeline(['chargeback_amount', 'days_to_chargeback', 'fraud_score']))
+[?2004l[?2004h> print("AUC with ALL features:", run_pipeline([]))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@f6fdec80eb9d:/workspace# python3 pipeline_test.py
+[?2004lpython3 pipeline_test.py
+AUC excluding chargeback leaks: 1.0
+AUC excluding chargeback leaks & fraud_score: 0.8890221799168091
+AUC with ALL features: 1.0
+[?2004hroot@f6fdec80eb9d:/workspace# python3 pipeline_test.py
+[?2004l^CTraceback (most recent call last):
+  File "/workspace/pipeline_test.py", line 3, in <module>
+    from sklearn.model_selection import train_test_split
+  File "/usr/local/lib/python3.11/site-packages/sklearn/__init__.py", line 87, in <module>
+    from .base import clone
+  File "/usr/local/lib/python3.11/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils import _IS_32BIT
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/__init__.py", line 22, in <module>
+    from ._estimator_html_repr import estimator_html_repr
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/_estimator_html_repr.py", line 10, in <module>
+    from .fixes import parse_version
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/fixes.py", line 17, in <module>
+    import scipy.stats
+  File "/usr/local/lib/python3.11/site-packages/scipy/stats/__init__.py", line 626, in <module>
+    from ._stats_py import *
+  File "/usr/local/lib/python3.11/site-packages/scipy/stats/_stats_py.py", line 2771, in <module>
+    @xp_capabilities()
+     ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/scipy/_lib/_array_api.py", line 810, in decorator
+    note = _make_capabilities_note(f.__name__, sphinx_capabilities)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/scipy/_lib/_array_api.py", line 754, in _make_capabilities_note
+    return textwrap.dedent(note)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/textwrap.py", line 466, in dedent
+    text = re.sub(r'(?m)^' + margin, '', text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/re/__init__.py", line 185, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+[?2004hroot@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.select_dtypes(include=['object']).nunique())"
+[?2004lProductCD         5
+card4             4
+card6             3
+P_emaildomain    57
+R_emaildomain    50
+M1                1
+M2                2
+M3                2
+M4                3
+M5                2
+M6                2
+M7                2
+M8                2
+M9                2
+dtype: int64
+[?2004hroot@f6fdec80eb9d:/workspace# cat << 'EOF' > test_clean_models.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder, StandardScaler
+[?2004l[?2004h> from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
+[?2004l[?2004h> from xgboost import XGBClassifier
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> target = 'isFraud'
+[?2004l[?2004h> 
+[?2004l[?2004h> # Exclude target, ID, and leaky features
+[?2004l[?2004h> exclude_features = ['TransactionID', target, 'chargeback_amount', 'days_to_chargeback', 'fraud_score']
+[?2004l[?2004h> features = [c for c in df.columns if c not in exclude_features]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split
+[?2004l[?2004h> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Preprocessing
+[?2004l[?2004h> cat_cols = df[features].select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> num_cols = [c for c in features if c not in cat_cols]
+[?2004l[?2004h> 
+[?2004l[?2004h> # 1. Pipeline with HistGradientBoostingClassifier (using native categorical or OneHot)
+[?2004l[?2004h> # HistGB natively supports missing values, so we can just convert categorical to categories or use OneHot
+[?2004l[?2004h> # Let's test HistGB with OneHot
+[?2004l[?2004h> num_transformer = SimpleImputer(strategy='median')
+[?2004l[?2004h> cat_transformer = Pipeline(steps=[
+[?2004l[?2004h>     ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004l[?2004h>     ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+[?2004l[?2004h> ])
+[?2004l[?2004h> preprocessor = ColumnTransformer(transformers=[
+[?2004l[?2004h>     ('num', num_transformer, num_cols),
+[?2004l[?2004h>     ('cat', cat_transformer, cat_cols)
+[?2004l[?2004h> ])
+[?2004l[?2004h> 
+[?2004l[?2004h> pipeline_hgb = Pipeline(steps=[
+[?2004l[?2004h>     ('preprocessor', preprocessor),
+[?2004l[?2004h>     ('classifier', HistGradientBoostingClassifier(random_state=42))
+[?2004l[?2004h> ])
+[?2004l[?2004h> pipeline_hgb.fit(train_df[features], train_df[target])
+[?2004l[?2004h> preds_hgb = pipeline_hgb.predict_proba(val_df[features])[:, 1]
+[?2004l[?2004h> print("HistGB (OneHot) AUC:", roc_auc_score(val_df[target], preds_hgb))
+[?2004l[?2004h> 
+[?2004l[?2004h> # 2. Pipeline with XGBoost (enable_categorical=True, handle missing natively)
+[?2004l[?2004h> # XGBoost can handle categorical features natively if they are category dtype and enable_categorical=True
+[?2004l[?2004h> xgb_train = train_df[features].copy()
+[?2004l[?2004h> xgb_val = val_df[features].copy()
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     xgb_train[col] = xgb_train[col].astype('category')
+[?2004l[?2004h>     xgb_val[col] = xgb_val[col].astype('category')
+[?2004l[?2004h> 
+[?2004l[?2004h> # XGBoost handles missing numeric values natively, but let's see if we should impute
+[?2004l[?2004h> xgb = XGBClassifier(enable_categorical=True, random_state=42, eval_metric='auc')
+[?2004l[?2004h> xgb.fit(xgb_train, train_df[target])
+[?2004l[?2004h> preds_xgb = xgb.predict_proba(xgb_val)[:, 1]
+[?2004l[?2004h> print("XGBoost (native categorical & missing) AUC:", roc_auc_score(val_df[target], preds_xgb))
+[?2004l[?2004h> 
+[?2004l[?2004h> # 3. XGBoost with explicit Imputation + OneHot
+[?2004l[?2004h> # Let's see if pre-imputing and one-hot encoding improves XGBoost
+[?2004l[?2004h> pipeline_xgb = Pipeline(steps=[
+[?2004l[?2004h>     ('preprocessor', preprocessor),
+[?2004l[?2004h>     ('classifier', XGBClassifier(random_state=42, eval_metric='auc'))
+[?2004l[?2004h> ])
+[?2004l[?2004h> pipeline_xgb.fit(train_df[features], train_df[target])
+[?2004l[?2004h> preds_xgb_pipe = pipeline_xgb.predict_proba(val_df[features])[:, 1]
+[?2004l[?2004h> print("XGBoost (Pipeline with OneHot & Imputation) AUC:", roc_auc_score(val_df[target], preds_xgb_pipe))
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@f6fdec80eb9d:/workspace# python3 test_clean_models.py
+[?2004lHistGB (OneHot) AUC: 0.8890221799168091
+XGBoost (native categorical & missing) AUC: 0.8732641379040565
+XGBoost (Pipeline with OneHot & Imputation) AUC: 0.8860296514584501
+[?2004hroot@f6fdec80eb9d:/workspace# cat << 'EOF' > tune_model.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder
+[?2004l[?2004h> from sklearn.ensemble import HistGradientBoostingClassifier
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> target = 'isFraud'
+[?2004l[?2004h> 
+[?2004l[?2004h> # Clean feature set
+[?2004l[?2004h> exclude_features = ['TransactionID', target, 'chargeback_amount', 'days_to_chargeback', 'fraud_score']
+[?2004l[?2004h> features = [c for c in df.columns if c not in exclude_features]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split
+[?2004l[?2004h> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+[?2004l[?2004h> 
+[?2004l[?2004h> cat_cols = df[features].select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> num_cols = [c for c in features if c not in cat_cols]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Preprocessor
+[?2004l[?2004h> num_transformer = SimpleImputer(strategy='median')
+[?2004l[?2004h> cat_transformer = Pipeline(steps=[
+[?2004l[?2004h>     ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004l[?2004h>     ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+[?2004l[?2004h> ])
+[?2004l[?2004h> preprocessor = ColumnTransformer(transformers=[
+[?2004l[?2004h>     ('num', num_transformer, num_cols),
+[?2004l[?2004h>     ('cat', cat_transformer, cat_cols)
+[?2004l[?2004h> ])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's try different hyperparameters for HistGB
+[?2004l[?2004h> results = []
+[?2004l[?2004h> for lr in [0.03, 0.05, 0.1]:
+[?2004l[?2004h>     for max_iter in [100, 150, 200]:
+[?2004l[?2004h>         for max_leaf_nodes in [31, 63]:
+[?2004l[?2004h>             model = Pipeline(steps=[
+[?2004l[?2004h>                 ('preprocessor', preprocessor),
+[?2004l[?2004h>                 ('classifier', HistGradientBoostingClassifier(
+[?2004l[?2004h>                     learning_rate=lr,
+[?2004l[?2004h>                     max_iter=max_iter,
+[?2004l[?2004h>                     max_leaf_nodes=max_leaf_nodes,
+[?2004l[?2004h>                     random_state=42
+[?2004l[?2004h>                 ))
+[?2004l[?2004h>             ])
+[?2004l[?2004h>             model.fit(train_df[features], train_df[target])
+[?2004l[?2004h>             preds = model.predict_proba(val_df[features])[:, 1]
+[?2004l[?2004h>             auc = roc_auc_score(val_df[target], preds)
+[?2004l[?2004h>             results.append((lr, max_iter, max_leaf_nodes, auc))
+[?2004l[?2004h>             print(f"lr={lr}, max_iter={max_iter}, max_leaf_nodes={max_leaf_nodes} -> AUC={auc:.6f}")
+[?2004l[?2004h> 
+[?2004l[?2004h> best_res = max(results, key=lambda x: x[3])
+[?2004l[?2004h> print("Best Hyperparameters:", best_res)
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@f6fdec80eb9d:/workspace# python3 tune_model.py
+[?2004llr=0.03, max_iter=100, max_leaf_nodes=31 -> AUC=0.898003
+lr=0.03, max_iter=100, max_leaf_nodes=63 -> AUC=0.890209
+lr=0.03, max_iter=150, max_leaf_nodes=31 -> AUC=0.900428
+lr=0.03, max_iter=150, max_leaf_nodes=63 -> AUC=0.890209
+lr=0.03, max_iter=200, max_leaf_nodes=31 -> AUC=0.900428
+lr=0.03, max_iter=200, max_leaf_nodes=63 -> AUC=0.890209
+lr=0.05, max_iter=100, max_leaf_nodes=31 -> AUC=0.900803
+lr=0.05, max_iter=100, max_leaf_nodes=63 -> AUC=0.898662
+lr=0.05, max_iter=150, max_leaf_nodes=31 -> AUC=0.900803
+lr=0.05, max_iter=150, max_leaf_nodes=63 -> AUC=0.898662
+lr=0.05, max_iter=200, max_leaf_nodes=31 -> AUC=0.900803
+lr=0.05, max_iter=200, max_leaf_nodes=63 -> AUC=0.898662
+lr=0.1, max_iter=100, max_leaf_nodes=31 -> AUC=0.889022
+lr=0.1, max_iter=100, max_leaf_nodes=63 -> AUC=0.886946
+lr=0.1, max_iter=150, max_leaf_nodes=31 -> AUC=0.889022
+lr=0.1, max_iter=150, max_leaf_nodes=63 -> AUC=0.886946
+lr=0.1, max_iter=200, max_leaf_nodes=31 -> AUC=0.889022
+lr=0.1, max_iter=200, max_leaf_nodes=63 -> AUC=0.886946
+Best Hyperparameters: (0.05, 100, 31, 0.9008032233247708)
+[?2004hroot@f6fdec80eb9d:/workspace# cat << 'EOF' > train_and_save.py
+[?2004l[?2004h> import os
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder
+[?2004l[?2004h> from sklearn.ensemble import HistGradientBoostingClassifier
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> 
+[?2004l[?2004h> # 1. Load data
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> target = 'isFraud'
+[?2004l[?2004h> 
+[?2004l[?2004h> # 2. Exclude target, ID, and leaky features
+[?2004l[?2004h> exclude_features = ['TransactionID', target, 'chargeback_amount', 'days_to_chargeback', 'fraud_score']
+[?2004l[?2004h> features = [c for c in df.columns if c not in exclude_features]
+[?2004l[?2004h> 
+[?2004l[?2004h> # 3. 80/20 train/validation split
+[?2004l[?2004h> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+[?2004l[?2004h> 
+[?2004l[?2004h> # 4. Define feature columns
+[?2004l[?2004h> cat_cols = df[features].select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> num_cols = [c for c in features if c not in cat_cols]
+[?2004l[?2004h> 
+[?2004l[?2004h> # 5. Pipeline with imputation and one-hot encoding
+[?2004l[?2004h> num_transformer = SimpleImputer(strategy='median')
+[?2004l[?2004h> cat_transformer = Pipeline(steps=[
+[?2004l[?2004h>     ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004l[?2004h>     ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+[?2004l[?2004h> ])
+[?2004l[?2004h> 
+[?2004l[?2004h> preprocessor = ColumnTransformer(transformers=[
+[?2004l[?2004h>     ('num', num_transformer, num_cols),
+[?2004l[?2004h>     ('cat', cat_transformer, cat_cols)
+[?2004l[?2004h> ])
+[?2004l[?2004h> 
+[?2004l[?2004h> # 6. Fit best model
+[?2004l[?2004h> model = Pipeline(steps=[
+[?2004l[?2004h>     ('preprocessor', preprocessor),
+[?2004l[?2004h>     ('classifier', HistGradientBoostingClassifier(
+[?2004l[?2004h>         learning_rate=0.05,
+[?2004l[?2004h>         max_iter=100,
+[?2004l[?2004h>         max_leaf_nodes=31,
+[?2004l[?2004h>         random_state=42
+[?2004l[?2004h>     ))
+[?2004l[?2004h> ])
+[?2004l[?2004h> 
+[?2004l[?2004h> model.fit(train_df[features], train_df[target])
+[?2004l[?2004h> 
+[?2004l[?2004h> # 7. Predict validation probabilities
+[?2004l[?2004h> val_preds = model.predict_proba(val_df[features])[:, 1]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Recalculate and print AUC to double check
+[?2004l[?2004h> auc = roc_auc_score(val_df[target], val_preds)
+[?2004l[?2004h> print(f"Validation AUC: {auc:.6f}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # 8. Create /output directory if not exists
+[?2004l[?2004h> os.makedirs('/output', exist_ok=True)
+[?2004l[?2004h> 
+[?2004l[?2004h> # 9. Save predictions: columns must be TransactionID and fraud_prob
+[?2004l[?2004h> preds_df = pd.DataFrame({
+[?2004l[?2004h>     'TransactionID': val_df['TransactionID'],
+[?2004l[?2004h>     'fraud_prob': val_preds
+[?2004l[?2004h> })
+[?2004l[?2004h> preds_df.to_csv('/output/predictions.csv', index=False)
+[?2004l[?2004h> print("Predictions saved to /output/predictions.csv successfully. Shape:", preds_df.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # 10. Save AUC score
+[?2004l[?2004h> with open('/output/auc.txt', 'w') as f:
+[?2004l[?2004h>     f.write(f"{auc:.6f}\n")
+[?2004l[?2004h> print("AUC saved to /output/auc.txt successfully.")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@f6fdec80eb9d:/workspace# python3 train_and_save.py
+[?2004lValidation AUC: 0.900803
+Predictions saved to /output/predictions.csv successfully. Shape: (3000, 2)
+AUC saved to /output/auc.txt successfully.
+[?2004hroot@f6fdec80eb9d:/workspace# cat /output/auc.txt
+[?2004l0.900803
+[?2004hroot@f6fdec80eb9d:/workspace# head -n 5 /output/predictions.csv
+[?2004lTransactionID,fraud_prob
+3476394,0.02922378936302175
+3053569,0.005270258892182082
+3353921,0.004754205349301189
+3516024,0.004783394252933903
+[?2004hroot@f6fdec80eb9d:/workspace# 

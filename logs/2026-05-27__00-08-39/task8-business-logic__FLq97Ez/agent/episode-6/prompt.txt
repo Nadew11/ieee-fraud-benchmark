@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print('Date min:', df.transaction_date.min(), 'max:',
+ df.transaction_date.max()); print(df.groupby(['transaction_type', 'isFraud']).size())"
+Date min: 2023-09-06 max: 2023-12-31
+transaction_type     isFraud
+chargeback_reversal  1             9
+purchase             0          8117
+                     1           298
+refund               1            33
+dtype: int64
+root@474ebd5bd0a4:/workspace#

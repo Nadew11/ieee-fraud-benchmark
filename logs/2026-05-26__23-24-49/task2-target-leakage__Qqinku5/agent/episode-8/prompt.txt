@@ -1,0 +1,77 @@
+New Terminal Output:
+
+root@bb21c86eed4d:/workspace# cat << 'EOF' > /workspace/train.py
+> import os
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # 1. Load data
+> df = pd.read_csv('/data/train_transaction.csv')
+>
+> # Identify targets and features
+> target_col = 'isFraud'
+> id_col = 'TransactionID'
+>
+> # Separate features and target
+> X = df.drop(columns=[target_col])
+> y = df[target_col]
+>
+> # For categorical columns, convert them to category type
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+> for col in cat_cols:
+>     X[col] = X[col].astype('category')
+>
+> # 2. Train/validation split (80/20)
+> X_train, X_val, y_train, y_val = train_test_split(
+>     X, y, test_size=0.20, random_state=42, stratify=y
+> )
+>
+> # Prepare output paths
+> os.makedirs('/output', exist_ok=True)
+>
+> # We need TransactionID in predictions.csv, so let's keep track of validation set TransactionIDs
+> val_ids = X_val[id_col]
+>
+> # Let's drop TransactionID from training features so the model doesn't overfit on it
+> X_train_feat = X_train.drop(columns=[id_col])
+> X_val_feat = X_val.drop(columns=[id_col])
+>
+> # 3. Train XGBoost classifier
+> # enable_categorical=True allows XGBoost to handle category columns directly
+> model = xgb.XGBClassifier(
+>     n_estimators=200,
+>     learning_rate=0.05,
+>     max_depth=6,
+>     random_state=42,
+>     enable_categorical=True,
+>     tree_method='hist'
+> )
+>
+> model.fit(X_train_feat, y_train)
+>
+> # 4. Predict probabilities
+> # Predict prob of class 1
+> val_probs = model.predict_proba(X_val_feat)[:, 1]
+>
+> # Calculate AUC
+> auc = roc_auc_score(y_val, val_probs)
+> print(f"Validation AUC: {auc:.6f}")
+>
+> # 5. Save predictions
+> predictions_df = pd.DataFrame({
+>     'TransactionID': val_ids,
+>     'fraud_prob': val_probs
+> })
+> predictions_df.to_csv('/output/predictions.csv', index=False)
+> print("Saved predictions to /output/predictions.csv")
+>
+> # 6. Save AUC
+> with open('/output/auc.txt', 'w') as f:
+>     f.write(f"{auc:.6f}\n")
+> print("Saved AUC to /output/auc.txt")
+>
+> EOF
+root@bb21c86eed4d:/workspace#

@@ -1,0 +1,41 @@
+New Terminal Output:
+root@d8276d655354:/workspace# ls -la /data
+total 3208
+drwxr-xr-x 1 root root    4096 May 27 03:22 .
+drwxr-xr-x 1 root root    4096 May 27 04:25 ..
+-rw-r--r-- 1 root root 3273929 May 27 03:22 train_transaction.csv
+root@d8276d655354:/workspace# head -n 2 /data/train_transaction.csv
+TransactionID,isFraud,TransactionDT,TransactionAmt,ProductCD,card1,card2,card3,card4,card5,card6,addr1,addr2,dist1,dist2,P_emaildomain,R_emaildomain,C1,C2,C3,C4
+,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,M1,M2,M3,M4,M5,M6,M7,M8,M9,chargeback_amount,fraud_score,days_to_chargeba
+ck
+3539620,0,14597586,107.95,W,7648,357.0,150.0,visa,226.0,debit,184.0,87.0,857.0,,gmail.com,,3.0,1.0,0.0,0.0,1.0,1.0,0.0,0.0,2.0,0.0,1.0,0.0,16.0,3.0,0.0,,,434.0,
+27.0,,,,,531.0,49.0,,,,602.0,T,F,F,,,T,F,F,F,0.0,0.0871,303.0
+root@d8276d655354:/workspace# python3 -c "import pandas, sklearn, lightgbm; print('Installed!')"
+bash: !': event not found
+root@d8276d655354:/workspace#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+{
+  "analysis": "Apologies. I am keeping the JSON description strings flat and simple. I will execute the command to print the entire fee schedule.",
+  "plan": "Print the contents of /data/fee_schedule.csv.",
+  "commands": [
+    {
+      "keystrokes": "cat /data/fee_schedule.csv\n",
+      "duration": 0.5
+    }
+  ]
+}

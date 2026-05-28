@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df['isFraud'].value_counts())"
+isFraud
+0    23747
+1     1253
+Name: count, dtype: int64
+root@e9645eb65f5b:/workspace#

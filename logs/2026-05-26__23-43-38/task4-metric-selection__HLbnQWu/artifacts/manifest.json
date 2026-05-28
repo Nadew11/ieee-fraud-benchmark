@@ -1,0 +1,26 @@
+[
+  {
+    "source": "/logs/artifacts",
+    "destination": "artifacts",
+    "type": "directory",
+    "status": "empty"
+  },
+  {
+    "source": "/output/audit_findings.txt",
+    "destination": "artifacts/audit_findings.txt",
+    "type": "file",
+    "status": "ok"
+  },
+  {
+    "source": "/output/metrics.json",
+    "destination": "artifacts/metrics.json",
+    "type": "file",
+    "status": "ok"
+  },
+  {
+    "source": "/output/recommendation.txt",
+    "destination": "artifacts/recommendation.txt",
+    "type": "file",
+    "status": "ok"
+  }
+]

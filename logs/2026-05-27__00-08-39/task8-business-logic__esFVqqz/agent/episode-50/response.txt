@@ -1,0 +1,10 @@
+{
+  "analysis": "Ah! Because of the Ctrl+C, the writing of `sum_rec_types.py` was interrupted or it didn't save properly, or it got appended with some other text. Let's write `sum_rec_types.py` again and run it.",
+  "plan": "Write sum_rec_types.py and execute it.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > sum_rec_types.py\nimport pandas as pd\ndf = pd.read_csv('/data/transactions.csv')\nfx = pd.read_csv('/data/fx_rates.csv')\n\nrates_dict = {}\nfor idx, row in fx.iterrows():\n    rates_dict[(row['currency'], row['date'])] = row['rate_to_usd']\n\ndef get_rate(currency, date_str):\n    if currency == 'USD':\n        return 1.0\n    if (currency, date_str) in rates_dict:\n        return rates_dict[(currency, date_str)]\n    currency_rates = fx[fx['currency'] == currency]\n    prior_rates = currency_rates[currency_rates['date'] <= date_str]\n    if len(prior_rates) == 0:\n        return currency_rates.sort_values('date').iloc[0]['rate_to_usd']\n    return prior_rates.sort_values('date', ascending=False).iloc[0]['rate_to_usd']\n\ndf['fx_rate'] = df.apply(lambda r: get_rate(r['currency'], r['transaction_date']), axis=1)\ndf['amt_usd'] = df['TransactionAmt'] * df['fx_rate']\n\ndf_clean = df.drop_duplicates(subset=['TransactionID'], keep='first')\ndf_clean_no_declined = df_clean[df_clean.settlement_status != 'declined'].copy()\nfraud = df_clean_no_declined[df_clean_no_declined.isFraud == 1]\n\nrefunds = fraud[fraud.transaction_type == 'refund']\ncbs = fraud[fraud.transaction_type == 'chargeback_reversal']\n\nprint(\"Refunds sum:\", refunds['amt_usd'].sum())\nprint(\"Chargebacks sum:\", cbs['amt_usd'].sum())\n\nEOF\npython3 sum_rec_types.py\n",
+      "duration": 2.0
+    }
+  ]
+}

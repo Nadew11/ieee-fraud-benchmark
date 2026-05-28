@@ -1,0 +1,42 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat << 'EOF' > test_fe.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> # Group by card1 frequency
+> freq = df['card1'].value_counts()
+> print("card1 transaction frequencies:")
+> print(freq.describe())
+> print("Number of card1 with > 1 transaction:", (freq > 1).sum())
+> print("Number of card1 with > 5 transactions:", (freq > 5).sum())
+>
+> # Let's see ProductCD as well
+> print("ProductCD value counts:")
+> print(df['ProductCD'].value_counts())
+> EOF
+root@9da0ecea1a80:/workspace# python3 test_fe.py
+card1 transaction frequencies:
+count    14086.000000
+mean         2.129774
+std          1.168902
+min          1.000000
+25%          1.000000
+50%          2.000000
+75%          3.000000
+max          9.000000
+Name: count, dtype: float64
+Number of card1 with > 1 transaction: 8953
+Number of card1 with > 5 transactions: 175
+ProductCD value counts:
+ProductCD
+W    14955
+H     6604
+C     4153
+S     2437
+R     1851
+Name: count, dtype: int64
+

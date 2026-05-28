@@ -1,0 +1,36 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# python3 analyze_financials.py
+Evaluation period: 2026-01-15 00:00:00 to 2026-04-30 22:00:00 (105.92 days)
+Unique days in dataset: 102
+
+Best Threshold based on Total Quarterly Cost (unconstrained):
+threshold                  2.900000e-01
+tp                         1.850000e+02
+fp                         2.142000e+03
+fn                         8.000000e+00
+tn                         2.730000e+03
+flagged                    2.327000e+03
+q_flagged                  1.286397e+06
+daily_alerts_by_holdout    2.197010e+01
+daily_alerts_by_quarter    1.429330e+04
+q_investigation_cost       4.502389e+07
+q_fraud_loss               1.857453e+07
+q_total_cost               6.359842e+07
+Name: 290, dtype: float64
+
+Metrics at threshold 0.5:
+threshold                  5.000000e-01
+tp                         1.440000e+02
+fp                         5.540000e+02
+fn                         4.900000e+01
+tn                         4.318000e+03
+flagged                    6.980000e+02
+q_flagged                  3.858638e+05
+daily_alerts_by_holdout    6.590087e+00
+daily_alerts_by_quarter    4.287375e+03
+q_investigation_cost       1.350523e+07
+q_fraud_loss               1.137690e+08
+q_total_cost               1.272742e+08
+Name: 500, dtype: float64
+root@831ed0f33a44:/workspace#

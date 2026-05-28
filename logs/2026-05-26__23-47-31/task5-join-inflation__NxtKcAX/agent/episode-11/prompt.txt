@@ -1,0 +1,13 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# python3 -c "import pandas as pd; ident = pd.read_csv('/data/identity.csv'); print(ident['DeviceType'].dropna().unique())"
+['mobile' 'desktop']
+root@3532236a873b:/workspace# ls -la /workspace
+total 16
+drwxr-xr-x 1 root root 4096 May 27 04:49 .
+drwxr-xr-x 1 root root 4096 May 27 04:48 ..
+-rw-r--r-- 1 root root 1581 May 27 04:49 solution.py
+-rw-r--r-- 1 root root 1182 May 27 04:48 test.py
+root@3532236a873b:/workspace# find / -maxdepth 2 -name "*task*" -o -name "*read*" -o -name "*instruction*" 2>/dev/null
+/proc/thread-self
+root@3532236a873b:/workspace#

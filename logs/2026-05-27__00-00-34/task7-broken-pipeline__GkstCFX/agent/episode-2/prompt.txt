@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# cp /data/pipeline.py /workspace/pipeline.py
+root@549b54a67146:/workspace# python3 /workspace/pipeline.py
+Loading data...
+

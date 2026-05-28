@@ -1,0 +1,18 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# python3 -c "import pandas as pd; df=pd.read_csv('/data/transactions.csv'); settled_fp = df[(df.isFraud == 1) & (df.transaction_typ
+e == 'purchase') & (df.settlement_status == 'settled')]; print(settled_fp.transaction_date.value_counts().sort_index())"
+transaction_date
+2023-10-01    6
+2023-10-02    1
+2023-10-03    4
+2023-10-05    2
+2023-10-06    5
+             ..
+2023-12-27    4
+2023-12-28    2
+2023-12-29    2
+2023-12-30    4
+2023-12-31    5
+Name: count, Length: 85, dtype: int64
+root@b9e5a18b679d:/workspace#

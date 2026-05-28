@@ -1,0 +1,82 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > /data/pipeline.py
+> #!/usr/bin/env python3
+> """
+> Fraud Detection Pipeline — v1.3 (Corrected)
+> """
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+> import warnings
+> warnings.filterwarnings("ignore")
+>
+> # 1. Load data
+> print("Loading data...")
+> df = pd.read_csv("/data/train_transaction.csv")
+> print(f"Shape: {df.shape}")
+>
+> # 2. Sort by TransactionDT to ensure temporal ordering
+> df = df.sort_values("TransactionDT").reset_index(drop=True)
+>
+> TARGET = "isFraud"
+>
+> # 3. Categorical Encoding (Keep card4, card6, ProductCD and One-Hot Encode them)
+> cat_cols = ["ProductCD", "card4", "card6"]
+> df_encoded = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+>
+> DROP = ["TransactionID", TARGET]
+> features = [c for c in df_encoded.columns if c not in DROP]
+>
+> # 4. Temporal Split (First 80% train, last 20% validation)
+> split_idx = int(len(df_encoded) * 0.8)
+> train_df = df_encoded.iloc[:split_idx]
+> val_df = df_encoded.iloc[split_idx:]
+>
+> X_train = train_df[features]
+> y_train = train_df[TARGET]
+> X_val = val_df[features]
+> y_val = val_df[TARGET]
+>
+> print(f"Train size: {len(X_train)}, Val size: {len(X_val)}")
+> print(f"Val fraud rate: {y_val.mean():.4f}")
+>
+> # 5. Train XGBoost (No StandardScaler, native NaN handling, proper eval_metric)
+> model = xgb.XGBClassifier(
+>     objective="binary:logistic",
+>     eval_metric="auc",
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+> )
+> model.fit(
+>     X_train, y_train,
+>     eval_set=[(X_val, y_val)],
+>     verbose=False,
+> )
+>
+> probs = model.predict_proba(X_val)[:, 1]
+> auc = roc_auc_score(y_val, probs)
+> print(f"\nValidation AUC: {auc:.4f}")
+>
+> # Write the AUC to the output file
+> with open("/output/auc.txt", "w") as f:
+>     f.write(f"{auc:.4f}\n")
+> print("AUC written to /output/auc.txt")
+> EOF
+root@0d5e255b62ea:/workspace# chmod +x /data/pipeline.py
+root@0d5e255b62ea:/workspace# python3 /data/pipeline.py
+Loading data...
+Shape: (25000, 22)
+Train size: 20000, Val size: 5000
+Val fraud rate: 0.0484
+
+Validation AUC: 1.0000
+AUC written to /output/auc.txt
+root@0d5e255b62ea:/workspace#

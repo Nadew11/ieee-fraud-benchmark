@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; missing = df.isnull().sum(); print(mis
+sing[missing > 0])'
+

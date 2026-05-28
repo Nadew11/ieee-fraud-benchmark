@@ -1,0 +1,29 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); dup_ids = df[df.duplicated(subset=["TransactionID"]
+, keep=False)]["TransactionID"].unique()[:5]; print(df[df["TransactionID"].isin(dup_ids)].sort_values("TransactionID").head(10))'
+       TransactionID  id_01          id_02  id_03  id_04  id_05  id_06  ...           id_34  id_35  id_36  id_37  id_38 DeviceType                     DeviceInf
+o
+64         3100991.0   -5.0   98682.000000    NaN    NaN    1.0    0.0  ...  match_status:1      T      F      T      F     mobile                     iOS Devic
+e
+10007      3100991.0   -5.0   98685.373824    NaN    NaN    1.0    0.0  ...  match_status:1      T      F      T      F     mobile                     iOS Devic
+e
+52         3155064.0   -5.0  150177.000000    0.0    0.0   -1.0  -11.0  ...             NaN      F      F      T      T    desktop                            Na
+N
+10315      3155064.0   -5.0  150180.973022    0.0    0.0   -1.0  -11.0  ...             NaN      F      F      T      T    desktop                            Na
+N
+138        3251454.0    0.0   61950.000000    0.0    0.0    0.0   -1.0  ...  match_status:1      T      F      T      T     mobile                     iOS Devic
+e
+10358      3251454.0    0.0   61948.790527    0.0    0.0    0.0   -1.0  ...  match_status:1      T      F      T      T     mobile                     iOS Devic
+e
+70         3485744.0  -25.0   61319.000000    0.0    0.0    1.0  -32.0  ...  match_status:2      T      F      T      F     mobile  SAMSUNG-SM-J327A Build/NRD90
+M
+10215      3485744.0  -25.0   61315.851793    0.0    0.0    1.0  -32.0  ...  match_status:2      T      F      T      F     mobile  SAMSUNG-SM-J327A Build/NRD90
+M
+97         3575086.0   -5.0  116381.000000    0.0    0.0    0.0    0.0  ...  match_status:2      T      F      F      F     mobile                     iOS Devic
+e
+10270      3575086.0   -5.0  116378.416389    0.0    0.0    0.0    0.0  ...  match_status:2      T      F      F      F     mobile                     iOS Devic
+e
+
+[10 rows x 41 columns]
+root@803b650a44b8:/workspace#

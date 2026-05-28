@@ -1,0 +1,79 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > match_gt.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+> regions = pd.read_csv('/data/region_map.csv')
+>
+> # Convert dates
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> # Build FX rates lookup
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> # Join fee schedules
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> # Wait, let's verify if there are any missing fee rates
+> print("Missing fee rates:", df['fee_rate'].isna().sum())
+>
+> df['processing_fee_usd'] = df['amount_usd'] * df['fee_rate']
+>
+> # Join regions
+> region_dict = regions.set_index('country_code')['region'].to_dict()
+> df['region'] = df['country_code'].map(region_dict).fillna('Other')
+>
+> # Filter for Q4 2023
+> df_q4 = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+>
+> # Filter out declined transactions
+> df_q4_not_declined = df_q4[df_q4['settlement_status'] != 'declined']
+>
+> # Now, let's look at isFraud == 1 transactions in Q4
+> fraud_txs = df_q4_not_declined[df_q4_not_declined['isFraud'] == 1]
+>
+> print("Total fraud txs (excluding declined) in Q4:", len(fraud_txs))
+> print("By transaction type:")
+> print(fraud_txs.groupby('transaction_type').size())
+> print("Gross fraud usd by type:")
+> print(fraud_txs.groupby('transaction_type')['amount_usd'].sum())
+> print("Processing fee usd by type:")
+> print(fraud_txs.groupby('transaction_type')['processing_fee_usd'].sum())
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 match_gt.py
+Missing fee rates: 0
+Total fraud txs (excluding declined) in Q4: 320
+By transaction type:
+transaction_type
+chargeback_reversal      9
+purchase               278
+refund                  33
+dtype: int64
+Gross fraud usd by type:
+transaction_type
+chargeback_reversal      863.080436
+purchase               31521.929699
+refund                  2435.890686
+Name: amount_usd, dtype: float64
+Processing fee usd by type:
+transaction_type
+chargeback_reversal      24.686746
+purchase               1068.538526
+refund                   78.081557
+Name: processing_fee_usd, dtype: float64
+root@474ebd5bd0a4:/workspace#

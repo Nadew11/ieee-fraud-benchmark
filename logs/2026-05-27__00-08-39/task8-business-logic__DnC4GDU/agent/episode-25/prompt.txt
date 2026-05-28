@@ -1,0 +1,137 @@
+New Terminal Output:
+
+Total frauds: 278
+Collecting pulp
+  Downloading pulp-3.3.2-py3-none-any.whl.metadata (8.6 kB)
+Downloading pulp-3.3.2-py3-none-any.whl (16.4 MB)
+   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 16.4/16.4 MB 36.6 MB/s eta 0:00:00
+Installing collected packages: pulp
+Successfully installed pulp-3.3.2
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a v
+irtual environment instead: https://pip.pypa.io/warnings/venv
+
+[notice] A new release of pip is available: 24.0 -> 26.1.1
+[notice] To update, run: pip install --upgrade pip
+Welcome to the CBC MILP Solver
+Version: 2.10.10
+Build Date: Sep 26 2023
+
+command line - /usr/local/lib/python3.11/site-packages/pulp/apis/../solverdir/cbc/linux/arm64/cbc /tmp/d63dfda9b02e4763a4c83624b446e52a-pulp.mps -timeMode elaps
+ed -solve -printingOptions all -solution /tmp/d63dfda9b02e4763a4c83624b446e52a-pulp.sol (default strategy 1)
+At line 2 NAME          MODEL
+At line 3 ROWS
+At line 10 COLUMNS
+At line 1958 RHS
+At line 1964 BOUNDS
+At line 2244 ENDATA
+Problem MODEL has 5 rows, 279 columns and 1390 elements
+Coin0008I MODEL read with 0 errors
+Option for timeMode changed from cpu to elapsed
+Continuous objective value is 0 - 0.00 seconds
+Cgl0004I processed model has 3 rows, 259 columns (259 integer (246 of which binary)) and 777 elements
+Cbc0038I Initial state - 3 integers unsatisfied sum - 0.803974
+Cbc0038I Pass   1: suminf.    0.59813 (3) obj. 0 iterations 5
+Cbc0038I Pass   2: suminf.    0.69364 (3) obj. 0 iterations 3
+Cbc0038I Pass   3: suminf.    0.56335 (3) obj. 0 iterations 36
+Cbc0038I Pass   4: suminf.    0.33954 (3) obj. 0 iterations 1
+Cbc0038I Pass   5: suminf.    0.33345 (3) obj. 0 iterations 3
+Cbc0038I Pass   6: suminf.    0.84540 (3) obj. 0 iterations 4
+Cbc0038I Pass   7: suminf.    0.43399 (3) obj. 0 iterations 4
+Cbc0038I Pass   8: suminf.    0.90939 (3) obj. 0 iterations 18
+Cbc0038I Pass   9: suminf.    0.51749 (3) obj. 0 iterations 5
+Cbc0038I Pass  10: suminf.    0.93150 (3) obj. 0 iterations 5
+Cbc0038I Pass  11: suminf.    1.00000 (3) obj. 0 iterations 3
+Cbc0038I Pass  12: suminf.    0.84374 (3) obj. 0 iterations 21
+Cbc0038I Pass  13: suminf.    0.78162 (3) obj. 0 iterations 3
+Cbc0038I Pass  14: suminf.    1.00000 (3) obj. 0 iterations 4
+Cbc0038I Pass  15: suminf.    0.72709 (3) obj. 0 iterations 4
+Cbc0038I Pass  16: suminf.    0.73579 (3) obj. 0 iterations 17
+Cbc0038I Pass  17: suminf.    0.76843 (3) obj. 0 iterations 2
+Cbc0038I Pass  18: suminf.    0.77307 (3) obj. 0 iterations 4
+Cbc0038I Pass  19: suminf.    1.00000 (3) obj. 0 iterations 3
+Cbc0038I Pass  20: suminf.    1.00000 (3) obj. 0 iterations 25
+Cbc0038I Pass  21: suminf.    0.63119 (3) obj. 0 iterations 4
+Cbc0038I Pass  22: suminf.    0.98808 (3) obj. 0 iterations 3
+Cbc0038I Pass  23: suminf.    0.80507 (3) obj. 0 iterations 11
+Cbc0038I Pass  24: suminf.    0.76996 (3) obj. 0 iterations 2
+Cbc0038I Pass  25: suminf.    0.76962 (3) obj. 0 iterations 3
+Cbc0038I Pass  26: suminf.    1.00000 (3) obj. 0 iterations 4
+Cbc0038I Pass  27: suminf.    0.81996 (3) obj. 0 iterations 4
+Cbc0038I Pass  28: suminf.    0.53808 (3) obj. 0 iterations 20
+Cbc0038I Pass  29: suminf.    0.45750 (3) obj. 0 iterations 4
+Cbc0038I Pass  30: suminf.    0.45376 (3) obj. 0 iterations 4
+Cbc0038I No solution found this major pass
+Cbc0038I Before mini branch and bound, 197 integers at bound fixed and 0 continuous
+Cbc0038I Full problem 3 rows 259 columns, reduced to 3 rows 62 columns
+Cbc0038I Mini branch and bound did not improve solution (0.02 seconds)
+Cbc0038I After 0.02 seconds - Feasibility pump exiting - took 0.01 seconds
+Cbc0031I 21 added rows had average density of 186.66667
+Cbc0013I At root node, 21 cuts changed objective from 0 to 0 in 100 passes
+Cbc0014I Cut generator 0 (Probing) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.022 seconds - new frequency is -100
+Cbc0014I Cut generator 1 (Gomory) - 1533 row cuts average 257.9 elements, 0 column cuts (0 active)  in 0.053 seconds - new frequency is -100
+Cbc0014I Cut generator 2 (Knapsack) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.002 seconds - new frequency is -100
+Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.001 seconds - new frequency is -100
+Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 522 row cuts average 165.0 elements, 0 column cuts (0 active)  in 0.060 seconds - new frequency is -100
+Cbc0014I Cut generator 5 (FlowCover) - 13 row cuts average 99.5 elements, 0 column cuts (0 active)  in 0.026 seconds - new frequency is -100
+Cbc0014I Cut generator 6 (TwoMirCuts) - 5 row cuts average 141.8 elements, 0 column cuts (0 active)  in 0.003 seconds - new frequency is -100
+Cbc0010I After 0 nodes, 1 on tree, 1e+50 best solution, best possible 0 (0.42 seconds)
+Cbc0004I Integer solution of 0 found after 4680 iterations and 367 nodes (0.60 seconds)
+Cbc0001I Search completed - best objective 0, took 4680 iterations and 367 nodes (0.60 seconds)
+Cbc0032I Strong branching done 1694 times (4503 iterations), fathomed 57 nodes and fixed 176 variables
+Cbc0035I Maximum depth 162, 0 variables fixed on reduced cost
+Cuts at root node changed objective from 0 to 0
+Probing was tried 100 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.022 seconds)
+Gomory was tried 100 times and created 1533 cuts of which 0 were active after adding rounds of cuts (0.053 seconds)
+Knapsack was tried 100 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
+Clique was tried 100 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
+MixedIntegerRounding2 was tried 100 times and created 522 cuts of which 0 were active after adding rounds of cuts (0.060 seconds)
+FlowCover was tried 100 times and created 13 cuts of which 0 were active after adding rounds of cuts (0.026 seconds)
+TwoMirCuts was tried 100 times and created 5 cuts of which 0 were active after adding rounds of cuts (0.003 seconds)
+ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found
+
+Objective value:                0.00000000
+Enumerated nodes:               367
+Total iterations:               4680
+Time (CPU seconds):             0.60
+Time (Wallclock seconds):       0.62
+
+Option for printingOptions changed from normal to all
+Total time (CPU seconds):       0.60   (Wallclock seconds):       0.62
+
+Status: Optimal
+Selected count: 263
+Selected IDs: [3068583 3243137 3384766 3483689 3326432 3344085 3571889 3571889 3353379
+ 3519372 3011734 3283388 3389131 3570541 3058108 3264213 3013350 3236404
+ 3072152 3535605 3282070 3357788 3538014 3079641 3522631 3176174 3009160
+ 3168558 3388943 3379204 3327795 3362242 3452325 3112671 3169421 3229164
+ 3004648 3427466 3107345 3004648 3107345 3462664 3288278 3563451 3383433
+ 3544952 3452212 3348758 3541357 3466335 3535564 3502950 3150070 3150070
+ 3160991 3146507 3087746 3239471 3514891 3184312 3541202 3349247 3257273
+ 3257273 3290643 3290643 3233361 3017812 3083341 3513937 3227029 3123778
+ 3407851 3407851 3391286 3479186 3186368 3186368 3546868 2992626 3022237
+ 3315572 3286803 3480693 3368974 3166183 3458590 3506833 3177459 3478183
+ 3072415 3440852 3185424 3331606 3248682 3209911 3540466 3358090 2992799
+ 3433866 3111963 2987780 3241151 3082563 3111895 3118278 3224630 3273503
+ 3038284 3145928 2998292 3155549 3387537 3243183 3351454 3251371 3267483
+ 3112923 3411489 3380306 3231532 3305569 3402353 3164191 3049320 3267521
+ 3144258 3202839 3144258 2994663 3465621 3365086 3472531 3056345 3294415
+ 3394968 3374263 3294415 3394968 3519377 3111185 3368115 3274084 3066453
+ 3561700 3405217 3570935 3563749 3333668 3477762 3200650 3320988 3162139
+ 3270077 3434598 3510781 3125715 2992234 3437889 3223816 3405227 3545926
+ 3409730 3427563 3433578 3365962 3051830 3222441 3134964 3520360 3472327
+ 3287375 3021920 3121701 3463061 3504585 3138353 3353526 3544431 3383096
+ 3084585 3279032 3245170 3215806 3499499 3007209 3429382 3206504 3250990
+ 3079248 3103312 3196833 3347898 3383771 3127551 3103912 3381683 3359190
+ 3435419 3264116 3264116 3395308 3561223 3388328 3562618 3233836 3165081
+ 3227307 3183801 3036064 3143187 3303307 3183889 3185771 3068095 3373972
+ 3434377 3328742 3068361 3265748 3240793 3473210 3396872 3161351 3093139
+ 3200715 3564645 3564645 3332005 3195125 3375218 3413554 3221918 3380259
+ 3114080 3253961 3407088 3487151 3013981 3574412 3341477 3030545 3028568
+ 3464676 3072612 3210281 3559518 3177976 3007017 3424301 3329978 3029265
+ 3180745 3180745 3481470 3440332 3397922 3418263 3141396 3390091 3206312
+ 3082917 3371528]
+Actual gross sum: 30212.525814735003
+Actual fee sum: 1021.5620552785301
+root@cf0db7aa8136:/workspace#

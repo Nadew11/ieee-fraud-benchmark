@@ -1,0 +1,50 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.dtypes); print(df.isna().sum())"
+TransactionID       int64
+isFraud             int64
+TransactionDT       int64
+TransactionAmt    float64
+card1               int64
+card2             float64
+addr1             float64
+dist1             float64
+C1                float64
+C2                float64
+C3                float64
+C4                float64
+C5                float64
+C6                float64
+V1                float64
+V2                float64
+V3                float64
+V4                float64
+V5                float64
+ProductCD          object
+card4              object
+card6              object
+dtype: object
+TransactionID         0
+isFraud               0
+TransactionDT         0
+TransactionAmt        0
+card1                 0
+card2              1252
+addr1              2519
+dist1              9963
+C1                 2531
+C2                 2443
+C3                 2533
+C4                 2430
+C5                 2479
+C6                 2447
+V1                 9578
+V2                 9516
+V3                15022
+V4                17512
+V5                 7195
+ProductCD             0
+card4                 0
+card6                 0
+dtype: int64
+root@549b54a67146:/workspace#

@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# python3 test_rounding.py
+
+none Gross: 30212.65790995 Fees: 702.89414371671 Recoveries: 2435.89068568
+round_both Gross: 30212.56 Fees: 702.99 Recoveries: 2435.89
+root@b9e5a18b679d:/workspace#
+root@b9e5a18b679d:/workspace#

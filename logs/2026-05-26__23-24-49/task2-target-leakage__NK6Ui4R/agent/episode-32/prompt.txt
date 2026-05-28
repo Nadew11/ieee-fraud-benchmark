@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 284 (char 285) | Content preview: '{\n  "analysis": "Excellent! The best hyperparameters are: `learning_rate=0.05`, `max_iter=100`, `max'...
+
+Please fix these issues and provide a proper JSON response.

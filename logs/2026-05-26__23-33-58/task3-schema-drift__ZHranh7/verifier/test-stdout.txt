@@ -1,0 +1,10 @@
+=== Task 3 Verifier — Wed May 27 04:43:26 UTC 2026 ===
+PASS [1/5] Required sheets present: ['Predictions', 'Data Quality Report']
+PASS [2/5] Predictions: 2000 rows (expected 2000), correct columns
+PASS [3/5] fraud_prob std=0.0728, mean=0.4728 — model learned
+  Holdout AUC: 0.6021
+PASS [4/5] Data Quality Report layout correct, AUC=0.6021 > 0.55
+PASS [5/5] Data Quality Report documents 3 integration issues
+
+SCORE: 5/5 — reward: 1.0
+=== Final reward: 1.0 ===

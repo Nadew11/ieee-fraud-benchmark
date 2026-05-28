@@ -1,0 +1,13 @@
+{
+  "analysis": "There are no files in `/output` yet. Let's think: is there a bug in how standard scaling is applied to `df`? \nWait! Look at this in `pipeline.py`:\n`X = df[features].fillna(-999).values`\nWait, what are the features? \n`features = [c for c in df.columns if c not in DROP]`\nAnd we have:\n```python
+scaler = StandardScaler()
+X = scaler.fit_transform(X)
+```\nWait! Let's check `X` shape and content after standard scaling. If we fillna with `-999` and then do standard scaling, what are the values of the scaled features? \nLet's check if there is an issue. If we scale features using `StandardScaler` after filling NaN with `-999`, then `-999` will be shifted and scaled to some value (e.g. around `-3.0` to `-15.0`). \nWait! Is there an issue with using `StandardScaler` for tree models? No, but wait, why is the AUC 1.0000 in our run? Is it because the model is learning something too well, or is there a target leak in the dataset? \nWait, let's look at the correlation output again: \n`C1`, `C2`, `C4`, `C5`, `card1`, `card2`, `addr1`, `dist1` all have extremely high correlations with `isFraud` compared to typical real-world tabular datasets. But wait, is there an engineered leak in `/data/train_transaction.csv`? \nWait, let's write a python script to inspect the features of the dataset more deeply. Let's look at the correlation of every column with the target or check if there is some column that perfectly predicts `isFraud` when some condition is met.\nWait! Let's check the values of `C1`, `C2`, `dist1`, etc. for `isFraud == 1` and `isFraud == 0`. Let's run a script to compute the distribution of some of these features.",
+  "plan": "Print the mean, min, max, std of each feature grouped by `isFraud`.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.groupby('isFraud')[['card1', 'card2', 'addr1', 'dist1', 'C1', 'C2', 'C4', 'C5']].mean())\"\n",
+      "duration": 2.0
+    }
+  ]
+}

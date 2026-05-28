@@ -1,0 +1,8 @@
+Previous response had warnings:
+WARNINGS: - Extra text detected after JSON object
+
+New Terminal Output:
+
+Features ['id_05', 'id_37', 'id_02']: CV AUC = 0.5221 +/- 0.0224
+Features ['id_05', 'id_37', 'id_20']: CV AUC = 0.5236 +/- 0.0364
+

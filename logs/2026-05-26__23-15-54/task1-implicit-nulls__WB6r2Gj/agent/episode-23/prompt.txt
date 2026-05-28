@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 143 (char 144) | Content preview: '{\n  "analysis": "Ah! There is no ground_truth file in the system. That\'s fine. We know what the veri'...
+
+Please fix these issues and provide a proper JSON response.

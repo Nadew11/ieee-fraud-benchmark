@@ -1,0 +1,8 @@
+New Terminal Output:
+
+lightgbm is NOT installed
+xgboost is installed
+catboost is NOT installed
+sklearn is installed
+openpyxl is installed
+root@8b9ff8325d75:/workspace#

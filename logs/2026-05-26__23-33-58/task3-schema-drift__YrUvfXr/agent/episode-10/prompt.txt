@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# python3 check_types.py
+root@8b9ff8325d75:/workspace# python3 -c "import pandas as pd; train=pd.read_csv('/data/train_identity.csv'); print(train['isFraud'].value_counts(dropna=False))
+"
+

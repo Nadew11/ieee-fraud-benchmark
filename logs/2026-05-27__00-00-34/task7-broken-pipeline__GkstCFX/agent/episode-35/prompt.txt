@@ -1,0 +1,50 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "
+> import pandas as pd, numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> df = pd.read_csv('/data/train_transaction.csv')
+>
+> TARGET = 'isFraud'
+> # Instead of dropping categorical columns, we keep them and convert to category dtype
+> cat_cols = ['ProductCD', 'card4', 'card6']
+> for col in cat_cols:
+>     df[col] = df[col].astype('category')
+>
+> features = [c for c in df.columns if c not in ['TransactionID', TARGET]]
+>
+> X = df[features]
+> y = df[TARGET].values
+>
+> X_train, X_val, y_train, y_val = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> model = xgb.XGBClassifier(
+>     objective='binary:logistic',
+>     eval_metric='auc',
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+>     enable_categorical=True
+> )
+> model.fit(
+>     X_train, y_train,
+>     eval_set=[(X_val, y_val)],
+>     verbose=False,
+> )
+>
+> probs = model.predict_proba(X_val)[:, 1]
+> auc   = roc_auc_score(y_val, probs)
+> print('Corrected Validation AUC:', auc)
+> "
+Corrected Validation AUC: 1.0
+root@549b54a67146:/workspace#

@@ -1,0 +1,15 @@
+Dataset: Fraud Detection Model - Holdout Evaluation Export
+Source: IEEE-CIS transaction scoring pipeline v4.2.1
+Export date: 2026-05-01
+
+Overall Statistics (as exported):
+  Columns: TransactionID, y_true, y_pred_prob, scored_at, batch_id
+  Model: XGBoost v2.0.3, trained on Q1-Q3 2025 data
+  Scoring period: January 15 - April 30, 2026
+
+Note: This export was generated from the raw scoring pipeline output
+and has not been pre-processed or filtered. The export contains all
+scored records from the evaluation period.
+
+Fraud labels (y_true) are finalized after chargeback window closure
+(45 days). Labels in this export are considered final.

@@ -1,0 +1,14 @@
+{
+  "auc_roc": 0.905062,
+  "precision_at_0.5": 0.206304,
+  "recall_at_0.5": 0.746114,
+  "f1_score_at_0.5": 0.323232,
+  "accuracy_at_0.5": 0.880948,
+  "precision_at_recommended_threshold_0.644": 0.46473,
+  "recall_at_recommended_threshold_0.644": 0.580311,
+  "f1_score_at_recommended_threshold_0.644": 0.516129,
+  "accuracy_at_recommended_threshold_0.644": 0.958539,
+  "holdout_dataset_size": 5065,
+  "holdout_fraud_cases": 193,
+  "holdout_non_fraud_cases": 4872
+}

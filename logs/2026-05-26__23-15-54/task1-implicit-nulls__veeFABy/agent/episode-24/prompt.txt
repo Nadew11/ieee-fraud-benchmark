@@ -1,0 +1,91 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# cat << 'EOF' > clean.py
+> import pandas as pd
+> import numpy as np
+>
+> # Load dataset
+> df = pd.read_csv('/data/train_identity.csv')
+> print("Original shape:", df.shape)
+>
+> # Remove duplicate records based on TransactionID, keeping the first occurrence
+> df_clean = df.drop_duplicates(subset=['TransactionID'], keep='first').copy()
+> print("Shape after deduplication:", df_clean.shape)
+>
+> # Handle missing values and ensure correct data types
+> for col in df_clean.columns:
+>     if df_clean[col].dtype == 'object':
+>         # Categorical columns: fill missing with 'Unknown'
+>         df_clean[col] = df_clean[col].fillna('Unknown').astype(str)
+>     else:
+>         # Numeric columns: fill missing with median
+>         median_val = df_clean[col].median()
+>         df_clean[col] = df_clean[col].fillna(median_val)
+>
+>         # Cast integer-valued columns to int64
+>         # (We check if all values are integers after filling)
+>         if (df_clean[col] % 1 == 0).all():
+>             df_clean[col] = df_clean[col].astype('int64')
+>         else:
+>             df_clean[col] = df_clean[col].astype('float64')
+>
+> # Verify types and missing values
+> print("Null counts:", df_clean.isnull().sum().sum())
+> print("Column data types:")
+> for col in df_clean.columns:
+>     print(f"{col}: {df_clean[col].dtype}")
+>
+> # Save cleaned dataset
+> import os
+> os.makedirs('/output', exist_ok=True)
+> df_clean.to_csv('/output/cleaned.csv', index=False)
+> print("Saved cleaned dataset to /output/cleaned.csv")
+> EOF
+root@803b650a44b8:/workspace# python3 clean.py
+Original shape: (10500, 41)
+Shape after deduplication: (10000, 41)
+Null counts: 0
+Column data types:
+TransactionID: int64
+id_01: int64
+id_02: int64
+id_03: int64
+id_04: int64
+id_05: int64
+id_06: int64
+id_07: int64
+id_08: int64
+id_09: int64
+id_10: int64
+id_11: float64
+id_12: object
+id_13: int64
+id_14: int64
+id_15: object
+id_16: object
+id_17: int64
+id_18: int64
+id_19: int64
+id_20: int64
+id_21: int64
+id_22: int64
+id_23: object
+id_24: int64
+id_25: int64
+id_26: int64
+id_27: object
+id_28: object
+id_29: object
+id_30: object
+id_31: object
+id_32: int64
+id_33: object
+id_34: object
+id_35: object
+id_36: object
+id_37: object
+id_38: object
+DeviceType: object
+DeviceInfo: object
+Saved cleaned dataset to /output/cleaned.csv
+root@803b650a44b8:/workspace#

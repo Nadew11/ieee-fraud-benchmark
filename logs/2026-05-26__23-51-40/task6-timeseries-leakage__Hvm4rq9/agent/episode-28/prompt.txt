@@ -1,0 +1,8 @@
+New Terminal Output:
+
+Training XGBoost model...
+Training HistGB model...
+Final Blended Train AUC: 0.87140
+Final Blended Test AUC: 0.86550
+Saved outputs successfully!
+root@9da0ecea1a80:/workspace#

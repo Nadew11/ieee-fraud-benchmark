@@ -1,0 +1,14 @@
+{
+  "analysis": "XGBoost and scikit-learn are available! We also have pandas and numpy. This is perfect. Let's analyze the input data details. We have `/data/transactions.csv` which has 30,000 rows. Columns: `TransactionID`, `TransactionDT`, `isFraud`, `TransactionAmt`, `card1`, `ProductCD`, `addr1`, `C1`, `C2`.\n\nLet's write a python script to inspect the columns, data types, missing values, distribution of the target variable `isFraud`, and check the temporal order (distribution of `TransactionDT`).",
+  "plan": "Create an inspection python script and run it to understand the dataset structure.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > inspect_data.py\nimport pandas as pd\nimport numpy as np\n\ndf = pd.read_csv('/data/transactions.csv')\nprint(\"Shape:\", df.shape)\nprint(\"Columns:\", df.columns.tolist())\nprint(\"Missing values:\\n\", df.isnull().sum())\nprint(\"isFraud value counts:\\n\", df['isFraud'].value_counts(dropna=False))\nprint(\"TransactionDT range:\", df['TransactionDT'].min(), df['TransactionDT'].max())\nprint(\"ProductCD unique values:\", df['ProductCD'].unique())\nprint(\"card1 unique count:\", df['card1'].nunique())\nprint(\"addr1 unique count:\", df['addr1'].nunique())\nEOF\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "python3 inspect_data.py\n",
+      "duration": 1.0
+    }
+  ]
+}

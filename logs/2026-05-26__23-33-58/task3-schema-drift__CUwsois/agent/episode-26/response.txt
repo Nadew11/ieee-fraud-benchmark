@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's wait for C=1.0.",
+  "plan": "Wait 2 seconds.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

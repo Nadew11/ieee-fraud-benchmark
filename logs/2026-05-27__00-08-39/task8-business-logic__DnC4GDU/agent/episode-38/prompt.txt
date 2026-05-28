@@ -1,0 +1,6 @@
+New Terminal Output:
+
+tries in df but not in region_map:', set(df['country_code'].unique()) - set(rm['country_code'].unique()))"
+Countries in df but not in region_map: {'JP'}
+root@cf0db7aa8136:/workspace#
+root@cf0db7aa8136:/workspace#

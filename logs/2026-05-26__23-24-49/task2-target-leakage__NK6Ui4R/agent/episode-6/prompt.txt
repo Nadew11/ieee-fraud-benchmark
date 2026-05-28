@@ -1,0 +1,30 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df[['chargeback_amount', 'fraud_score', 'd
+ays_to_chargeback', 'isFraud']].groupby('isFraud').describe().T.to_string())"
+isFraud                              0            1
+chargeback_amount  count  14469.000000   531.000000
+                   mean       0.000000   151.123032
+                   std        0.000000   231.351005
+                   min        0.000000     3.510000
+                   25%        0.000000    37.310000
+                   50%        0.000000    77.000000
+                   75%        0.000000   150.000000
+                   max        0.000000  2161.000000
+fraud_score        count  14469.000000   531.000000
+                   mean       0.053071     0.941961
+                   std        0.036528     0.029688
+                   min        0.001000     0.848100
+                   25%        0.023700     0.922650
+                   50%        0.051000     0.941600
+                   75%        0.078100     0.963450
+                   max        0.197300     0.999000
+days_to_chargeback count  14469.000000   531.000000
+                   mean     227.985555    14.969868
+                   std       79.811814     8.504329
+                   min       90.000000     1.000000
+                   25%      159.000000     8.000000
+                   50%      228.000000    15.000000
+                   75%      298.000000    22.000000
+                   max      365.000000    30.000000
+root@f6fdec80eb9d:/workspace#

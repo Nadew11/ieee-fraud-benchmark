@@ -1,0 +1,10 @@
+{
+  "analysis": "We need to investigate the files in `/data` first, read their headers, and understand the schema.",
+  "plan": "I will run `ls -la /data` and check the contents of `/data` to see the structure of the CSV files.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /data\n",
+      "duration": 0.5
+    }
+  ]
+}

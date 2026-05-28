@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait slightly longer for the remaining output of the script.",
+  "plan": "Wait 3 seconds.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 3.0
+    }
+  ]
+}

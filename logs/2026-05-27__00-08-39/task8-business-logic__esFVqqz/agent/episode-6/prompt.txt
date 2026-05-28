@@ -1,0 +1,43 @@
+New Terminal Output:
+
+}root@b9e5a18b679d:/workspace# python3 -c "import pandas, openpyxl; print('Pandas and Openpyxl are available')"
+Pandas and Openpyxl are available
+root@b9e5a18b679d:/workspace# cat << 'EOF' > explore.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> print(df.info())
+> print(df.head())
+> EOF
+root@b9e5a18b679d:/workspace# python3 explore.py
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 8457 entries, 0 to 8456
+Data columns (total 15 columns):
+ #   Column             Non-Null Count  Dtype
+---  ------             --------------  -----
+ 0   TransactionID      8457 non-null   int64
+ 1   isFraud            8457 non-null   int64
+ 2   TransactionAmt     8457 non-null   float64
+ 3   ProductCD          8457 non-null   object
+ 4   card4              8440 non-null   object
+ 5   card6              8441 non-null   object
+ 6   addr1              7492 non-null   float64
+ 7   addr2              7492 non-null   float64
+ 8   transaction_date   8457 non-null   object
+ 9   timestamp          8457 non-null   object
+ 10  currency           8457 non-null   object
+ 11  country_code       8457 non-null   object
+ 12  merchant_category  8457 non-null   object
+ 13  settlement_status  8457 non-null   object
+ 14  transaction_type   8457 non-null   object
+dtypes: float64(3), int64(2), object(10)
+memory usage: 991.2+ KB
+None
+   TransactionID  isFraud  TransactionAmt ProductCD       card4  ... currency  country_code  merchant_category settlement_status transaction_type
+0        3333560        0           41.00         W  mastercard  ...      USD            GB             crypto           settled         purchase
+1        3259516        0           76.95         W  mastercard  ...      USD            DE             crypto           settled         purchase
+2        3437864        0           68.50         W        visa  ...      USD            GB             travel           settled         purchase
+3        3350478        0          310.95         W        visa  ...      NGN            US             travel          declined         purchase
+4        3355011        0          250.00         W  mastercard  ...      USD            US             retail           settled         purchase
+
+[5 rows x 15 columns]
+

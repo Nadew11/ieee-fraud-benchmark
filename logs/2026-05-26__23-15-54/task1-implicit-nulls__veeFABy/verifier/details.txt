@@ -1,0 +1,10 @@
+=== Task 1 Verifier — Wed May 27 04:19:37 UTC 2026 ===
+PASS: output file exists
+PASS [1/5] row count: 10000 (expected ~10000)
+PASS [2/5] id_01 has no -999 sentinel values
+PASS [3/5] id_12 has no 'unknown' sentinel values
+PASS [4/5] id_15 has no empty-string sentinels
+PASS [5/5] TransactionID dtype is int64 (correct)
+
+SCORE: 5/5 — reward: 1.0
+=== Final reward: 1.0 ===

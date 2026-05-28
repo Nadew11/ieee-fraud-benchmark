@@ -1,0 +1,28 @@
+{
+  "analysis": "Wait, the AUC on numeric features is extremely low, barely around 0.50-0.53. Why?
+Ah, let's look at the correlation test we did earlier!
+`id_07 (numeric): AUC = 0.4498 (non-null: 273)`
+`id_08 (numeric): AUC = 0.2932 (non-null: 273)`
+`id_21 (numeric): AUC = 0.7551 (non-null: 274)`
+`id_24 (numeric): AUC = 0.4209 (non-null: 249)`
+`id_25 (numeric): AUC = 0.2029 (non-null: 272)`
+
+Look at `id_21`: its AUC is 0.7551 on non-null values! But its non-null count is only 274 out of 8000!
+And look at `id_25`: its AUC is 0.2029 on non-null values, which is actually very strong negative correlation (so 1 - 0.2029 = 0.7971 predictive signal if we invert or use a tree!).
+Why are the trees getting ~0.51?
+Ah! Because 96%+ of the values are null!
+When we fill nulls with `0` or median, the signal from the rare non-null values gets completely washed out because 0.96 of the data is just filled with the same constant!
+But wait! If we do something different:
+What if we add a missingness indicator (boolean `is_null` feature) for every column?
+For example, if a column `id_21` is non-null only 274 times, the indicator `id_21_is_null` might be highly predictive!
+And what if we use the missingness indicators as features?
+Let's check if the missingness itself or the combination of missingness and the feature values provides strong signal.
+Let's write a python script to test adding missingness indicators (as 0/1 columns) and training our model on them.",
+  "plan": "I will write a python script to test adding missingness indicators for columns and training trees on that combined representation.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > test_missing_indicators.py\nimport pandas as pd\nimport numpy as np\nfrom sklearn.model_selection import train_test_split\nfrom sklearn.metrics import roc_auc_score\nfrom sklearn.ensemble import RandomForestClassifier\nimport xgboost as xgb\n\ntrain_df = pd.read_csv('/data/train_identity.csv')\ntrain_df.columns = [c.replace('-', '_') if '-' in c else c for c in train_df.columns]\n\ntarget_col = 'isFraud'\nfeature_cols = [c for c in train_df.columns if c != target_col and c != 'TransactionID']\n\ntrain_sub, val_sub = train_test_split(train_df, test_size=0.20, random_state=42, stratify=train_df[target_col])\n\n# Create missing indicators\ndef create_features(df):\n    X = pd.DataFrame(index=df.index)\n    # Numeric cols\n    num_cols = df[feature_cols].select_dtypes(exclude=['object']).columns.tolist()\n    for col in num_cols:\n        X[col] = df[col].fillna(0)\n        X[f'{col}_isna'] = df[col].isna().astype(int)\n    \n    # Categorical cols\n    cat_cols = df[feature_cols].select_dtypes(include=['object']).columns.tolist()\n    for col in cat_cols:\n        # Simple frequency encoding or label encoding\n        freq = df[col].value_counts()\n        X[col] = df[col].map(freq).fillna(0)\n        X[f'{col}_isna'] = df[col].isna().astype(int)\n    return X\n\nX_train = create_features(train_sub)\nX_val = create_features(val_sub)\n\nprint('Features shape:', X_train.shape)\n\nclf_rf = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42, class_weight='balanced')\nclf_rf.fit(X_train, train_sub[target_col])\nauc_rf = roc_auc_score(val_sub[target_col], clf_rf.predict_proba(X_val)[:, 1])\nprint(f'RF with missing indicators AUC: {auc_rf:.6f}')\n\nclf_xgb = xgb.XGBClassifier(n_estimators=100, max_depth=4, learning_rate=0.05, random_state=42, eval_metric='auc')\nclf_xgb.fit(X_train, train_sub[target_col])\nauc_xgb = roc_auc_score(val_sub[target_col], clf_xgb.predict_proba(X_val)[:, 1])\nprint(f'XGB with missing indicators AUC: {auc_xgb:.6f}')\nEOF\npython3 test_missing_indicators.py\n",
+      "duration": 5.0
+    }
+  ]
+}

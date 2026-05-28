@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's look at the command output, and also search for where the test runner might be.",
+  "plan": "Let's check the `/output/` folder and see if it exists, and list its contents.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /output/\n",
+      "duration": 0.5
+    }
+  ]
+}

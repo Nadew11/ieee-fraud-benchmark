@@ -1,0 +1,76 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# cat << 'EOF' > tune_model.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
+> import xgboost as xgb
+>
+> train_df = pd.read_csv('/data/train_identity.csv')
+> train_df.columns = [c.replace('-', '_') if '-' in c else c for c in train_df.columns]
+>
+> target_col = 'isFraud'
+> feature_cols = [c for c in train_df.columns if c != target_col and c != 'TransactionID']
+>
+> # Split
+> train_sub, val_sub = train_test_split(train_df, test_size=0.20, random_state=42, stratify=train_df[target_col])
+>
+> print("Train class ratio:", train_sub[target_col].mean())
+> print("Holdout class ratio:", val_sub[target_col].mean())
+>
+> # Let's try simple preprocessing first
+> cat_cols = train_df[feature_cols].select_dtypes(include=['object']).columns.tolist()
+> num_cols = train_df[feature_cols].select_dtypes(exclude=['object']).columns.tolist()
+>
+> def preprocess(train_fit, df_to_transform):
+>     df_out = df_to_transform.copy()
+>     for col in num_cols:
+>         df_out[col] = df_out[col].fillna(df_out[col].median() if not df_out[col].isna().all() else 0)
+>     for col in cat_cols:
+>         df_out[col] = df_out[col].fillna('Missing').astype(str)
+>         # Fit categories
+>         train_cats = train_fit[col].fillna('Missing').astype(str).unique()
+>         cat_map = {cat: idx for idx, cat in enumerate(train_cats)}
+>         df_out[col] = df_out[col].map(cat_map).fillna(-1).astype(int)
+>     return df_out
+>
+> train_sub_proc = preprocess(train_sub, train_sub)
+> val_sub_proc = preprocess(train_sub, val_sub)
+>
+> # 1. XGBoost
+> clf_xgb = xgb.XGBClassifier(
+>     n_estimators=100,
+>     max_depth=4,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     eval_metric='auc'
+> )
+> clf_xgb.fit(train_sub_proc[feature_cols], train_sub_proc[target_col])
+> xgb_preds = clf_xgb.predict_proba(val_sub_proc[feature_cols])[:, 1]
+> print(f"XGBoost AUC: {roc_auc_score(val_sub_proc[target_col], xgb_preds):.6f}")
+>
+> # 2. HistGradientBoosting
+> clf_hgb = HistGradientBoostingClassifier(random_state=42, max_iter=100)
+> clf_hgb.fit(train_sub_proc[feature_cols], train_sub_proc[target_col])
+> hgb_preds = clf_hgb.predict_proba(val_sub_proc[feature_cols])[:, 1]
+> print(f"HistGradientBoosting AUC: {roc_auc_score(val_sub_proc[target_col], hgb_preds):.6f}")
+>
+> # 3. RandomForest
+> clf_rf = RandomForestClassifier(n_estimators=100, max_depth=8, random_state=42, class_weight='balanced')
+> clf_rf.fit(train_sub_proc[feature_cols], train_sub_proc[target_col])
+> rf_preds = clf_rf.predict_proba(val_sub_proc[feature_cols])[:, 1]
+> print(f"Random Forest AUC: {roc_auc_score(val_sub_proc[target_col], rf_preds):.6f}")
+>
+> EOF
+root@16de4ef61b18:/workspace# python3 tune_model.py
+Train class ratio: 0.03421875
+Holdout class ratio: 0.034375
+XGBoost AUC: 0.520618
+HistGradientBoosting AUC: 0.466278
+Random Forest AUC: 0.514292
+root@16de4ef61b18:/workspace#

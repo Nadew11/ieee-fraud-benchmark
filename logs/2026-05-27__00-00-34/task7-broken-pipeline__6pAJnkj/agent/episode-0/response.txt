@@ -1,0 +1,14 @@
+{
+  "analysis": "We need to fix a broken fraud detection pipeline. Let's first look at the files available, especially `/data/pipeline.py` and see what's in there.",
+  "plan": "I will run `ls -la /data` and `cat /data/pipeline.py` to examine the directory contents and inspect the script.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /data\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "cat /data/pipeline.py\n",
+      "duration": 1.0
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+New Terminal Output:
+
+python3 -c "import xgboost; print('xgboost is installed')" || true
+sklearn and openpyxl are installed
+
+root@16de4ef61b18:/workspace# python3 -c "import lightgbm; print('lightgbm is installed')" || true
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+root@16de4ef61b18:/workspace# python3 -c "import xgboost; print('xgboost is installed')" || true
+cat << 'EOF' > test_imports.py
+import sys
+for pkg in ['sklearn', 'openpyxl', 'lightgbm', 'xgboost']:
+    try:
+        __import__(pkg)
+        print(f'{pkg}: available')
+    except ImportError:
+        print(f'{pkg}: NOT available')
+EOF
+python3 test_imports.py
+

@@ -1,0 +1,19 @@
+{
+  "auc_roc": 0.9050623420710073,
+  "unfiltered_auc_roc_reported_by_analyst": 0.918213421549955,
+  "recommended_threshold": 0.644,
+  "precision_at_recommended_threshold": 0.46473029045643155,
+  "recall_at_recommended_threshold": 0.5803108808290155,
+  "f1_score_at_recommended_threshold": 0.5161290322580645,
+  "accuracy_at_recommended_threshold": 0.9585389930898321,
+  "precision_at_analyst_threshold_0.5": 0.20630372492836677,
+  "recall_at_analyst_threshold_0.5": 0.7461139896373057,
+  "f1_score_at_analyst_threshold_0.5": 0.3232323232323232,
+  "accuracy_at_analyst_threshold_0.5": 0.8809476801579467,
+  "total_eval_samples": 5065,
+  "total_eval_fraud_cases": 193,
+  "fraud_rate_pct": 3.8104639684106614,
+  "quarterly_loss_no_model": 448110562.68509376,
+  "quarterly_loss_at_recommended_threshold": 192730108.58835143,
+  "quarterly_savings_at_recommended_threshold": 255380454.09674233
+}

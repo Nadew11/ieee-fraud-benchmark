@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_identity.csv'); dups = df[df['TransactionID'].duplicated(keep='firs
+t')].index.tolist(); print(len(dups), min(dups), max(dups))"
+500 10000 10499
+root@cc7b6f7834c9:/workspace#

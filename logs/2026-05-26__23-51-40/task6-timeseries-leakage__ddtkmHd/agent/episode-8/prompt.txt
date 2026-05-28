@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print('Is sorted by TransactionDT:', df['TransactionD
+T'].is_monotonic_increasing); print('Min DT:', df['TransactionDT'].min(), 'Max DT:', df['TransactionDT'].max()); print('Time span in days:', (df['TransactionDT'
+].max() - df['TransactionDT'].min()) / 86400)"
+Is sorted by TransactionDT: True
+Min DT: 86413 Max DT: 15810838
+Time span in days: 181.99565972222223
+root@f9cb0064b676:/workspace#

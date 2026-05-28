@@ -1,0 +1,95 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat << 'EOF' > run_ensemble.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+> from sklearn.ensemble import HistGradientBoostingClassifier
+>
+> # 1. Load and sort
+> df = pd.read_csv('/data/transactions.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> # 2. Feature Engineering
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+> df['day_of_week'] = (df['TransactionDT'] // 86400) % 7
+>
+> # Historical features
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(999999999)
+> df['card1_cum_amt_mean'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(0)
+> df['card1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_cum_amt_mean'] + 1e-5)
+>
+> df['card1_addr1'] = df['card1'].astype(str) + '_' + df['addr1'].astype(str)
+> df['card1_addr1_cum_count'] = df.groupby('card1_addr1').cumcount()
+> df['card1_addr1_time_diff'] = df.groupby('card1_addr1')['TransactionDT'].diff().fillna(999999999)
+> df['card1_addr1_cum_amt_mean'] = df.groupby('card1_addr1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(0)
+> df['card1_addr1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_addr1_cum_amt_mean'] + 1e-5)
+>
+> df['card1_freq'] = df.groupby('card1')['TransactionDT'].transform('count')
+> df['addr1_freq'] = df.groupby('addr1')['TransactionDT'].transform('count')
+>
+> # Split
+> split_idx = int(len(df) * 0.8)
+> train_df = df.iloc[:split_idx]
+> test_df = df.iloc[split_idx:]
+>
+> # For XGBoost
+> df_xgb = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+> features_xgb = [c for c in df_xgb.columns if c not in ['TransactionID', 'TransactionDT', 'isFraud', 'card1_addr1']]
+> X_train_xgb = df_xgb.iloc[:split_idx][features_xgb]
+> X_test_xgb = df_xgb.iloc[split_idx:][features_xgb]
+> y_train = df['isFraud'].iloc[:split_idx]
+> y_test = df['isFraud'].iloc[split_idx:]
+>
+> # For HistGB
+> df_hist = df.copy()
+> df_hist['ProductCD'] = df_hist['ProductCD'].astype('category')
+> features_hist = [c for c in df_hist.columns if c not in ['TransactionID', 'TransactionDT', 'isFraud', 'card1_addr1']]
+> X_train_hist = df_hist.iloc[:split_idx][features_hist]
+> X_test_hist = df_hist.iloc[split_idx:][features_hist]
+>
+> # Train XGBoost
+> xgb_model = xgb.XGBClassifier(
+>     n_estimators=150,
+>     max_depth=4,
+>     learning_rate=0.03,
+>     subsample=1.0,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     eval_metric='auc'
+> )
+> xgb_model.fit(X_train_xgb, y_train)
+>
+> # Train HistGB
+> hist_model = HistGradientBoostingClassifier(
+>     max_depth=3,
+>     learning_rate=0.03,
+>     max_iter=150,
+>     categorical_features=['ProductCD'],
+>     random_state=42
+> )
+> hist_model.fit(X_train_hist, y_train)
+>
+> # Predict
+> preds_train_xgb = xgb_model.predict_proba(X_train_xgb)[:, 1]
+> preds_test_xgb = xgb_model.predict_proba(X_test_xgb)[:, 1]
+>
+> preds_train_hist = hist_model.predict_proba(X_train_hist)[:, 1]
+> preds_test_hist = hist_model.predict_proba(X_test_hist)[:, 1]
+>
+> print(f"XGBoost alone Test AUC: {roc_auc_score(y_test, preds_test_xgb):.5f}")
+> print(f"HistGB alone Test AUC: {roc_auc_score(y_test, preds_test_hist):.5f}")
+>
+> # Blended predictions
+> for w in [0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8]:
+>     preds_train_blend = w * preds_train_xgb + (1 - w) * preds_train_hist
+>     preds_test_blend = w * preds_test_xgb + (1 - w) * preds_test_hist
+>
+>     auc_train = roc_auc_score(y_train, preds_train_blend)
+>     auc_test = roc_auc_score(y_test, preds_test_blend)
+>     print(f"Weight XGB={w:.1f} | Train AUC: {auc_train:.5f}, Test AUC: {auc_test:.5f}")
+> EOF
+root@9da0ecea1a80:/workspace# python3 run_ensemble.py
+

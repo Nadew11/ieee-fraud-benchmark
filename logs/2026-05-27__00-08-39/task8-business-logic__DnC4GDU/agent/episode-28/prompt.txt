@@ -1,0 +1,36 @@
+New Terminal Output:
+
+Fee Sum: 1021.5799999999999
+root@cf0db7aa8136:/workspace# cat << 'EOF' > check_exclusions.py
+> import pandas as pd
+>
+> df_selected = pd.read_csv('selected_exact_ids.csv')
+> df_all = pd.read_csv('/data/transactions.csv')
+>
+> # Filter df_all to Q4 non-declined fraud purchases
+> df_q4 = df_all[(df_all['transaction_date'] >= '2023-10-01') & (df_all['transaction_date'] <= '2023-12-31')]
+> df_q4 = df_q4[df_q4['settlement_status'] != 'declined']
+> frauds = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')]
+>
+> # Let's find which ones are NOT in selected
+> excluded = frauds[~frauds['TransactionID'].isin(df_selected['TransactionID'])]
+> print("Excluded transactions count:", len(excluded))
+> print(excluded[['TransactionID', 'TransactionAmt', 'settlement_status', 'transaction_date', 'currency', 'country_code']])
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 check_exclusions.py
+Excluded transactions count: 12
+      TransactionID  TransactionAmt settlement_status transaction_date currency country_code
+1261        3155194          50.000           settled       2023-11-16      EUR           KE
+1907        3267483          11.601           settled       2023-11-16      USD           US
+2129        3210281         117.000           settled       2023-12-26      NGN           CA
+2628        3466335         171.000           settled       2023-10-22      ETB           CA
+2957        3022237          30.000           settled       2023-11-02      EUR           KE
+5147        3210490         112.990           settled       2023-12-24      EUR           US
+5360        2992626          48.336           pending       2023-11-01      ETB           NG
+5448        3341477         445.000           settled       2023-12-25      EUR           US
+6567        3082563         107.950           settled       2023-11-09      USD           DE
+6642        3427466         335.000           settled       2023-10-15      USD           NG
+6669        3302885          17.340           settled       2023-10-01      USD           CA
+7555        3359190          18.730           settled       2023-12-10      USD           DE
+root@cf0db7aa8136:/workspace#

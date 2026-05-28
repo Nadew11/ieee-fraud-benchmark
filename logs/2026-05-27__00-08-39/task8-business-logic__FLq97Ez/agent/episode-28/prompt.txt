@@ -1,0 +1,31 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 test_sheets.py
+      month         region  gross_fraud_usd  net_fraud_usd  processing_fees  fraud_transaction_count  avg_ticket_usd
+0   2023-10         Africa          1133.71         930.54            36.12                       11      103.064545
+1   2023-10         Europe          2964.72        2761.29            93.57                       27      109.804444
+2   2023-10  North America          2266.16        2150.49            74.00                       27       83.931852
+3   2023-10          Other          1603.62        1557.04            46.56                       10      160.362000
+4   2023-11         Africa          2368.18        2200.86            85.50                       20      118.409000
+5   2023-11         Europe          3793.58        3384.70           119.16                       28      135.485000
+6   2023-11  North America          2625.74        2538.01            86.22                       36       72.937222
+7   2023-11          Other           307.54         295.50            12.04                        4       76.885000
+8   2023-12         Africa          1795.10        1303.72            54.51                       18       99.727778
+9   2023-12         Europe          2505.63        1919.64            92.63                       33       75.928182
+10  2023-12  North America          8061.40        7282.98           287.31                       43      187.474419
+11  2023-12          Other           787.18         430.32            33.96                        6      131.196667
+root@474ebd5bd0a4:/workspace# python3 test_sheets.py
+      month         region  gross_fraud_usd  net_fraud_usd  processing_fees  fraud_transaction_count  avg_ticket_usd
+0   2023-10         Africa          1133.71         930.54            36.12                       11      103.064545
+1   2023-10         Europe          2964.72        2761.29            93.57                       27      109.804444
+2   2023-10  North America          2266.16        2150.49            74.00                       27       83.931852
+3   2023-10          Other          1603.62        1557.04            46.56                       10      160.362000
+4   2023-11         Africa          2368.18        2200.86            85.50                       20      118.409000
+5   2023-11         Europe          3793.58        3384.70           119.16                       28      135.485000
+6   2023-11  North America          2625.74        2538.01            86.22                       36       72.937222
+7   2023-11          Other           307.54         295.50            12.04                        4       76.885000
+8   2023-12         Africa          1795.10        1303.72            54.51                       18       99.727778
+9   2023-12         Europe          2505.63        1919.64            92.63                       33       75.928182
+10  2023-12  North America          8061.40        7282.98           287.31                       43      187.474419
+11  2023-12          Other           787.18         430.32            33.96                        6      131.196667
+root@474ebd5bd0a4:/workspace#

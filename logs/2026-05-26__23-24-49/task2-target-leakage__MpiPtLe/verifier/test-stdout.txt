@@ -1,0 +1,9 @@
+=== Task 2 Verifier — Wed May 27 04:28:16 UTC 2026 ===
+PASS [1/5] predictions.csv: 3000 rows, correct columns
+PASS [2/5] auc.txt contains valid float: 0.899604
+PASS [3/5] AUC 0.8996 ≤ 0.99 (not obviously leaked)
+PASS [4/5] AUC 0.8996 in realistic range [0.78, 0.94]
+PASS [5/5] No leaky column names found in agent output + AUC is clean
+
+SCORE: 5/5 — reward: 1.0
+=== Final reward: 1.0 ===

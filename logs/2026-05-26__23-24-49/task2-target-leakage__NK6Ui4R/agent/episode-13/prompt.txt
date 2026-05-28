@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 34 (char 35) | Content preview: '{\n  "analysis": "Wow, look at that!\nXGB AUC without explicit chargeback leaks (but keeping fraud_sco'...
+
+Please fix these issues and provide a proper JSON response.

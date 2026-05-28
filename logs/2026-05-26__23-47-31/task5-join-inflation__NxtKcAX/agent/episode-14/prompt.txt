@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# find /root -name "*eval*" -o -name "*test*"
+/root/.github/skills/model-evaluation
+/root/.agents/skills/model-evaluation
+/root/.codex/skills/model-evaluation
+/root/.gemini/skills/model-evaluation
+/root/.claude/skills/model-evaluation
+root@3532236a873b:/workspace#

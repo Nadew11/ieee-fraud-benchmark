@@ -1,0 +1,137 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_identity.csv').iloc[:10000]; pd.set_option('display.max_columns', N
+one); pd.set_option('display.max_rows', 100); print(df.dtypes); print(df.describe(include='all'))"
+TransactionID    float64
+id_01            float64
+id_02            float64
+id_03            float64
+id_04            float64
+id_05            float64
+id_06            float64
+id_07            float64
+id_08            float64
+id_09            float64
+id_10            float64
+id_11            float64
+id_12             object
+id_13            float64
+id_14            float64
+id_15             object
+id_16             object
+id_17            float64
+id_18            float64
+id_19            float64
+id_20            float64
+id_21            float64
+id_22            float64
+id_23             object
+id_24            float64
+id_25            float64
+id_26            float64
+id_27             object
+id_28             object
+id_29             object
+id_30             object
+id_31             object
+id_32            float64
+id_33             object
+id_34             object
+id_35             object
+id_36             object
+id_37             object
+id_38             object
+DeviceType        object
+DeviceInfo        object
+dtype: object
+        TransactionID         id_01          id_02        id_03        id_04  \
+count    1.000000e+04  10000.000000    9752.000000  4680.000000  4680.000000
+unique            NaN           NaN            NaN          NaN          NaN
+top               NaN           NaN            NaN          NaN          NaN
+freq              NaN           NaN            NaN          NaN          NaN
+mean     3.239337e+06    -10.121800  177688.251948     0.057051    -0.059402
+std      1.788408e+05     13.995833  160152.491518     0.582161     0.692445
+min      2.987004e+06   -100.000000      44.000000   -13.000000   -13.000000
+25%      3.078226e+06    -10.000000   68976.000000     0.000000     0.000000
+50%      3.205430e+06     -5.000000  129118.000000     0.000000     0.000000
+75%      3.394841e+06     -5.000000  235356.000000     0.000000     0.000000
+max      3.577509e+06      0.000000  990657.000000     6.000000     0.000000
+
+              id_05        id_06       id_07       id_08        id_09  \
+count   9475.000000  9475.000000  341.000000  341.000000  5244.000000
+unique          NaN          NaN         NaN         NaN          NaN
+top             NaN          NaN         NaN         NaN          NaN
+freq            NaN          NaN         NaN         NaN          NaN
+mean       1.511873    -6.856253   12.865103  -37.243402     0.086957
+std        5.270250    16.938321   10.488621   25.216288     0.942799
+min      -72.000000  -100.000000  -33.000000 -100.000000   -23.000000
+25%        0.000000    -6.000000    5.000000  -47.000000     0.000000
+50%        0.000000     0.000000   13.000000  -33.000000     0.000000
+75%        1.000000     0.000000   21.000000  -23.000000     0.000000
+max       52.000000     0.000000   38.000000    0.000000    15.000000
+
+              id_10        id_11     id_12        id_13        id_14  id_15  \
+count   5244.000000  9764.000000     10000  8838.000000  5498.000000   9765
+unique          NaN          NaN         2          NaN          NaN      3
+top             NaN          NaN  NotFound          NaN          NaN  Found
+freq            NaN          NaN      8525          NaN          NaN   4786
+mean      -0.304348    99.757393       NaN    47.910840  -345.234631    NaN
+std        2.712291     1.110407       NaN    11.939598    96.053608    NaN
+min     -100.000000    90.000000       NaN    11.000000  -600.000000    NaN
+25%        0.000000   100.000000       NaN    49.000000  -360.000000    NaN
+50%        0.000000   100.000000       NaN    52.000000  -300.000000    NaN
+75%        0.000000   100.000000       NaN    52.000000  -300.000000    NaN
+max        0.000000   100.000000       NaN    64.000000   720.000000    NaN
+
+        id_16        id_17        id_18        id_19        id_20       id_21  \
+count    8966  9642.000000  3072.000000  9641.000000  9635.000000  342.000000
+unique      2          NaN          NaN          NaN          NaN         NaN
+top     Found          NaN          NaN          NaN          NaN         NaN
+freq     4680          NaN          NaN          NaN          NaN         NaN
+mean      NaN   189.521883    14.216797   352.781662   402.843072  358.845029
+std       NaN    30.357384     1.544901   140.749465   152.488452  193.335006
+min       NaN   100.000000    11.000000   100.000000   100.000000  100.000000
+25%       NaN   166.000000    13.000000   266.000000   256.000000  252.000000
+50%       NaN   166.000000    15.000000   339.000000   472.000000  252.000000
+75%       NaN   225.000000    15.000000   427.000000   533.000000  453.000000
+max       NaN   226.000000    26.000000   671.000000   660.000000  849.000000
+
+             id_22                 id_23       id_24       id_25       id_26  \
+count   342.000000                   342  309.000000  340.000000  341.000000
+unique         NaN                     3         NaN         NaN         NaN
+top            NaN  IP_PROXY:TRANSPARENT         NaN         NaN         NaN
+freq           NaN                   231         NaN         NaN         NaN
+mean     15.938596                   NaN   12.792880  329.432353  148.328446
+std       6.690412                   NaN    2.457921   95.875095   30.843972
+min      14.000000                   NaN   11.000000  110.000000  100.000000
+25%      14.000000                   NaN   11.000000  321.000000  121.000000
+50%      14.000000                   NaN   11.000000  321.000000  147.000000
+75%      14.000000                   NaN   15.000000  360.250000  169.000000
+max      41.000000                   NaN   26.000000  545.000000  216.000000
+
+        id_27  id_28  id_29       id_30        id_31        id_32      id_33  \
+count     342   9764   9764        5303         9698  5304.000000       5026
+unique      2      2      2          70          105          NaN         96
+top     Found  Found  Found  Windows 10  chrome 63.0          NaN  1920x1080
+freq      341   5336   5244        1412         1498          NaN       1175
+mean      NaN    NaN    NaN         NaN          NaN    26.472097        NaN
+std       NaN    NaN    NaN         NaN          NaN     3.710072        NaN
+min       NaN    NaN    NaN         NaN          NaN    16.000000        NaN
+25%       NaN    NaN    NaN         NaN          NaN    24.000000        NaN
+50%       NaN    NaN    NaN         NaN          NaN    24.000000        NaN
+75%       NaN    NaN    NaN         NaN          NaN    32.000000        NaN
+max       NaN    NaN    NaN         NaN          NaN    32.000000        NaN
+
+                 id_34 id_35 id_36 id_37 id_38 DeviceType DeviceInfo
+count             5356  9765  9765  9765  9765       9745       8200
+unique               3     2     2     2     2          2        676
+top     match_status:2     T     F     T     F    desktop    Windows
+freq              4184  5332  9275  7705  5103       5963       3288
+mean               NaN   NaN   NaN   NaN   NaN        NaN        NaN
+std                NaN   NaN   NaN   NaN   NaN        NaN        NaN
+min                NaN   NaN   NaN   NaN   NaN        NaN        NaN
+25%                NaN   NaN   NaN   NaN   NaN        NaN        NaN
+50%                NaN   NaN   NaN   NaN   NaN        NaN        NaN
+75%                NaN   NaN   NaN   NaN   NaN        NaN        NaN
+max                NaN   NaN   NaN   NaN   NaN        NaN        NaN
+root@cc7b6f7834c9:/workspace#

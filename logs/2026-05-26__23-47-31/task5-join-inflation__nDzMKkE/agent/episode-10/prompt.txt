@@ -1,0 +1,22 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# python3 -c "
+> import pandas as pd
+> tx = pd.read_csv('/data/transactions.csv')
+> ident = pd.read_csv('/data/identity.csv').drop_duplicates(subset=['TransactionID'])
+> merged = pd.merge(tx, ident, on='TransactionID', how='left')
+> print('Merged len:', len(merged))
+> print('Merged fraud total:', merged[merged['isFraud'] == 1]['TransactionAmt'].sum())
+> print(merged[merged['isFraud'] == 1].groupby('DeviceType', dropna=False).agg(
+>     total_fraud_amount=('TransactionAmt', 'sum'),
+>     fraud_transaction_count=('TransactionID', 'count')
+> ))
+> "
+Merged len: 10000
+Merged fraud total: 49056.519
+            total_fraud_amount  fraud_transaction_count
+DeviceType
+desktop               9897.656                      118
+mobile                9523.986                       80
+NaN                  29634.877                      153
+root@10499a3d6cec:/workspace#

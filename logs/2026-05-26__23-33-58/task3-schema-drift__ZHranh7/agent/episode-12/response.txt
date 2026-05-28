@@ -1,0 +1,12 @@
+{
+  "analysis": "Wait, the AUC is extremely low (~0.52). Why is that? Let's check if the holdout set predictions are completely wrong, or if we have features with reverse effects or if we are not handling the target variable correctly, or if `TransactionID` is being included as a feature? No, `feature_cols` explicitly excludes `TransactionID` and `isFraud`. Let's check `train_df['isFraud'].value_counts()`.
+Wait, let's see if there is any leak, or if there is another issue. Why are these gradient boosted models getting an AUC of 0.52?
+Let's print the feature importances to see what features are important. Let's write a python snippet to compute single-feature AUCs or Pearson correlation with the target.",
+  "plan": "I will run a python script to calculate the individual AUC of each feature on the train/validation split, to find which features have actual signal, and to check if they are encoded correctly.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > test_correlations.py\nimport pandas as pd\nimport numpy as np\nfrom sklearn.metrics import roc_auc_score\n\ntrain_df = pd.read_csv('/data/train_identity.csv')\ntrain_df.columns = [c.replace('-', '_') if '-' in c else c for c in train_df.columns]\n\ntarget = train_df['isFraud']\nprint(\"Total cases:\", len(train_df), \"Fraud cases:\", target.sum())\n\nfor col in train_df.columns:\n    if col in ['isFraud', 'TransactionID']:\n        continue\n    # If numeric, calculate AUC\n    if train_df[col].dtype in [np.float64, np.int64]:\n        valid_mask = train_df[col].notna()\n        if valid_mask.sum() > 10:\n            try:\n                auc = roc_auc_score(target[valid_mask], train_df.loc[valid_mask, col])\n                # print if it's high or low\n                if auc < 0.45 or auc > 0.55:\n                    print(f\"{col} (numeric): AUC = {auc:.4f} (non-null: {valid_mask.sum()})\")\n            except Exception as e:\n                pass\n    else:\n        # Categorical, look at fraud rate per category\n        counts = train_df.groupby(col)['isFraud'].agg(['count', 'mean']).sort_values('count', ascending=False)\n        if (counts['mean'] - target.mean()).abs().max() > 0.05:\n            print(f\"{col} (categorical):\\n\", counts.head(5))\nEOF\npython3 test_correlations.py\n",
+      "duration": 5.0
+    }
+  ]
+}

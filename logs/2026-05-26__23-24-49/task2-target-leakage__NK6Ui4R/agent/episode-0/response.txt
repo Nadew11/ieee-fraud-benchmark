@@ -1,0 +1,14 @@
+{
+  "analysis": "We are at the beginning of the task. We need to train a fraud classifier using `/data/train_transaction.csv` and output `/output/predictions.csv` and `/output/auc.txt` with the ROC-AUC score on the validation split (80/20 split). Let's first inspect the data, see what features there are, and then write a Python script to do the preprocessing, training, evaluation, and saving.",
+  "plan": "1. Check the first few lines of `/data/train_transaction.csv` to see what features exist and their formats.\n2. See if python3, pandas, scikit-learn, etc. are installed.\n3. Write a Python script to load the data, split it into 80/20 train/validation sets (reproducibly), preprocess missing values, train a model (e.g., LightGBM or XGBoost or RandomForest), evaluate ROC-AUC, write predictions and AUC to the designated files.\n4. Run the script and verify output files.",
+  "commands": [
+    {
+      "keystrokes": "head -n 5 /data/train_transaction.csv\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "python3 -c \"import pandas, sklearn, lightgbm; print('Imports successful')\"\n",
+      "duration": 0.5
+    }
+  ]
+}

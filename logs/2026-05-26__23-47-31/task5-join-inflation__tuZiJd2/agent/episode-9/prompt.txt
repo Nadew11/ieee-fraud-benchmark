@@ -1,0 +1,18 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# python3 -c "
+> import pandas as pd
+> id_df = pd.read_csv('/data/identity.csv')
+> # check if any ID has both null and non-null DeviceType
+> has_null = id_df['DeviceType'].isna()
+> has_nonnull = id_df['DeviceType'].notna()
+> # Group by TransactionID
+> g = id_df.groupby('TransactionID')
+> print('Unique DeviceType per ID (dropna=False) counts value distribution:')
+> print(g['DeviceType'].apply(lambda x: len(set(x))).value_counts())
+> "
+Unique DeviceType per ID (dropna=False) counts value distribution:
+DeviceType
+1    2461
+Name: count, dtype: int64
+root@7e0b471406a5:/workspace#

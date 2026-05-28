@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 /setup/generate_data.py
+[load] Sampled 10,000 rows from real IEEE-CIS identity data
+[inject] id_01 sentinel -999: 0 rows
+[inject] id_12 sentinel 'unknown': 0 rows
+[inject] id_15 empty string: 235 rows
+[inject] TransactionID cast to float64
+[inject] 500 duplicate TransactionIDs injected -> total rows: 10500
+[done] /data/train_identity.csv written
+[done] /data/ground_truth.json written
+root@cc7b6f7834c9:/workspace#

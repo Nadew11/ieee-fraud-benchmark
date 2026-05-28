@@ -1,0 +1,9 @@
+Previous response had warnings:
+WARNINGS: - Extra text detected after JSON object
+
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# python3 find_best_combo.py
+SUCCESS: Features=['id_05', 'id_37'], C=0.01 -> Train=0.5257, Val=0.5651
+SUCCESS: Features=['id_05', 'id_37'], C=0.1 -> Train=0.5257, Val=0.5651
+

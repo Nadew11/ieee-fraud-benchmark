@@ -1,0 +1,23 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# cat << 'EOF' > check_cats.py
+> import pandas as pd
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> test = test.rename(columns=lambda x: x.replace('-', '_'))
+>
+> cat_cols = [c for c in test.columns if test[c].dtype == 'O' or train[c].dtype == 'O']
+> print("Categorical columns:", cat_cols)
+> for col in cat_cols:
+>     train_vals = set(train[col].dropna().unique())
+>     test_vals = set(test[col].dropna().unique())
+>     only_train = train_vals - test_vals
+>     only_test = test_vals - train_vals
+>     print(f"Column {col}: train_unique={len(train_vals)}, test_unique={len(test_vals)}, only_train={len(only_train)}, only_test={len(only_test)}")
+>     if len(only_train) > 0 and len(only_train) < 10:
+>         print("  only_train:", only_train)
+>     if len(only_test) > 0 and len(only_test) < 10:
+>         print("  only_test:", only_test)
+> EOF
+root@8b9ff8325d75:/workspace# python3 check_cats.py
+

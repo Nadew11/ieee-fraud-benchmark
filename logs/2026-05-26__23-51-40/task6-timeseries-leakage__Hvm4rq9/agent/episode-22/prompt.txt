@@ -1,0 +1,8 @@
+New Terminal Output:
+
+depth=5, lr=0.01 -> Train AUC: 0.86804, Test AUC: 0.86199
+depth=5, lr=0.03 -> Train AUC: 0.87829, Test AUC: 0.86085
+depth=5, lr=0.05 -> Train AUC: 0.89680, Test AUC: 0.85497
+depth=6, lr=0.01 -> Train AUC: 0.86826, Test AUC: 0.86232
+depth=6, lr=0.03 -> Train AUC: 0.88427, Test AUC: 0.85990
+

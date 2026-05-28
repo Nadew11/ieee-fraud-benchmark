@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 50 (char 51) | Content preview: '{\n  "analysis": "Aha! Oh my goodness! Look at this!\nRefunds sum = 2435.89068568 (which is EXACTLY th'...
+
+Please fix these issues and provide a proper JSON response.

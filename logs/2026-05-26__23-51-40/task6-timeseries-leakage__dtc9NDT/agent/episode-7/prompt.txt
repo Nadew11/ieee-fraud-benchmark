@@ -1,0 +1,13 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print('Is sorted:', df['TransactionDT'].is_monotonic_
+increasing); print(df['ProductCD'].value_counts())"
+Is sorted: True
+ProductCD
+W    14955
+H     6604
+C     4153
+S     2437
+R     1851
+Name: count, dtype: int64
+root@81a3fc64145d:/workspace#

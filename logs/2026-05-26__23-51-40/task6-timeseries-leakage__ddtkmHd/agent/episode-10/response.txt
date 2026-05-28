@@ -1,0 +1,41 @@
+{
+  "analysis": "The fast vectorized implementation took only 0.048 seconds! This is perfect.
+Let's design a powerful feature set for XGBoost using:
+1. `TransactionAmt`: numerical
+2. `ProductCD`: categorical (can use LabelEncoding or TargetEncoding or OneHotEncoding). Since XGBoost has native support for categoricals or we can just label/target encode them, let's look at what values `ProductCD` has. It has ['C' 'W' 'S' 'H' 'R']. One-hot encoding is very simple and robust here.
+3. `card1`: numerical, but treated as category. We can use target encoding or frequency encoding. Or we can compute features like:
+   - `card1_cum_count`
+   - `card1_time_diff`
+   - `card1_cum_mean_amt`
+   - Difference of `TransactionAmt` from `card1_cum_mean_amt`: `TransactionAmt - card1_cum_mean_amt`
+   - Ratio of `TransactionAmt` to `card1_cum_mean_amt`: `TransactionAmt / (card1_cum_mean_amt + 1e-5)`
+4. `addr1`: billing region/area. Let's do similar statistics:
+   - `addr1_cum_count`
+   - `addr1_time_diff`
+   - `addr1_cum_mean_amt`
+5. `C1`, `C2`: numerical counts. We can keep them as is.
+6. Time-based features:
+   - Since `TransactionDT` spans ~182 days, we can extract:
+     - `hour`: `(df['TransactionDT'] // 3600) % 24`
+     - `day_of_week`: `(df['TransactionDT'] // 86400) % 7`
+
+Let's do validation splitting.
+The instruction says: 'Choose a split strategy that reflects how the model would be deployed in production — the model must predict future transactions it has never seen.'
+So we must use a time-based split.
+Since the total dataset has 30,000 transactions, we can sort the dataset by `TransactionDT` (which it already is), and use:
+- First 24,000 samples (80%) as the training set.
+- Last 6,000 samples (20%) as the test set.
+
+Let's verify the class distribution of the training and test sets to make sure both have enough positive (fraud) cases.",
+  "plan": "Write a python script to check the split and distributions, and print isFraud counts in training/test sets.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > test_split.py\nimport pandas as pd\ndf = pd.read_csv('/data/transactions.csv')\nn_train = int(len(df) * 0.8)\ntrain = df.iloc[:n_train]\ntest = df.iloc[n_train:]\nprint('Train shape:', train.shape, 'Fraud rate:', train['isFraud'].mean(), 'Fraud count:', train['isFraud'].sum())\nprint('Test shape:', test.shape, 'Fraud rate:', test['isFraud'].mean(), 'Fraud count:', test['isFraud'].sum())\nEOF\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "python3 test_split.py\n",
+      "duration": 1.0
+    }
+  ]
+}

@@ -1,0 +1,72 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/output/cleaned.csv')
+> print(df.info())
+> print(df.head())
+> "
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 10000 entries, 0 to 9999
+Data columns (total 41 columns):
+ #   Column         Non-Null Count  Dtype
+---  ------         --------------  -----
+ 0   TransactionID  10000 non-null  int64
+ 1   id_01          10000 non-null  float64
+ 2   id_02          9752 non-null   float64
+ 3   id_03          4680 non-null   float64
+ 4   id_04          4680 non-null   float64
+ 5   id_05          9475 non-null   float64
+ 6   id_06          9475 non-null   float64
+ 7   id_07          341 non-null    float64
+ 8   id_08          341 non-null    float64
+ 9   id_09          5244 non-null   float64
+ 10  id_10          5244 non-null   float64
+ 11  id_11          9764 non-null   float64
+ 12  id_12          10000 non-null  object
+ 13  id_13          8838 non-null   float64
+ 14  id_14          5498 non-null   float64
+ 15  id_15          9765 non-null   object
+ 16  id_16          8966 non-null   object
+ 17  id_17          9642 non-null   float64
+ 18  id_18          3072 non-null   float64
+ 19  id_19          9641 non-null   float64
+ 20  id_20          9635 non-null   float64
+ 21  id_21          342 non-null    float64
+ 22  id_22          342 non-null    float64
+ 23  id_23          342 non-null    object
+ 24  id_24          309 non-null    float64
+ 25  id_25          340 non-null    float64
+ 26  id_26          341 non-null    float64
+ 27  id_27          342 non-null    object
+ 28  id_28          9764 non-null   object
+ 29  id_29          9764 non-null   object
+ 30  id_30          5303 non-null   object
+ 31  id_31          9698 non-null   object
+ 32  id_32          5304 non-null   float64
+ 33  id_33          5026 non-null   object
+ 34  id_34          5356 non-null   object
+ 35  id_35          9765 non-null   object
+ 36  id_36          9765 non-null   object
+ 37  id_37          9765 non-null   object
+ 38  id_38          9765 non-null   object
+ 39  DeviceType     9745 non-null   object
+ 40  DeviceInfo     8200 non-null   object
+dtypes: float64(23), int64(1), object(17)
+memory usage: 3.1+ MB
+None
+   TransactionID  id_01     id_02  id_03  id_04  id_05  id_06  id_07  id_08  ...  id_32      id_33           id_34 id_35  id_36  id_37 id_38 DeviceType  DeviceI
+nfo
+0        3082972   -5.0  119617.0    0.0    0.0    0.0    0.0    NaN    NaN  ...    NaN        NaN             NaN     F      F      T     T    desktop
+NaN
+1        3488422   -5.0   35555.0    0.0    0.0    0.0    0.0    NaN    NaN  ...   24.0  1919x1079  match_status:2     T      F      T     T    desktop     Wind
+ows
+2        3276554   -5.0   69490.0    0.0    0.0    1.0   -4.0    NaN    NaN  ...   24.0  1920x1080  match_status:2     T      F      T     F    desktop     Wind
+ows
+3        3070458  -15.0       NaN    NaN    NaN    NaN    NaN    NaN    NaN  ...    NaN        NaN             NaN   NaN    NaN    NaN   NaN        NaN
+NaN
+4        3107819    0.0   35376.0    0.0    0.0    6.0    0.0    NaN    NaN  ...   32.0   1280x720  match_status:2     T      F      T     T     mobile
+NaN
+
+[5 rows x 41 columns]
+root@666a44d996ad:/workspace#

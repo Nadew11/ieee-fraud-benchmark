@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 78 (char 79) | Content preview: '{\n  "analysis": "Wait, the python command is hanging or is taking a while. Why?\nAh, `HistGradientBoo'...
+
+Please fix these issues and provide a proper JSON response.

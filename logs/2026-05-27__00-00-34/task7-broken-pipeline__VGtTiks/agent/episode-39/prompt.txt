@@ -1,0 +1,38 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > inspect_perfect.py
+> import pandas as pd
+> from sklearn.tree import DecisionTreeClassifier, export_text
+>
+> df = pd.read_csv('/data/train_transaction.csv').sort_values('TransactionDT').reset_index(drop=True)
+> TARGET = 'isFraud'
+> cat_cols = ['ProductCD', 'card4', 'card6']
+> df_encoded = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+> DROP = ['TransactionID', TARGET]
+> features = [c for c in df_encoded.columns if c not in DROP]
+>
+> split_idx = int(len(df_encoded) * 0.8)
+> X_train, y_train = df_encoded.iloc[:split_idx][features], df_encoded.iloc[:split_idx][TARGET]
+> X_val, y_val = df_encoded.iloc[split_idx:][features], df_encoded.iloc[split_idx:][TARGET]
+>
+> # Train a decision tree of depth 4 and print it
+> dt = DecisionTreeClassifier(max_depth=4, random_state=42)
+> dt.fit(X_train.fillna(-999), y_train)
+> print(export_text(dt, feature_names=features))
+> EOF
+root@0d5e255b62ea:/workspace# python3 inspect_perfect.py
+|--- C1 <= 9.50
+|   |--- addr1 <= 449.50
+|   |   |--- C2 <= 5.50
+|   |   |   |--- card2 <= 499.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- card2 >  499.50
+|   |   |   |   |--- class: 1
+|   |   |--- C2 >  5.50
+|   |   |   |--- class: 1
+|   |--- addr1 >  449.50
+|   |   |--- class: 1
+|--- C1 >  9.50
+|   |--- class: 1
+
+root@0d5e255b62ea:/workspace#

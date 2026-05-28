@@ -1,0 +1,24 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > search_filters.py
+> import pandas as pd
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+> regions = pd.read_csv('/data/region_map.csv')
+>
+> # Let's clean or parse dates
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> # Let's inspect currency rates conversion
+> # FX rates matching transaction date, or the most recent prior rate.
+> # Let's build a fast mapping of (currency, date) -> rate
+> print("Unique currencies:", df['currency'].unique())
+> print("FX currencies:", fx['currency'].unique())
+> EOF
+root@474ebd5bd0a4:/workspace# python3 search_filters.py
+Unique currencies: ['USD' 'NGN' 'EUR' 'GBP' 'ETB']
+FX currencies: ['GBP' 'ETB' 'NGN' 'EUR']
+root@474ebd5bd0a4:/workspace#

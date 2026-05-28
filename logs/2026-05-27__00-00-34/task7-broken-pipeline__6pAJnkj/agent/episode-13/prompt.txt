@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv').sort_values('TransactionDT'); split_idx = int(len
+(df) * 0.8); train_df = df.iloc[:split_idx]; val_df = df.iloc[split_idx:]; print('Train size:', len(train_df), 'Val size:', len(val_df)); print('Train fraud rat
+e:', train_df['isFraud'].mean(), 'Val fraud rate:', val_df['isFraud'].mean())"
+Train size: 20000 Val size: 5000
+Train fraud rate: 0.05055 Val fraud rate: 0.0484
+root@e9645eb65f5b:/workspace#

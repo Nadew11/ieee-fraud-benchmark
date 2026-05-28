@@ -1,0 +1,10 @@
+{
+  "analysis": "There is a `/setup` directory! Let's list its contents.",
+  "plan": "I will list the contents of `/setup` using `ls -la /setup`.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /setup\n",
+      "duration": 0.5
+    }
+  ]
+}

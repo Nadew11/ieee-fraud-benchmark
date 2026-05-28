@@ -1,0 +1,6 @@
+New Terminal Output:
+
+lr=0.1, max_iter=200, max_leaf_nodes=31 -> AUC=0.889022
+lr=0.1, max_iter=200, max_leaf_nodes=63 -> AUC=0.886946
+Best Hyperparameters: (0.05, 100, 31, 0.9008032233247708)
+root@f6fdec80eb9d:/workspace#

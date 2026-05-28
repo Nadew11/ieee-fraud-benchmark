@@ -1,0 +1,67 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 -c "
+> with open('test_features2.py', 'w') as f:
+>     f.write('''import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> df = pd.read_csv('/data/transactions.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> df['dt_diff_card1'] = df.groupby('card1')['TransactionDT'].diff().fillna(-1)
+> df['dt_diff_card1_addr1'] = df.groupby(['card1', 'addr1'])['TransactionDT'].diff().fillna(-1)
+>
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_addr1_cum_count'] = df.groupby(['card1', 'addr1']).cumcount()
+>
+> df['card1_amt_cum_mean'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(-1)
+> df['card1_addr1_amt_cum_mean'] = df.groupby(['card1', 'addr1'])['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(-1)
+>
+> df['card1_fraud_cum_mean'] = df.groupby('card1')['isFraud'].transform(lambda x: x.shift().expanding().mean()).fillna(0.0456)
+> df['card1_addr1_fraud_cum_mean'] = df.groupby(['card1', 'addr1'])['isFraud'].transform(lambda x: x.shift().expanding().mean()).fillna(0.0456)
+>
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+>
+> df['amt_to_mean_card1'] = df['TransactionAmt'] / (df['card1_amt_cum_mean'] + 1e-5)
+> df['amt_to_mean_card1_addr1'] = df['TransactionAmt'] / (df['card1_addr1_amt_cum_mean'] + 1e-5)
+>
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+>
+> features = [c for c in df.columns if c not in ['TransactionID', 'TransactionDT', 'isFraud']]
+> print('Number of features:', len(features))
+>
+> n = len(df)
+> train_idx = int(n * 0.7)
+> val_idx = int(n * 0.8)
+>
+> train_df = df.iloc[:train_idx]
+> val_df = df.iloc[train_idx:val_idx]
+> test_df = df.iloc[val_idx:]
+>
+> X_train, y_train = train_df[features], train_df['isFraud']
+> X_val, y_val = val_df[features], val_df['isFraud']
+> X_test, y_test = test_df[features], test_df['isFraud']
+>
+> model = xgb.XGBClassifier(
+>     n_estimators=1000,
+>     max_depth=5,
+>     learning_rate=0.03,
+>     random_state=42,
+>     eval_metric='auc',
+>     early_stopping_rounds=50
+> )
+>
+> model.fit(
+>     X_train, y_train,
+>     eval_set=[(X_val, y_val)],
+>     verbose=50
+> )
+>
+> preds = model.predict_proba(X_test)[:, 1]
+> print(f'Test AUC: {roc_auc_score(y_test, preds):.5f}')
+> ''')
+> "
+root@81a3fc64145d:/workspace# python3 test_features2.py
+

@@ -1,0 +1,50 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_identity.csv'); print('Shape:', df.shape); print('Duplicates in Tra
+nsactionID:', df['TransactionID'].duplicated().sum()); print('NaN counts per column:\n', df.isna().sum())"
+Shape: (10500, 41)
+Duplicates in TransactionID: 500
+NaN counts per column:
+ TransactionID        0
+id_01                0
+id_02              265
+id_03             5608
+id_04             5608
+id_05              550
+id_06              550
+id_07            10150
+id_08            10150
+id_09             5001
+id_10             5001
+id_11              252
+id_12                0
+id_13             1218
+id_14             4741
+id_15              251
+id_16             1101
+id_17              377
+id_18             7273
+id_19              378
+id_20              384
+id_21            10149
+id_22            10149
+id_23            10149
+id_24            10183
+id_25            10151
+id_26            10150
+id_27            10149
+id_28              252
+id_29              252
+id_30             4950
+id_31              323
+id_32             4949
+id_33             5244
+id_34             4894
+id_35              251
+id_36              251
+id_37              251
+id_38              251
+DeviceType         272
+DeviceInfo        1906
+dtype: int64
+root@cc7b6f7834c9:/workspace#

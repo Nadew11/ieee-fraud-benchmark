@@ -1,0 +1,10 @@
+{
+  "analysis": "Let's inspect `/data/ground_truth.json` to see if there is any target info there that we should match or if it contains ground truth answers for us to verify against.",
+  "plan": "Check `/data/ground_truth.json` content.",
+  "commands": [
+    {
+      "keystrokes": "cat /data/ground_truth.json\n",
+      "duration": 0.5
+    }
+  ]
+}

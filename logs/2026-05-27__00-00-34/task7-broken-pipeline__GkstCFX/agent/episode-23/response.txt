@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, both experiments gave CV AUC of 1.0000! \nWait, why does it give 1.0000? Let's check: if there is indeed a feature that is extremely correlated or perfectly predictive of `isFraud`, wait! Let's check `df['isFraud'].value_counts()`. \nWait! Is `isFraud` actually in the features of the original script? No. \nWait, why did the task description say \"A fraud detection pipeline runs without crashing, but produces poor results (AUC = 0.73). Find and fix all bugs in the pipeline\"?\nWait! Let's check if the junior engineer's pipeline actually gets 0.73 AUC on a different test set or if the test set is split in a different way! \nWait, let's think: is there a different way to split the data? \nAh! `TransactionDT` is the transaction timestamp. In time-series or fraud datasets (like IEEE-CIS), there's a strong temporal aspect. But we saw that even with a chronological split (sorting by `TransactionDT` and split at 80%), the validation AUC was `0.99999`!\nWait! Why is the validation AUC so high? \nIs it because of some feature leakage? Let's look at the features again: \n`TransactionID`, `isFraud`, `TransactionDT`, `TransactionAmt`, `card1`, `card2`, `addr1`, `dist1`, `C1`, `C2`, `C3`, `C4`, `C5`, `C6`, `V1`, `V2`, `V3`, `V4`, `V5`, `ProductCD`, `card4`, `card6`.\nWait! Let's print out the first 5 rows and all columns of `df[df['isFraud'] == 1]` and `df[df['isFraud'] == 0]` to see what is happening.",
+  "plan": "Let's inspect the data for both classes to see why they are so easily separable.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print('Fraud:'); print(df[df['isFraud']==1].head(10)); print('Legit:'); print(df[df['isFraud']==0].head(10))\"\n",
+      "duration": 3.0
+    }
+  ]
+}

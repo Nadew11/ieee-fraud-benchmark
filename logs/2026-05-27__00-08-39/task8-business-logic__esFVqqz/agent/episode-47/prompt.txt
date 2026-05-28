@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 298 (char 299) | Content preview: '{\n  "analysis": "Wait, the search is still running or got cut off? Ah, it didn\'t finish printing or '...
+
+Please fix these issues and provide a proper JSON response.

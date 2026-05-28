@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 48 (char 49) | Content preview: '{\n  "analysis": "Wait, let\'s look at the numbers.\nThe ground truth has:\n- `q4_net_fraud_total_usd`: '...
+
+Please fix these issues and provide a proper JSON response.

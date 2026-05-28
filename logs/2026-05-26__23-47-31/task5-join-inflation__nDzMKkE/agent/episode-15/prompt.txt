@@ -1,0 +1,20 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# python3 -c "
+> import pandas as pd
+> tx = pd.read_csv('/data/transactions.csv')
+> ident = pd.read_csv('/data/identity.csv').drop_duplicates(subset=['TransactionID'])
+> merged = pd.merge(tx, ident, on='TransactionID', how='left')
+>
+> # Grouping
+> res = merged[merged['isFraud'] == 1].groupby('DeviceType', dropna=True).agg(
+>     total_fraud_amount=('TransactionAmt', 'sum'),
+>     fraud_transaction_count=('TransactionID', 'count')
+> ).reset_index()
+>
+> print(res)
+> "
+  DeviceType  total_fraud_amount  fraud_transaction_count
+0    desktop            9897.656                      118
+1     mobile            9523.986                       80
+root@10499a3d6cec:/workspace#

@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# find / -name "*fraud*" -o -name "*identity*" 2>/dev/null
+ls -la /data /output
+

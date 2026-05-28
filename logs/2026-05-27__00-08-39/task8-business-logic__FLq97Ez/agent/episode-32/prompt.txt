@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# mkdir -p /output
+root@474ebd5bd0a4:/workspace# ls -la /output
+total 8
+drwxr-xr-x 2 root root 4096 May 27 05:09 .
+drwxr-xr-x 1 root root 4096 May 27 05:15 ..
+root@474ebd5bd0a4:/workspace#

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 96 (char 97) | Content preview: '{\n  "analysis": "Ah! The script actually had finished printing the results before we pressed C-c!\nLe'...
+
+Please fix these issues and provide a proper JSON response.

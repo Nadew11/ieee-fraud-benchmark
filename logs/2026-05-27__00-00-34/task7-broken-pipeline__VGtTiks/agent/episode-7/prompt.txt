@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); df_sorted = df.sort_values('TransactionDT'); pri
+nt('Is sorted:', df_sorted['TransactionDT'].is_monotonic_increasing)"
+Is sorted: True
+root@0d5e255b62ea:/workspace#

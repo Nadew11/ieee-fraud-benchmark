@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; orig = pd.read_csv('/setup/source_identity.csv'); train = pd.read_csv('/data/train_identity.csv')
+; print('Orig TransactionID dtype:', orig['TransactionID'].dtype); print('Train TransactionID dtype:', train['TransactionID'].dtype)"
+Orig TransactionID dtype: int64
+Train TransactionID dtype: float64
+root@cc7b6f7834c9:/workspace#

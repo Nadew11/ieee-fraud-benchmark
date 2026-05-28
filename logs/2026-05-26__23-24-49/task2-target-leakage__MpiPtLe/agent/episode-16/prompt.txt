@@ -1,0 +1,6 @@
+New Terminal Output:
+
+depth=8, lr=0.03, sub=1.0 -> AUC: 0.892787
+depth=8, lr=0.05, sub=0.8 -> AUC: 0.895891
+depth=8, lr=0.05, sub=1.0 -> AUC: 0.891884
+

@@ -1,0 +1,68 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# cat << 'EOF' > test_combo.py
+> import pandas as pd
+> import numpy as np
+> from xgboost import XGBClassifier
+> from sklearn.metrics import roc_auc_score
+>
+> df = pd.read_csv('/data/transactions.csv')
+>
+> # Grouping identifier
+> df['card1_addr1'] = df['card1'].astype(str) + '_' + df['addr1'].astype(str)
+>
+> # Features
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+> df['day_of_week'] = (df['TransactionDT'] // 86400) % 7
+>
+> # Historical patterns for card1_addr1
+> df['combo_cum_count'] = df.groupby('card1_addr1').cumcount()
+> df['combo_time_diff'] = df.groupby('card1_addr1')['TransactionDT'].diff().fillna(-1)
+> cumsum_combo = df.groupby('card1_addr1')['TransactionAmt'].cumsum()
+> cumcount_combo = df.groupby('card1_addr1').cumcount() + 1
+> df['combo_cum_mean_amt'] = cumsum_combo / cumcount_combo
+> df['combo_amt_diff_mean'] = df['TransactionAmt'] - df['combo_cum_mean_amt']
+>
+> # Historical patterns for card1 alone
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(-1)
+> cumsum_card1 = df.groupby('card1')['TransactionAmt'].cumsum()
+> cumcount_card1 = df.groupby('card1').cumcount() + 1
+> df['card1_cum_mean_amt'] = cumsum_card1 / cumcount_card1
+>
+> # Frequency encoding (based on train set to avoid target/future leakage)
+> n_train = int(len(df) * 0.8)
+> train_df = df.iloc[:n_train]
+> card1_freq = train_df['card1'].value_counts(normalize=True)
+> df['card1_freq'] = df['card1'].map(card1_freq).fillna(0)
+>
+> # Categorical productCD
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+>
+> # Drop non-feature columns
+> features = [col for col in df.columns if col not in ['TransactionID', 'isFraud', 'card1_addr1']]
+>
+> train = df.iloc[:n_train]
+> test = df.iloc[n_train:]
+>
+> X_train, y_train = train[features], train['isFraud']
+> X_test, y_test = test[features], test['isFraud']
+>
+> model = XGBClassifier(
+>     n_estimators=200,
+>     learning_rate=0.05,
+>     max_depth=6,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     eval_metric='auc'
+> )
+>
+> model.fit(X_train, y_train)
+> y_pred_test = model.predict_proba(X_test)[:, 1]
+> test_auc = roc_auc_score(y_test, y_pred_test)
+> print(f"Test AUC with combo features: {test_auc:.5f}")
+> EOF
+root@f9cb0064b676:/workspace# python3 test_combo.py
+

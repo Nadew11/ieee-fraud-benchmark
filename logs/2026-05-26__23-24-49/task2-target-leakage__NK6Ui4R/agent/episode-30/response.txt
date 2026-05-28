@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's wait a tiny bit more for the final line of tuning to finish.",
+  "plan": "Wait for the last line to print and for the prompt to return.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

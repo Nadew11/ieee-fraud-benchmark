@@ -1,0 +1,10 @@
+{
+  "analysis": "Apologies. I am keeping the JSON description strings flat and simple. I will execute the script to inspect fraud purchases.",
+  "plan": "Write and run the python script `check_fraud.py`.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > check_fraud.py\nimport pandas as pd\ndf = pd.read_csv('/data/transactions.csv')\n\ndf = df[df.settlement_status != 'declined']\n\nfraud_purchases = df[(df.isFraud == 1) & (df.transaction_type == 'purchase')]\nprint(\"Total non-declined fraud purchases:\", len(fraud_purchases))\nprint(fraud_purchases.isnull().sum())\nprint(fraud_purchases.card4.value_counts(dropna=False))\nprint(fraud_purchases.card6.value_counts(dropna=False))\nprint(fraud_purchases.settlement_status.value_counts(dropna=False))\n\nfor col in fraud_purchases.columns:\n    if fraud_purchases[col].nunique() < 10:\n        print(col, \":\", fraud_purchases[col].value_counts(dropna=False))\nEOF\npython3 check_fraud.py\n",
+      "duration": 2.0
+    }
+  ]
+}

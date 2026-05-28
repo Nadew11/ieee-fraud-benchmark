@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "
+> import pandas as pd, numpy as np
+> from sklearn.model_selection import train_test_split
+> import xgboost as xgb
+> df = pd.read_csv('/data/train_transaction.csv')
+> print('TransactionDT range:', df['TransactionDT'].min(), df['TransactionDT'].max())
+> print('isFraud mean:', df['isFraud'].mean())
+> "
+

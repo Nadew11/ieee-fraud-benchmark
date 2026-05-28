@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 test_features2.py
+Number of features: 20
+[0]     validation_0-auc:0.81440
+[50]    validation_0-auc:0.85718
+[100]   validation_0-auc:0.87654
+[150]   validation_0-auc:0.87568
+[152]   validation_0-auc:0.87551
+Test AUC: 0.86292
+root@81a3fc64145d:/workspace#

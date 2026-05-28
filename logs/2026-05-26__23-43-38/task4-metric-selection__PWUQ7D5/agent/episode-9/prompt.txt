@@ -1,0 +1,53 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > fast_analyze.py
+> import csv
+> from collections import Counter
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     rows = [tuple(r) for r in reader]
+>
+> print("Total rows:", len(rows))
+> unique_rows = set(rows)
+> print("Unique rows:", len(unique_rows))
+>
+> # Let's see some duplicates
+> trans_counts = Counter([r[0] for r in rows])
+> dup_ids = [tid for tid, count in trans_counts.items() if count > 1]
+> print("Number of duplicate IDs:", len(dup_ids))
+>
+> # Look at some examples
+> print("Examples of duplicates:")
+> count = 0
+> for tid in dup_ids:
+>     matching = [r for r in rows if r[0] == tid]
+>     print(f"ID {tid}:")
+>     for m in matching:
+>         print("  ", m)
+>     count += 1
+>     if count >= 5:
+>         break
+> EOF
+root@a7f99ad36897:/workspace# python3 fast_analyze.py
+Total rows: 5650
+Unique rows: 5650
+Number of duplicate IDs: 500
+Examples of duplicates:
+ID 3003238:
+   ('3003238', '0', '0.2394', '2026-05-10 10:00:00', '35')
+   ('3003238', '0', '0.2507', '2026-04-21 17:00:00', '26')
+ID 3003352:
+   ('3003352', '0', '0.0891', '2026-03-06 19:00:00', '8')
+   ('3003352', '0', '0.1081', '2026-05-09 09:00:00', '38')
+ID 3003115:
+   ('3003115', '0', '0.3081', '2026-05-07 12:00:00', '35')
+   ('3003115', '0', '0.33', '2026-02-07 14:00:00', '5')
+ID 3002731:
+   ('3002731', '0', '0.0934', '2026-05-08 19:00:00', '31')
+   ('3002731', '0', '0.0732', '2026-04-19 12:00:00', '32')
+ID 3003013:
+   ('3003013', '0', '0.1566', '2026-05-10 01:00:00', '41')
+   ('3003013', '0', '0.1574', '2026-01-30 20:00:00', '25')
+root@a7f99ad36897:/workspace#

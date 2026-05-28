@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); d = df[df.duplicated(subset=["TransactionID"], keep
+=False)].sort_values("TransactionID"); d1 = d.groupby("TransactionID").first(); d2 = d.groupby("TransactionID").last(); print((d1["id_02"] != d2["id_02"]).sum()
+)'
+

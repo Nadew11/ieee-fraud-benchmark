@@ -1,0 +1,9 @@
+New Terminal Output:
+
+lr: 0.02, n_est: 120 -> Test AUC: 0.86316
+lr: 0.02, n_est: 140 -> Test AUC: 0.86306
+lr: 0.03, n_est: 80 -> Test AUC: 0.86399
+lr: 0.03, n_est: 100 -> Test AUC: 0.86405
+lr: 0.03, n_est: 120 -> Test AUC: 0.86466
+lr: 0.03, n_est: 140 -> Test AUC: 0.86470
+root@81a3fc64145d:/workspace#

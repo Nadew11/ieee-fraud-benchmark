@@ -1,0 +1,10 @@
+{
+  "analysis": "I need to ensure no raw control characters are present. I will check the root directory '/' to see if there are any other relevant directories or test scripts.",
+  "plan": "List the files in the root directory '/' to see what's there.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /\n",
+      "duration": 0.5
+    }
+  ]
+}

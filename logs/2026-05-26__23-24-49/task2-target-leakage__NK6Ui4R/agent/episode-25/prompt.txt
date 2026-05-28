@@ -1,0 +1,63 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# cat << 'EOF' > tune_model.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.compose import ColumnTransformer
+> from sklearn.pipeline import Pipeline
+> from sklearn.impute import SimpleImputer
+> from sklearn.preprocessing import OneHotEncoder
+> from sklearn.ensemble import HistGradientBoostingClassifier
+> from sklearn.metrics import roc_auc_score
+>
+> # Load
+> df = pd.read_csv('/data/train_transaction.csv')
+> target = 'isFraud'
+>
+> # Clean feature set
+> exclude_features = ['TransactionID', target, 'chargeback_amount', 'days_to_chargeback', 'fraud_score']
+> features = [c for c in df.columns if c not in exclude_features]
+>
+> # Split
+> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+>
+> cat_cols = df[features].select_dtypes(include=['object']).columns.tolist()
+> num_cols = [c for c in features if c not in cat_cols]
+>
+> # Preprocessor
+> num_transformer = SimpleImputer(strategy='median')
+> cat_transformer = Pipeline(steps=[
+>     ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+>     ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+> ])
+> preprocessor = ColumnTransformer(transformers=[
+>     ('num', num_transformer, num_cols),
+>     ('cat', cat_transformer, cat_cols)
+> ])
+>
+> # Let's try different hyperparameters for HistGB
+> results = []
+> for lr in [0.03, 0.05, 0.1]:
+>     for max_iter in [100, 150, 200]:
+>         for max_leaf_nodes in [31, 63]:
+>             model = Pipeline(steps=[
+>                 ('preprocessor', preprocessor),
+>                 ('classifier', HistGradientBoostingClassifier(
+>                     learning_rate=lr,
+>                     max_iter=max_iter,
+>                     max_leaf_nodes=max_leaf_nodes,
+>                     random_state=42
+>                 ))
+>             ])
+>             model.fit(train_df[features], train_df[target])
+>             preds = model.predict_proba(val_df[features])[:, 1]
+>             auc = roc_auc_score(val_df[target], preds)
+>             results.append((lr, max_iter, max_leaf_nodes, auc))
+>             print(f"lr={lr}, max_iter={max_iter}, max_leaf_nodes={max_leaf_nodes} -> AUC={auc:.6f}")
+>
+> best_res = max(results, key=lambda x: x[3])
+> print("Best Hyperparameters:", best_res)
+> EOF
+root@f6fdec80eb9d:/workspace# python3 tune_model.py
+

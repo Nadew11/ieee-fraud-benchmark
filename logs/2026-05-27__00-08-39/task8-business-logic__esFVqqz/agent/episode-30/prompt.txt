@@ -1,0 +1,117 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > find_exact_excluded.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> rates_dict = {}
+> for idx, row in fx.iterrows():
+>     rates_dict[(row['currency'], row['date'])] = row['rate_to_usd']
+>
+> def get_rate(currency, date_str):
+>     if currency == 'USD':
+>         return 1.0
+>     if (currency, date_str) in rates_dict:
+>         return rates_dict[(currency, date_str)]
+>     currency_rates = fx[fx['currency'] == currency]
+>     prior_rates = currency_rates[currency_rates['date'] <= date_str]
+>     if len(prior_rates) == 0:
+>         return currency_rates.sort_values('date').iloc[0]['rate_to_usd']
+>     return prior_rates.sort_values('date', ascending=False).iloc[0]['rate_to_usd']
+>
+> rates = []
+> for idx, row in df.iterrows():
+>     rates.append(get_rate(row['currency'], row['transaction_date']))
+> df['fx_rate'] = rates
+> df['amt_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = dict(zip(fees['merchant_category'], fees['fee_rate']))
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee'] = df['amt_usd'] * df['fee_rate']
+>
+> df_no_declined = df[df.settlement_status != 'declined'].copy()
+>
+> settled_fp = df_no_declined[(df_no_declined.isFraud == 1) & (df_no_declined.transaction_type == 'purchase') & (df_no_declined.settlement_status == 'settled')]
+.copy()
+>
+> print("Number of settled fraud purchases:", len(settled_fp))
+> print("Total USD of settled fraud purchases:", settled_fp['amt_usd'].sum())
+> print("Total Fees of settled fraud purchases:", settled_fp['processing_fee'].sum())
+>
+> target_gross = 30212.56
+> target_fees = 1021.58
+>
+> diff_gross = settled_fp['amt_usd'].sum() - target_gross
+> diff_fees = settled_fp['processing_fee'].sum() - target_fees
+> print(f"Difference in gross: {diff_gross}, Difference in fees: {diff_fees}")
+>
+> for idx, row in settled_fp.iterrows():
+>     if abs(row['amt_usd'] - diff_gross) < 5.0 and abs(row['processing_fee'] - diff_fees) < 1.0:
+>         print("Potential single row:", row['TransactionID'], row['TransactionAmt'], row['currency'], row['amt_usd'], row['processing_fee'], row['merchant_cate
+gory'])
+>
+> recoveries = df_no_declined[(df_no_declined.isFraud == 1) & (df_no_declined.transaction_type.isin(['refund', 'chargeback_reversal']))]
+> print("Number of recoveries:", len(recoveries))
+> print("Total USD of recoveries:", recoveries['amt_usd'].sum())
+> diff_rec = recoveries['amt_usd'].sum() - 2435.89
+> print("Difference in recoveries:", diff_rec)
+>
+> print(recoveries[['TransactionID', 'transaction_type', 'amt_usd', 'settlement_status']])
+>
+> EOF
+root@b9e5a18b679d:/workspace# python3 find_exact_excluded.py
+Number of settled fraud purchases: 264
+Total USD of settled fraud purchases: 30309.336008362
+Total Fees of settled fraud purchases: 1025.126345709975
+Difference in gross: 96.77600836199781, Difference in fees: 3.5463457099750713
+Potential single row: 3264116 86.34 EUR 95.63182445999999 2.8689547337999994 travel
+Potential single row: 3264116 87.0 EUR 96.36285299999999 2.8908855899999994 travel
+Number of recoveries: 42
+Total USD of recoveries: 3298.9711221
+Difference in recoveries: 863.0811220999999
+      TransactionID     transaction_type     amt_usd settlement_status
+71         10251371  chargeback_reversal  199.240000           settled
+151         8535564               refund    0.019791           settled
+230        10007209  chargeback_reversal   93.590000           settled
+435         8072152               refund   82.890000           settled
+514         8427466               refund  166.390000           settled
+619         8363256               refund    0.221392           settled
+620         8103312               refund   70.500000           settled
+810         8007209               refund   82.340000           settled
+962         8210490               refund  107.871507           settled
+1308        8466335               refund    1.245387           settled
+1442        8118278               refund   81.815315           settled
+2364       10294415  chargeback_reversal  111.127698           settled
+3052        8056345               refund  384.560000           settled
+3287        8251371               refund  152.680000           settled
+3376       10143187  chargeback_reversal    0.508153           settled
+3587        8112671               refund    0.657900           settled
+3623        8409730               refund   12.330000           settled
+3817        8564632               refund   26.970000           settled
+3944       10118278  chargeback_reversal  121.133549           settled
+4070        8143187               refund    0.367223           settled
+4108       10160991  chargeback_reversal    0.097638           settled
+4295        8177459               refund   28.890000           settled
+4631        8134964               refund  250.340000           settled
+4787        8007017               refund   39.758940           settled
+5058        8294415               refund   74.458369           settled
+5098        8287375               refund   67.560000           settled
+5123        8390091               refund   43.638478           settled
+5130        8303307               refund   52.312053           settled
+5628        8388943               refund    0.573982           settled
+5838        8504585               refund  162.030000           settled
+5845        8160991               refund    0.090978           settled
+6054        8368974               refund    3.911868           settled
+6089        8405217               refund   46.270000           settled
+6488        8524453               refund  283.140000           settled
+6512        8561700               refund    1.424348           settled
+6736        8183801               refund    0.814502           settled
+7180        8563749               refund  140.408653           settled
+7218       10535564  chargeback_reversal    0.025029           settled
+7626       10563749  chargeback_reversal  263.382747           settled
+7792        8326432               refund   39.850000           settled
+7917        8186368               refund   29.560000           settled
+8221       10390091  chargeback_reversal   73.975624           settled
+root@b9e5a18b679d:/workspace#

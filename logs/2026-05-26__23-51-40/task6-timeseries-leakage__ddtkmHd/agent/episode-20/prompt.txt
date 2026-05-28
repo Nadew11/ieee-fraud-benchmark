@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid \escape: line 6 column 1357 (char 1787) | Content preview: '{\n  "analysis": "Apologies for the control characters in my JSON analysis. I will now create and run'...
+
+Please fix these issues and provide a proper JSON response.

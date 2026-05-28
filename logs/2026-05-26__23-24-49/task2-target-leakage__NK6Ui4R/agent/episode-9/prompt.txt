@@ -1,0 +1,52 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# cat << 'EOF' > test_model.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.ensemble import HistGradientBoostingClassifier
+> from sklearn.metrics import roc_auc_score
+>
+> # Load data
+> df = pd.read_csv('/data/train_transaction.csv')
+>
+> # Separate features and target
+> target = 'isFraud'
+>
+> # Let's inspect categorical columns
+> cat_cols = df.select_dtypes(include=['object']).columns.tolist()
+> print("Categorical columns:", cat_cols)
+>
+> # Convert categorical columns to category dtypes for HistGradientBoostingClassifier
+> for col in cat_cols:
+>     df[col] = df[col].astype('category')
+>
+> # Split
+> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+>
+> # Define feature sets
+> # 1. All features (excluding TransactionID and isFraud)
+> features_all = [c for c in df.columns if c not in ['TransactionID', target]]
+>
+> # 2. Features excluding potential leakage: 'chargeback_amount', 'days_to_chargeback', 'fraud_score'
+> features_no_leak = [c for c in features_all if c not in ['chargeback_amount', 'days_to_chargeback', 'fraud_score']]
+>
+> # Train model 1 (all features)
+> clf1 = HistGradientBoostingClassifier(categorical_features=[features_all.index(c) for c in cat_cols if c in features_all], random_state=42)
+> clf1.fit(train_df[features_all], train_df[target])
+> preds1 = clf1.predict_proba(val_df[features_all])[:, 1]
+> auc1 = roc_auc_score(val_df[target], preds1)
+> print(f"AUC with all features: {auc1:.6f}")
+>
+> # Train model 2 (no leak)
+> clf2 = HistGradientBoostingClassifier(categorical_features=[features_no_leak.index(c) for c in cat_cols if c in features_no_leak], random_state=42)
+> clf2.fit(train_df[features_no_leak], train_df[target])
+> preds2 = clf2.predict_proba(val_df[features_no_leak])[:, 1]
+> auc2 = roc_auc_score(val_df[target], preds2)
+> print(f"AUC without leaky features: {auc2:.6f}")
+> EOF
+root@f6fdec80eb9d:/workspace# python3 test_model.py
+Categorical columns: ['ProductCD', 'card4', 'card6', 'P_emaildomain', 'R_emaildomain', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9']
+AUC with all features: 1.000000
+AUC without leaky features: 0.895147
+root@f6fdec80eb9d:/workspace#

@@ -1,0 +1,51 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > filter_check.py
+> import csv
+> from datetime import datetime
+> from collections import Counter
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     rows = [r for r in reader]
+>
+> filtered_rows = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') < datetime(2026, 5, 1)]
+> print("Filtered rows (scored before May 1):", len(filtered_rows))
+>
+> tids = [r[0] for r in filtered_rows]
+> counts = Counter(tids)
+> dups = [tid for tid, count in counts.items() if count > 1]
+> print("Duplicates in filtered dataset:", len(dups))
+>
+> # Let's see basic counts for filtered dataset
+> tp, fp, fn, tn = 0, 0, 0, 0
+> for r in filtered_rows:
+>     y_true = int(r[1])
+>     y_prob = float(r[2])
+>     y_pred = 1 if y_prob >= 0.5 else 0
+>     if y_true == 1 and y_pred == 1:
+>         tp += 1
+>     elif y_true == 0 and y_pred == 1:
+>         fp += 1
+>     elif y_true == 1 and y_pred == 0:
+>         fn += 1
+>     elif y_true == 0 and y_pred == 0:
+>         tn += 1
+>
+> print(f"Filtered TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}")
+> accuracy = (tp + tn) / len(filtered_rows)
+> print("Filtered Accuracy:", accuracy)
+>
+> from sklearn.metrics import roc_auc_score
+> y_true_filt = [int(r[1]) for r in filtered_rows]
+> y_prob_filt = [float(r[2]) for r in filtered_rows]
+> print("Filtered AUC:", roc_auc_score(y_true_filt, y_prob_filt))
+> EOF
+root@a7f99ad36897:/workspace# python3 filter_check.py
+Filtered rows (scored before May 1): 5065
+Duplicates in filtered dataset: 0
+Filtered TP: 144, FP: 554, FN: 49, TN: 4318
+Filtered Accuracy: 0.8809476801579467
+Filtered AUC: 0.9050623420710073
+root@a7f99ad36897:/workspace#

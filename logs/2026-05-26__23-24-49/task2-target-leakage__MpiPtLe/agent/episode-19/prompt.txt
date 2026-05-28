@@ -1,0 +1,7 @@
+New Terminal Output:
+
+depth=8, lr=0.1, sub=0.8 -> AUC: 0.886359
+depth=8, lr=0.1, sub=1.0 -> AUC: 0.891112
+Best AUC: 0.8996036040734897
+Best params: {'max_depth': 6, 'learning_rate': 0.03, 'subsample': 0.8}
+root@d8276d655354:/workspace#

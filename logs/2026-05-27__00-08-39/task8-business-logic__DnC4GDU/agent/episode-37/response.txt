@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's wait or hit enter.",
+  "plan": "Hit Enter or wait.",
+  "commands": [
+    {
+      "keystrokes": "\n",
+      "duration": 0.5
+    }
+  ]
+}

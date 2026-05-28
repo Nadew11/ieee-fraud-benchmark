@@ -1,0 +1,28 @@
+Previous response had warnings:
+WARNINGS: - Command 1 should end with newline when followed by another command. Otherwise the two commands will be concatenated together on the same line.
+
+New Terminal Output:
+
+python3 -c 'import sys; print(sys.version)'
+Train shape: (8000, 42)
+Test shape: (2000, 41)
+Train columns: ['TransactionID', 'id_01', 'id_02', 'id_03', 'id_04', 'id_05', 'id_06', 'id_07', 'id_08', 'id_09', 'id_10', 'id_11', 'id_12', 'id_13', 'id_14', '
+id_15', 'id_16', 'id_17', 'id_18', 'id_19', 'id_20', 'id_21', 'id_22', 'id_23', 'id_24', 'id_25', 'id_26', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_32',
+ 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'DeviceType', 'DeviceInfo', 'isFraud']
+Test columns: ['TransactionID', 'id-01', 'id-02', 'id-03', 'id-04', 'id-05', 'id-06', 'id-07', 'id-08', 'id-09', 'id-10', 'id-11', 'id-12', 'id-13', 'id-14', 'i
+d-15', 'id-16', 'id-17', 'id-18', 'id-19', 'id-20', 'id-21', 'id-22', 'id-23', 'id-24', 'id-25', 'id-26', 'id-27', 'id-28', 'id-29', 'id-30', 'id-31', 'id-32',
+'id-33', 'id-34', 'id-35', 'id-36', 'id-37', 'id-38', 'DeviceType', 'DeviceInfo']
+root@27e59b3c4e79:/workspace# python3 -c 'import sys; print(sys.version)'
+3.11.15 (main, May 19 2026, 23:56:34) [GCC 14.2.0]
+root@27e59b3c4e79:/workspace# ^C
+root@27e59b3c4e79:/workspace# python3 -c "import pandas as pd; print('Pandas imported successfully')"
+
+
+
+
+
+
+
+
+
+

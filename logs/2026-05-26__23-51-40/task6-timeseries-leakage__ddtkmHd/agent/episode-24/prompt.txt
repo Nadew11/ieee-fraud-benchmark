@@ -1,0 +1,8 @@
+Current terminal state:
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# rm -f explore.py test_feat.py test_feat_fast.py test_split.py test_combo.py tune.py final_train.py
+root@f9cb0064b676:/workspace#
+
+
+Are you sure you want to mark the task as complete? This will trigger your solution to be graded and you won't be able to make any further corrections. If so, include "task_complete": true in your JSON response again.

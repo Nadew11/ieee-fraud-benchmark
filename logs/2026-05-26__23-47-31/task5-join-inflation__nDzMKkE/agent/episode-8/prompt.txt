@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# python3 -c "import pandas as pd; ident=pd.read_csv('/data/identity.csv'); print(ident['DeviceType'].value_counts(dropna=False))"
+DeviceType
+desktop    1757
+mobile     1128
+NaN          68
+Name: count, dtype: int64
+root@10499a3d6cec:/workspace#

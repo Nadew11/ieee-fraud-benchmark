@@ -1,0 +1,14 @@
+=== Task 4 Verifier — Wed May 27 04:47:22 UTC 2026 ===
+Ground truth: clean_auc=0.8871, dirty_auc=0.9182, clean_count=5000, dirty_count=5650, calibration_rows=150, duplicate_rows=500
+PASS [1/9] All 3 output files exist (audit=8033, rec=6303 chars)
+PASS [2/9] metrics.json has 12 valid metrics: ['auc_roc', 'precision_at_0.5', 'recall_at_0.5', 'f1_score_at_0.5', 'accuracy_at_0.5', 'precision_at_recommended_threshold_0.644', 'recall_at_recommended_threshold_0.644', 'f1_score_at_recommended_threshold_0.644', 'accuracy_at_recommended_threshold_0.644', 'holdout_dataset_size', 'holdout_fraud_cases', 'holdout_non_fraud_cases']
+FAIL [3/9] AUC 'auc_roc'=0.9051 off by 0.0180 from clean value 0.8871
+FAIL [4/9] Agent found 1/2 data issues. Missing: calibration/anomalous rows
+PASS [5/9] Audit correctly identifies accuracy as misleading
+PASS [6/9] Recommendation pushes back on deploy-as-is
+PASS [7/9] Financial impact analysis present (28 dollar amounts)
+FAIL [8/9] Agent does not report cleaned row count. Expected 5,000 after removing calibration + deduplication
+PASS [9/9] Non-default threshold recommended (['0.644', '0.644', '0.644', '0.644']) with justification
+
+SCORE: 6/9 = 0.0
+=== Final reward: 0.0 ===

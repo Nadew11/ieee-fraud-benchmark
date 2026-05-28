@@ -1,0 +1,13 @@
+{
+  "analysis": "Wow, this is a major finding! There are 800 rows representing 400 transaction IDs that are duplicated.
+And their fields, like TransactionAmt, are slightly different!
+Wait, let's see why there are duplicate transaction IDs.
+Let's see if there are any duplicates among the fraud transactions.",
+  "plan": "Write and run a script to see if there are duplicate transaction IDs among the fraud transactions.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df=pd.read_csv('/data/transactions.csv'); fraud=df[df.isFraud==1]; print('Fraud with duplicate transaction IDs:', fraud.TransactionID.duplicated().sum())\"\n",
+      "duration": 1.0
+    }
+  ]
+}

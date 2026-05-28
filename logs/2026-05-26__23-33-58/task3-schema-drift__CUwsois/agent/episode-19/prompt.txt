@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# python3 test_robust_models.py
+LR - Train AUC: 0.6697882522592804
+LR - Holdout AUC: 0.5639305678140629
+Tuned XGB - Train AUC: 0.7176455465600503
+Tuned XGB - Holdout AUC: 0.5380288320094145
+Tuned HistGB - Train AUC: 0.6854176039549688
+Tuned HistGB - Holdout AUC: 0.5147867019711679
+root@27e59b3c4e79:/workspace#

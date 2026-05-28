@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 test_retrain.py
+N_estimators: 50, Test AUC: 0.86054
+N_estimators: 80, Test AUC: 0.86298
+N_estimators: 100, Test AUC: 0.86280
+

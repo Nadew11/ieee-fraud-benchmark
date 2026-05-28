@@ -1,0 +1,16 @@
+New Terminal Output:
+
+root@bb21c86eed4d:/workspace# python3 /workspace/train.py
+head -n 5 /output/predictions.csv
+Validation AUC: 0.890202
+Saved predictions to /output/predictions.csv
+Saved AUC to /output/auc.txt
+root@bb21c86eed4d:/workspace# head -n 5 /output/predictions.csv
+TransactionID,fraud_prob
+3476394,0.047025666
+3053569,0.0072918697
+3353921,0.0035052984
+3516024,0.005126902
+root@bb21c86eed4d:/workspace# cat /output/auc.txt
+0.890202
+root@bb21c86eed4d:/workspace#

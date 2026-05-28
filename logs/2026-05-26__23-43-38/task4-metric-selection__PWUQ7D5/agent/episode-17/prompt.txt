@@ -1,0 +1,79 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > evaluate_thresholds.py
+> import csv
+> from datetime import datetime
+> import numpy as np
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     rows = [r for r in reader]
+>
+> # Filter to scoring period: before May 1, 2026
+> filtered_rows = [r for r in rows if datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') < datetime(2026, 5, 1)]
+> y_true = np.array([int(r[1]) for r in filtered_rows])
+> y_prob = np.array([float(r[2]) for r in filtered_rows])
+>
+> N = len(filtered_rows)
+> loss_per_fn = 4200.0
+> cost_per_alert = 35.0
+> quarterly_volume = 2800000.0
+>
+> def eval_t(t):
+>     if t == 1.0:
+>         y_pred = np.zeros_like(y_true)
+>     elif t == 0.0:
+>         y_pred = np.ones_like(y_true)
+>     else:
+>         y_pred = (y_prob >= t).astype(int)
+>
+>     tp = int(sum((y_true == 1) & (y_pred == 1)))
+>     fp = int(sum((y_true == 0) & (y_pred == 1)))
+>     fn = int(sum((y_true == 1) & (y_pred == 0)))
+>     tn = int(sum((y_true == 0) & (y_pred == 0)))
+>
+>     tp_rate = tp / N
+>     fp_rate = fp / N
+>     fn_rate = fn / N
+>     tn_rate = tn / N
+>
+>     tp_q = tp_rate * quarterly_volume
+>     fp_q = fp_rate * quarterly_volume
+>     fn_q = fn_rate * quarterly_volume
+>     tn_q = tn_rate * quarterly_volume
+>
+>     alerts_q = tp_q + fp_q
+>     alerts_daily = alerts_q / 90.0
+>
+>     cost_fn = fn_q * loss_per_fn
+>     cost_alert = alerts_q * cost_per_alert
+>     total_cost = cost_fn + cost_alert
+>
+>     return {
+>         'threshold': t,
+>         'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+>         'alerts_daily': alerts_daily,
+>         'cost_fn': cost_fn,
+>         'cost_alert': cost_alert,
+>         'total_cost': total_cost
+>     }
+>
+> for t in [0.0, 0.1, 0.2, 0.29, 0.5, 0.6, 0.644, 0.7, 0.8, 0.9, 1.0]:
+>     res = eval_t(t)
+>     print(f"Threshold: {res['threshold']:.3f} | TP: {res['tp']}, FP: {res['fp']}, FN: {res['fn']}, TN: {res['tn']} | Daily Alerts: {res['alerts_daily']:.1f} |
+ Cost FN: ${res['cost_fn']:,.2f} | Cost Alert: ${res['cost_alert']:,.2f} | Total: ${res['total_cost']:,.2f}")
+> EOF
+root@a7f99ad36897:/workspace# python3 evaluate_thresholds.py
+Threshold: 0.000 | TP: 193, FP: 4872, FN: 0, TN: 0 | Daily Alerts: 31111.1 | Cost FN: $0.00 | Cost Alert: $98,000,000.00 | Total: $98,000,000.00
+Threshold: 0.100 | TP: 193, FP: 4190, FN: 0, TN: 682 | Daily Alerts: 26922.0 | Cost FN: $0.00 | Cost Alert: $84,804,343.53 | Total: $84,804,343.53
+Threshold: 0.200 | TP: 189, FP: 3171, FN: 4, TN: 1701 | Daily Alerts: 20638.4 | Cost FN: $9,287,265.55 | Cost Alert: $65,010,858.84 | Total: $74,298,124.38
+Threshold: 0.290 | TP: 185, FP: 2142, FN: 8, TN: 2730 | Daily Alerts: 14293.3 | Cost FN: $18,574,531.10 | Cost Alert: $45,023,889.44 | Total: $63,598,420.53
+Threshold: 0.500 | TP: 144, FP: 554, FN: 49, TN: 4318 | Daily Alerts: 4287.4 | Cost FN: $113,769,002.96 | Cost Alert: $13,505,231.98 | Total: $127,274,234.95
+Threshold: 0.600 | TP: 122, FP: 201, FN: 71, TN: 4671 | Daily Alerts: 1984.0 | Cost FN: $164,848,963.47 | Cost Alert: $6,249,555.77 | Total: $171,098,519.25
+Threshold: 0.644 | TP: 112, FP: 129, FN: 81, TN: 4743 | Daily Alerts: 1480.3 | Cost FN: $188,067,127.34 | Cost Alert: $4,662,981.24 | Total: $192,730,108.59
+Threshold: 0.700 | TP: 97, FP: 61, FN: 96, TN: 4811 | Daily Alerts: 970.5 | Cost FN: $222,894,373.15 | Cost Alert: $3,057,058.24 | Total: $225,951,431.39
+Threshold: 0.800 | TP: 57, FP: 14, FN: 136, TN: 4858 | Daily Alerts: 436.1 | Cost FN: $315,767,028.63 | Cost Alert: $1,373,741.36 | Total: $317,140,769.99
+Threshold: 0.900 | TP: 37, FP: 1, FN: 156, TN: 4871 | Daily Alerts: 233.4 | Cost FN: $362,203,356.37 | Cost Alert: $735,241.86 | Total: $362,938,598.22
+Threshold: 1.000 | TP: 0, FP: 0, FN: 193, TN: 4872 | Daily Alerts: 0.0 | Cost FN: $448,110,562.69 | Cost Alert: $0.00 | Total: $448,110,562.69
+root@a7f99ad36897:/workspace#

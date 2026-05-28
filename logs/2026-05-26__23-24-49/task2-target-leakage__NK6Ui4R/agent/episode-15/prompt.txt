@@ -1,0 +1,64 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.isna().sum().to_string())"
+TransactionID             0
+isFraud                   0
+TransactionDT             0
+TransactionAmt            0
+ProductCD                 0
+card1                     0
+card2                   238
+card3                    47
+card4                    47
+card5                   108
+card6                    48
+addr1                  1610
+addr2                  1610
+dist1                  8817
+dist2                 14014
+P_emaildomain          2414
+R_emaildomain         11558
+C1                        0
+C2                        0
+C3                        0
+C4                        0
+C5                        0
+C6                        0
+C7                        0
+C8                        0
+C9                        0
+C10                       0
+C11                       0
+C12                       0
+C13                       0
+C14                       0
+D1                       34
+D2                     7073
+D3                     6656
+D4                     4354
+D5                     7902
+D6                    13216
+D7                    14062
+D8                    13095
+D9                    13095
+D10                    1980
+D11                    7030
+D12                   13422
+D13                   13488
+D14                   13466
+D15                    2295
+M1                     6810
+M2                     6810
+M3                     6810
+M4                     7125
+M5                     8809
+M6                     4264
+M7                     8789
+M8                     8788
+M9                     8788
+chargeback_amount         0
+fraud_score               0
+days_to_chargeback        0
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); missing = df.isna().sum(); print(missing[missing
+ > 0])"
+

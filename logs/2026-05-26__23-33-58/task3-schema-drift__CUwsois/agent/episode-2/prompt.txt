@@ -1,0 +1,34 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# python3 -c '
+> import pandas as pd
+> train = pd.read_csv("/data/train_identity.csv")
+> test = pd.read_csv("/data/test_identity.csv")
+> print("Train shape:", train.shape)
+> print("Test shape:", test.shape)
+> print("Train columns:", list(train.columns))
+> print("Test columns:", list(test.columns))
+> '
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

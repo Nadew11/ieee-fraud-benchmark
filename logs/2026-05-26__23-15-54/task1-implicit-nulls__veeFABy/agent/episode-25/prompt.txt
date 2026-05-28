@@ -1,0 +1,56 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/output/cleaned.csv"); print("Shape:", df.shape); print("Null count:", df.isnul
+l().sum().sum()); print(df.info())'
+Shape: (10000, 41)
+Null count: 0
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 10000 entries, 0 to 9999
+Data columns (total 41 columns):
+ #   Column         Non-Null Count  Dtype
+---  ------         --------------  -----
+ 0   TransactionID  10000 non-null  int64
+ 1   id_01          10000 non-null  int64
+ 2   id_02          10000 non-null  int64
+ 3   id_03          10000 non-null  int64
+ 4   id_04          10000 non-null  int64
+ 5   id_05          10000 non-null  int64
+ 6   id_06          10000 non-null  int64
+ 7   id_07          10000 non-null  int64
+ 8   id_08          10000 non-null  int64
+ 9   id_09          10000 non-null  int64
+ 10  id_10          10000 non-null  int64
+ 11  id_11          10000 non-null  float64
+ 12  id_12          10000 non-null  object
+ 13  id_13          10000 non-null  int64
+ 14  id_14          10000 non-null  int64
+ 15  id_15          10000 non-null  object
+ 16  id_16          10000 non-null  object
+ 17  id_17          10000 non-null  int64
+ 18  id_18          10000 non-null  int64
+ 19  id_19          10000 non-null  int64
+ 20  id_20          10000 non-null  int64
+ 21  id_21          10000 non-null  int64
+ 22  id_22          10000 non-null  int64
+ 23  id_23          10000 non-null  object
+ 24  id_24          10000 non-null  int64
+ 25  id_25          10000 non-null  int64
+ 26  id_26          10000 non-null  int64
+ 27  id_27          10000 non-null  object
+ 28  id_28          10000 non-null  object
+ 29  id_29          10000 non-null  object
+ 30  id_30          10000 non-null  object
+ 31  id_31          10000 non-null  object
+ 32  id_32          10000 non-null  int64
+ 33  id_33          10000 non-null  object
+ 34  id_34          10000 non-null  object
+ 35  id_35          10000 non-null  object
+ 36  id_36          10000 non-null  object
+ 37  id_37          10000 non-null  object
+ 38  id_38          10000 non-null  object
+ 39  DeviceType     10000 non-null  object
+ 40  DeviceInfo     10000 non-null  object
+dtypes: float64(1), int64(23), object(17)
+memory usage: 3.1+ MB
+None
+root@803b650a44b8:/workspace#

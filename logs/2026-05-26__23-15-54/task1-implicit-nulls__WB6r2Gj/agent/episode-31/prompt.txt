@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 150 (char 151) | Content preview: '{\n  "analysis": "Exactly! The original TransactionID datatype is `int64`, while the train Transactio'...
+
+Please fix these issues and provide a proper JSON response.

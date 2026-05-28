@@ -1,0 +1,79 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# cat << 'EOF' > train_eval.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.preprocessing import OrdinalEncoder
+> from xgboost import XGBClassifier
+> from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier
+>
+> # Load data
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> test = test.rename(columns=lambda x: x.replace('-', '_'))
+>
+> # Separate features and target
+> X = train.drop(columns=['isFraud'])
+> y = train['isFraud']
+> X_test = test.copy()
+>
+> # Categorical features list
+> cat_cols = [c for c in X.columns if X[c].dtype == 'O' or X[c].dtype == 'object']
+> print("Categorical features:", cat_cols)
+>
+> # Fill missing values and ordinal encode for simplicity across model types
+> X_encoded = X.copy()
+> X_test_encoded = X_test.copy()
+>
+> # Ensure TransactionID is not treated as a feature
+> X_encoded = X_encoded.drop(columns=['TransactionID'])
+> X_test_encoded = X_test_encoded.drop(columns=['TransactionID'])
+>
+> # Ordinal encoding
+> for col in cat_cols:
+>     # Convert to string and fillna
+>     X_encoded[col] = X_encoded[col].astype(str).fillna('missing')
+>     X_test_encoded[col] = X_test_encoded[col].astype(str).fillna('missing')
+>
+>     # Fit ordinal encoder on train, transform train and test
+>     oe = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=-1)
+>     X_encoded[col] = oe.fit_transform(X_encoded[[col]])
+>     X_test_encoded[col] = oe.transform(X_test_encoded[[col]])
+>
+> # Let's do a 20% holdout split
+> X_tr, X_val, y_tr, y_val = train_test_split(X_encoded, y, test_size=0.2, random_state=42, stratify=y)
+>
+> # Try HistGradientBoostingClassifier
+> model_hgb = HistGradientBoostingClassifier(random_state=42)
+> model_hgb.fit(X_tr, y_tr)
+> preds_hgb = model_hgb.predict_proba(X_val)[:, 1]
+> auc_hgb = roc_auc_score(y_val, preds_hgb)
+> print(f"HistGradientBoosting holdout AUC: {auc_hgb:.4f}")
+>
+> # Try XGBoost
+> model_xgb = XGBClassifier(random_state=42, eval_metric='logloss')
+> model_xgb.fit(X_tr, y_tr)
+> preds_xgb = model_xgb.predict_proba(X_val)[:, 1]
+> auc_xgb = roc_auc_score(y_val, preds_xgb)
+> print(f"XGBoost holdout AUC: {auc_xgb:.4f}")
+>
+> # Try Random Forest
+> model_rf = RandomForestClassifier(random_state=42, n_estimators=100)
+> # RandomForest needs numeric features with no NaN, so let's impute NaNs with -999 for RF
+> X_tr_rf = X_tr.fillna(-999)
+> X_val_rf = X_val.fillna(-999)
+> model_rf.fit(X_tr_rf, y_tr)
+> preds_rf = model_rf.predict_proba(X_val_rf)[:, 1]
+> auc_rf = roc_auc_score(y_val, preds_rf)
+> print(f"Random Forest holdout AUC: {auc_rf:.4f}")
+>
+> EOF
+root@8b9ff8325d75:/workspace# python3 train_eval.py
+Categorical features: ['id_12', 'id_15', 'id_16', 'id_23', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'D
+eviceType', 'DeviceInfo']
+HistGradientBoosting holdout AUC: 0.4640
+XGBoost holdout AUC: 0.4706
+Random Forest holdout AUC: 0.4780
+root@8b9ff8325d75:/workspace#

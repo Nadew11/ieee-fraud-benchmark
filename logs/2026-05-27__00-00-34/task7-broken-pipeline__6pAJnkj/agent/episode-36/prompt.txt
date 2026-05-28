@@ -1,0 +1,49 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "
+> import pandas as pd
+> import numpy as np
+> import xgboost as xgb
+> from sklearn.preprocessing import LabelEncoder
+> from sklearn.metrics import roc_auc_score
+>
+> # Load data
+> df = pd.read_csv('/data/train_transaction.csv')
+>
+> # Sort chronologically to prevent temporal leakage
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> # Encode categorical features instead of dropping them
+> cat_cols = ['ProductCD', 'card4', 'card6']
+> for col in cat_cols:
+>     le = LabelEncoder()
+>     df[col] = le.fit_transform(df[col].astype(str))
+>
+> TARGET = 'isFraud'
+> DROP = ['TransactionID', TARGET, 'TransactionDT']
+> features = [c for c in df.columns if c not in DROP]
+>
+> split_idx = int(len(df) * 0.8)
+> train_df = df.iloc[:split_idx]
+> val_df = df.iloc[split_idx:]
+>
+> X_train, y_train = train_df[features].values, train_df[TARGET].values
+> X_val, y_val = val_df[features].values, val_df[TARGET].values
+>
+> model = xgb.XGBClassifier(
+>     objective='binary:logistic',
+>     eval_metric='auc',
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42
+> )
+> model.fit(X_train, y_train)
+> probs = model.predict_proba(X_val)[:, 1]
+> auc = roc_auc_score(y_val, probs)
+> print('Corrected Temporal Split AUC:', auc)
+> "
+Corrected Temporal Split AUC: 0.9999973945577523
+root@e9645eb65f5b:/workspace#

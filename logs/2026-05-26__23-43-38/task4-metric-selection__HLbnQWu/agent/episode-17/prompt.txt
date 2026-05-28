@@ -1,0 +1,57 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# cat << 'EOF' > make_metrics_json.py
+> import pandas as pd
+> import json
+> from sklearn.metrics import roc_auc_score, precision_score, recall_score, f1_score, accuracy_score
+>
+> # Load and clean
+> df = pd.read_csv('/data/predictions.csv')
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+> start_date = pd.to_datetime('2026-01-15 00:00:00')
+> end_date = pd.to_datetime('2026-04-30 23:59:59')
+> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)].copy()
+>
+> y_true = clean_df['y_true']
+> y_pred_prob = clean_df['y_pred_prob']
+>
+> # Metrics at 0.5
+> y_pred_05 = (y_pred_prob >= 0.5).astype(int)
+> precision_05 = float(precision_score(y_true, y_pred_05))
+> recall_05 = float(recall_score(y_true, y_pred_05))
+> f1_05 = float(f1_score(y_true, y_pred_05))
+> accuracy_05 = float(accuracy_score(y_true, y_pred_05))
+>
+> # Metrics at 0.644
+> y_pred_rec = (y_pred_prob >= 0.644).astype(int)
+> precision_rec = float(precision_score(y_true, y_pred_rec))
+> recall_rec = float(recall_score(y_true, y_pred_rec))
+> f1_rec = float(f1_score(y_true, y_pred_rec))
+> accuracy_rec = float(accuracy_score(y_true, y_pred_rec))
+>
+> auc_roc = float(roc_auc_score(y_true, y_pred_prob))
+>
+> metrics = {
+>     "auc_roc": round(auc_roc, 6),
+>     "precision_at_0.5": round(precision_05, 6),
+>     "recall_at_0.5": round(recall_05, 6),
+>     "f1_score_at_0.5": round(f1_05, 6),
+>     "accuracy_at_0.5": round(accuracy_05, 6),
+>     "precision_at_recommended_threshold_0.644": round(precision_rec, 6),
+>     "recall_at_recommended_threshold_0.644": round(recall_rec, 6),
+>     "f1_score_at_recommended_threshold_0.644": round(f1_rec, 6),
+>     "accuracy_at_recommended_threshold_0.644": round(accuracy_rec, 6),
+>     "holdout_dataset_size": int(len(clean_df)),
+>     "holdout_fraud_cases": int(y_true.sum()),
+>     "holdout_non_fraud_cases": int((y_true == 0).sum())
+> }
+>
+> # Save to /output/metrics.json
+> with open('/output/metrics.json', 'w') as f:
+>     json.dump(metrics, f, indent=2)
+>
+> print("Successfully created /output/metrics.json:")
+> print(json.dumps(metrics, indent=2))
+> EOF
+root@831ed0f33a44:/workspace# python3 make_metrics_json.py
+

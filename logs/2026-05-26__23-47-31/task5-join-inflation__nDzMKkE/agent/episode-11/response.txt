@@ -1,0 +1,10 @@
+{
+  "analysis": "The terminal is processing. I'll wait for the output.",
+  "plan": "Wait for 1.0 seconds.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 1.0
+    }
+  ]
+}

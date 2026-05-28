@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); dt = df['TransactionDT']; print('Min:', dt.min(), 'Ma
+x:', dt.max(), 'Span days:', (dt.max() - dt.min()) / (24*3600))"
+Min: 86413 Max: 15810838 Span days: 181.99565972222223
+root@81a3fc64145d:/workspace#

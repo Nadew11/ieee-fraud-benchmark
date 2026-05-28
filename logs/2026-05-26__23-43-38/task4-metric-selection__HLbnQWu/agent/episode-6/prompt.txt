@@ -1,0 +1,39 @@
+New Terminal Output:
+
+python3 analyze.py
+Dataset shape: (5650, 5)
+Unique TransactionIDs: 5150
+Missing values:
+TransactionID    0
+y_true           0
+y_pred_prob      0
+scored_at        0
+batch_id         0
+dtype: int64
+y_true counts:
+y_true
+0    5399
+1     251
+Name: count, dtype: int64
+
+At 0.5 threshold:
+AUC-ROC: 0.9182
+Accuracy: 0.8830
+Confusion Matrix:
+TP: 194, FP: 604, FN: 57, TN: 4795
+
+Number of duplicate TransactionID rows: 1000
+      TransactionID  y_true  y_pred_prob            scored_at  batch_id
+742         3000017       0       0.2876  2026-01-31 05:00:00        42
+1437        3000017       0       0.2549  2026-05-11 14:00:00        44
+5630        3000034       0       0.2078  2026-05-09 08:00:00        26
+5588        3000034       0       0.1834  2026-02-21 04:00:00         9
+1068        3000035       0       0.3291  2026-05-05 03:00:00        41
+3639        3000035       0       0.3452  2026-02-27 21:00:00        20
+2652        3000050       0       0.0010  2026-05-11 14:00:00        20
+3683        3000050       0       0.0010  2026-01-22 09:00:00        36
+1292        3000051       1       0.3548  2026-03-06 04:00:00        11
+5213        3000051       1       0.3614  2026-05-03 22:00:00        30
+root@831ed0f33a44:/workspace# python3 analyze.py
+python3 -c "print('Hello World')"
+

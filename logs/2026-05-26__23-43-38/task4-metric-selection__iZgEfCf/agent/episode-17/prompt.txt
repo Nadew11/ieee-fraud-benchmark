@@ -1,0 +1,66 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# mkdir -p /output
+root@58fc9c5bb0bf:/workspace# cat << 'EOF' > compute_metrics.py
+> import pandas as pd
+> import json
+> from sklearn.metrics import confusion_matrix, accuracy_score, roc_auc_score
+>
+> df = pd.read_csv('/data/predictions.csv')
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+>
+> # Clean data
+> df_clean = df[(df['batch_id'] != 99) & (df['scored_at'] <= '2026-04-30 23:59:59')].copy()
+>
+> # Compute metrics at threshold 0.5
+> y_true = df_clean['y_true']
+> y_pred_prob = df_clean['y_pred_prob']
+> y_pred_05 = (y_pred_prob >= 0.5).astype(int)
+>
+> tn, fp, fn, tp = confusion_matrix(y_true, y_pred_05).ravel()
+> accuracy_05 = accuracy_score(y_true, y_pred_05)
+> auc_roc = roc_auc_score(y_true, y_pred_prob)
+> precision_05 = tp / (tp + fp)
+> recall_05 = tp / (tp + fn)
+> f1_05 = 2 * precision_05 * recall_05 / (precision_05 + recall_05)
+>
+> # Let's also compute metrics at recommended threshold 0.63
+> y_pred_063 = (y_pred_prob >= 0.63).astype(int)
+> tn_63, fp_63, fn_63, tp_63 = confusion_matrix(y_true, y_pred_063).ravel()
+> accuracy_063 = accuracy_score(y_true, y_pred_063)
+> precision_063 = tp_63 / (tp_63 + fp_63)
+> recall_063 = tp_63 / (tp_63 + fn_63)
+> f1_063 = 2 * precision_063 * recall_063 / (precision_063 + recall_063)
+>
+> metrics = {
+>     "auc_roc": float(round(auc_roc, 4)),
+>     "accuracy_at_0.5": float(round(accuracy_05, 4)),
+>     "precision_at_0.5": float(round(precision_05, 4)),
+>     "recall_at_0.5": float(round(recall_05, 4)),
+>     "f1_score_at_0.5": float(round(f1_05, 4)),
+>     "accuracy_at_0.63": float(round(accuracy_063, 4)),
+>     "precision_at_0.63": float(round(precision_063, 4)),
+>     "recall_at_0.63": float(round(recall_063, 4)),
+>     "f1_score_at_0.63": float(round(f1_063, 4))
+> }
+>
+> with open('/output/metrics.json', 'w') as f:
+>     json.dump(metrics, f, indent=4)
+>
+> print("Saved metrics:")
+> print(json.dumps(metrics, indent=4))
+> EOF
+root@58fc9c5bb0bf:/workspace# python3 compute_metrics.py
+Saved metrics:
+{
+    "auc_roc": 0.8861,
+    "accuracy_at_0.5": 0.8794,
+    "precision_at_0.5": 0.1694,
+    "recall_at_0.5": 0.6975,
+    "f1_score_at_0.5": 0.2726,
+    "accuracy_at_0.63": 0.9538,
+    "precision_at_0.63": 0.3532,
+    "recall_at_0.63": 0.5123,
+    "f1_score_at_0.63": 0.4181
+}
+root@58fc9c5bb0bf:/workspace#

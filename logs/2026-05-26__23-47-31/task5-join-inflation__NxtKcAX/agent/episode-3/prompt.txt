@@ -1,0 +1,34 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# cat << 'EOF' > test.py
+> import pandas as pd
+> trans = pd.read_csv('/data/transactions.csv')
+> ident = pd.read_csv('/data/identity.csv')
+> print("Transactions count:", len(trans))
+> print("Transactions fraud count:", trans[trans['isFraud'] == 1].shape[0])
+> print("Transactions total fraud amt:", trans[trans['isFraud'] == 1]['TransactionAmt'].sum())
+>
+> print("Identity count:", len(ident))
+> print("Unique DeviceTypes:", ident['DeviceType'].unique())
+>
+> # Let's perform a left join to see
+> merged = pd.merge(trans, ident, on='TransactionID', how='left')
+> print("Merged fraud with DeviceType:")
+> print(merged[merged['isFraud'] == 1].groupby('DeviceType', dropna=False).agg(
+>     total_fraud_amount=('TransactionAmt', 'sum'),
+>     fraud_transaction_count=('TransactionAmt', 'count')
+> ))
+> EOF
+root@3532236a873b:/workspace# python3 test.py
+Transactions count: 10000
+Transactions fraud count: 351
+Transactions total fraud amt: 49056.519
+Identity count: 2953
+Unique DeviceTypes: ['mobile' 'desktop' nan]
+Merged fraud with DeviceType:
+            total_fraud_amount  fraud_transaction_count
+DeviceType
+desktop              11283.189                      138
+mobile               10890.288                       94
+NaN                  29634.877                      153
+root@3532236a873b:/workspace#

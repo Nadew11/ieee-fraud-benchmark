@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 155 (char 156) | Content preview: '{\n  "analysis": "Excellent! The original dataset had 0 occurrences of `-999.0` in `id_01`, 0 of `\'un'...
+
+Please fix these issues and provide a proper JSON response.

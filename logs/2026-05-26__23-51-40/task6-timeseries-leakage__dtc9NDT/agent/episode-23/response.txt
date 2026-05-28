@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, it is still training. Let's wait another 10 seconds.",
+  "plan": "Wait 10 seconds for the script output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 10.0
+    }
+  ]
+}

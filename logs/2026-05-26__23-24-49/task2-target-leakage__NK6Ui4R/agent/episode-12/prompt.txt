@@ -1,0 +1,42 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# cat << 'EOF' > test_xgb.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from xgboost import XGBClassifier
+> from sklearn.metrics import roc_auc_score
+>
+> df = pd.read_csv('/data/train_transaction.csv')
+> target = 'isFraud'
+>
+> # Convert categorical columns to category dtypes
+> cat_cols = df.select_dtypes(include=['object']).columns.tolist()
+> for col in cat_cols:
+>     df[col] = df[col].astype('category')
+>
+> # Split
+> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+>
+> # Exclude leakage features
+> features_no_leak = [c for c in df.columns if c not in ['TransactionID', target, 'chargeback_amount', 'days_to_chargeback']]
+>
+> # Train XGBoost with categorical support
+> xgb = XGBClassifier(enable_categorical=True, random_state=42, eval_metric='auc')
+> xgb.fit(train_df[features_no_leak], train_df[target])
+> preds_xgb = xgb.predict_proba(val_df[features_no_leak])[:, 1]
+> auc_xgb = roc_auc_score(val_df[target], preds_xgb)
+> print(f"XGB AUC without explicit chargeback leaks: {auc_xgb:.6f}")
+>
+> # What if we also exclude fraud_score?
+> features_no_score = [c for c in features_no_leak if c != 'fraud_score']
+> xgb2 = XGBClassifier(enable_categorical=True, random_state=42, eval_metric='auc')
+> xgb2.fit(train_df[features_no_score], train_df[target])
+> preds_xgb2 = xgb2.predict_proba(val_df[features_no_score])[:, 1]
+> auc_xgb2 = roc_auc_score(val_df[target], preds_xgb2)
+> print(f"XGB AUC without fraud_score or chargeback: {auc_xgb2:.6f}")
+> EOF
+root@f6fdec80eb9d:/workspace# python3 test_xgb.py
+XGB AUC without explicit chargeback leaks: 0.999967
+XGB AUC without fraud_score or chargeback: 0.892875
+root@f6fdec80eb9d:/workspace#

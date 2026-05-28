@@ -1,0 +1,18 @@
+New Terminal Output:
+
+depth=5, lr=0.03 | Best Iter=91 | Train AUC: 0.87450, Val AUC: 0.87853, Test AUC: 0.86051
+depth=5, lr=0.05 | Best Iter=69 | Train AUC: 0.87462, Val AUC: 0.87811, Test AUC: 0.86200
+root@9da0ecea1a80:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print(df[['C1', 'C2']].describe()); print('C1 unique
+values count:', df['C1'].nunique()); print('C2 unique values count:', df['C2'].nunique())"
+                 C1            C2
+count  30000.000000  30000.000000
+mean       5.053100      3.010867
+std        3.175135      1.978622
+min        0.000000      0.000000
+25%        2.000000      1.000000
+50%        5.000000      3.000000
+75%        8.000000      5.000000
+max       11.000000      6.000000
+C1 unique values count: 12
+C2 unique values count: 7
+

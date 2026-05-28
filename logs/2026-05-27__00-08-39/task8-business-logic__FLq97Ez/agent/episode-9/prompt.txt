@@ -1,0 +1,16 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' >> search_filters.py
+> # Check fx rate min/max dates for each currency
+> for cur in ['GBP', 'ETB', 'NGN', 'EUR']:
+>     cur_fx = fx[fx['currency'] == cur]
+>     print(f"{cur}: min_date={cur_fx['date'].min()}, max_date={cur_fx['date'].max()}, count={len(cur_fx)}")
+> EOF
+root@474ebd5bd0a4:/workspace# python3 search_filters.py
+Unique currencies: ['USD' 'NGN' 'EUR' 'GBP' 'ETB']
+FX currencies: ['GBP' 'ETB' 'NGN' 'EUR']
+GBP: min_date=2023-09-25 00:00:00, max_date=2024-01-05 00:00:00, count=72
+ETB: min_date=2023-09-25 00:00:00, max_date=2024-01-05 00:00:00, count=73
+NGN: min_date=2023-09-25 00:00:00, max_date=2024-01-05 00:00:00, count=72
+EUR: min_date=2023-09-26 00:00:00, max_date=2024-01-05 00:00:00, count=72
+root@474ebd5bd0a4:/workspace#

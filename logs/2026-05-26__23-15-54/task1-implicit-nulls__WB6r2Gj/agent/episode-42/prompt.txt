@@ -1,0 +1,39 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/train_identity.csv', keep_default_na=False)
+> print('Before clean:')
+> print('id_01 == -999:', (df['id_01'].astype(str).str.startswith('-999')).sum())
+> print('id_12 == unknown:', (df['id_12'] == 'unknown').sum())
+> print('id_15 == empty:', (df['id_15'] == '').sum())
+>
+> # Let's clean it
+> df_clean = df.drop_duplicates(subset=['TransactionID'], keep='first').copy()
+> # Cast TransactionID to int
+> df_clean['TransactionID'] = df_clean['TransactionID'].astype(float).astype(int)
+>
+> # Replace sentinels
+> # For id_01, let's replace '-999' or '-999.0' with empty string
+> df_clean.loc[df_clean['id_01'].astype(str).str.startswith('-999'), 'id_01'] = ''
+> df_clean.loc[df_clean['id_12'] == 'unknown', 'id_12'] = ''
+> # df_clean['id_15'] empty string remains empty string for missing representation
+>
+> print('After clean:')
+> print('id_01 == -999:', (df_clean['id_01'].astype(str).str.startswith('-999')).sum())
+> print('id_12 == unknown:', (df_clean['id_12'] == 'unknown').sum())
+> print('id_15 == empty:', (df_clean['id_15'] == '').sum())
+> "
+Before clean:
+id_01 == -999: 0
+id_12 == unknown: 0
+id_15 == empty: 251
+<string>:18: FutureWarning: Setting an item of incompatible dtype is deprecated and will raise in a future error of pandas. Value '' has dtype incompatible with
+ float64, please explicitly cast to a compatible dtype first.
+After clean:
+id_01 == -999: 0
+id_12 == unknown: 0
+id_15 == empty: 235
+root@cc7b6f7834c9:/workspace#

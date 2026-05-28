@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Expecting ',' delimiter: line 2 column 1732 (char 1733) | Content preview: '{\n  "analysis": "Aha! This is a smoking gun! Batch 99 has 150 transactions, and the model classifies'...
+
+Please fix these issues and provide a proper JSON response.

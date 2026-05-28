@@ -1,0 +1,14 @@
+{
+  "analysis": "Wow! Duplicate transaction IDs: 400!
+This is incredibly important! There are duplicate transaction IDs in the raw transaction ledger!
+Let's see what these duplicates are!
+Let's check if they are identical rows or if they are different.
+If they are different, how do they differ? Let's check using python.",
+  "plan": "Write a python script `inspect_duplicates.py` to check the nature of the duplicate transactions.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > inspect_duplicates.py\nimport pandas as pd\ndf = pd.read_csv('/data/transactions.csv')\ndups = df[df.TransactionID.duplicated(keep=False)].sort_values('TransactionID')\nprint(\"Total rows with duplicate IDs:\", len(dups))\nprint(dups.head(10))\nEOF\npython3 inspect_duplicates.py\n",
+      "duration": 2.0
+    }
+  ]
+}

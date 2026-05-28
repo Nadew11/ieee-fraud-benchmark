@@ -1,0 +1,70 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# cat << 'EOF' > test_correlations.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+>
+> train_df = pd.read_csv('/data/train_identity.csv')
+> train_df.columns = [c.replace('-', '_') if '-' in c else c for c in train_df.columns]
+>
+> target = train_df['isFraud']
+> print('Total cases:', len(train_df), 'Fraud cases:', target.sum())
+>
+> for col in train_df.columns:
+>     if col in ['isFraud', 'TransactionID']:
+>         continue
+>     if train_df[col].dtype in [np.float64, np.int64]:
+>         valid_mask = train_df[col].notna()
+>         if valid_mask.sum() > 10:
+>             try:
+>                 auc = roc_auc_score(target[valid_mask], train_df.loc[valid_mask, col])
+>                 if auc < 0.45 or auc > 0.55:
+>                     print(f'{col} (numeric): AUC = {auc:.4f} (non-null: {valid_mask.sum()})')
+>             except Exception as e:
+>                 pass
+>     else:
+>         counts = train_df.groupby(col)['isFraud'].agg(['count', 'mean']).sort_values('count', ascending=False)
+>         if (counts['mean'] - target.mean()).abs().max() > 0.05:
+>             print(f'{col} (categorical):\n', counts.head(5))
+> EOF
+root@16de4ef61b18:/workspace# python3 test_correlations.py
+Total cases: 8000 Fraud cases: 274
+id_07 (numeric): AUC = 0.4498 (non-null: 273)
+id_08 (numeric): AUC = 0.2932 (non-null: 273)
+id_21 (numeric): AUC = 0.7551 (non-null: 274)
+id_24 (numeric): AUC = 0.4209 (non-null: 249)
+id_25 (numeric): AUC = 0.2029 (non-null: 272)
+id_30 (categorical):
+              count      mean
+id_30
+Windows 10    1136  0.033451
+Windows 7      699  0.035765
+iOS 11.1.2     210  0.014286
+iOS 11.2.1     189  0.042328
+Android 7.0    176  0.005682
+id_31 (categorical):
+                        count      mean
+id_31
+chrome 63.0             1212  0.037954
+mobile safari 11.0       715  0.039161
+mobile safari generic    598  0.048495
+ie 11.0 for desktop      515  0.029126
+safari generic           455  0.030769
+id_33 (categorical):
+            count      mean
+id_33
+1920x1080    935  0.034225
+1366x768     476  0.025210
+1334x750     352  0.028409
+2208x1242    252  0.035714
+1440x900     246  0.020325
+DeviceInfo (categorical):
+              count      mean
+DeviceInfo
+Windows       2643  0.033674
+iOS Device    1057  0.035005
+MacOS          710  0.029577
+Trident/7.0    412  0.026699
+rv:11.0        109  0.018349
+root@16de4ef61b18:/workspace#

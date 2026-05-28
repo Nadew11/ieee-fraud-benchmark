@@ -1,0 +1,6 @@
+New Terminal Output:
+
+> "
+Inner Merged len: 2461
+Inner Merged fraud total: 19421.642
+root@10499a3d6cec:/workspace#

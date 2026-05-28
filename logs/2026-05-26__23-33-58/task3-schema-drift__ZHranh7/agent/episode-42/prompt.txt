@@ -1,0 +1,59 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# cat << 'EOF' > verify_output.py
+> import openpyxl
+> import pandas as pd
+>
+> wb = openpyxl.load_workbook('/output/fraud_risk.xlsx')
+> print('Sheet names:', wb.sheetnames)
+>
+> print('\n--- Predictions Sheet preview ---')
+> pred_sheet = wb['Predictions']
+> print('Header row:', [cell.value for cell in pred_sheet[1]])
+> print('Row 2:', [cell.value for cell in pred_sheet[2]])
+> print('Types of Row 2:', [type(cell.value) for cell in pred_sheet[2]])
+> print('Total Prediction rows:', pred_sheet.max_row)
+>
+> print('\n--- Data Quality Report preview ---')
+> dq_sheet = wb['Data Quality Report']
+> for row in range(1, 5):
+>     a_val = dq_sheet[f'A{row}'].value
+>     b_val = dq_sheet[f'B{row}'].value
+>     print(f'{a_val} = {b_val} (Type: {type(b_val)})')
+>
+> print('\nRow 6 Header:', [dq_sheet.cell(6, c).value for c in range(1, 4)])
+> for r in range(7, 10):
+>     print(f'Row {r}:')
+>     print('  issue_number:', dq_sheet.cell(r, 1).value, type(dq_sheet.cell(r, 1).value))
+>     print('  description:', dq_sheet.cell(r, 2).value[:80] + '...')
+>     print('  resolution:', dq_sheet.cell(r, 3).value[:80] + '...')
+> EOF
+root@16de4ef61b18:/workspace# python3 verify_output.py
+Sheet names: ['Predictions', 'Data Quality Report']
+
+--- Predictions Sheet preview ---
+Header row: ['TransactionID', 'fraud_prob']
+Row 2: [3108472, 0.5127089882983787]
+Types of Row 2: [<class 'int'>, <class 'float'>]
+Total Prediction rows: 2001
+
+--- Data Quality Report preview ---
+total_train_rows = 8000 (Type: <class 'int'>)
+total_test_rows = 2000 (Type: <class 'int'>)
+shared_feature_count = 41 (Type: <class 'int'>)
+model_auc_on_train_holdout = 0.602141806413651 (Type: <class 'float'>)
+
+Row 6 Header: ['issue_number', 'description', 'resolution']
+Row 7:
+  issue_number: 1 <class 'int'>
+  description: Feature name discrepancy (hyphens vs underscores) between System A and System B ...
+  resolution: Standardized the feature names of the System B (test) export by programmatically...
+Row 8:
+  issue_number: 2 <class 'int'>
+  description: Categorical columns (id_30, id_31, id_33, id_34, DeviceInfo) contained new, unse...
+  resolution: Implemented a robust ordinal encoding process that maps unseen categories to a d...
+Row 9:
+  issue_number: 3 <class 'int'>
+  description: Extreme sparsity and missing values in identity features (e.g., id_24, id_25, id...
+  resolution: Performed rigorous forward feature selection to identify a highly predictive, no...
+root@16de4ef61b18:/workspace#

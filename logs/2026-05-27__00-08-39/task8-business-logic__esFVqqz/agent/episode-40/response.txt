@@ -1,0 +1,12 @@
+{
+  "analysis": "Ah! There are 16 duplicates among the fraud transactions!
+Let's see what these duplicates are and whether one of them should be filtered or dropped!
+Let's print all fraud rows that have duplicate transaction IDs. This will help us understand why they are duplicated and how to resolve them to get the correct numbers.",
+  "plan": "Write and run a python script `inspect_fraud_dups.py` to examine the duplicate fraud transactions.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > inspect_fraud_dups.py\nimport pandas as pd\ndf = pd.read_csv('/data/transactions.csv')\nfraud = df[df.isFraud == 1]\ndups = fraud[fraud.TransactionID.duplicated(keep=False)].sort_values('TransactionID')\nprint(\"Total fraud rows with duplicate IDs:\", len(dups))\nprint(dups[['TransactionID', 'TransactionAmt', 'currency', 'transaction_date', 'transaction_type', 'settlement_status']])\nEOF\npython3 inspect_fraud_dups.py\n",
+      "duration": 2.0
+    }
+  ]
+}}

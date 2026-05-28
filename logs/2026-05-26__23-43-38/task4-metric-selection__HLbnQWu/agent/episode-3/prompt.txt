@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 6 column 35 (char 530) | Content preview: '{\n  "analysis": "The files contain some key data. Let\'s write a python script to load `/data/predict'...
+
+Please fix these issues and provide a proper JSON response.

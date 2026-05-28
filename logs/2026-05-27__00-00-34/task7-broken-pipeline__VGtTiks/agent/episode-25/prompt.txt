@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df['ProductCD'].unique()); print(df['card4
+'].unique()); print(df['card6'].unique())"
+

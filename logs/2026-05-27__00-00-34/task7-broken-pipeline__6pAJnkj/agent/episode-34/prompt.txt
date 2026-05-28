@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# ls -la /logs
+total 8
+drwxr-xr-x 1 root root 4096 May 27 05:00 .
+drwxr-xr-x 1 root root 4096 May 27 05:01 ..
+drwxrwxrwx 4 root root  128 May 27 05:01 agent
+drwxrwxrwx 2 root root   64 May 27 05:00 artifacts
+drwxrwxrwx 2 root root   64 May 27 05:00 verifier
+root@e9645eb65f5b:/workspace#

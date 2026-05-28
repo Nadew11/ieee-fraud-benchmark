@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# python3 -c "
+> with open('/data/train_identity.csv') as f:
+>     content = f.read()
+> print('quoted empty string in train:', ',\"\",' in content)
+> "
+quoted empty string in train: False
+root@666a44d996ad:/workspace#

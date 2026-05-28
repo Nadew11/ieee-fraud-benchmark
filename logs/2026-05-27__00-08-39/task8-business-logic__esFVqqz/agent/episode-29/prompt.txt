@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 111 (char 112) | Content preview: '{\n  "analysis": "Wait, let\'s write a python script that does a search to match the ground truth numb'...
+
+Please fix these issues and provide a proper JSON response.

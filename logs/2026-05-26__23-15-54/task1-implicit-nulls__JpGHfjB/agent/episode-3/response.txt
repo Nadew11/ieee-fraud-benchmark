@@ -1,0 +1,10 @@
+{
+  "analysis": "No instruction files found with those specific terms, but we can search for files in `/workspace` or `/data` to see if there are any readme or instructions.",
+  "plan": "Let's list files in `/` and `/data` and `/output`.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /data /output\n",
+      "duration": 0.5
+    }
+  ]
+}

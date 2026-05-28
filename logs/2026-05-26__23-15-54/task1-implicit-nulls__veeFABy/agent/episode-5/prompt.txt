@@ -1,0 +1,17 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); print(df.iloc[10000:].head(10))'
+       TransactionID  id_01          id_02  id_03  id_04  id_05  id_06  ...           id_34  id_35  id_36  id_37  id_38 DeviceType                 DeviceInfo
+10000      3521414.0  -20.0  312995.367057    NaN    NaN   -7.0  -29.0  ...             NaN      F      F      F      F     mobile                        NaN
+10001      3382929.0   -5.0  159409.864029    0.0    0.0    9.0  -12.0  ...  match_status:1      T      F      T      F     mobile                 iOS Device
+10002      3048867.0   -5.0  954835.210572    NaN    NaN    0.0    0.0  ...  match_status:2      T      F      F      F    desktop                      MacOS
+10003      3049537.0    0.0   43547.036329    0.0    0.0    1.0    0.0  ...  match_status:1      T      F      T      T     mobile                 iOS Device
+10004      3523900.0   -5.0   65854.202751    NaN    NaN    0.0    0.0  ...  match_status:2      T      F      F      T     mobile                 iOS Device
+10005      3026070.0  -20.0  252177.998704    NaN    NaN   -3.0  -24.0  ...             NaN      F      F      F      T     mobile       LG-H870 Build/NRD90U
+10006      3514831.0  -10.0  320567.144507    0.0    0.0    0.0    0.0  ...             NaN      F      F      T      F     mobile  Redmi 5 Plus Build/N2G47H
+10007      3100991.0   -5.0   98685.373824    NaN    NaN    1.0    0.0  ...  match_status:1      T      F      T      F     mobile                 iOS Device
+10008      3372659.0   -5.0  267249.941416    NaN    NaN    0.0    0.0  ...             NaN      F      F      T      F    desktop                        NaN
+10009      3075771.0  -20.0   63184.158567    NaN    NaN    0.0    0.0  ...             NaN      F      F      F      T     mobile                        NaN
+
+[10 rows x 41 columns]
+root@803b650a44b8:/workspace#

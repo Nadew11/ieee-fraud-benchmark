@@ -1,0 +1,41 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_single_auc.py
+> import pandas as pd
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> df = pd.read_csv('/data/train_transaction.csv')
+> TARGET = 'isFraud'
+>
+> for col in df.select_dtypes('number').columns:
+>     if col in ['isFraud', 'TransactionID']: continue
+>     X = df[[col]].fillna(-999).values
+>     y = df[TARGET].values
+>     X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+>     model = xgb.XGBClassifier(n_estimators=50, max_depth=3, learning_rate=0.1, random_state=42, verbosity=0)
+>     model.fit(X_train, y_train)
+>     probs = model.predict_proba(X_val)[:, 1]
+>     auc = roc_auc_score(y_val, probs)
+>     print(f'{col} alone validation AUC: {auc:.4f}')
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_single_auc.py
+TransactionDT alone validation AUC: 0.4931
+TransactionAmt alone validation AUC: 0.7779
+card1 alone validation AUC: 0.8226
+card2 alone validation AUC: 0.8749
+addr1 alone validation AUC: 0.8673
+dist1 alone validation AUC: 0.7635
+C1 alone validation AUC: 0.8293
+C2 alone validation AUC: 0.8328
+C3 alone validation AUC: 0.5017
+C4 alone validation AUC: 0.8122
+C5 alone validation AUC: 0.8041
+C6 alone validation AUC: 0.4920
+V1 alone validation AUC: 0.7827
+V2 alone validation AUC: 0.7570
+V3 alone validation AUC: 0.4931
+V4 alone validation AUC: 0.5481
+V5 alone validation AUC: 0.7906
+root@0d5e255b62ea:/workspace#

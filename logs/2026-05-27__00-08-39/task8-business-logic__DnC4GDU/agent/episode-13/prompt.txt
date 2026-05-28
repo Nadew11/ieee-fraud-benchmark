@@ -1,0 +1,63 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_logic.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+> region = pd.read_csv('/data/region_map.csv')
+>
+> # Convert dates to datetime objects
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+>
+> # Sort fx by date
+> fx = fx.sort_values('date_dt')
+>
+> # Let's write a function to get the USD rate for a given (currency, date_dt)
+> # To do this efficiently, we can pivot fx rates or do an asof merge.
+> # USD rate is always 1.0
+>
+> # Let's prepare a dataframe of dates and currencies
+> # We have currencies: GBP, ETB, NGN, EUR, USD
+> # For USD, rate is 1.0. Let's append USD rates to fx for all dates
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> # We can use pd.merge_asof to match
+> # For pd.merge_asof, we must sort both dataframes by the key on which we merge
+> df = df.sort_values('transaction_date_dt')
+>
+> # merge_asof matches on transaction_date_dt <= date_dt? No, we want matching or most recent prior rate.
+> # So df['transaction_date_dt'] >= fx_all['date_dt'].
+> # In pandas merge_asof:
+> # merge_asof(df, fx_all, on='transaction_date_dt', by='currency', direction='backward')
+> # This matches the transaction_date_dt with the largest date_dt in fx_all that is less than or equal to transaction_date_dt.
+>
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+>
+> # Let's verify if there are any missing rates
+> missing_rates = df_merged[df_merged['rate_to_usd'].isna()]
+> print("Missing rates count:", len(missing_rates))
+> if len(missing_rates) > 0:
+>     print(missing_rates[['transaction_date', 'currency']].drop_duplicates())
+>
+> # Calculate TransactionAmt in USD
+> df_merged['amt_usd'] = df_merged['TransactionAmt'] * df_merged['rate_to_usd']
+>
+> print("Total rows:", len(df_merged))
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_logic.py
+Missing rates count: 5
+   transaction_date currency
+1        2023-09-08      GBP
+3        2023-09-08      ETB
+5        2023-09-09      GBP
+9        2023-09-14      ETB
+12       2023-09-23      NGN
+Total rows: 8457
+root@cf0db7aa8136:/workspace#

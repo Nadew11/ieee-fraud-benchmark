@@ -1,0 +1,58 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# cat << 'EOF' > analyze.py
+> import pandas as pd
+> df = pd.read_csv('/data/train_identity.csv')
+> print("Shape:", df.shape)
+> print("Number of duplicates based on TransactionID:", df.duplicated(subset=['TransactionID']).sum())
+> print("Are all TransactionID integers?", (df['TransactionID'] % 1 == 0).all())
+> missing = df.isnull().sum()
+> for col in df.columns:
+>     print(f"{col}: dtype={df[col].dtype}, nulls={missing[col]} ({missing[col]/len(df):.2%}), unique={df[col].nunique()}")
+> EOF
+root@803b650a44b8:/workspace# python3 analyze.py
+Shape: (10500, 41)
+Number of duplicates based on TransactionID: 500
+Are all TransactionID integers? True
+TransactionID: dtype=float64, nulls=0 (0.00%), unique=10000
+id_01: dtype=float64, nulls=0 (0.00%), unique=32
+id_02: dtype=float64, nulls=265 (2.52%), unique=10098
+id_03: dtype=float64, nulls=5608 (53.41%), unique=16
+id_04: dtype=float64, nulls=5608 (53.41%), unique=13
+id_05: dtype=float64, nulls=550 (5.24%), unique=71
+id_06: dtype=float64, nulls=550 (5.24%), unique=82
+id_07: dtype=float64, nulls=10150 (96.67%), unique=47
+id_08: dtype=float64, nulls=10150 (96.67%), unique=69
+id_09: dtype=float64, nulls=5001 (47.63%), unique=25
+id_10: dtype=float64, nulls=5001 (47.63%), unique=31
+id_11: dtype=float64, nulls=252 (2.40%), unique=123
+id_12: dtype=object, nulls=0 (0.00%), unique=2
+id_13: dtype=float64, nulls=1218 (11.60%), unique=32
+id_14: dtype=float64, nulls=4741 (45.15%), unique=18
+id_15: dtype=object, nulls=251 (2.39%), unique=3
+id_16: dtype=object, nulls=1101 (10.49%), unique=2
+id_17: dtype=float64, nulls=377 (3.59%), unique=54
+id_18: dtype=float64, nulls=7273 (69.27%), unique=10
+id_19: dtype=float64, nulls=378 (3.60%), unique=329
+id_20: dtype=float64, nulls=384 (3.66%), unique=179
+id_21: dtype=float64, nulls=10149 (96.66%), unique=94
+id_22: dtype=float64, nulls=10149 (96.66%), unique=8
+id_23: dtype=object, nulls=10149 (96.66%), unique=3
+id_24: dtype=float64, nulls=10183 (96.98%), unique=6
+id_25: dtype=float64, nulls=10151 (96.68%), unique=93
+id_26: dtype=float64, nulls=10150 (96.67%), unique=42
+id_27: dtype=object, nulls=10149 (96.66%), unique=2
+id_28: dtype=object, nulls=252 (2.40%), unique=2
+id_29: dtype=object, nulls=252 (2.40%), unique=2
+id_30: dtype=object, nulls=4950 (47.14%), unique=70
+id_31: dtype=object, nulls=323 (3.08%), unique=105
+id_32: dtype=float64, nulls=4949 (47.13%), unique=3
+id_33: dtype=object, nulls=5244 (49.94%), unique=96
+id_34: dtype=object, nulls=4894 (46.61%), unique=3
+id_35: dtype=object, nulls=251 (2.39%), unique=2
+id_36: dtype=object, nulls=251 (2.39%), unique=2
+id_37: dtype=object, nulls=251 (2.39%), unique=2
+id_38: dtype=object, nulls=251 (2.39%), unique=2
+DeviceType: dtype=object, nulls=272 (2.59%), unique=2
+DeviceInfo: dtype=object, nulls=1906 (18.15%), unique=676
+root@803b650a44b8:/workspace#

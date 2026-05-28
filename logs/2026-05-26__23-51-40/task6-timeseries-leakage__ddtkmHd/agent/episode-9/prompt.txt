@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# cat << 'EOF' > test_feat.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(-1)
+> df['card1_cum_mean_amt'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.expanding().mean())
+> print(df[['card1', 'TransactionDT', 'TransactionAmt', 'card1_cum_count', 'card1_time_diff', 'card1_cum_mean_amt']].head(20))
+> EOF
+root@f9cb0064b676:/workspace# python3 test_feat.py
+

@@ -1,0 +1,6 @@
+{
+  "analysis": "Yes, everything is completely ready and checked. The requirements are fully satisfied.",
+  "plan": "Complete the task.",
+  "commands": [],
+  "task_complete": true
+}

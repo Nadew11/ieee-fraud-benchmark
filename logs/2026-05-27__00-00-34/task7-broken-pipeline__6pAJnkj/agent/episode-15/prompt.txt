@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 1651 (char 1652) | Content preview: '{\n  "analysis": "Wait, even on a chronological split, the AUC is 0.999993! Why is the AUC so incredi'...
+
+Please fix these issues and provide a proper JSON response.

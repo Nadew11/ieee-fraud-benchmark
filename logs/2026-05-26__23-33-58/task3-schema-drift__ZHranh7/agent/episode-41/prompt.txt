@@ -1,0 +1,64 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# cat << 'EOF' > verify_output.py
+> import openpyxl
+> import pandas as pd
+>
+> wb = openpyxl.load_workbook('/output/fraud_risk.xlsx')
+> print('Sheet names:', wb.sheetnames)
+>
+> print('\n--- Predictions Sheet preview ---')
+> pred_sheet = wb['Predictions']
+> print('Header row:', [cell.value for cell in pred_sheet[1]])
+> print('Row 2:', [cell.value for cell in pred_sheet[2]])
+> print('Types of Row 2:', [type(cell.value) for cell in pred_sheet[2]])
+> print('Total Prediction rows:', pred_sheet.max_row)
+>
+> print('\n--- Data Quality Report preview ---')
+> dq_sheet = wb['Data Quality Report']
+> for row in range(1, 5):
+>     a_val = dq_sheet[f'A{row}'].value
+>     b_val = dq_sheet[f'B{row}'].value
+>     print(f'{a_val} = {b_val} (Type: {type(b_val)})')
+>
+> print('\nRow 6 Header:', [dq_sheet.cell(6, c).value for c in range(1, 4)])
+> print('\nRow 6 Header:', [dq_sheet.cell(6, c).value for c in range(1, 4)])or r in range(7, 10):
+>     print(f'Row {r}:')
+>     print('  issue_number:', dq_sheet.cell(r, 1).value, type(dq_sheet.cell(r, 1).value))
+>     print('  description:', dq_sheet.cell(r, 2).value[:80] + '...')
+>     print('  resolution:', dq_sheet.cell(r, 3).value[:80] + '...')
+>
+> EOF
+root@16de4ef61b18:/workspace# python3 verify_output.py
+  File "/workspace/verify_output.py", line 21
+    print('\nRow 6 Header:', [dq_sheet.cell(6, c).value for c in range(1, 4)])or r in range(7, 10):
+                                                                                                  ^
+SyntaxError: invalid syntax
+root@16de4ef61b18:/workspace#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

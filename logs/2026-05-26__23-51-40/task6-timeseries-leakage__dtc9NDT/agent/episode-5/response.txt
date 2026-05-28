@@ -1,0 +1,12 @@
+{
+  "analysis": "The transactions are relatively uniformly distributed across the 182-day period. Splitting at the 80th percentile of `TransactionDT` makes a lot of sense: everything with `TransactionDT < 12,605,280` as the training set, and everything with `TransactionDT >= 12,605,280` as the test set. This represents training on the first ~145 days and testing on the last ~37 days.
+
+Let's inspect the categorical columns, like `ProductCD`, to see how they can be encoded (e.g. using label encoding, target encoding, or one-hot encoding).",
+  "plan": "1. Inspect unique values of `ProductCD`.\n2. Design and implement the feature engineering script. Let's make sure our features don't leak future information. Since the dataset is chronologically ordered by `TransactionDT` (let's verify this, or sort it to be absolutely sure), any shift/expanding operations must be done on the sorted dataframe.\n3. Let's write a python script to test a few features and print the correlation or mutual information with `isFraud` to confirm usefulness.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print('Is sorted:', df['TransactionDT'].is_monotonic_increasing); print('ProductCD:', df['ProductCD'].value_counts())\"\n",
+      "duration": 1.0
+    }
+  ]
+}

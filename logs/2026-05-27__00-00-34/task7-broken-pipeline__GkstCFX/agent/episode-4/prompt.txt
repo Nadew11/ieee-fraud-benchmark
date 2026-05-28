@@ -1,0 +1,14 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.head()); print(df.columns.tolist())"
+   TransactionID  isFraud  TransactionDT  TransactionAmt  card1  card2  addr1  ...        V2  V3        V4        V5  ProductCD             card4   card6
+0        2987000        0        6248836           24.12   4784  121.0  238.0  ...  1.471590 NaN  1.167535       NaN          W        mastercard  credit
+1        2987001        0        7852508           33.68   7561  367.0  333.0  ...       NaN NaN       NaN       NaN          H        mastercard  credit
+2        2987002        0       12705296           83.69  10142    NaN  247.0  ...  0.211914 NaN  1.569764  1.153218          W              visa  credit
+3        2987003        0        6629219           53.57   5156  233.0  363.0  ...  0.870313 NaN       NaN  0.057260          W        mastercard   debit
+4        2987004        0        6543222           37.27  14798  304.0    NaN  ...  0.448515 NaN       NaN  0.258928          W  american express   debit
+
+[5 rows x 22 columns]
+['TransactionID', 'isFraud', 'TransactionDT', 'TransactionAmt', 'card1', 'card2', 'addr1', 'dist1', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'V1', 'V2', 'V3', 'V4',
+'V5', 'ProductCD', 'card4', 'card6']
+root@549b54a67146:/workspace#

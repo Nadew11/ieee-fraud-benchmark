@@ -1,0 +1,41 @@
+New Terminal Output:
+root@3532236a873b:/workspace# ls -l /data
+total 292
+-rw-r--r-- 1 root root 138916 May 27 03:29 identity.csv
+-rw-r--r-- 1 root root 159640 May 27 03:29 transactions.csv
+root@3532236a873b:/workspace# python3 -c 'import pandas; print(pandas.__version__)'
+2.1.4
+root@3532236a873b:/workspace#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

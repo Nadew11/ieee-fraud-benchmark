@@ -1,0 +1,70 @@
+New Terminal Output:
+
+root@bb21c86eed4d:/workspace# cat /setup/generate_data.py
+"""
+Read real IEEE-CIS transaction data from /setup/source_transaction.csv,
+sample 15K rows, then inject 3 leaky columns derived from the target:
+  - chargeback_amount  (= TransactionAmt when fraud, 0 otherwise)
+  - fraud_score        (= ~0.94 when fraud, ~0.05 otherwise)
+  - days_to_chargeback (= 1-30 when fraud, 90-365 when legit)
+
+These columns perfectly predict isFraud → AUC ~0.99+ if used.
+"""
+import numpy as np
+import pandas as pd
+import json
+
+RNG = np.random.default_rng(42)
+SAMPLE_N = 15_000
+
+# ── Load real Kaggle data
+source = pd.read_csv("/setup/source_transaction.csv")
+print(f"[load] source_transaction.csv: {len(source):,} rows, {source.shape[1]} cols")
+
+df = source.sample(n=SAMPLE_N, random_state=42, replace=False).reset_index(drop=True)
+N = len(df)
+is_fraud = df["isFraud"].values
+
+print(f"[sample] {N:,} rows sampled, fraud rate: {is_fraud.mean():.4f}")
+
+# ── INJECT LEAKY COLUMNS
+# chargeback_amount: fraud rows get TransactionAmt, legit rows get 0
+df["chargeback_amount"] = np.where(
+    is_fraud == 1,
+    df["TransactionAmt"].values,
+    0.0
+).round(2)
+
+# fraud_score: fraud rows get ~0.94, legit rows get ~0.05
+fraud_score = np.where(
+    is_fraud == 1,
+    np.clip(RNG.normal(0.94, 0.03, N), 0.80, 0.999),
+    np.clip(RNG.normal(0.05, 0.04, N), 0.001, 0.20)
+)
+df["fraud_score"] = fraud_score.round(4)
+
+# days_to_chargeback: fraud rows small (1-30), legit rows large (90-365)
+days = np.where(
+    is_fraud == 1,
+    RNG.integers(1, 31, N),
+    RNG.integers(90, 366, N)
+).astype(float)
+df["days_to_chargeback"] = days
+
+# ── Save
+df.to_csv("/data/train_transaction.csv", index=False)
+print(f"[done] /data/train_transaction.csv: {len(df):,} rows, {df.shape[1]} cols")
+print(f"[done] Fraud rate: {is_fraud.mean():.4f}")
+
+# Ground truth for verifier
+gt = {
+    "leaky_columns": ["chargeback_amount", "fraud_score", "days_to_chargeback"],
+    "auc_min_legitimate": 0.78,
+    "auc_max_legitimate": 0.94,
+    "auc_leakage_threshold": 0.99,
+    "n_val_rows": int(N * 0.2),
+}
+with open("/data/ground_truth.json", "w") as f:
+    json.dump(gt, f)
+print("[done] /data/ground_truth.json written")
+root@bb21c86eed4d:/workspace#

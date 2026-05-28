@@ -1,0 +1,15 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# python3 /setup/generate_data.py
+[load] source_transaction.csv: 10,000 rows
+[load] source_identity.csv: 2,461 rows
+[filter] identity rows matching transactions: 2,461
+[gt] Clean total fraud amount: $49,056.52
+[gt] Clean join row count: 10000
+[inject] Identity rows: 2461 → 2953 (+492 dupes)
+[inject] Inflated total fraud amount: $51,808.35 (naive join answer — WRONG)
+[inject] Inflation ratio: 1.056x
+[done] transactions.csv: 10000 rows
+[done] identity.csv: 2953 rows (with duplicates injected)
+[done] ground_truth.json written
+root@7e0b471406a5:/workspace#

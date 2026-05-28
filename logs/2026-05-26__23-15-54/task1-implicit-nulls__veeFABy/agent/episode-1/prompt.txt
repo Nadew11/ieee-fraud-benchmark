@@ -1,0 +1,70 @@
+New Terminal Output:
+root@803b650a44b8:/workspace# ls -l /data
+total 1908
+-rw-r--r-- 1 root root 1950924 May 27 03:20 train_identity.csv
+root@803b650a44b8:/workspace# mkdir -p /output
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv", nrows=5); print(df.head()); print(df.info())'
+   TransactionID  id_01     id_02  id_03  id_04  id_05  id_06  id_07  id_08  ...  id_32      id_33           id_34 id_35  id_36  id_37 id_38 DeviceType  DeviceI
+nfo
+0      3082972.0   -5.0  119617.0    0.0    0.0    0.0    0.0    NaN    NaN  ...    NaN        NaN             NaN     F      F      T     T    desktop
+NaN
+1      3488422.0   -5.0   35555.0    0.0    0.0    0.0    0.0    NaN    NaN  ...   24.0  1919x1079  match_status:2     T      F      T     T    desktop     Wind
+ows
+2      3276554.0   -5.0   69490.0    0.0    0.0    1.0   -4.0    NaN    NaN  ...   24.0  1920x1080  match_status:2     T      F      T     F    desktop     Wind
+ows
+3      3070458.0  -15.0       NaN    NaN    NaN    NaN    NaN    NaN    NaN  ...    NaN        NaN             NaN   NaN    NaN    NaN   NaN        NaN
+NaN
+4      3107819.0    0.0   35376.0    0.0    0.0    6.0    0.0    NaN    NaN  ...   32.0   1280x720  match_status:2     T      F      T     T     mobile
+NaN
+
+[5 rows x 41 columns]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 41 columns):
+ #   Column         Non-Null Count  Dtype
+---  ------         --------------  -----
+ 0   TransactionID  5 non-null      float64
+ 1   id_01          5 non-null      float64
+ 2   id_02          4 non-null      float64
+ 3   id_03          4 non-null      float64
+ 4   id_04          4 non-null      float64
+ 5   id_05          4 non-null      float64
+ 6   id_06          4 non-null      float64
+ 7   id_07          0 non-null      float64
+ 8   id_08          0 non-null      float64
+ 9   id_09          4 non-null      float64
+ 10  id_10          4 non-null      float64
+ 11  id_11          4 non-null      float64
+ 12  id_12          5 non-null      object
+ 13  id_13          4 non-null      float64
+ 14  id_14          3 non-null      float64
+ 15  id_15          4 non-null      object
+ 16  id_16          4 non-null      object
+ 17  id_17          4 non-null      float64
+ 18  id_18          2 non-null      float64
+ 19  id_19          4 non-null      float64
+ 20  id_20          4 non-null      float64
+ 21  id_21          0 non-null      float64
+ 22  id_22          0 non-null      float64
+ 23  id_23          0 non-null      float64
+ 24  id_24          0 non-null      float64
+ 25  id_25          0 non-null      float64
+ 26  id_26          0 non-null      float64
+ 27  id_27          0 non-null      float64
+ 28  id_28          4 non-null      object
+ 29  id_29          4 non-null      object
+ 30  id_30          3 non-null      object
+ 31  id_31          4 non-null      object
+ 32  id_32          3 non-null      float64
+ 33  id_33          3 non-null      object
+ 34  id_34          3 non-null      object
+ 35  id_35          4 non-null      object
+ 36  id_36          4 non-null      object
+ 37  id_37          4 non-null      object
+ 38  id_38          4 non-null      object
+ 39  DeviceType     4 non-null      object
+ 40  DeviceInfo     2 non-null      object
+dtypes: float64(26), object(15)
+memory usage: 1.7+ KB
+None
+root@803b650a44b8:/workspace#

@@ -1,0 +1,16 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# python3 -c "import xgboost; print('XGBoost available')" || echo "XGBoost not available"
+XGBoost available
+root@9da0ecea1a80:/workspace# python3 -c "import xgboost; print('XGBoost available')" || echo "XGBoost not available"
+pip list | grep -E "scikit-learn|pandas|xgboost|lightgbm|catboost"
+XGBoost available
+root@9da0ecea1a80:/workspace# pip list | grep -E "scikit-learn|pandas|xgboost|lightgbm|catboost"
+pandas          2.1.4
+scikit-learn    1.4.0
+xgboost         2.0.3
+
+[notice] A new release of pip is available: 24.0 -> 26.1.1
+[notice] To update, run: pip install --upgrade pip
+root@9da0ecea1a80:/workspace#
+

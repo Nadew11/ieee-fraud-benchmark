@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df_train = pd.read_csv('/data/train_identity.csv')
+> df_src = pd.read_csv('/setup/source_identity.csv')
+> for col in df_train.columns:
+>     if df_train[col].dtype != df_src[col].dtype:
+>         print(f'Mismatch in {col}: train={df_train[col].dtype}, source={df_src[col].dtype}')
+> "
+Mismatch in TransactionID: train=float64, source=int64
+root@666a44d996ad:/workspace#

@@ -1,0 +1,17 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' >> find_subset.py
+> # Test keeping 'first' or 'last' for duplicates within 'purchases'
+> for keep_strat in ['first', 'last']:
+>     purchases_dedup = purchases.drop_duplicates(subset=['TransactionID'], keep=keep_strat)
+>     print(f"Keep: {keep_strat} -> count: {len(purchases_dedup)}, gross: {purchases_dedup['amount_usd'].sum():.4f}, fees: {purchases_dedup['processing_fee_usd'
+].sum():.4f}")
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 find_subset.py
+Count of purchases matching isFraud=1, Q4, not declined: 278
+Sum of amount_usd: 31521.929699035
+Sum of processing_fee_usd: 1068.53852614543
+Keep: first -> count: 263, gross: 30212.6579, fees: 1021.4958
+Keep: last -> count: 263, gross: 30218.6094, fees: 1021.7143
+root@474ebd5bd0a4:/workspace#

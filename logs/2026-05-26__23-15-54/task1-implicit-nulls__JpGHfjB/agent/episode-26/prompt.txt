@@ -1,0 +1,19 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df_cleaned = pd.read_csv('/output/cleaned.csv', keep_default_na=False)
+> print('Row count:', len(df_cleaned))
+> print('Duplicates on TransactionID:', df_cleaned['TransactionID'].duplicated().sum())
+> print('TransactionID dtype:', df_cleaned['TransactionID'].dtype)
+> print('-999 in id_01:', (df_cleaned['id_01'] == '-999.0').sum() + (df_cleaned['id_01'] == -999.0).sum())
+> print('unknown in id_12:', (df_cleaned['id_12'] == 'unknown').sum())
+> print('empty string in id_15:', (df_cleaned['id_15'] == '').sum())
+> "
+Row count: 10000
+Duplicates on TransactionID: 0
+TransactionID dtype: int64
+-999 in id_01: 0
+unknown in id_12: 0
+empty string in id_15: 235
+root@666a44d996ad:/workspace#

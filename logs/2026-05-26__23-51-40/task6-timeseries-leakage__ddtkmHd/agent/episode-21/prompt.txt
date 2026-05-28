@@ -1,0 +1,105 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# cat << 'EOF' > final_train.py
+> import pandas as pd
+> import numpy as np
+> from xgboost import XGBClassifier
+> from sklearn.metrics import roc_auc_score
+> import os
+o>
+d> df = pd.read_csv('/data/transactions.csv')
+>
+> # Grouping identifier
+> df['card1_addr1'] = df['card1'].astype(str) + '_' + df['addr1'].astype(str)
+>
+> # Features
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+> df['day_of_week'] = (df['TransactionDT'] // 86400) % 7
+>
+> # Historical patterns for card1_addr1
+> df['combo_cum_count'] = df.groupby('card1_addr1').cumcount()
+> df['combo_time_diff'] = df.groupby('card1_addr1')['TransactionDT'].diff().fillna(-1)
+> cumsum_combo = df.groupby('card1_addr1')['TransactionAmt'].cumsum()
+> cumcount_combo = df.groupby('card1_addr1').cumcount() + 1
+> df['combo_cum_mean_amt'] = cumsum_combo / cumcount_combo
+> df['combo_amt_diff_mean'] = df['TransactionAmt'] - df['combo_cum_mean_amt']
+>
+> # Historical patterns for card1 alone
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(-1)
+> cumsum_card1 = df.groupby('card1')['TransactionAmt'].cumsum()
+> cumcount_card1 = df.groupby('card1').cumcount() + 1
+> df['card1_cum_mean_amt'] = cumsum_card1 / cumcount_card1
+>
+> # Frequency encoding (based on train set to avoid target/future leakage)
+> n_train = int(len(df) * 0.8)
+> train_df = df.iloc[:n_train]
+>
+> card1_freq = train_df['card1'].value_counts(normalize=True)
+> df['card1_freq'] = df['card1'].map(card1_freq).fillna(0)
+>
+> addr1_freq = train_df['addr1'].value_counts(normalize=True)
+> df['addr1_freq'] = df['addr1'].map(addr1_freq).fillna(0)
+>
+> # Categorical productCD
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+>
+> # Drop non-feature columns
+> features = [col for col in df.columns if col not in ['TransactionID', 'isFraud', 'card1_addr1']]
+>
+> train = df.iloc[:n_train]
+> test = df.iloc[n_train:]
+>
+> X_train, y_train = train[features], train['isFraud']
+> X_test, y_test = test[features], test['isFraud']
+>
+> # Train on full train set
+> model = XGBClassifier(
+>     n_estimators=120,
+>     learning_rate=0.05,
+>     max_depth=4,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     eval_metric='auc'
+> )
+>
+> model.fit(X_train, y_train)
+> y_pred_test = model.predict_proba(X_test)[:, 1]
+> test_auc = roc_auc_score(y_test, y_pred_test)
+> print(f"Final Test AUC: {test_auc:.5f}")
+>
+> # Save outputs
+> os.makedirs('/output', exist_ok=True)
+> with open('/output/auc.txt', 'w') as f:
+>     f.write(f"{test_auc:.6f}\n")
+>
+> # Write methodology note
+> with open('/output/methodology.txt', 'w') as f:
+>     f.write("Methodology Note - Fraud Detection Model with Engineered Features\n")
+>     f.write("===============================================================\n\n")
+>     f.write("1. Feature Engineering Approach:\n")
+>     f.write("   To capture historical patterns in transaction behavior without introducing target leakage, ")
+>     f.write("we engineered cumulative and difference-based features using vectorized cumulative operations:\n")
+>     f.write("   - combo_cum_count, combo_time_diff, combo_cum_mean_amt, combo_amt_diff_mean: Cumulative patterns ")
+>     f.write("based on unique card1 + addr1 combination to uniquely identify clients.\n")
+>     f.write("   - card1_cum_count, card1_time_diff, card1_cum_mean_amt: Cumulative patterns grouped by card1 alone.\n")
+>     f.write("   - card1_freq, addr1_freq: Frequency encoding mapped from training distribution for high-cardinality categorical IDs.\n")
+>     f.write("   - hour, day_of_week: Temporal cyclic patterns derived from TransactionDT.\n\n")
+>     f.write("2. Evaluation Strategy:\n")
+>     f.write("   We used a temporal train/test split of 80% (first 24,000 samples) and 20% (last 6,000 samples). ")
+>     f.write("To select model complexity and prevent overfitting, we performed cross-validation with early stopping ")
+>     f.write("using a sub-validation set (the final 6,000 samples of the training portion).\n\n")
+>     f.write("3. Hyperparameter Tuning and Final Training:\n")
+>     f.write("   The tuning process identified that a lower-complexity XGBoost model (max_depth=4, learning_rate=0.05) ")
+>     f.write("substantially outperforms high-capacity models by preventing overfitting to the temporal distribution shift.\n")
+>     f.write("   We trained the final model on the full 80% training set using these parameters with 120 estimators, ")
+>     f.write(f"yielding a final Test AUC of {test_auc:.5f}.\n")
+>
+> print("Saved all outputs successfully.")
+> EOF
+root@f9cb0064b676:/workspace# python3 final_train.py
+Final Test AUC: 0.85897
+Saved all outputs successfully.
+root@f9cb0064b676:/workspace#

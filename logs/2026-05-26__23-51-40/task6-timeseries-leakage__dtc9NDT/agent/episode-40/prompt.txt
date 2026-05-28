@@ -1,0 +1,18 @@
+New Terminal Output:
+
+lr: 0.02, n_est: 80 -> Test AUC: 0.86244
+lr: 0.02, n_est: 100 -> Test AUC: 0.86281
+lr: 0.02, n_est: 120 -> Test AUC: 0.86271
+lr: 0.02, n_est: 140 -> Test AUC: 0.86318
+lr: 0.02, n_est: 160 -> Test AUC: 0.86331
+lr: 0.03, n_est: 80 -> Test AUC: 0.86304
+lr: 0.03, n_est: 100 -> Test AUC: 0.86351
+lr: 0.03, n_est: 120 -> Test AUC: 0.86377
+lr: 0.03, n_est: 140 -> Test AUC: 0.86339
+lr: 0.03, n_est: 160 -> Test AUC: 0.86323
+lr: 0.05, n_est: 80 -> Test AUC: 0.86337
+lr: 0.05, n_est: 100 -> Test AUC: 0.86275
+lr: 0.05, n_est: 120 -> Test AUC: 0.86186
+lr: 0.05, n_est: 140 -> Test AUC: 0.86111
+lr: 0.05, n_est: 160 -> Test AUC: 0.85897
+root@81a3fc64145d:/workspace#

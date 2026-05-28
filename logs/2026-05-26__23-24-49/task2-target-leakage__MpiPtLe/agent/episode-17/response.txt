@@ -1,0 +1,10 @@
+{
+  "analysis": "The tuning script is almost done. Let's wait another second.",
+  "plan": "Wait for completion.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

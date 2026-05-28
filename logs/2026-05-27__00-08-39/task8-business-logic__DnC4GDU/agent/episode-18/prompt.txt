@@ -1,0 +1,47 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_logic.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+>
+> # Prepare data
+> df = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+> df = df[df['settlement_status'] == 'settled'] # Let's assume settled only first
+>
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+> df_merged['amt_usd'] = df_merged['TransactionAmt'] * df_merged['rate_to_usd']
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> df_merged['processing_fee'] = df_merged['amt_usd'] * df_merged['fee_rate']
+>
+> purchases = df_merged[(df_merged['isFraud'] == 1) & (df_merged['transaction_type'] == 'purchase')]
+>
+> # Let's see if there is a transaction with amt_usd approx 96.78 and processing_fee approx 3.55
+> target_amt = 30309.336008 - 30212.56
+> target_fee = 1025.13 - 1021.58
+> print(f"Target Amt: {target_amt:.6f}, Target Fee: {target_fee:.6f}")
+>
+> candidates = purchases[abs(purchases['amt_usd'] - target_amt) < 1.0]
+> print("Candidates matching amount difference:")
+> print(candidates[['TransactionID', 'TransactionAmt', 'amt_usd', 'fee_rate', 'processing_fee', 'settlement_status', 'transaction_date']])
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_logic.py
+Target Amt: 96.776008, Target Fee: 3.550000
+Candidates matching amount difference:
+      TransactionID  TransactionAmt    amt_usd  fee_rate  processing_fee settlement_status transaction_date
+3029        3440852            97.0  97.000000     0.025        2.425000           settled       2023-11-06
+5928        3264116            87.0  96.362853     0.030        2.890886           settled       2023-12-12
+5934        3395308            97.0  97.000000     0.020        1.940000           settled       2023-12-12
+root@cf0db7aa8136:/workspace#

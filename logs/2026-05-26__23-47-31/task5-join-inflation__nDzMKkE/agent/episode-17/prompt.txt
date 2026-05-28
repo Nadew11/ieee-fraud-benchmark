@@ -1,0 +1,28 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# cat << 'EOF' > /workspace/run.py
+> import pandas as pd
+>
+> tx = pd.read_csv('/data/transactions.csv')
+> ident = pd.read_csv('/data/identity.csv')
+>
+> ident_unique = ident.drop_duplicates(subset=['TransactionID'])
+> merged = pd.merge(tx, ident_unique, on='TransactionID', how='left')
+>
+> overall_fraud_total = tx[tx['isFraud'] == 1]['TransactionAmt'].sum()
+>
+> with open('/output/total_fraud.txt', 'w') as f:
+>     f.write(f"{overall_fraud_total}\n")
+>
+> res = merged[merged['isFraud'] == 1].groupby('DeviceType', dropna=True).agg(
+>     total_fraud_amount=('TransactionAmt', 'sum'),
+>     fraud_transaction_count=('TransactionID', 'count')
+> ).reset_index()
+>
+> res.to_csv('/output/fraud_by_device.csv', index=False)
+>
+> print("Processing complete.")
+> EOF
+root@10499a3d6cec:/workspace# python3 /workspace/run.py
+Processing complete.
+root@10499a3d6cec:/workspace#

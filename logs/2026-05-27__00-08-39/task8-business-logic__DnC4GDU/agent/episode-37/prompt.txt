@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); rm = pd.read_csv('/data/region_map.csv'); print('Coun
+tries in df but not in region_map:', set(df['country_code'].unique()) - set(rm['country_code'].unique()))"
+

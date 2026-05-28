@@ -1,0 +1,139 @@
+{
+    "schema_version": 1,
+    "created_at": "2026-05-27T05:08:48.072987Z",
+    "harbor": {
+        "version": "0.8.0",
+        "is_editable": false
+    },
+    "invocation": [
+        "/Users/naodasfaw/.local/bin/harbor",
+        "run",
+        "-a",
+        "terminus-2",
+        "-m",
+        "gemini/gemini-3.5-flash",
+        "-k",
+        "3",
+        "-n",
+        "3",
+        "-o",
+        "submission_logs",
+        "-p",
+        "samples/task8-business-logic"
+    ],
+    "n_concurrent_trials": 3,
+    "retry": {
+        "max_retries": 0,
+        "exclude_exceptions": [
+            "VerifierTimeoutError",
+            "RewardFileEmptyError",
+            "VerifierOutputParseError",
+            "AgentTimeoutError",
+            "RewardFileNotFoundError"
+        ],
+        "wait_multiplier": 1.0,
+        "min_wait_sec": 1.0,
+        "max_wait_sec": 60.0
+    },
+    "trials": [
+        {
+            "task": {
+                "name": "task8-business-logic",
+                "type": "local",
+                "digest": "sha256:c683a135e1b215dd457ae93685ef3ef161eff760a170209bfa1ab2fc0911e81e",
+                "path": "samples/task8-business-logic"
+            },
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "terminus-2",
+                "model_name": "gemini/gemini-3.5-flash",
+                "skills": [],
+                "kwargs": {},
+                "env": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "suppress_override_warnings": false,
+                "extra_docker_compose": [],
+                "env": {},
+                "kwargs": {}
+            },
+            "verifier": {
+                "env": {},
+                "disable": false
+            }
+        },
+        {
+            "task": {
+                "name": "task8-business-logic",
+                "type": "local",
+                "digest": "sha256:c683a135e1b215dd457ae93685ef3ef161eff760a170209bfa1ab2fc0911e81e",
+                "path": "samples/task8-business-logic"
+            },
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "terminus-2",
+                "model_name": "gemini/gemini-3.5-flash",
+                "skills": [],
+                "kwargs": {},
+                "env": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "suppress_override_warnings": false,
+                "extra_docker_compose": [],
+                "env": {},
+                "kwargs": {}
+            },
+            "verifier": {
+                "env": {},
+                "disable": false
+            }
+        },
+        {
+            "task": {
+                "name": "task8-business-logic",
+                "type": "local",
+                "digest": "sha256:c683a135e1b215dd457ae93685ef3ef161eff760a170209bfa1ab2fc0911e81e",
+                "path": "samples/task8-business-logic"
+            },
+            "timeout_multiplier": 1.0,
+            "agent": {
+                "name": "terminus-2",
+                "model_name": "gemini/gemini-3.5-flash",
+                "skills": [],
+                "kwargs": {},
+                "env": {},
+                "mcp_servers": []
+            },
+            "skills": [],
+            "environment": {
+                "type": "docker",
+                "force_build": false,
+                "delete": true,
+                "cpu_enforcement_policy": "auto",
+                "memory_enforcement_policy": "auto",
+                "suppress_override_warnings": false,
+                "extra_docker_compose": [],
+                "env": {},
+                "kwargs": {}
+            },
+            "verifier": {
+                "env": {},
+                "disable": false
+            }
+        }
+    ]
+}

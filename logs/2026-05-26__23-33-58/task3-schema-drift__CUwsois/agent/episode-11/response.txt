@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's wait for the python command to finish.",
+  "plan": "Wait.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 1.0
+    }
+  ]
+}

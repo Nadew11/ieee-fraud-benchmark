@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 33 (char 34) | Content preview: '{\n  "analysis": "Ah! Look at that:\nDepth 1: Train AUC 0.7270, Val AUC 0.7045\nDepth 2: Train AUC 0.84'...
+
+Please fix these issues and provide a proper JSON response.

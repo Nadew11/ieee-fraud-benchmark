@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# python3 /workspace/clean_data.py
+Initial shape: (10500, 41)
+After removing duplicates: (10000, 41)
+TransactionID dtype: int64
+Saved cleaned dataset to /output/cleaned.csv
+root@666a44d996ad:/workspace#

@@ -1,0 +1,85 @@
+AUDIT FINDINGS: FRAUD MODEL EVALUATION DRAFT REPORT
+==================================================
+Audited by: Senior AI Consultant / Lead Fraud Analyst
+Date: May 27, 2026
+Subject: Technical and Operational Audit of Draft Evaluation Report by Alex Chen (Junior Analyst)
+
+This document contains detailed findings from our technical audit of the draft fraud model evaluation report. The audit revealed multiple critical errors, misleading claims, and major analytical gaps. Deploying the model under the draft's assumptions would have overwhelmed Fraud Operations and led to sub-optimal financial results.
+
+Below are the 6 primary findings, including explanations of what is wrong, why it matters, and the corrected interpretations.
+
+--------------------------------------------------------------------------------
+FINDING 1: Data Pipeline Failure (Out-of-Period Data and Duplicate Leakage)
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  "The XGBoost fraud detection model was evaluated against 5,650 held-out transactions."
+* What is Wrong:
+  The evaluation dataset export was not pre-processed or filtered. It contains 585 records from May (May 1 to May 11, 2026) which fall outside the designated scoring period of January 15 - April 30, 2026 specified in dataset_info.txt.
+  Crucially, 500 of these 585 records are exact duplicates (by TransactionID) of transactions already present within the correct scoring period. The analyst failed to perform basic deduplication and date filtering.
+* Why it Matters:
+  Including duplicate and out-of-period records inflates the evaluation dataset size by 11.5% and distorts all performance metrics. When properly cleaned, the true holdout dataset contains exactly 5,065 unique transactions and 0 duplicates.
+
+--------------------------------------------------------------------------------
+FINDING 2: Inflated and Incorrect Performance Metrics
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  "Accuracy: 88.3%", "AUC-ROC: 0.9182", "Confusion Matrix (threshold = 0.5): True Positives: 194, False Positives: 604, False Negatives: 57, True Negatives: 4,795"
+* What is Wrong:
+  These metrics were computed on the raw, uncleaned dataset of 5,650 rows (which included duplicate/leaked rows). On the corrected scoring period dataset (5,065 unique rows), the performance metrics are lower:
+  - Correct AUC-ROC: 0.905062 (reported as 0.9182, an inflation of ~0.013)
+  - Correct Accuracy at 0.5: 88.0948% (reported as 88.30%)
+  - Correct Confusion Matrix at 0.5:
+    * True Positives (TP): 144 (reported as 194, an inflation of 50)
+    * False Positives (FP): 554 (reported as 604, an inflation of 50)
+    * False Negatives (FN): 49 (reported as 57)
+    * True Negatives (TN): 4,318 (reported as 4,795)
+* Why it Matters:
+  The model's actual ranking performance (AUC-ROC) is 0.9051 rather than the inflated 0.9182. Furthermore, at a threshold of 0.5, the model detects 50 fewer true fraud cases (144 vs. 194) in the holdout set, meaning the detection capability was significantly overstated.
+
+--------------------------------------------------------------------------------
+FINDING 3: Contradictory Performance Claim and Missed Accuracy Target
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  "Based on the strong AUC of 0.9182 and accuracy of 88.3%, this model meets our performance targets and is recommended for production deployment."
+  And in Methodology: "Compared against deployment targets (AUC > 0.80, Accuracy > 95%)"
+* What is Wrong:
+  The analyst recommends deployment claiming that the model "meets our performance targets". However, the model's reported accuracy is 88.3% (corrected to 88.09%), which is significantly BELOW the stated deployment target of Accuracy > 95%. The analyst made a flat-out contradictory claim, recommending deployment despite a clear target violation.
+* Why it Matters:
+  Recommending a model for deployment when it fails to meet its primary performance targets is a major oversight. It compromises risk management standards and indicates a lack of attention to detail.
+
+--------------------------------------------------------------------------------
+FINDING 4: Misleading Metric Selection (The Accuracy Paradox)
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  Focusing on "Accuracy: 88.3%" as a primary metric for model evaluation and justifying deployment based on it.
+* What is Wrong:
+  In highly imbalanced datasets like fraud detection, accuracy is an inappropriate and misleading metric. In the corrected dataset, there are 4,872 non-fraud transactions and only 193 fraud transactions. A useless "predict-always-zero" model would achieve an accuracy of 96.19% (which actually meets the 95% accuracy target).
+  This fraud model has a lower accuracy (88.09%) at threshold 0.5 because it flags 554 false positives. The analyst failed to highlight this "accuracy paradox" or report class-imbalanced metrics such as Precision (20.6%), Recall (74.6%), or F1-Score (32.3%).
+* Why it Matters:
+  Relying on accuracy can lead to deploying models that are operationally unusable (due to high false positives) or rejecting high-value models because they appear to "fail" a naive accuracy threshold.
+
+--------------------------------------------------------------------------------
+FINDING 5: Omission of Operational Capacity Constraints
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  Recommends deploying the model with a threshold of 0.5 "as-is" and claiming "no further tuning is required".
+* What is Wrong:
+  At a threshold of 0.5, the model flags 698 of 5,065 holdout transactions (13.78%). Extrapolated to our quarterly production volume of 2,800,000 transactions, this would generate 385,864 alerts per quarter, which translates to 4,287 alerts per day (assuming 90 days per quarter).
+  However, the Fraud Operations team has a strict daily review capacity of only 1,500 alerts per day (12 analysts, 8-hour shifts). The draft recommendation completely ignores this operational reality.
+* Why it Matters:
+  Deploying the model at threshold 0.5 would generate 4,287 daily alerts, exceeding our team's capacity by 2.85x. This would overwhelm the operations team, cause massive backlogs, lead to severe analyst burnout, and leave thousands of fraud alerts unreviewed, creating a critical security gap.
+
+--------------------------------------------------------------------------------
+FINDING 6: Absence of Financial Modeling and Threshold Optimization
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  "No further tuning is required. ... recommended for production deployment."
+* What is Wrong:
+  The analyst failed to conduct any cost-benefit analysis or threshold optimization using the cost parameters provided by Finance ($4,200 loss per undetected fraud, $35 cost per manual investigation).
+  They did not realize that threshold 0.5 is not only operationally impossible, but also financially sub-optimal.
+* Why it Matters:
+  Tuning the threshold is necessary to balance investigation costs and undetected fraud losses.
+  - At threshold 0.5, the projected quarterly cost is $127.27M ($13.51M investigation + $113.77M fraud loss).
+  - While an unconstrained cost-minimizing threshold exists at 0.29 (cost of $63.60M), it is operationally impossible as it generates 14,293 alerts/day.
+  - By performing a constrained optimization, we can find a threshold that satisfies the daily review capacity of 1,500 alerts while minimizing cost. This occurs at t = 0.644, generating 1,480.3 alerts/day and minimizing the quarterly cost to $192.73M ($4.66M investigation + $188.07M fraud loss).
+  This represents a net quarterly savings of $255.38M compared to doing nothing (baseline cost of $448.11M), while remaining fully within operational capacity.

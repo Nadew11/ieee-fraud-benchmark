@@ -1,0 +1,42 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > dup_check.py
+> import csv
+> from datetime import datetime
+> from collections import defaultdict
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     rows = [r for r in reader]
+>
+> by_id = defaultdict(list)
+> for r in rows:
+>     by_id[r[0]].append(r)
+>
+> dup_info = []
+> for tid, records in by_id.items():
+>     if len(records) > 1:
+>         dup_info.append((tid, records))
+>
+> print("Total duplicates (by ID):", len(dup_info))
+> # Let's see if one of the records in duplicate is always in May
+> may_count = 0
+> both_in_period = 0
+> for tid, records in dup_info:
+>     dates = [datetime.strptime(r[3], '%Y-%m-%d %H:%M:%S') for r in records]
+>     has_may = any(d >= datetime(2026, 5, 1) for d in dates)
+>     all_period = all(d < datetime(2026, 5, 1) for d in dates)
+>     if has_may:
+>         may_count += 1
+>     if all_period:
+>         both_in_period += 1
+>
+> print("Duplicates with at least one record in May:", may_count)
+> print("Duplicates with both records in the scoring period (before May 1):", both_in_period)
+> EOF
+root@a7f99ad36897:/workspace# python3 dup_check.py
+Total duplicates (by ID): 500
+Duplicates with at least one record in May: 500
+Duplicates with both records in the scoring period (before May 1): 0
+root@a7f99ad36897:/workspace#

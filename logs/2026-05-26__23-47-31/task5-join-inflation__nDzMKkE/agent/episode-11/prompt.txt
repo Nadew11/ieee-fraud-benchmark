@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# python3 -c "
+> import pandas as pd
+> tx = pd.read_csv('/data/transactions.csv')
+> ident = pd.read_csv('/data/identity.csv').drop_duplicates(subset=['TransactionID'])
+> inner_merged = pd.merge(tx, ident, on='TransactionID', how='inner')
+> print('Inner Merged len:', len(inner_merged))
+> print('Inner Merged fraud total:', inner_merged[inner_merged['isFraud'] == 1]['TransactionAmt'].sum())
+> "
+

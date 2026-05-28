@@ -1,0 +1,924 @@
+[?2004hroot@27e59b3c4e79:/workspace# asciinema rec --stdin /logs/agent/recording.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent/recording.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+clear
+[?2004hroot@27e59b3c4e79:/workspace# [Kroot@27e59b3c4e79:/workspace# ls -lh /data/
+[?2004ltotal 1.8M
+-rw-r--r-- 1 root root 359K May 27 03:24 test_identity.csv
+-rw-r--r-- 1 root root 1.5M May 27 03:24 train_identity.csv
+[?2004hroot@27e59b3c4e79:/workspace# python3 -c '
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> train = pd.read_csv("/data/train_identity.csv")
+[?2004l[?2004h> test = pd.read_csv("/data/test_identity.csv")
+[?2004l[?2004h> print("Train shape:", train.shape)
+[?2004l[?2004h> print("Test shape:", test.shape)
+[?2004l[?2004h> print("Train columns:", list(train.columns))
+[?2004l[?2004h> print("Test columns:", list(test.columns))
+[?2004l[?2004h> '
+[?2004lpython3 -c 'import sys; print(sys.version)'
+Train shape: (8000, 42)
+Test shape: (2000, 41)
+Train columns: ['TransactionID', 'id_01', 'id_02', 'id_03', 'id_04', 'id_05', 'id_06', 'id_07', 'id_08', 'id_09', 'id_10', 'id_11', 'id_12', 'id_13', 'id_14', 'id_15', 'id_16', 'id_17', 'id_18', 'id_19', 'id_20', 'id_21', 'id_22', 'id_23', 'id_24', 'id_25', 'id_26', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_32', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'DeviceType', 'DeviceInfo', 'isFraud']
+Test columns: ['TransactionID', 'id-01', 'id-02', 'id-03', 'id-04', 'id-05', 'id-06', 'id-07', 'id-08', 'id-09', 'id-10', 'id-11', 'id-12', 'id-13', 'id-14', 'id-15', 'id-16', 'id-17', 'id-18', 'id-19', 'id-20', 'id-21', 'id-22', 'id-23', 'id-24', 'id-25', 'id-26', 'id-27', 'id-28', 'id-29', 'id-30', 'id-31', 'id-32', 'id-33', 'id-34', 'id-35', 'id-36', 'id-37', 'id-38', 'DeviceType', 'DeviceInfo']
+[?2004hroot@27e59b3c4e79:/workspace# python3 -c 'import sys; print(sys.version)'
+[?2004l3.11.15 (main, May 19 2026, 23:56:34) [GCC 14.2.0]
+[?2004hroot@27e59b3c4e79:/workspace# ^C[?2004l[?2004h[?2004l
+[?2004hroot@27e59b3c4e79:/workspace# python3 -c "import pandas as pd; print('Pandas imported successfully')"
+[?2004lPandas imported successfully
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > inspect_data.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's map test columns from - to _ so they match
+[?2004l[?2004h> test_cols_mapped = [c.replace('-', '_') for c in test.columns]
+[?2004l[?2004h> test.columns = test_cols_mapped
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Are mapped columns identical (excluding isFraud)?", set(train.columns) - {'isFraud'} == set(test.columns))
+[?2004l[?2004h> print("Train cols not in test:", set(train.columns) - set(test.columns))
+[?2004l[?2004h> print("Test cols not in train:", set(test.columns) - set(train.columns))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's look at numerical vs categorical
+[?2004l[?2004h> cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> print("Categorical columns:", cat_cols)
+[?2004l[?2004h> 
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     if col in test.columns:
+[?2004l[?2004h>         train_unique = set(train[col].dropna().unique())
+[?2004l[?2004h>         test_unique = set(test[col].dropna().unique())
+[?2004l[?2004h>         diff_train_test = train_unique - test_unique
+[?2004l[?2004h>         diff_test_train = test_unique - train_unique
+[?2004l[?2004h>         if diff_train_test or diff_test_train:
+[?2004l[?2004h>             print(f"Column {col} has mismatch:")
+[?2004l[?2004h>             print(f"  In train but not test: {list(diff_train_test)[:5]}")
+[?2004l[?2004h>             print(f"  In test but not train: {list(diff_test_train)[:5]}")
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 inspect_data.py
+[?2004lAre mapped columns identical (excluding isFraud)? True
+Train cols not in test: {'isFraud'}
+Test cols not in train: set()
+Categorical columns: ['id_12', 'id_15', 'id_16', 'id_23', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'DeviceType', 'DeviceInfo']
+Column id_27 has mismatch:
+  In train but not test: ['NotFound']
+  In test but not train: []
+Column id_30 has mismatch:
+  In train but not test: ['Mac OS X 10_12_5', 'Android 5.0', 'Mac OS X 10.10', 'Android 6.0', 'Android 5.0.2']
+  In test but not train: ['other', 'Windows']
+Column id_31 has mismatch:
+  In train but not test: ['samsung browser 4.0', 'mobile safari uiwebview', 'firefox 47.0', 'chrome 46.0 for android', 'opera']
+  In test but not train: ['icedragon', 'samsung browser 3.3', 'google search application 48.0', 'Cherry', 'firefox 55.0']
+Column id_33 has mismatch:
+  In train but not test: ['1344x840', '1600x899', '1280x960', '2049x1536', '5760x3240']
+  In test but not train: ['3600x2250', '3843x2163', '1440x803', '1680x945', '3839x2160']
+Column id_34 has mismatch:
+  In train but not test: []
+  In test but not train: ['match_status:-1']
+Column DeviceInfo has mismatch:
+  In train but not test: ['K88 Build/MMB29M', 'SM-G955U1 Build/R16NW', 'LG-H910 Build/NRD90M', 'XT1254 Build/MCG24.251-5-5', '5056A Build/MMB29M']
+  In test but not train: ['SAMSUNG-SM-G920A Build/MMB29K', 'Moto Z2 Play Build/NPSS26.118-19-6', 'S471', 'SM-G935V', 'SAMSUNG SM-G900M Build/LRX21T']
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > inspect_details.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> test.columns = [c.replace('-', '_') for c in test.columns]
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Train TransactionID unique:", train['TransactionID'].nunique() == len(train))
+[?2004l[?2004h> print("Test TransactionID unique:", test['TransactionID'].nunique() == len(test))
+[?2004l[?2004h> print("Train target distribution:", train['isFraud'].value_counts())
+[?2004l[?2004h> 
+[?2004l[?2004h> # Check for null values in both datasets
+[?2004l[?2004h> train_nulls = train.isnull().mean()
+[?2004l[?2004h> test_nulls = test.isnull().mean()
+[?2004l[?2004h> print("Train columns with >50% nulls:", (train_nulls > 0.5).sum())
+[?2004l[?2004h> print("Test columns with >50% nulls:", (test_nulls > 0.5).sum())
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's inspect some sample rows for anomalies
+[?2004l[?2004h> print(train.head())
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 inspect_details.py
+[?2004lTrain TransactionID unique: True
+Test TransactionID unique: True
+Train target distribution: isFraud
+0    7726
+1     274
+Name: count, dtype: int64
+Train columns with >50% nulls: 12
+Test columns with >50% nulls: 13
+   TransactionID  id_01     id_02  id_03  id_04  id_05  id_06  id_07  ...           id_34  id_35  id_36  id_37 id_38  DeviceType              DeviceInfo isFraud
+0        3056518  -15.0       NaN    NaN    NaN    NaN    NaN    NaN  ...             NaN    NaN    NaN    NaN   NaN         NaN                     NaN       0
+1        3477006   -5.0  362487.0    0.0    0.0    0.0    0.0    NaN  ...             NaN      F      F      T     F      mobile                     NaN       0
+2        3424043   -5.0  200785.0    0.0    0.0    0.0    0.0    NaN  ...             NaN      F      T      T     F     desktop             Trident/7.0       0
+3        3163577  -10.0  152340.0    0.0    0.0    0.0    0.0    NaN  ...             NaN      F      F      T     F      mobile  ONE A2003 Build/MMB29M       0
+4        3044921   -5.0   73250.0    0.0    0.0    0.0    0.0    NaN  ...  match_status:2      T      F      T     F     desktop                 rv:57.0       0
+
+[5 rows x 42 columns]
+[?2004hroot@27e59b3c4e79:/workspace# python3 -c "
+[?2004l[?2004h> for pkg in ['lightgbm', 'xgboost', 'catboost', 'sklearn', 'openpyxl']:
+[?2004l[?2004h>     try:
+[?2004l[?2004h>         __import__(pkg)
+[?2004l[?2004h>         print(pkg, 'is installed')
+[?2004l[?2004h>     except ImportError:
+[?2004l[?2004h>         print(pkg, 'is NOT installed')
+[?2004l[?2004h> "
+[?2004llightgbm is NOT installed
+xgboost is installed
+catboost is NOT installed
+sklearn is installed
+
+openpyxl is installed
+[?2004hroot@27e59b3c4e79:/workspace# 
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 -c "import openpyxl; print('openpyxl is installed')"
+[?2004lopenpyxl is installed
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > test_model.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> from sklearn.ensemble import HistGradientBoostingClassifier
+[?2004l[?2004h> from sklearn.preprocessing import LabelEncoder
+[?2004l[?2004h> 
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> test.columns = [c.replace('-', '_') for c in test.columns]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Identify categorical columns
+[?2004l[?2004h> cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> print("Categorical columns:", cat_cols)
+[?2004l[?2004h> 
+[?2004l[?2004h> # For each categorical column, let's convert to category or encode as integer
+[?2004l[?2004h> # Let's combine train and test for consistent encoding
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     train[col] = train[col].astype(str)
+[?2004l[?2004h>     test[col] = test[col].astype(str)
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Encode with LabelEncoder
+[?2004l[?2004h>     le = LabelEncoder()
+[?2004l[?2004h>     all_vals = pd.concat([train[col], test[col]], axis=0)
+[?2004l[?2004h>     le.fit(all_vals)
+[?2004l[?2004h>     train[col] = le.transform(train[col])
+[?2004l[?2004h>     test[col] = le.transform(test[col])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split train into 80% train and 20% holdout
+[?2004l[?2004h> X = train.drop(columns=['TransactionID', 'isFraud'])
+[?2004l[?2004h> y = train['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train, X_holdout, y_train, y_holdout = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> # We can use HistGradientBoostingClassifier which naturally handles missing values and categorical ints
+[?2004l[?2004h> model = HistGradientBoostingClassifier(random_state=42, max_iter=100)
+[?2004l[?2004h> model.fit(X_train, y_train)
+[?2004l[?2004h> 
+[?2004l[?2004h> preds_train = model.predict_proba(X_train)[:, 1]
+[?2004l[?2004h> preds_holdout = model.predict_proba(X_holdout)[:, 1]
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Train AUC:", roc_auc_score(y_train, preds_train))
+[?2004l[?2004h> print("Holdout AUC:", roc_auc_score(y_holdout, preds_holdout))
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 test_model.py
+[?2004lCategorical columns: ['id_12', 'id_15', 'id_16', 'id_23', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'DeviceType', 'DeviceInfo']
+Train AUC: 0.9967786832382932
+Holdout AUC: 0.46398352456604885
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > test_different_models.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> from sklearn.ensemble import HistGradientBoostingClassifier
+[?2004l[?2004h> from xgboost import XGBClassifier
+[?2004l[?2004h> from sklearn.preprocessing import LabelEncoder
+[?2004l[?2004h> 
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> test.columns = [c.replace('-', '_') for c in test.columns]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's preserve NaNs correctly instead of converting to 'nan' string
+[?2004l[?2004h> # Or map missing to an actual value, or let XGBoost handle them
+[?2004l[?2004h> cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> 
+[?2004l[?2004h> # For categorical features, let's keep NaN as NaN and use pd.Categorical
+[?2004l[?2004h> # or label encode while keeping NaNs as -1
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     train[col] = train[col].astype(str).replace('nan', np.nan)
+[?2004l[?2004h>     test[col] = test[col].astype(str).replace('nan', np.nan)
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Combine to fit label encoder, but keep NaN as -1
+[?2004l[?2004h>     non_null_train = train[col].dropna()
+[?2004l[?2004h>     non_null_test = test[col].dropna()
+[?2004l[?2004h>     all_vals = pd.concat([non_null_train, non_null_test], axis=0).unique()
+[?2004l[?2004h>     
+[?2004l[?2004h>     le = LabelEncoder()
+[?2004l[?2004h>     le.fit(all_vals)
+[?2004l[?2004h>     
+[?2004l[?2004h>     # Map only non-null
+[?2004l[?2004h>     train.loc[train[col].notnull(), col] = le.transform(train.loc[train[col].notnull(), col])
+[?2004l[?2004h>     test.loc[test[col].notnull(), col] = le.transform(test.loc[test[col].notnull(), col])
+[?2004l[?2004h>     
+[?2004l[?2004h>     train[col] = train[col].astype(float)
+[?2004l[?2004h>     test[col] = test[col].astype(float)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split train into 80% train and 20% holdout
+[?2004l[?2004h> X = train.drop(columns=['TransactionID', 'isFraud'])
+[?2004l[?2004h> y = train['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train, X_holdout, y_train, y_holdout = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's test standard XGBoost classifier
+[?2004l[?2004h> xgb = XGBClassifier(random_state=42, eval_metric='logloss', max_depth=4, learning_rate=0.05, n_estimators=100)
+[?2004l[?2004h> xgb.fit(X_train, y_train)
+[?2004l[?2004h> preds_train_xgb = xgb.predict_proba(X_train)[:, 1]
+[?2004l[?2004h> preds_holdout_xgb = xgb.predict_proba(X_holdout)[:, 1]
+[?2004l[?2004h> print("XGBoost - Train AUC:", roc_auc_score(y_train, preds_train_xgb))
+[?2004l[?2004h> print("XGBoost - Holdout AUC:", roc_auc_score(y_holdout, preds_holdout_xgb))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's test HistGradientBoosting with some regularization
+[?2004l[?2004h> hgb = HistGradientBoostingClassifier(random_state=42, max_depth=3, learning_rate=0.05, max_iter=100)
+[?2004l[?2004h> hgb.fit(X_train, y_train)
+[?2004l[?2004h> preds_train_hgb = hgb.predict_proba(X_train)[:, 1]
+[?2004l[?2004h> preds_holdout_hgb = hgb.predict_proba(X_holdout)[:, 1]
+[?2004l[?2004h> print("HistGB - Train AUC:", roc_auc_score(y_train, preds_train_hgb))
+[?2004l[?2004h> print("HistGB - Holdout AUC:", roc_auc_score(y_holdout, preds_holdout_hgb))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's check a simple Random Forest
+[?2004l[?2004h> from sklearn.ensemble import RandomForestClassifier
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> rf_pipeline = Pipeline([
+[?2004l[?2004h>     ('imputer', SimpleImputer(strategy='median')),
+[?2004l[?2004h>     ('rf', RandomForestClassifier(random_state=42, max_depth=5, n_estimators=100, class_weight='balanced'))
+[?2004l[?2004h> ])
+[?2004l[?2004h> rf_pipeline.fit(X_train, y_train)
+[?2004l[?2004h> preds_train_rf = rf_pipeline.predict_proba(X_train)[:, 1]
+[?2004l[?2004h> preds_holdout_rf = rf_pipeline.predict_proba(X_holdout)[:, 1]
+[?2004l[?2004h> print("RF - Train AUC:", roc_auc_score(y_train, preds_train_rf))
+[?2004l[?2004h> print("RF - Holdout AUC:", roc_auc_score(y_holdout, preds_holdout_rf))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 test_different_models.py
+[?2004lXGBoost - Train AUC: 0.8458226307013907
+XGBoost - Holdout AUC: 0.5081082671373933
+HistGB - Train AUC: 0.8084164241721759
+HistGB - Holdout AUC: 0.5372580170638424
+RF - Train AUC: 0.8244284480574215
+RF - Holdout AUC: 0.5068314210061783
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > feature_analysis.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> 
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> test.columns = [c.replace('-', '_') for c in test.columns]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Identify categorical columns
+[?2004l[?2004h> cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     train[col] = train[col].astype(str).replace('nan', np.nan)
+[?2004l[?2004h>     # Map to numeric categories for simple AUC calculation
+[?2004l[?2004h>     train[col] = pd.factorize(train[col])[0]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's check single feature AUCs
+[?2004l[?2004h> X = train.drop(columns=['TransactionID', 'isFraud'])
+[?2004l[?2004h> y = train['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train, X_holdout, y_train, y_holdout = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> feature_aucs = []
+[?2004l[?2004h> for col in X.columns:
+[?2004l[?2004h>     # handle NaNs
+[?2004l[?2004h>     col_train = X_train[col].fillna(X_train[col].median() if X_train[col].notnull().any() else 0)
+[?2004l[?2004h>     col_holdout = X_holdout[col].fillna(X_train[col].median() if X_train[col].notnull().any() else 0)
+[?2004l[?2004h>     
+[?2004l[?2004h>     try:
+[?2004l[?2004h>         auc_train = roc_auc_score(y_train, col_train)
+[?2004l[?2004h>         if auc_train < 0.5: auc_train = 1.0 - auc_train
+[?2004l[?2004h>         auc_hold = roc_auc_score(y_holdout, col_holdout)
+[?2004l[?2004h>         if auc_hold < 0.5: auc_hold = 1.0 - auc_hold
+[?2004l[?2004h>         feature_aucs.append({
+[?2004l[?2004h>             'col': col,
+[?2004l[?2004h>             'train_auc': auc_train,
+[?2004l[?2004h>             'holdout_auc': auc_hold,
+[?2004l[?2004h>             'null_pct': train[col].isnull().mean()
+[?2004l[?2004h>         })
+[?2004l[?2004h>     except Exception as e:
+[?2004l[?2004h>         pass
+[?2004l[?2004h> 
+[?2004l[?2004h> df_auc = pd.DataFrame(feature_aucs).sort_values(by='holdout_auc', ascending=False)
+[?2004l[?2004h> print(df_auc.head(20))
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 feature_analysis.py
+[?2004l           col  train_auc  holdout_auc  null_pct
+32       id_33   0.520474     0.555193  0.000000
+4        id_05   0.506606     0.553122  0.052875
+36       id_37   0.515220     0.551192  0.000000
+14       id_15   0.508453     0.546096  0.000000
+28       id_29   0.512018     0.535546  0.000000
+27       id_28   0.507433     0.532527  0.000000
+1        id_02   0.522869     0.530179  0.024500
+31       id_32   0.506389     0.526102  0.468625
+35       id_36   0.500447     0.524719  0.000000
+19       id_20   0.513233     0.523813  0.036000
+38  DeviceType   0.524612     0.522360  0.000000
+34       id_35   0.511365     0.520182  0.000000
+26       id_27   0.507695     0.520065  0.000000
+22       id_23   0.507728     0.520065  0.000000
+33       id_34   0.509174     0.519394  0.000000
+29       id_30   0.506800     0.518547  0.000000
+37       id_38   0.533985     0.517358  0.000000
+5        id_06   0.503879     0.517335  0.052875
+16       id_17   0.516332     0.516040  0.035250
+18       id_19   0.515635     0.515628  0.035375
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > test_robust_models.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> from sklearn.linear_model import LogisticRegression
+[?2004l[?2004h> from sklearn.preprocessing import StandardScaler
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder
+[?2004l[?2004h> from xgboost import XGBClassifier
+[?2004l[?2004h> from sklearn.ensemble import HistGradientBoostingClassifier
+[?2004l[?2004h> 
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> test.columns = [c.replace('-', '_') for c in test.columns]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Separate features
+[?2004l[?2004h> X = train.drop(columns=['TransactionID', 'isFraud'])
+[?2004l[?2004h> y = train['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> 
+[?2004l[?2004h> # Create a preprocessing pipeline
+[?2004l[?2004h> preprocessor = ColumnTransformer(
+[?2004l[?2004h>     transformers=[
+[?2004l[?2004h>         ('num', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='median')),
+[?2004l[?2004h>             ('scaler', StandardScaler())
+[?2004l[?2004h>         ]), num_cols),
+[?2004l[?2004h>         ('cat', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004l[?2004h>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+[?2004l[?2004h>         ]), cat_cols)
+[?2004l[?2004h>     ]
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train, X_holdout, y_train, y_holdout = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> # 1. Logistic Regression
+[?2004l[?2004h> lr_pipeline = Pipeline([
+[?2004l[?2004h>     ('preprocessor', preprocessor),
+[?2004l[?2004h>     ('lr', LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000, C=0.01))
+[?2004l[?2004h> ])
+[?2004l[?2004h> lr_pipeline.fit(X_train, y_train)
+[?2004l[?2004h> preds_train_lr = lr_pipeline.predict_proba(X_train)[:, 1]
+[?2004l[?2004h> preds_holdout_lr = lr_pipeline.predict_proba(X_holdout)[:, 1]
+[?2004l[?2004h> print("LR - Train AUC:", roc_auc_score(y_train, preds_train_lr))
+[?2004l[?2004h> print("LR - Holdout AUC:", roc_auc_score(y_holdout, preds_holdout_lr))
+[?2004l[?2004h> 
+[?2004l[?2004h> # 2. Tuned XGBoost with regularized parameters
+[?2004l[?2004h> # Let's use a simpler pipeline for tree models
+[?2004l[?2004h> # For tree models, let's label-encode categories first or keep them ordinal
+[?2004l[?2004h> X_tree = X.copy()
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     X_tree[col] = pd.factorize(X_tree[col])[0]
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train_t, X_hold_t, y_train_t, y_hold_t = train_test_split(
+[?2004l[?2004h>     X_tree, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> xgb = XGBClassifier(
+[?2004l[?2004h>     random_state=42,
+[?2004l[?2004h>     eval_metric='logloss',
+[?2004l[?2004h>     max_depth=2,
+[?2004l[?2004h>     learning_rate=0.01,
+[?2004l[?2004h>     n_estimators=150,
+[?2004l[?2004h>     subsample=0.7,
+[?2004l[?2004h>     colsample_bytree=0.7,
+[?2004l[?2004h>     scale_pos_weight=20
+[?2004l[?2004h> )
+[?2004l[?2004h> xgb.fit(X_train_t, y_train_t)
+[?2004l[?2004h> preds_train_xgb = xgb.predict_proba(X_train_t)[:, 1]
+[?2004l[?2004h> preds_hold_xgb = xgb.predict_proba(X_hold_t)[:, 1]
+[?2004l[?2004h> print("Tuned XGB - Train AUC:", roc_auc_score(y_train_t, preds_train_xgb))
+[?2004l[?2004h> print("Tuned XGB - Holdout AUC:", roc_auc_score(y_hold_t, preds_hold_xgb))
+[?2004l[?2004h> 
+[?2004l[?2004h> # 3. Tuned HistGB
+[?2004l[?2004h> hgb = HistGradientBoostingClassifier(
+[?2004l[?2004h>     random_state=42,
+[?2004l[?2004h>     max_depth=2,
+[?2004l[?2004h>     learning_rate=0.01,
+[?2004l[?2004h>     max_iter=150,
+[?2004l[?2004h>     min_samples_leaf=50
+[?2004l[?2004h> )
+[?2004l[?2004h> hgb.fit(X_train_t, y_train_t)
+[?2004l[?2004h> preds_train_hgb = hgb.predict_proba(X_train_t)[:, 1]
+[?2004l[?2004h> preds_hold_hgb = hgb.predict_proba(X_hold_t)[:, 1]
+[?2004l[?2004h> print("Tuned HistGB - Train AUC:", roc_auc_score(y_train_t, preds_train_hgb))
+[?2004l[?2004h> print("Tuned HistGB - Holdout AUC:", roc_auc_score(y_hold_t, preds_hold_hgb))
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 test_robust_models.py
+[?2004lLR - Train AUC: 0.6697882522592804
+LR - Holdout AUC: 0.5639305678140629
+Tuned XGB - Train AUC: 0.7176455465600503
+Tuned XGB - Holdout AUC: 0.5380288320094145
+Tuned HistGB - Train AUC: 0.6854176039549688
+Tuned HistGB - Holdout AUC: 0.5147867019711679
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > tune_lr.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> from sklearn.linear_model import LogisticRegression
+[?2004l[?2004h> from sklearn.preprocessing import StandardScaler
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder
+[?2004l[?2004h> 
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> X = train.drop(columns=['TransactionID', 'isFraud'])
+[?2004l[?2004h> y = train['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> 
+[?2004l[?2004h> preprocessor = ColumnTransformer(
+[?2004l[?2004h>     transformers=[
+[?2004l[?2004h>         ('num', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='median')),
+[?2004l[?2004h>             ('scaler', StandardScaler())
+[?2004l[?2004h>         ]), num_cols),
+[?2004l[?2004h>         ('cat', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004l[?2004h>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+[?2004l[?2004h>         ]), cat_cols)
+[?2004l[?2004h>     ]
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train, X_holdout, y_train, y_holdout = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> for C_val in [0.0001, 0.001, 0.01, 0.05, 0.1, 0.5, 1.0]:
+[?2004l[?2004h>     lr_pipeline = Pipeline([
+[?2004l[?2004h>         ('preprocessor', preprocessor),
+[?2004l[?2004h>         ('lr', LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000, C=C_val))
+[?2004l[?2004h>     ])
+[?2004l[?2004h>     lr_pipeline.fit(X_train, y_train)
+[?2004l[?2004h>     preds_train = lr_pipeline.predict_proba(X_train)[:, 1]
+[?2004l[?2004h>     preds_holdout = lr_pipeline.predict_proba(X_holdout)[:, 1]
+[?2004l[?2004h>     print(f"C={C_val:<6} | Train AUC: {roc_auc_score(y_train, preds_train):.5f} | Holdout AUC: {roc_auc_score(y_holdout, preds_holdout):.5f}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 tune_lr.py
+[?2004lC=0.0001 | Train AUC: 0.57622 | Holdout AUC: 0.53080
+C=0.001  | Train AUC: 0.60751 | Holdout AUC: 0.55122
+C=0.01   | Train AUC: 0.66979 | Holdout AUC: 0.56393
+C=0.05   | Train AUC: 0.73367 | Holdout AUC: 0.55195
+C=0.1    | Train AUC: 0.76341 | Holdout AUC: 0.54244
+
+C=0.5    | Train AUC: 0.81259 | Holdout AUC: 0.52437
+C=1.0    | Train AUC: 0.82216 | Holdout AUC: 0.51759
+[?2004hroot@27e59b3c4e79:/workspace# 
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > test_xgb_preprocessed.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> from xgboost import XGBClassifier
+[?2004l[?2004h> from sklearn.preprocessing import StandardScaler
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder
+[?2004l[?2004h> 
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> X = train.drop(columns=['TransactionID', 'isFraud'])
+[?2004l[?2004h> y = train['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> 
+[?2004l[?2004h> preprocessor = ColumnTransformer(
+[?2004l[?2004h>     transformers=[
+[?2004l[?2004h>         ('num', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='median')),
+[?2004l[?2004h>             ('scaler', StandardScaler())
+[?2004l[?2004h>         ]), num_cols),
+[?2004l[?2004h>         ('cat', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004l[?2004h>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+[?2004l[?2004h>         ]), cat_cols)
+[?2004l[?2004h>     ]
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train, X_holdout, y_train, y_holdout = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train_pre = preprocessor.fit_transform(X_train)
+[?2004l[?2004h> X_hold_pre = preprocessor.transform(X_holdout)
+[?2004l[?2004h> 
+[?2004l[?2004h> xgb = XGBClassifier(
+[?2004l[?2004h>     random_state=42,
+[?2004l[?2004h>     eval_metric='logloss',
+[?2004l[?2004h>     max_depth=3,
+[?2004l[?2004h>     learning_rate=0.01,
+[?2004l[?2004h>     n_estimators=100,
+[?2004l[?2004h>     subsample=0.6,
+[?2004l[?2004h>     colsample_bytree=0.6
+[?2004l[?2004h> )
+[?2004l[?2004h> xgb.fit(X_train_pre, y_train)
+[?2004l[?2004h> 
+[?2004l[?2004h> preds_train = xgb.predict_proba(X_train_pre)[:, 1]
+[?2004l[?2004h> preds_holdout = xgb.predict_proba(X_hold_pre)[:, 1]
+[?2004l[?2004h> print(f"XGB on preprocessed | Train AUC: {roc_auc_score(y_train, preds_train):.5f} | Holdout AUC: {roc_auc_score(y_holdout, preds_holdout):.5f}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 test_xgb_preprocessed.py
+[?2004lXGB on preprocessed | Train AUC: 0.68617 | Holdout AUC: 0.51701
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > check_mixed_types.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> 
+[?2004l[?2004h> for col in train.columns:
+[?2004l[?2004h>     types = train[col].dropna().map(type).unique()
+[?2004l[?2004h>     if len(types) > 1:
+[?2004l[?2004h>         print(f"Train col {col} has mixed types: {types}")
+[?2004l[?2004h> 
+[?2004l[?2004h> for col in test.columns:
+[?2004l[?2004h>     types = test[col].dropna().map(type).unique()
+[?2004l[?2004h>     if len(types) > 1:
+[?2004l[?2004h>         print(f"Test col {col} has mixed types: {types}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 check_mixed_types.py
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# mkdir -p /output
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# ls -la /output
+[?2004ltotal 8
+drwxr-xr-x 2 root root 4096 May 27 03:24 .
+drwxr-xr-x 1 root root 4096 May 27 04:35 ..
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > generate_report.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> from sklearn.linear_model import LogisticRegression
+[?2004l[?2004h> from sklearn.preprocessing import StandardScaler
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder
+[?2004l[?2004h> import openpyxl
+[?2004l[?2004h> 
+[?2004l[?2004h> # 1. Load data
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Calculate total rows
+[?2004l[?2004h> total_train_rows = len(train)
+[?2004l[?2004h> total_test_rows = len(test)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Map test columns from - to _ so they match
+[?2004l[?2004h> test_cols_original = list(test.columns)
+[?2004l[?2004h> test.columns = [c.replace('-', '_') for c in test.columns]
+[?2004l[?2004h> 
+[?2004ll[?2004h> # Count shared features (both columns share TransactionID and 40 features, so 41 columns total)
+[?2004l[?2004h> shared_features = list(set(train.columns).intersection(set(test.columns)))
+[?2004l[?2004h> shared_feature_count = len(shared_features)
+[?2004l[?2004h> print("Shared feature count:", shared_feature_count)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Separate features and target
+[?2004lariabl[?2004h> X = train.drop(columns=['TransactionID', 'isFraud'])
+[?2004l[?2004h> y = train['isFraud']
+[?2004l[?2004h> 
+[?2004lr[?2004h> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> 
+[?2004l[?2004h> # Create a preprocessing pipeline
+[?2004lified splitting during [?2004h> preprocessor = ColumnTransformer(
+[?2004lholdout evaluation to ensure equal[?2004h>     transformers=[
+[?2004l[?2004h>         ('num', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='median')),
+[?2004l[?2004h>             ('scaler', StandardScaler())
+[?2004l[?2004h>         ]), num_cols),
+[?2004l[?2004h>         ('cat', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004lsol[?2004h>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+[?2004lsx')[?2004h>         ]), cat_cols)
+[?2004l[?2004h>     ]
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split train into 80% train and 20% holdout for AUC verification
+[?2004l[?2004h> X_train, X_holdout, y_train, y_holdout = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> # We will use Logistic Regression with C=0.01
+[?2004l[?2004h> model = Pipeline([
+[?2004l[?2004h>     ('preprocessor', preprocessor),
+[?2004l[?2004h>     ('lr', LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000, C=0.01))
+[?2004l[?2004h> ])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Fit on X_train
+[?2004l[?2004h> model.fit(X_train, y_train)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Evaluate on X_holdout
+[?2004l[?2004h> preds_holdout = model.predict_proba(X_holdout)[:, 1]
+[?2004l[?2004h> holdout_auc = float(roc_auc_score(y_holdout, preds_holdout))
+[?2004l[?2004h> print("Holdout AUC:", holdout_auc)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Generate predictions for every row in test set
+[?2004l[?2004h> test_features = test.drop(columns=['TransactionID'])
+[?2004l[?2004h> test_preds = model.predict_proba(test_features)[:, 1]
+[?2004l[?2004h> 
+[?2004l[?2004h> predictions_df = pd.DataFrame({
+[?2004l[?2004h>     'TransactionID': test['TransactionID'].astype(int),
+[?2004l[?2004h>     'fraud_prob': test_preds.astype(float)
+[?2004l[?2004h> })
+[?2004l[?2004h> 
+[?2004l[?2004h> # Create openpyxl workbook
+[?2004l[?2004h> wb = openpyxl.Workbook()
+[?2004l[?2004h> 
+[?2004l[?2004h> # 2. Setup Predictions sheet
+[?2004l[?2004h> ws_pred = wb.active
+[?2004l[?2004h> ws_pred.title = "Predictions"
+[?2004l[?2004h> 
+[?2004l[?2004h> # Write header
+[?2004l[?2004h> ws_pred.append(['TransactionID', 'fraud_prob'])
+[?2004l[?2004h> # Write predictions data
+[?2004l[?2004h> for r in predictions_df.itertuples(index=False):
+[?2004l[?2004h>     ws_pred.append([int(r.TransactionID), float(r.fraud_prob)])
+[?2004l[?2004h> 
+[?2004l[?2004h> # 3. Setup Data Quality Report sheet
+[?2004l[?2004h> ws_dq = wb.create_sheet(title="Data Quality Report")
+[?2004l[?2004h> 
+[?2004l[?2004h> # A1 = total_train_rows, B1 = numeric count
+[?2004l[?2004h> ws_dq['A1'] = 'total_train_rows'
+[?2004l[?2004h> ws_dq['B1'] = int(total_train_rows)
+[?2004l[?2004h> 
+[?2004l[?2004h> # A2 = total_test_rows, B2 = numeric count
+[?2004l[?2004h> ws_dq['A2'] = 'total_test_rows'
+[?2004l[?2004h> ws_dq['B2'] = int(total_test_rows)
+[?2004l[?2004h> 
+[?2004l[?2004h> # A3 = shared_feature_count, B3 = numeric count
+[?2004l[?2004h> ws_dq['A3'] = 'shared_feature_count'
+[?2004l[?2004h> ws_dq['B3'] = int(shared_feature_count)
+[?2004l[?2004h> 
+[?2004l[?2004h> # A4 = model_auc_on_train_holdout, B4 = numeric AUC value
+[?2004l[?2004h> ws_dq['A4'] = 'model_auc_on_train_holdout'
+[?2004l[?2004h> ws_dq['B4'] = float(holdout_auc)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Row 6 header = issue_number, description, resolution
+[?2004l[?2004h> ws_dq['A6'] = 'issue_number'
+[?2004l[?2004h> ws_dq['B6'] = 'description'
+[?2004l[?2004h> ws_dq['C6'] = 'resolution'
+[?2004l[?2004h> 
+[?2004l[?2004h> # Starting at row 7, document issues
+[?2004l[?2004h> issues = [
+[?2004l[?2004h>     {
+[?2004l[?2004h>         'issue_number': 1,
+[?2004l[?2004h>         'description': "Column naming mismatch between source systems: System A (train) uses underscore separators (e.g., id_01) while System B (test) uses hyphen separators (e.g., id-01).",
+[?2004l[?2004h>         'resolution': "Standardized the column names of System B (test) by replacing all hyphens with underscores, aligning them perfectly with System A's naming schema to enable consistent pipeline ingestion."
+[?2004l[?2004h>     },
+[?2004l[?2004h>     {
+[?2004l[?2004h>         'issue_number': 2,
+[?2004l[?2004h>         'description': "High rate of missing values (NaNs) across features: There are 12 columns in train and 13 columns in test with missingness rates exceeding 50%.",
+[?2004l[?2004h>         'resolution': "Applied robust imputation strategies in the preprocessing pipeline: used median values for numerical columns and introduced a dedicated 'missing' string category for categorical columns."
+[?2004l[?2004h>     },
+[?2004l[?2004h>     {
+[?2004l[?2004h>         'issue_number': 3,
+[?2004l[?2004h>         'description': "Inconsistent categorical levels (Out of Vocabulary values) in test features: Columns like id_30, id_31, id_33, id_34, and DeviceInfo contain unique categories in test not seen in train.",
+[?2004l[?2004h>         'resolution': "Configured scikit-learn OneHotEncoder with the 'handle_unknown="ignore"' parameter to ensure the model pipeline processes unseen categorical values gracefully without causing errors or failures."
+[?2004l[?2004h>     },
+[?2004l[?2004h>     {
+[?2004l[?2004h>         'issue_number': 4,
+[?2004l[?2004h>         'description': "Severe target class imbalance: The 'isFraud' target variable contains only 274 fraud cases (3.42%) out of 8,000 observations in the training dataset.",
+[?2004l[?2004h>         'resolution': "Employed class-weighted loss adjustment ('class_weight="balanced"') in Logistic Regression, and applied stratified splitting during holdout evaluation to ensure equal target distribution in splits."
+[?2004l[?2004h>     }
+[?2004l[?2004h> ]
+[?2004l[?2004h> 
+[?2004l[?2004h> for idx, issue in enumerate(issues, start=7):
+[?2004l[?2004h>     ws_dq.cell(row=idx, column=1, value=int(issue['issue_number']))
+[?2004l[?2004h>     ws_dq.cell(row=idx, column=2, value=str(issue['description']))
+[?2004l[?2004h>     ws_dq.cell(row=idx, column=3, value=str(issue['resolution']))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save to file
+[?2004l[?2004h> wb.save('/output/fraud_risk.xlsx')
+[?2004l[?2004h> print("Saved workbook to /output/fraud_risk.xlsx successfully!")
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 generate_report.py
+[?2004l  File "/workspace/generate_report.py", line 131
+    'resolution': "Configured scikit-learn OneHotEncoder with the 'handle_unknown="ignore"' parameter to ensure the model pipeline processes unseen categorical values gracefully without causing errors or failures."
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+SyntaxError: invalid syntax. Perhaps you forgot a comma?
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > generate_report.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> from sklearn.linear_model import LogisticRegression
+[?2004l[?2004h> from sklearn.preprocessing import StandardScaler
+[?2004l[?2004h> from sklearn.impute import SimpleImputer
+[?2004l[?2004h> from sklearn.pipeline import Pipeline
+[?2004l[?2004h> from sklearn.compose import ColumnTransformer
+[?2004l[?2004h> from sklearn.preprocessing import OneHotEncoder
+[?2004l[?2004h> import openpyxl
+[?2004l[?2004h> 
+[?2004l[?2004h> # 1. Load data
+[?2004l[?2004h> train = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> test = pd.read_csv('/data/test_identity.csv')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Calculate total rows
+[?2004l[?2004h> total_train_rows = len(train)
+[?2004l[?2004h> total_test_rows = len(test)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Map test columns from - to _ so they match
+[?2004l[?2004h> test_cols_original = list(test.columns)
+[?2004l[?2004h> test.columns = [c.replace('-', '_') for c in test.columns]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Count shared features (both columns share TransactionID and 40 features, so 41 columns total)
+[?2004l[?2004h> shared_features = list(set(train.columns).intersection(set(test.columns)))
+[?2004l[?2004h> shared_feature_count = len(shared_features)
+[?2004l[?2004h> print("Shared feature count:", shared_feature_count)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Separate features and target
+[?2004l[?2004h> X = train.drop(columns=['TransactionID', 'isFraud'])
+[?2004l[?2004h> y = train['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> 
+[?2004l[?2004h> # Create a preprocessing pipeline
+[?2004l[?2004h> preprocessor = ColumnTransformer(
+[?2004l[?2004h>     transformers=[
+[?2004l equal target distribution in[?2004h>         ('num', Pipeline([
+[?2004l[?2004h>             ('imputer', SimpleImputer(strategy='median')),
+[?2004l[?2004h>             ('scaler', StandardScaler())
+[?2004l[?2004h>         ]), num_cols),
+[?2004l  ws_dq.cell(row=idx, column=1, value=int(issue['issue_number']))
+    ws_dq.cell(ro[?2004h>         ('cat', Pipeline([
+[?2004lstr([?2004h>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+[?2004l[?2004h>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+[?2004lri[?2004h>         ]), cat_cols)
+[?2004l[?2004h>     ]
+[?2004l/outpu[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split train into 80% train and 20% holdout for AUC verification
+[?2004ly
+[?2004h> X_train, X_holdout, y_train, y_holdout = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.2, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> # We will use Logistic Regression with C=0.01
+[?2004l[?2004h> model = Pipeline([
+[?2004l[?2004h>     ('preprocessor', preprocessor),
+[?2004l[?2004h>     ('lr', LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000, C=0.01))
+[?2004l[?2004h> ])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Fit on X_train
+[?2004l[?2004h> model.fit(X_train, y_train)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Evaluate on X_holdout
+[?2004l[?2004h> preds_holdout = model.predict_proba(X_holdout)[:, 1]
+[?2004l[?2004h> holdout_auc = float(roc_auc_score(y_holdout, preds_holdout))
+[?2004l[?2004h> print("Holdout AUC:", holdout_auc)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Generate predictions for every row in test set
+[?2004l[?2004h> test_features = test.drop(columns=['TransactionID'])
+[?2004l[?2004h> test_preds = model.predict_proba(test_features)[:, 1]
+[?2004l[?2004h> 
+[?2004l[?2004h> predictions_df = pd.DataFrame({
+[?2004l[?2004h>     'TransactionID': test['TransactionID'].astype(int),
+[?2004l[?2004h>     'fraud_prob': test_preds.astype(float)
+[?2004l[?2004h> })
+[?2004l[?2004h> 
+[?2004l[?2004h> # Create openpyxl workbook
+[?2004l[?2004h> wb = openpyxl.Workbook()
+[?2004l[?2004h> 
+[?2004l[?2004h> # 2. Setup Predictions sheet
+[?2004l[?2004h> ws_pred = wb.active
+[?2004l[?2004h> ws_pred.title = "Predictions"
+[?2004l[?2004h> 
+[?2004l[?2004h> # Write header
+[?2004l[?2004h> ws_pred.append(['TransactionID', 'fraud_prob'])
+[?2004l[?2004h> # Write predictions data
+[?2004l[?2004h> for r in predictions_df.itertuples(index=False):
+[?2004l[?2004h>     ws_pred.append([int(r.TransactionID), float(r.fraud_prob)])
+[?2004l[?2004h> 
+[?2004l[?2004h> # 3. Setup Data Quality Report sheet
+[?2004l[?2004h> ws_dq = wb.create_sheet(title="Data Quality Report")
+[?2004l[?2004h> 
+[?2004l[?2004h> # A1 = total_train_rows, B1 = numeric count
+[?2004l[?2004h> ws_dq['A1'] = 'total_train_rows'
+[?2004l[?2004h> ws_dq['B1'] = int(total_train_rows)
+[?2004l[?2004h> 
+[?2004l[?2004h> # A2 = total_test_rows, B2 = numeric count
+[?2004l[?2004h> ws_dq['A2'] = 'total_test_rows'
+[?2004l[?2004h> ws_dq['B2'] = int(total_test_rows)
+[?2004l[?2004h> 
+[?2004l[?2004h> # A3 = shared_feature_count, B3 = numeric count
+[?2004l[?2004h> ws_dq['A3'] = 'shared_feature_count'
+[?2004l[?2004h> ws_dq['B3'] = int(shared_feature_count)
+[?2004l[?2004h> 
+[?2004l[?2004h> # A4 = model_auc_on_train_holdout, B4 = numeric AUC value
+[?2004l[?2004h> ws_dq['A4'] = 'model_auc_on_train_holdout'
+[?2004l[?2004h> ws_dq['B4'] = float(holdout_auc)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Row 6 header = issue_number, description, resolution
+[?2004l[?2004h> ws_dq['A6'] = 'issue_number'
+[?2004l[?2004h> ws_dq['B6'] = 'description'
+[?2004l[?2004h> ws_dq['C6'] = 'resolution'
+[?2004l[?2004h> 
+[?2004l[?2004h> # Starting at row 7, document issues
+[?2004l[?2004h> issues = [
+[?2004l[?2004h>     {
+[?2004l[?2004h>         'issue_number': 1,
+[?2004l[?2004h>         'description': "Column naming mismatch between source systems: System A (train) uses underscore separators (e.g., id_01) while System B (test) uses hyphen separators (e.g., id-01).",
+[?2004l[?2004h>         'resolution': "Standardized the column names of System B (test) by replacing all hyphens with underscores, aligning them perfectly with System A's naming schema to enable consistent pipeline ingestion."
+[?2004l[?2004h>     },
+[?2004l[?2004h>     {
+[?2004l[?2004h>         'issue_number': 2,
+[?2004l[?2004h>         'description': "High rate of missing values (NaNs) across features: There are 12 columns in train and 13 columns in test with missingness rates exceeding 50%.",
+[?2004l[?2004h>         'resolution': "Applied robust imputation strategies in the preprocessing pipeline: used median values for numerical columns and introduced a dedicated 'missing' string category for categorical columns."
+[?2004l[?2004h>     },
+[?2004l[?2004h>     {
+[?2004l[?2004h>         'issue_number': 3,
+[?2004l[?2004h>         'description': "Inconsistent categorical levels (Out of Vocabulary values) in test features: Columns like id_30, id_31, id_33, id_34, and DeviceInfo contain unique categories in test not seen in train.",
+[?2004l[?2004h>         'resolution': "Configured scikit-learn OneHotEncoder with the 'handle_unknown=ignore' parameter to ensure the model pipeline processes unseen categorical values gracefully without causing errors or failures."
+[?2004l[?2004h>     },
+[?2004l[?2004h>     {
+[?2004l[?2004h>         'issue_number': 4,
+[?2004l[?2004h>         'description': "Severe target class imbalance: The 'isFraud' target variable contains only 274 fraud cases (3.42%) out of 8,000 observations in the training dataset.",
+[?2004l[?2004h>         'resolution': "Employed class-weighted loss adjustment ('class_weight=balanced') in Logistic Regression, and applied stratified splitting during holdout evaluation to ensure equal target distribution in splits."
+[?2004l[?2004h>     }
+[?2004l[?2004h> ]
+[?2004l[?2004h> 
+[?2004l[?2004h> for idx, issue in enumerate(issues, start=7):
+[?2004l[?2004h>     ws_dq.cell(row=idx, column=1, value=int(issue['issue_number']))
+[?2004l[?2004h>     ws_dq.cell(row=idx, column=2, value=str(issue['description']))
+[?2004l[?2004h>     ws_dq.cell(row=idx, column=3, value=str(issue['resolution']))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save to file
+[?2004l[?2004h> wb.save('/output/fraud_risk.xlsx')
+[?2004l[?2004h> print("Saved workbook to /output/fraud_risk.xlsx successfully!")
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 generate_report.py
+[?2004lShared feature count: 41
+Holdout AUC: 0.5639305678140629
+Saved workbook to /output/fraud_risk.xlsx successfully!
+[?2004hroot@27e59b3c4e79:/workspace# cat << 'EOF' > verify_xlsx.py
+[?2004l[?2004h> import openpyxl
+[?2004l[?2004h> 
+[?2004l[?2004h> wb = openpyxl.load_workbook('/output/fraud_risk.xlsx')
+[?2004l[?2004h> print("Sheet names:", wb.sheetnames)
+[?2004l[?2004h> 
+[?2004l[?2004h> ws_pred = wb['Predictions']
+[?2004l[?2004h> print("Predictions sheet min/max row:", ws_pred.min_row, ws_pred.max_row)
+[?2004l[?2004h> print("Predictions header:", [cell.value for cell in ws_pred[1]])
+[?2004l[?2004h> print("Predictions sample row 2:", [cell.value for cell in ws_pred[2]], "types:", [type(cell.value) for cell in ws_pred[2]])
+[?2004l[?2004h> 
+[?2004l[?2004h> ws_dq = wb['Data Quality Report']
+[?2004l[?2004h> print("Data Quality Report contents:")
+[?2004l[?2004h> for r in range(1, 5):
+[?2004l[?2004h>     print(f"  {ws_dq.cell(row=r, column=1).value}: {ws_dq.cell(row=r, column=2).value} (type B={type(ws_dq.cell(row=r, column=2).value)})")
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Row 6:", [ws_dq.cell(row=6, column=col).value for col in range(1, 4)])
+[?2004l[?2004h> for r in range(7, 11):
+[?2004l[?2004h>     print(f"  Row {r}:", [ws_dq.cell(row=r, column=col).value for col in range(1, 4)])
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# python3 verify_xlsx.py
+[?2004lSheet names: ['Predictions', 'Data Quality Report']
+Predictions sheet min/max row: 1 2001
+Predictions header: ['TransactionID', 'fraud_prob']
+Predictions sample row 2: [3108472, 0.4670987023462802] types: [<class 'int'>, <class 'float'>]
+Data Quality Report contents:
+  total_train_rows: 8000 (type B=<class 'int'>)
+  total_test_rows: 2000 (type B=<class 'int'>)
+  shared_feature_count: 41 (type B=<class 'int'>)
+  model_auc_on_train_holdout: 0.5639305678140629 (type B=<class 'float'>)
+Row 6: ['issue_number', 'description', 'resolution']
+  Row 7: [1, 'Column naming mismatch between source systems: System A (train) uses underscore separators (e.g., id_01) while System B (test) uses hyphen separators (e.g., id-01).', "Standardized the column names of System B (test) by replacing all hyphens with underscores, aligning them perfectly with System A's naming schema to enable consistent pipeline ingestion."]
+  Row 8: [2, 'High rate of missing values (NaNs) across features: There are 12 columns in train and 13 columns in test with missingness rates exceeding 50%.', "Applied robust imputation strategies in the preprocessing pipeline: used median values for numerical columns and introduced a dedicated 'missing' string category for categorical columns."]
+  Row 9: [3, 'Inconsistent categorical levels (Out of Vocabulary values) in test features: Columns like id_30, id_31, id_33, id_34, and DeviceInfo contain unique categories in test not seen in train.', "Configured scikit-learn OneHotEncoder with the 'handle_unknown=ignore' parameter to ensure the model pipeline processes unseen categorical values gracefully without causing errors or failures."]
+  Row 10: [4, "Severe target class imbalance: The 'isFraud' target variable contains only 274 fraud cases (3.42%) out of 8,000 observations in the training dataset.", "Employed class-weighted loss adjustment ('class_weight=balanced') in Logistic Regression, and applied stratified splitting during holdout evaluation to ensure equal target distribution in splits."]
+[?2004hroot@27e59b3c4e79:/workspace# rm -f inspect_data.py inspect_details.py test_model.py test_different_models.py test_robust_models.py check_mixed_types.py tune_lr.py test_xgb_preprocessed.py verify_xlsx.py
+[?2004l[?2004hroot@27e59b3c4e79:/workspace# echo "Task successfully complete!"
+[?2004lTask successfully complete!
+[?2004hroot@27e59b3c4e79:/workspace# 

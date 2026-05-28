@@ -1,0 +1,111 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > check_fraud.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+>
+> df = df[df.settlement_status != 'declined']
+>
+> fraud_purchases = df[(df.isFraud == 1) & (df.transaction_type == 'purchase')]
+> print("Total non-declined fraud purchases:", len(fraud_purchases))
+> print(fraud_purchases.isnull().sum())
+> print(fraud_purchases.card4.value_counts(dropna=False))
+> print(fraud_purchases.card6.value_counts(dropna=False))
+> print(fraud_purchases.settlement_status.value_counts(dropna=False))
+>
+> for col in fraud_purchases.columns:
+>     if fraud_purchases[col].nunique() < 10:
+>         print(col, ":", fraud_purchases[col].value_counts(dropna=False))
+> EOF
+root@b9e5a18b679d:/workspace# python3 check_fraud.py
+Total non-declined fraud purchases: 278
+TransactionID          0
+isFraud                0
+TransactionAmt         0
+ProductCD              0
+card4                  0
+card6                  0
+addr1                105
+addr2                105
+transaction_date       0
+timestamp              0
+currency               0
+country_code           0
+merchant_category      0
+settlement_status      0
+transaction_type       0
+dtype: int64
+card4
+visa                187
+mastercard           82
+discover              7
+american express      2
+Name: count, dtype: int64
+card6
+debit     144
+credit    134
+Name: count, dtype: int64
+settlement_status
+settled    264
+pending     14
+Name: count, dtype: int64
+isFraud : isFraud
+1    278
+Name: count, dtype: int64
+ProductCD : ProductCD
+W    114
+C    112
+H     25
+R     19
+S      8
+Name: count, dtype: int64
+card4 : card4
+visa                187
+mastercard           82
+discover              7
+american express      2
+Name: count, dtype: int64
+card6 : card6
+debit     144
+credit    134
+Name: count, dtype: int64
+addr2 : addr2
+87.0    164
+NaN     105
+60.0      7
+96.0      2
+Name: count, dtype: int64
+currency : currency
+USD    153
+EUR     45
+NGN     30
+ETB     26
+GBP     24
+Name: count, dtype: int64
+country_code : country_code
+US    89
+DE    38
+GB    31
+FR    25
+NG    22
+JP    22
+CA    21
+KE    15
+ET    15
+Name: count, dtype: int64
+merchant_category : merchant_category
+digital_goods    86
+retail           83
+crypto           39
+travel           29
+gambling         22
+atm              19
+Name: count, dtype: int64
+settlement_status : settlement_status
+settled    264
+pending     14
+Name: count, dtype: int64
+transaction_type : transaction_type
+purchase    278
+Name: count, dtype: int64
+root@b9e5a18b679d:/workspace#

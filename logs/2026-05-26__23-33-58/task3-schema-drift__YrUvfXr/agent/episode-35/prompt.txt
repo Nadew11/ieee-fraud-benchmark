@@ -1,0 +1,10 @@
+Previous response had warnings:
+WARNINGS: - Extra text detected after JSON object
+
+New Terminal Output:
+
+SUCCESS: Features=['id_05', 'id_37'], C=0.1 -> Train=0.5257, Val=0.5651
+SUCCESS: Features=['id_05', 'id_37'], C=1.0 -> Train=0.5257, Val=0.5651
+SUCCESS: Features=['id_05', 'id_37'], C=10.0 -> Train=0.5257, Val=0.5651
+FAIL: Features=['id_05', 'id_37', 'id_02'], C=0.01 -> Train=0.5386, Val=0.5066
+

@@ -1,0 +1,20 @@
+New Terminal Output:
+
+ModuleNotFoundError: No module named 'lightgbm'
+root@f6fdec80eb9d:/workspace# python3 -c "import xgboost; print('xgb ok')"
+xgb ok
+root@f6fdec80eb9d:/workspace# python3 -c "import xgboost; print('xgb ok')"
+python3 -c "from sklearn.ensemble import HistGradientBoostingClassifier; print('HistGB ok')"
+xgb ok
+pip list
+root@f6fdec80eb9d:/workspace# python3 -c "from sklearn.ensemble import HistGradientBoostingClassifier; print('HistGB ok')"
+
+
+
+
+
+
+
+
+
+

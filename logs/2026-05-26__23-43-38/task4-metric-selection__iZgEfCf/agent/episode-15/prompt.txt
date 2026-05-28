@@ -1,0 +1,104 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# cat << 'EOF' > optimize_threshold.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import confusion_matrix, roc_auc_score
+>
+> df = pd.read_csv('/data/predictions.csv')
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+>
+> # Clean dataset
+> df_clean = df[(df['batch_id'] != 99) & (df['scored_at'] <= '2026-04-30 23:59:59')].copy()
+>
+> print("Clean dataset count:", len(df_clean))
+> print("Clean dataset fraud count:", (df_clean['y_true'] == 1).sum())
+>
+> # Cost parameters
+> loss_per_fn = 4200
+> cost_per_alert = 35
+> quarterly_volume = 2800000
+> holdout_volume = len(df_clean)
+> scale_factor = quarterly_volume / holdout_volume
+> days_in_quarter = 90
+> capacity = 1500
+>
+> results = []
+> thresholds = np.linspace(0.0, 1.0, 101)
+>
+> for t in thresholds:
+>     df_clean['y_pred'] = (df_clean['y_pred_prob'] >= t).astype(int)
+>     tn, fp, fn, tp = confusion_matrix(df_clean['y_true'], df_clean['y_pred']).ravel()
+>
+>     # Holdout costs
+>     holdout_fn_cost = fn * loss_per_fn
+>     holdout_alert_cost = (tp + fp) * cost_per_alert
+>     holdout_total_cost = holdout_fn_cost + holdout_alert_cost
+>
+>     # Projected quarterly costs
+>     proj_fn_cost = holdout_fn_cost * scale_factor
+>     proj_alert_cost = holdout_alert_cost * scale_factor
+>     proj_total_cost = holdout_total_cost * scale_factor
+>
+>     # Alert volume
+>     proj_quarterly_alerts = (tp + fp) * scale_factor
+>     proj_daily_alerts = proj_quarterly_alerts / days_in_quarter
+>
+>     # Metrics
+>     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+>     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+>     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+>     acc = (tp + tn) / holdout_volume
+>
+>     results.append({
+>         'threshold': t,
+>         'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+>         'recall': recall, 'precision': precision, 'f1': f1, 'accuracy': acc,
+>         'proj_total_cost': proj_total_cost,
+>         'proj_fn_cost': proj_fn_cost,
+>         'proj_alert_cost': proj_alert_cost,
+>         'proj_quarterly_alerts': proj_quarterly_alerts,
+>         'proj_daily_alerts': proj_daily_alerts
+>     })
+>
+> res_df = pd.DataFrame(results)
+> # Sort by projected total cost
+> print("Top 10 thresholds by lowest cost:")
+> print(res_df.sort_values(by='proj_total_cost').head(10)[['threshold', 'tp', 'fp', 'fn', 'tn', 'precision', 'recall', 'f1', 'proj_daily_alerts', 'proj_total_co
+st']])
+>
+> # Let's see results where daily alerts <= capacity
+> print("\nTop 10 thresholds by lowest cost within capacity (<= 1500 daily alerts):")
+> within_cap = res_df[res_df['proj_daily_alerts'] <= capacity]
+> print(within_cap.sort_values(by='proj_total_cost').head(10)[['threshold', 'tp', 'fp', 'fn', 'tn', 'precision', 'recall', 'f1', 'proj_daily_alerts', 'proj_tota
+l_cost']])
+> EOF
+root@58fc9c5bb0bf:/workspace# python3 optimize_threshold.py
+Clean dataset count: 5000
+Clean dataset fraud count: 162
+Top 10 thresholds by lowest cost:
+    threshold   tp    fp  fn    tn  precision    recall        f1  proj_daily_alerts  proj_total_cost
+29       0.29  154  2142   8  2696   0.067073  0.950617  0.125305       14286.222222       63817600.0
+28       0.28  154  2257   8  2581   0.063874  0.950617  0.119705       15001.777778       66071600.0
+27       0.27  154  2375   8  2463   0.060894  0.950617  0.114456       15736.000000       68384400.0
+25       0.25  155  2603   7  2235   0.056200  0.956790  0.106164       17160.888889       70520800.0
+26       0.26  154  2497   8  2341   0.058091  0.950617  0.109492       16495.111111       70775600.0
+21       0.21  158  3062   4  1776   0.049068  0.975309  0.093436       20035.555556       72520000.0
+24       0.24  155  2729   7  2109   0.053745  0.956790  0.101773       17944.888889       72990400.0
+30       0.30  149  2025  13  2813   0.068537  0.919753  0.127568       13527.111111       73186400.0
+31       0.31  148  1919  14  2919   0.071601  0.913580  0.132795       12861.333333       73441200.0
+32       0.32  147  1824  15  3014   0.074581  0.907407  0.137834       12264.000000       73911600.0
+
+Top 10 thresholds by lowest cost within capacity (<= 1500 daily alerts):
+    threshold  tp   fp   fn    tn  precision    recall        f1  proj_daily_alerts  proj_total_cost
+63       0.63  83  152   79  4686   0.353191  0.512346  0.418136        1462.222222      190414000.0
+64       0.64  81  138   81  4700   0.369863  0.500000  0.425197        1362.666667      194804400.0
+65       0.65  78  118   84  4720   0.397959  0.481481  0.435754        1219.555556      201409600.0
+66       0.66  76  104   86  4734   0.422222  0.469136  0.444444        1120.000000      205800000.0
+67       0.67  75   88   87  4750   0.460123  0.462963  0.461538        1014.222222      207818800.0
+68       0.68  74   76   88  4762   0.493333  0.456790  0.474359         933.333333      209916000.0
+69       0.69  69   69   93  4769   0.500000  0.425926  0.460000         858.666667      221440800.0
+70       0.70  66   61   96  4777   0.519685  0.407407  0.456747         790.222222      228281200.0
+71       0.71  64   55   98  4783   0.537815  0.395062  0.455516         740.444444      232828400.0
+72       0.72  59   46  103  4792   0.561905  0.364198  0.441948         653.333333      244314000.0
+root@58fc9c5bb0bf:/workspace#

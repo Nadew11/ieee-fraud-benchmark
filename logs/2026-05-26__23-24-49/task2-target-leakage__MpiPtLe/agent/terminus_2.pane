@@ -1,0 +1,597 @@
+[?2004hroot@d8276d655354:/workspace# asciinema rec --stdin /logs/agent/recording.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent/recording.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+[?2004hroot@d8276d655354:/workspace# clear
+[?2004l[H[J[3J[?2004hroot@d8276d655354:/workspace# ls -la /data
+[?2004ltotal 3208
+drwxr-xr-x 1 root root    4096 May 27 03:22 .
+drwxr-xr-x 1 root root    4096 May 27 04:25 ..
+-rw-r--r-- 1 root root 3273929 May 27 03:22 train_transaction.csv
+[?2004hroot@d8276d655354:/workspace# head -n 2 /data/train_transaction.csv
+[?2004lTransactionID,isFraud,TransactionDT,TransactionAmt,ProductCD,card1,card2,card3,card4,card5,card6,addr1,addr2,dist1,dist2,P_emaildomain,R_emaildomain,C1,C2,C3,C4,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,M1,M2,M3,M4,M5,M6,M7,M8,M9,chargeback_amount,fraud_score,days_to_chargeback
+3539620,0,14597586,107.95,W,7648,357.0,150.0,visa,226.0,debit,184.0,87.0,857.0,,gmail.com,,3.0,1.0,0.0,0.0,1.0,1.0,0.0,0.0,2.0,0.0,1.0,0.0,16.0,3.0,0.0,,,434.0,27.0,,,,,531.0,49.0,,,,602.0,T,F,F,,,T,F,F,F,0.0,0.0871,303.0
+[?2004hroot@d8276d655354:/workspace# python3 -c "import pandas, sklearn, lightgbm; print('Installed!')"
+[?2004lbash: !': event not found
+[?2004hroot@d8276d655354:/workspace# python3 -c "import pandas; import sklearn; print('pandas and sklearn are OK')"
+[?2004lpython3 -c "import lightgbm; print('lightgbm OK')"
+python3 -c "import xgboost; print('xgboost OK')"
+pandas and sklearn are OK
+[?2004hroot@d8276d655354:/workspace# python3 -c "import lightgbm; print('lightgbm OK')"
+[?2004lTraceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+[?2004hroot@d8276d655354:/workspace# python3 -c "import xgboost; print('xgboost OK')"
+[?2004lxgboost OK
+[?2004hroot@d8276d655354:/workspace# python3 -c "import xgboost; print('xgboost OK')"
+[?2004lpython3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv', nrows=5); print(df.columns.tolist())"
+xgboost OK
+[?2004hroot@d8276d655354:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv', nrows=5); print(df.columns.tolist())"
+[?2004l['TransactionID', 'isFraud', 'TransactionDT', 'TransactionAmt', 'ProductCD', 'card1', 'card2', 'card3', 'card4', 'card5', 'card6', 'addr1', 'addr2', 'dist1', 'dist2', 'P_emaildomain', 'R_emaildomain', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'chargeback_amount', 'fraud_score', 'days_to_chargeback']
+[?2004hroot@d8276d655354:/workspace# 
+[?2004l[?2004hroot@d8276d655354:/workspace# mkdir -p /output
+[?2004l[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > info.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> print("Shape:", df.shape)
+[?2004l[?2004h> print("Columns:", list(df.columns))
+[?2004l[?2004h> print("Nulls:", df.isnull().sum()[df.isnull().sum() > 0])
+[?2004l[?2004h> print("Data types:")
+[?2004l[?2004h> print(df.dtypes.value_counts())
+[?2004l[?2004h> print(df.dtypes[df.dtypes == 'object'])
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 info.py
+[?2004lShape: (15000, 58)
+Columns: ['TransactionID', 'isFraud', 'TransactionDT', 'TransactionAmt', 'ProductCD', 'card1', 'card2', 'card3', 'card4', 'card5', 'card6', 'addr1', 'addr2', 'dist1', 'dist2', 'P_emaildomain', 'R_emaildomain', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'D1', 'D2', 'D3', 'D4', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'chargeback_amount', 'fraud_score', 'days_to_chargeback']
+Nulls: card2              238
+card3               47
+card4               47
+card5              108
+card6               48
+addr1             1610
+addr2             1610
+dist1             8817
+dist2            14014
+P_emaildomain     2414
+R_emaildomain    11558
+D1                  34
+D2                7073
+D3                6656
+D4                4354
+D5                7902
+D6               13216
+D7               14062
+D8               13095
+D9               13095
+D10               1980
+D11               7030
+D12              13422
+D13              13488
+D14              13466
+D15               2295
+M1                6810
+M2                6810
+M3                6810
+M4                7125
+M5                8809
+M6                4264
+M7                8789
+M8                8788
+M9                8788
+dtype: int64
+Data types:
+float64    40
+object     14
+int64       4
+Name: count, dtype: int64
+ProductCD        object
+card4            object
+card6            object
+P_emaildomain    object
+R_emaildomain    object
+M1               object
+M2               object
+M3               object
+M4               object
+M5               object
+M6               object
+M7               object
+M8               object
+M9               object
+dtype: object
+[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > test_leak.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> print("Fraud rate:", df['isFraud'].mean())
+[?2004l[?2004h> print(df.groupby('isFraud')[['chargeback_amount', 'fraud_score', 'days_to_chargeback']].describe())
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 test_leak.py
+[?2004lFraud rate: 0.0354
+        chargeback_amount                                                            ... days_to_chargeback                                                         
+                    count        mean         std   min    25%   50%    75%     max  ...              count        mean        std   min    25%    50%    75%    max
+isFraud                                                                              ...                                                                            
+0                 14469.0    0.000000    0.000000  0.00   0.00   0.0    0.0     0.0  ...            14469.0  227.985555  79.811814  90.0  159.0  228.0  298.0  365.0
+1                   531.0  151.123032  231.351005  3.51  37.31  77.0  150.0  2161.0  ...              531.0   14.969868   8.504329   1.0    8.0   15.0   22.0   30.0
+
+[2 rows x 24 columns]
+[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > test_leak2.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> print(df.groupby('isFraud')['fraud_score'].describe())
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 test_leak2.py
+[?2004l           count      mean       std     min      25%     50%      75%     max
+isFraud                                                                       
+0        14469.0  0.053071  0.036528  0.0010  0.02370  0.0510  0.07810  0.1973
+1          531.0  0.941961  0.029688  0.8481  0.92265  0.9416  0.96345  0.9990
+[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > train.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> import xgboost as xgb
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load data
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> print("Loaded shape:", df.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Separate features and target
+[?2004l[?2004h> X = df.drop(columns=['isFraud'])
+[?2004l[?2004h> y = df['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> # Keep track of TransactionID for predictions
+[?2004l[?2004h> trans_id = X['TransactionID']
+[?2004l[?2004h> # Drop TransactionID from features as it's an identifier
+[?2004l[?2004h> X = X.drop(columns=['TransactionID'])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's identify categorical columns
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> print("Categorical columns:", cat_cols)
+[?2004l[?2004h> 
+[?2004l[?2004h> # For categorical columns, let's fillna with 'Missing' and convert to category type
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     X[col] = X[col].fillna('Missing').astype('category')
+[?2004l[?2004h> 
+[?2004l[?2004h> # For numerical columns, XGBoost handles missing values natively, but let's be sure. 
+[?2004l[?2004h> # If we convert categories to codes or use XGBoost's enable_categorical=True:
+[?2004l[?2004h> # Let's use enable_categorical=True since modern XGBoost supports categorical features.
+[?2004l[?2004h> # Alternatively, we can use label encoding or one-hot encoding.
+[?2004l[?2004h> # Let's write a robust script that encodes categorical features using label encoding to avoid any environment compatibility issues.
+[?2004l[?2004h> from sklearn.preprocessing import LabelEncoder
+[?2004l[?2004h> label_encoders = {}
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     le = LabelEncoder()
+[?2004l[?2004h>     X[col] = le.fit_transform(X[col].astype(str))
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split 80/20
+[?2004l[?2004h> # The prompt says: "Use an 80/20 train/validation split."
+[?2004l[?2004h> # Let's use a fixed random state for reproducibility.
+[?2004l[?2004h> X_train, X_val, y_train, y_val, idx_train, idx_val = train_test_split(
+[?2004l[?2004h>     X, y, trans_id, test_size=0.20, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Train shape:", X_train.shape)
+[?2004l[?2004h> print("Val shape:", X_val.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Train XGBoost Classifier
+[?2004l[?2004h> clf = xgb.XGBClassifier(
+[?2004l[?2004h>     n_estimators=500,
+[?2004l[?2004h>     learning_rate=0.05,
+[?2004l[?2004h>     max_depth=6,
+[?2004l[?2004h>     subsample=0.8,
+[?2004l[?2004h>     colsample_bytree=0.8,
+[?2004l[?2004h>     random_state=42,
+[?2004l[?2004h>     use_label_encoder=False,
+[?2004l[?2004h>     eval_metric='auc'
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=50)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Predict
+[?2004l[?2004h> val_preds = clf.predict_proba(X_val)[:, 1]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Calculate AUC
+[?2004l[?2004h> auc_score = roc_auc_score(y_val, val_preds)
+[?2004l[?2004h> print("Validation AUC:", auc_score)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save predictions
+[?2004l[?2004h> predictions_df = pd.DataFrame({
+[?2004l[?2004h>     'TransactionID': idx_val,
+[?2004l[?2004h>     'fraud_prob': val_preds
+[?2004l[?2004h> })
+[?2004l[?2004h> predictions_df.to_csv('/output/predictions.csv', index=False)
+[?2004l[?2004h> print("Saved predictions to /output/predictions.csv")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save AUC to /output/auc.txt
+[?2004l[?2004h> with open('/output/auc.txt', 'w') as f:
+[?2004l[?2004h>     f.write(f"{auc_score:.6f}")
+[?2004l[?2004h> print("Saved AUC to /output/auc.txt")
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 train.py
+[?2004lLoaded shape: (15000, 58)
+Categorical columns: ['ProductCD', 'card4', 'card6', 'P_emaildomain', 'R_emaildomain', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9']
+Train shape: (12000, 56)
+Val shape: (3000, 56)
+[0]	validation_0-auc:1.00000
+[50]	validation_0-auc:1.00000
+[100]	validation_0-auc:1.00000
+[150]	validation_0-auc:1.00000
+[200]	validation_0-auc:1.00000
+[250]	validation_0-auc:1.00000
+[300]	validation_0-auc:1.00000
+[350]	validation_0-auc:1.00000
+[400]	validation_0-auc:1.00000
+[450]	validation_0-auc:1.00000
+[499]	validation_0-auc:1.00000
+Validation AUC: 1.0
+Saved predictions to /output/predictions.csv
+Saved AUC to /output/auc.txt
+[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > train_robust.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> import xgboost as xgb
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load data
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> print("Loaded shape:", df.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's drop the leakage columns
+[?2004l[?2004h> leakage_cols = ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+[?2004l[?2004h> # Drop them if they exist
+[?2004l[?2004h> existing_leaks = [col for col in leakage_cols if col in df.columns]
+[?2004l[?2004h> print("Dropping leakage columns:", existing_leaks)
+[?2004l[?2004h> df_clean = df.drop(columns=existing_leaks)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Separate features and target
+[?2004l[?2004h> X = df_clean.drop(columns=['isFraud'])
+[?2004l[?2004h> y = df_clean['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> # Keep track of TransactionID for predictions
+[?2004l[?2004h> trans_id = X['TransactionID']
+[?2004l[?2004h> X = X.drop(columns=['TransactionID'])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Identify categorical columns
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> print("Categorical columns:", cat_cols)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Encode categorical columns
+[?2004l[?2004h> from sklearn.preprocessing import LabelEncoder
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     # Fill missing categorical values with a string placeholder
+[?2004l[?2004h>     X[col] = X[col].fillna('Missing').astype(str)
+[?2004l[?2004h>     le = LabelEncoder()
+[?2004l[?2004h>     X[col] = le.fit_transform(X[col])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split 80/20
+[?2004l[?2004h> X_train, X_val, y_train, y_val, idx_train, idx_val = train_test_split(
+[?2004l[?2004h>     X, y, trans_id, test_size=0.20, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Train shape:", X_train.shape)
+[?2004l[?2004h> print("Val shape:", X_val.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Train XGBoost Classifier
+[?2004l[?2004h> clf = xgb.XGBClassifier(
+[?2004l[?2004h>     n_estimators=300,
+[?2004l[?2004h>     learning_rate=0.05,
+[?2004l[?2004h>     max_depth=6,
+[?2004l[?2004h>     subsample=0.8,
+[?2004l[?2004h>     colsample_bytree=0.8,
+[?2004l[?2004h>     random_state=42,
+[?2004l[?2004h>     use_label_encoder=False,
+[?2004l[?2004h>     eval_metric='auc'
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=50)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Predict
+[?2004l[?2004h> val_preds = clf.predict_proba(X_val)[:, 1]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Calculate AUC
+[?2004l[?2004h> auc_score = roc_auc_score(y_val, val_preds)
+[?2004l[?2004h> print("Validation AUC:", auc_score)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save predictions
+[?2004l[?2004h> predictions_df = pd.DataFrame({
+[?2004l[?2004h>     'TransactionID': idx_val,
+[?2004l[?2004h>     'fraud_prob': val_preds
+[?2004l[?2004h> })
+[?2004l[?2004h> predictions_df.to_csv('/output/predictions.csv', index=False)
+[?2004l[?2004h> print("Saved predictions to /output/predictions.csv")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save AUC to /output/auc.txt
+[?2004l[?2004h> with open('/output/auc.txt', 'w') as f:
+[?2004l[?2004h>     f.write(f"{auc_score:.6f}")
+[?2004l[?2004h> print("Saved AUC to /output/auc.txt")
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 train_robust.py
+[?2004lLoaded shape: (15000, 58)
+Dropping leakage columns: ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+Categorical columns: ['ProductCD', 'card4', 'card6', 'P_emaildomain', 'R_emaildomain', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9']
+Train shape: (12000, 53)
+Val shape: (3000, 53)
+[0]	validation_0-auc:0.79836
+[50]	validation_0-auc:0.88451
+[100]	validation_0-auc:0.89059
+[150]	validation_0-auc:0.89554
+[200]	validation_0-auc:0.89615
+[250]	validation_0-auc:0.89661
+[299]	validation_0-auc:0.89677
+Validation AUC: 0.8967708075263068
+Saved predictions to /output/predictions.csv
+Saved AUC to /output/auc.txt
+[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > inspect_features.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> print(df['TransactionDT'].describe())
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 inspect_features.py
+[?2004lcount    1.500000e+04
+mean     7.323742e+06
+std      4.600125e+06
+min      8.640000e+04
+25%      3.021365e+06
+50%      7.244897e+06
+75%      1.112461e+07
+max      1.581109e+07
+Name: TransactionDT, dtype: float64
+[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > train_fe.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> import xgboost as xgb
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load data
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's drop the leakage columns
+[?2004l[?2004h> leakage_cols = ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+[?2004l[?2004h> existing_leaks = [col for col in leakage_cols if col in df.columns]
+[?2004l[?2004h> df_clean = df.drop(columns=existing_leaks)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Feature engineering on TransactionDT
+[?2004l[?2004h> df_clean['hour'] = (df_clean['TransactionDT'] // 3600) % 24
+[?2004l[?2004h> df_clean['day'] = (df_clean['TransactionDT'] // (3600 * 24)) % 7
+[?2004l[?2004h> 
+[?2004l[?2004h> # Separate features and target
+[?2004l[?2004h> X = df_clean.drop(columns=['isFraud'])
+[?2004l[?2004h> y = df_clean['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> # Keep track of TransactionID for predictions
+[?2004l[?2004h> trans_id = X['TransactionID']
+[?2004l[?2004h> X = X.drop(columns=['TransactionID'])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Identify categorical columns
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> print("Categorical columns:", cat_cols)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Encode categorical columns
+[?2004l[?2004h> from sklearn.preprocessing import LabelEncoder
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     X[col] = X[col].fillna('Missing').astype(str)
+[?2004l[?2004h>     le = LabelEncoder()
+[?2004l[?2004h>     X[col] = le.fit_transform(X[col])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split 80/20
+[?2004l[?2004h> X_train, X_val, y_train, y_val, idx_train, idx_val = train_test_split(
+[?2004l[?2004h>     X, y, trans_id, test_size=0.20, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Train shape:", X_train.shape)
+[?2004l[?2004h> print("Val shape:", X_val.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Train XGBoost Classifier
+[?2004l[?2004h> clf = xgb.XGBClassifier(
+[?2004l[?2004h>     n_estimators=300,
+[?2004l[?2004h>     learning_rate=0.05,
+[?2004l[?2004h>     max_depth=6,
+[?2004l[?2004h>     subsample=0.8,
+[?2004l[?2004h>     colsample_bytree=0.8,
+[?2004l[?2004h>     random_state=42,
+[?2004l[?2004h>     use_label_encoder=False,
+[?2004l[?2004h>     eval_metric='auc'
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=50)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Predict
+[?2004l[?2004h> val_preds = clf.predict_proba(X_val)[:, 1]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Calculate AUC
+[?2004l[?2004h> auc_score = roc_auc_score(y_val, val_preds)
+[?2004l[?2004h> print("Validation AUC with FE:", auc_score)
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 train_fe.py
+[?2004lCategorical columns: ['ProductCD', 'card4', 'card6', 'P_emaildomain', 'R_emaildomain', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9']
+Train shape: (12000, 55)
+Val shape: (3000, 55)
+[0]	validation_0-auc:0.78336
+[50]	validation_0-auc:0.88641
+[100]	validation_0-auc:0.89045
+[150]	validation_0-auc:0.89047
+[200]	validation_0-auc:0.89396
+[250]	validation_0-auc:0.89386
+[299]	validation_0-auc:0.89453
+Validation AUC with FE: 0.8945313009349206
+[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > tune.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> import xgboost as xgb
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load data
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Drop leakage
+[?2004l[?2004h> leakage_cols = ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+[?2004l[?2004h> existing_leaks = [col for col in leakage_cols if col in df.columns]
+[?2004l[?2004h> df_clean = df.drop(columns=existing_leaks)
+[?2004l[?2004h> 
+[?2004l[?2004h> X = df_clean.drop(columns=['isFraud', 'TransactionID'])
+[?2004l[?2004h> y = df_clean['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> from sklearn.preprocessing import LabelEncoder
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     X[col] = X[col].fillna('Missing').astype(str)
+[?2004l[?2004h>     le = LabelEncoder()
+[?2004l[?2004h>     X[col] = le.fit_transform(X[col])
+[?2004l[?2004h> 
+[?2004l[?2004h> X_train, X_val, y_train, y_val = train_test_split(
+[?2004l[?2004h>     X, y, test_size=0.20, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> # Let's try a few combinations of max_depth, learning_rate, subsample, and colsample_bytree
+[?2004l[?2004h> best_auc = 0
+[?2004l[?2004h> best_params = {}
+[?2004l[?2004h> 
+[?2004l[?2004h> for max_depth in [4, 6, 8]:
+[?2004l[?2004h>     for lr in [0.03, 0.05, 0.1]:
+[?2004l[?2004h>         for sub in [0.8, 1.0]:
+[?2004l[?2004h>             clf = xgb.XGBClassifier(
+[?2004l[?2004h>                 n_estimators=300,
+[?2004l[?2004h>                 learning_rate=lr,
+[?2004l[?2004h>                 max_depth=max_depth,
+[?2004l[?2004h>                 subsample=sub,
+[?2004l[?2004h>                 colsample_bytree=0.8,
+[?2004l[?2004h>                 random_state=42,
+[?2004l[?2004h>                 use_label_encoder=False,
+[?2004l[?2004h>                 eval_metric='auc'
+[?2004l[?2004h>             )
+[?2004l[?2004h>             clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
+[?2004l[?2004h>             preds = clf.predict_proba(X_val)[:, 1]
+[?2004l[?2004h>             auc = roc_auc_score(y_val, preds)
+[?2004l[?2004h>             print(f"depth={max_depth}, lr={lr}, sub={sub} -> AUC: {auc:.6f}")
+[?2004l[?2004h>             if auc > best_auc:
+[?2004l[?2004h>                 best_auc = auc
+[?2004l[?2004h>                 best_params = {'max_depth': max_depth, 'learning_rate': lr, 'subsample': sub}
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Best AUC:", best_auc)
+[?2004l[?2004h> print("Best params:", best_params)
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 tune.py
+[?2004ldepth=4, lr=0.03, sub=0.8 -> AUC: 0.887692
+depth=4, lr=0.03, sub=1.0 -> AUC: 0.881481
+depth=4, lr=0.05, sub=0.8 -> AUC: 0.891141
+depth=4, lr=0.05, sub=1.0 -> AUC: 0.881120
+depth=4, lr=0.1, sub=0.8 -> AUC: 0.885277
+depth=4, lr=0.1, sub=1.0 -> AUC: 0.885401
+depth=6, lr=0.03, sub=0.8 -> AUC: 0.899604
+depth=6, lr=0.03, sub=1.0 -> AUC: 0.887656
+depth=6, lr=0.05, sub=0.8 -> AUC: 0.896771
+depth=6, lr=0.05, sub=1.0 -> AUC: 0.893817
+depth=6, lr=0.1, sub=0.8 -> AUC: 0.898055
+depth=6, lr=0.1, sub=1.0 -> AUC: 0.896543
+depth=8, lr=0.03, sub=0.8 -> AUC: 0.896924
+depth=8, lr=0.03, sub=1.0 -> AUC: 0.892787
+depth=8, lr=0.05, sub=0.8 -> AUC: 0.895891
+depth=8, lr=0.05, sub=1.0 -> AUC: 0.891884
+depth=8, lr=0.1, sub=0.8 -> AUC: 0.886359
+depth=8, lr=0.1, sub=1.0 -> AUC: 0.891112
+Best AUC: 0.8996036040734897
+Best params: {'max_depth': 6, 'learning_rate': 0.03, 'subsample': 0.8}
+[?2004hroot@d8276d655354:/workspace# cat << 'EOF' > run.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> from sklearn.model_selection import train_test_split
+[?2004l[?2004h> from sklearn.metrics import roc_auc_score
+[?2004l[?2004h> import xgboost as xgb
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load data
+[?2004l[?2004h> df = pd.read_csv('/data/train_transaction.csv')
+[?2004l[?2004h> print("Loaded shape:", df.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Drop the obvious target leakage columns to build a realistic and robust model
+[?2004l[?2004h> leakage_cols = ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+[?2004l[?2004h> existing_leaks = [col for col in leakage_cols if col in df.columns]
+[?2004l[?2004h> print("Dropping leakage columns:", existing_leaks)
+[?2004l[?2004h> df_clean = df.drop(columns=existing_leaks)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Separate features and target
+[?2004l[?2004h> X = df_clean.drop(columns=['isFraud'])
+[?2004l[?2004h> y = df_clean['isFraud']
+[?2004l[?2004h> 
+[?2004l[?2004h> # Keep track of TransactionID for predictions
+[?2004l[?2004h> trans_id = X['TransactionID']
+[?2004l[?2004h> X = X.drop(columns=['TransactionID'])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Identify and label encode categorical columns
+[?2004l[?2004h> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+[?2004l[?2004h> from sklearn.preprocessing import LabelEncoder
+[?2004l[?2004h> for col in cat_cols:
+[?2004l[?2004h>     X[col] = X[col].fillna('Missing').astype(str)
+[?2004l[?2004h>     le = LabelEncoder()
+[?2004l[?2004h>     X[col] = le.fit_transform(X[col])
+[?2004l[?2004h> 
+[?2004l[?2004h> # Split 80/20 using stratify on the target label
+[?2004l[?2004h> X_train, X_val, y_train, y_val, idx_train, idx_val = train_test_split(
+[?2004l[?2004h>     X, y, trans_id, test_size=0.20, random_state=42, stratify=y
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> print("Train shape:", X_train.shape)
+[?2004l[?2004h> print("Validation shape:", X_val.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Train tuned XGBoost Classifier
+[?2004l[?2004h> clf = xgb.XGBClassifier(
+[?2004l[?2004h>     n_estimators=300,
+[?2004l[?2004h>     learning_rate=0.03,
+[?2004l[?2004h>     max_depth=6,
+[?2004l[?2004h>     subsample=0.8,
+[?2004l[?2004h>     colsample_bytree=0.8,
+[?2004l[?2004h>     random_state=42,
+[?2004l[?2004h>     use_label_encoder=False,
+[?2004l[?2004h>     eval_metric='auc'
+[?2004l[?2004h> )
+[?2004l[?2004h> 
+[?2004l[?2004h> clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=50)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Predict probabilities
+[?2004l[?2004h> val_preds = clf.predict_proba(X_val)[:, 1]
+[?2004l[?2004h> 
+[?2004l[?2004h> # Calculate and report Validation AUC
+[?2004l[?2004h> auc_score = roc_auc_score(y_val, val_preds)
+[?2004l[?2004h> print(f"Validation ROC-AUC: {auc_score:.6f}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save predictions to /output/predictions.csv
+[?2004l[?2004h> predictions_df = pd.DataFrame({
+[?2004l[?2004h>     'TransactionID': idx_val,
+[?2004l[?2004h>     'fraud_prob': val_preds
+[?2004l[?2004h> })
+[?2004l[?2004h> predictions_df.to_csv('/output/predictions.csv', index=False)
+[?2004l[?2004h> print("Saved validation predictions to /output/predictions.csv")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save AUC to /output/auc.txt
+[?2004l[?2004h> with open('/output/auc.txt', 'w') as f:
+[?2004l[?2004h>     f.write(f"{auc_score:.6f}")
+[?2004l[?2004h> print("Saved validation AUC to /output/auc.txt")
+[?2004l[?2004h> 
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@d8276d655354:/workspace# python3 run.py
+[?2004lLoaded shape: (15000, 58)
+Dropping leakage columns: ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+Train shape: (12000, 53)
+Validation shape: (3000, 53)
+[0]	validation_0-auc:0.79836
+[50]	validation_0-auc:0.87830
+[100]	validation_0-auc:0.88671
+[150]	validation_0-auc:0.89177
+[200]	validation_0-auc:0.89604
+[250]	validation_0-auc:0.89729
+[299]	validation_0-auc:0.89960
+Validation ROC-AUC: 0.899604
+Saved validation predictions to /output/predictions.csv
+Saved validation AUC to /output/auc.txt
+[?2004hroot@d8276d655354:/workspace# head -n 5 /output/predictions.csv
+[?2004lTransactionID,fraud_prob
+3476394,0.01803385
+3053569,0.0056095524
+3353921,0.0023596552
+3516024,0.003446759
+[?2004hroot@d8276d655354:/workspace# cat /output/auc.txt
+[?2004l0.899604[?2004hroot@d8276d655354:/workspace# 

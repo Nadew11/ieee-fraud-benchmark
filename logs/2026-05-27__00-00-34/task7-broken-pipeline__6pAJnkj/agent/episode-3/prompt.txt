@@ -1,0 +1,7 @@
+New Terminal Output:
+
+Val fraud rate: 0.0470
+
+Validation AUC: 1.0000
+Note: AUC seems low — unclear why model isn't learning better
+root@e9645eb65f5b:/workspace#

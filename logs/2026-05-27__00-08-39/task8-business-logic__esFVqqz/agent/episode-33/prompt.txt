@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 64 (char 65) | Content preview: '{\n  "analysis": "Ah! There are indeed 223 direct matches missing!\nWait, let\'s look at USD. Does the '...
+
+Please fix these issues and provide a proper JSON response.

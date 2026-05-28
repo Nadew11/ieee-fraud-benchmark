@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_identity.csv', keep_default_na=False); print('Number of empty strin
+gs in id_15:', (df['id_15'] == '').sum()); print('Sample non-empty values:', df['id_15'].unique())"
+Number of empty strings in id_15: 251
+Sample non-empty values: ['Found' '' 'New' 'Unknown']
+root@cc7b6f7834c9:/workspace#

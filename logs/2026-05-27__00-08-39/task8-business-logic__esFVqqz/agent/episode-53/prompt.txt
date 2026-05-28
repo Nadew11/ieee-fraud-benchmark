@@ -1,0 +1,21 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > check_exact_match.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> print("Unique currencies in fx:", fx.currency.unique())
+>
+> for c in fx.currency.unique():
+>     print(f"{c}: {len(fx[fx.currency==c])} rates")
+>
+> EOF
+root@b9e5a18b679d:/workspace# python3 check_exact_match.py
+Unique currencies in fx: ['GBP' 'ETB' 'NGN' 'EUR']
+GBP: 72 rates
+ETB: 73 rates
+NGN: 72 rates
+EUR: 72 rates
+root@b9e5a18b679d:/workspace#

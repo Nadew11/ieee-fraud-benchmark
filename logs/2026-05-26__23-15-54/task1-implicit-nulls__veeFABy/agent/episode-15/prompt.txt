@@ -1,0 +1,31 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; cat_cols = df.select_dtypes(include=["
+object"]).columns; print("Categorical columns:", list(cat_cols)); [print(col, df[col].unique()[:10]) for col in cat_cols]'
+Categorical columns: ['id_12', 'id_15', 'id_16', 'id_23', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'De
+viceType', 'DeviceInfo']
+id_12 ['NotFound' 'Found']
+id_15 ['Found' nan 'New' 'Unknown']
+id_16 ['Found' nan 'NotFound']
+id_23 [nan 'IP_PROXY:TRANSPARENT' 'IP_PROXY:HIDDEN' 'IP_PROXY:ANONYMOUS']
+id_27 [nan 'Found' 'NotFound']
+id_28 ['Found' nan 'New']
+id_29 ['Found' nan 'NotFound']
+id_30 [nan 'Windows 10' 'Android' 'iOS 11.1.2' 'iOS 11.2.1' 'Android 7.0'
+ 'Windows 7' 'iOS 11.2.6' 'iOS 11.3.0' 'iOS 11.2.2']
+id_31 ['chrome 63.0' 'edge 16.0' nan 'chrome 65.0' 'mobile safari 11.0'
+ 'chrome 64.0' 'chrome 62.0 for android' 'chrome 64.0 for android'
+ 'firefox' 'safari 9.0']
+id_33 [nan '1919x1079' '1920x1080' '1280x720' '1600x900' '2001x1125' '2208x1242'
+ '2436x1125' '1366x768' '1334x750']
+id_34 [nan 'match_status:2' 'match_status:1' 'match_status:0']
+id_35 ['F' 'T' nan]
+id_36 ['F' nan 'T']
+id_37 ['T' nan 'F']
+id_38 ['T' 'F' nan]
+DeviceType ['desktop' nan 'mobile']
+DeviceInfo [nan 'Windows' 'iOS Device' 'LG-X180g Build/LMY47I'
+ 'SM-A520F Build/NRD90M' 'rv:54.0' 'Trident/7.0'
+ 'SAMSUNG-SM-G930A Build/NRD90M' 'LG-H320 Build/LRX21Y'
+ '9008A Build/NRD90M']
+root@803b650a44b8:/workspace#

@@ -1,0 +1,16 @@
+New Terminal Output:
+
+xgboost is installed
+root@16de4ef61b18:/workspace#
+root@16de4ef61b18:/workspace# cat << 'EOF' > test_imports.py
+> import sys
+> for pkg in ['sklearn', 'openpyxl', 'lightgbm', 'xgboost']:
+>     try:
+>         __import__(pkg)
+>         print(f'{pkg}: available')
+>     except ImportError:
+>         print(f'{pkg}: NOT available')
+> EOF
+root@16de4ef61b18:/workspace# python3 test_imports.py
+python3 test_imports.py
+

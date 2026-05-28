@@ -1,0 +1,16 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 test_hyperparams.py
+depth: 4, subsample: 0.8, colsample: 0.8 -> Test AUC: 0.86196
+depth: 4, subsample: 0.8, colsample: 1.0 -> Test AUC: 0.86066
+depth: 4, subsample: 1.0, colsample: 0.8 -> Test AUC: 0.86465
+depth: 4, subsample: 1.0, colsample: 1.0 -> Test AUC: 0.86260
+depth: 5, subsample: 0.8, colsample: 0.8 -> Test AUC: 0.86123
+depth: 5, subsample: 0.8, colsample: 1.0 -> Test AUC: 0.86147
+depth: 5, subsample: 1.0, colsample: 0.8 -> Test AUC: 0.86374
+depth: 5, subsample: 1.0, colsample: 1.0 -> Test AUC: 0.86383
+depth: 6, subsample: 0.8, colsample: 0.8 -> Test AUC: 0.85738
+depth: 6, subsample: 0.8, colsample: 1.0 -> Test AUC: 0.86137
+depth: 6, subsample: 1.0, colsample: 0.8 -> Test AUC: 0.85860
+depth: 6, subsample: 1.0, colsample: 1.0 -> Test AUC: 0.86303
+root@81a3fc64145d:/workspace#

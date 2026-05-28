@@ -1,0 +1,19 @@
+Previous response had warnings:
+WARNINGS: - Extra text detected after JSON object
+
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# python3 top_n_features.py
+N=1 (id_05):
+  LR  -> Train AUC: 0.5066, Val AUC: 0.5531
+  HGB -> Train AUC: 0.5338, Val AUC: 0.5045
+N=2 (id_05, id_37):
+  LR  -> Train AUC: 0.5257, Val AUC: 0.5651
+  HGB -> Train AUC: 0.5518, Val AUC: 0.5211
+N=3 (id_05, id_37, id_02):
+  LR  -> Train AUC: 0.5385, Val AUC: 0.5079
+  HGB -> Train AUC: 0.6031, Val AUC: 0.4551
+N=4 (id_05, id_37, id_02, id_32):
+  LR  -> Train AUC: 0.5442, Val AUC: 0.4949
+  HGB -> Train AUC: 0.6031, Val AUC: 0.4551
+

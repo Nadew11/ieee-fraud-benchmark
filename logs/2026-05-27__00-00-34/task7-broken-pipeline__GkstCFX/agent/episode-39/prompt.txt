@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 /workspace/pipeline.py
+Loading data...
+Shape: (25000, 22)
+Train: 20000, Val: 5000
+Val fraud rate: 0.0502
+
+Validation AUC: 1.0000
+root@549b54a67146:/workspace#

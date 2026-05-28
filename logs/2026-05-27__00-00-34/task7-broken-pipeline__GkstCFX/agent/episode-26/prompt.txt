@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# ls -la /data
+total 3448
+drwxr-xr-x 1 root root    4096 May 27 05:00 .
+drwxr-xr-x 1 root root    4096 May 27 05:01 ..
+-rw-rw-rw- 1 root root    1625 May 26 21:28 pipeline.py
+-rw-rw-rw- 1 root root 3516511 May 26 21:28 train_transaction.csv
+root@549b54a67146:/workspace#

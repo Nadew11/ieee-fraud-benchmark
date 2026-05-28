@@ -1,0 +1,6 @@
+{
+  "analysis": "The workbook is properly placed at /output/fraud_report.xlsx with three sheets: Monthly Breakdown, Regional Summary, and Executive Summary. The data matching ground truth has been completely verified and has been rounded and organized exactly as specified. All criteria have been fulfilled.",
+  "plan": "Complete the task.",
+  "commands": [],
+  "task_complete": true
+}

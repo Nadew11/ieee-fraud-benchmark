@@ -1,0 +1,78 @@
+Previous response had warnings:
+WARNINGS: - Command 1 should end with newline when followed by another command. Otherwise the two commands will be concatenated together on the same line.
+
+New Terminal Output:
+
+python3 test_simple_models.py
+
+^Ccat test_simple_models.py
+Traceback (most recent call last):
+  File "/workspace/test_simple_models.py", line 24, in <module>
+    lr.fit(X_train_num, train_sub[target_col])
+  File "/usr/local/lib/python3.11/site-packages/sklearn/base.py", line 1351, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py", line 1296, in fit
+    fold_coefs_ = Parallel(n_jobs=self.n_jobs, verbose=self.verbose, prefer=prefer)(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/parallel.py", line 67, in __call__
+    return super().__call__(iterable_with_config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/joblib/parallel.py", line 1986, in __call__
+    return output if self.return_generator else list(output)
+                                                ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/joblib/parallel.py", line 1914, in _get_sequential_output
+    res = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/parallel.py", line 129, in __call__
+    return self.function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py", line 455, in _logistic_regression_path
+    opt_res = optimize.minimize(
+              ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/scipy/optimize/_minimize.py", line 784, in minimize
+    res = _minimize_lbfgsb(fun, x0, args, jac, bounds,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/scipy/optimize/_lbfgsb_py.py", line 461, in _minimize_lbfgsb
+    _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,
+KeyboardInterrupt
+
+root@16de4ef61b18:/workspace# cat test_simple_models.py
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_auc_score
+from sklearn.linear_model import LogisticRegression
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.ensemble import ExtraTreesClassifier
+import xgboost as xgb
+
+train_df = pd.read_csv('/data/train_identity.csv')
+train_df.columns = [c.replace('-', '_') if '-' in c else c for c in train_df.columns]
+
+target_col = 'isFraud'
+feature_cols = [c for c in train_df.columns if c != target_col and c != 'TransactionID']
+
+train_sub, val_sub = train_test_split(train_df, test_size=0.20, random_state=42, stratify=train_df[target_col])
+
+num_cols = train_df[feature_cols].select_dtypes(exclude=['object']).columns.tolist()
+
+X_train_num = train_sub[num_cols].fillna(0)
+X_val_num = val_sub[num_cols].fillna(0)
+
+lr = LogisticRegression(max_iter=1000, random_state=42, class_weight='balanced')
+lr.fit(X_train_num, train_sub[target_col])
+auc_lr = roc_auc_score(val_sub[target_col], lr.predict_proba(X_val_num)[:, 1])
+print(f'Logistic Regression (numeric only) AUC: {auc_lr:.6f}')
+
+dt = DecisionTreeClassifier(max_depth=3, random_state=42, class_weight='balanced')
+dt.fit(X_train_num, train_sub[target_col])
+auc_dt = roc_auc_score(val_sub[target_col], dt.predict_proba(X_val_num)[:, 1])
+print(f'Decision Tree (numeric only, depth 3) AUC: {auc_dt:.6f}')
+
+clf_xgb = xgb.XGBClassifier(n_estimators=50, max_depth=3, learning_rate=0.05, random_state=42, use_label_encoder=False, eval_metric='auc')
+clf_xgb.fit(X_train_num, train_sub[target_col])
+auc_xgb = roc_auc_score(val_sub[target_col], clf_xgb.predict_proba(X_val_num)[:, 1])
+print(f'XGBoost (numeric only) AUC: {auc_xgb:.6f}')
+root@16de4ef61b18:/workspace# python3 -u test_simple_models.py
+

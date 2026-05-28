@@ -1,0 +1,65 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# cat -n /data/pipeline.py
+     1  #!/usr/bin/env python3
+     2  """
+     3  Fraud Detection Pipeline — v1.2
+     4  Author: junior_engineer@payments.co
+     5  """
+     6  import pandas as pd
+     7  import numpy as np
+     8  from sklearn.model_selection import train_test_split
+     9  from sklearn.preprocessing import StandardScaler
+    10  from sklearn.metrics import roc_auc_score
+    11  import xgboost as xgb
+    12  import warnings
+    13  warnings.filterwarnings("ignore")
+    14
+    15  # Load data
+    16  print("Loading data...")
+    17  df = pd.read_csv("/data/train_transaction.csv")
+    18  print(f"Shape: {df.shape}")
+    19
+    20  # Features / target
+    21  TARGET = "isFraud"
+    22  DROP = ["TransactionID", TARGET, "ProductCD", "card4", "card6"]
+    23  features = [c for c in df.columns if c not in DROP]
+    24
+    25  X = df[features].fillna(-999).values
+    26  y = df[TARGET].values
+    27
+    28  # Scale features for better model performance
+    29  scaler = StandardScaler()
+    30  X = scaler.fit_transform(X)
+    31
+    32  # Split into train and validation
+    33  X_train, X_val, y_train, y_val = train_test_split(
+    34      X, y, test_size=0.2, random_state=42
+    35  )
+    36  print(f"Train: {len(X_train)}, Val: {len(X_val)}")
+    37  print(f"Val fraud rate: {y_val.mean():.4f}")
+    38
+    39  # Train XGBoost
+    40  model = xgb.XGBClassifier(
+    41      objective="binary:logistic",
+    42      eval_metric="rmse",
+    43      n_estimators=300,
+    44      max_depth=6,
+    45      learning_rate=0.05,
+    46      subsample=0.8,
+    47      colsample_bytree=0.8,
+    48      random_state=42,
+    49      use_label_encoder=False,
+    50      verbosity=0,
+    51  )
+    52  model.fit(
+    53      X_train, y_train,
+    54      eval_set=[(X_val, y_val)],
+    55      verbose=False,
+    56  )
+    57
+    58  probs = model.predict_proba(X_val)[:, 1]
+    59  auc   = roc_auc_score(y_val, probs)
+    60  print(f"\nValidation AUC: {auc:.4f}")
+    61  print("Note: AUC seems low — unclear why model isn't learning better")
+root@549b54a67146:/workspace#

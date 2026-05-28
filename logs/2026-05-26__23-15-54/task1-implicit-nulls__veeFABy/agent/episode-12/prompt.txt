@@ -1,0 +1,16 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); d = df[df.duplicated(subset=["TransactionID"], keep
+=False)].sort_values("TransactionID"); print(d[["TransactionID", "id_02"]].head(10))'
+       TransactionID          id_02
+10340      2987528.0  118375.124699
+7361       2987528.0  118380.000000
+3564       2987660.0  162818.000000
+10320      2987660.0  162813.505197
+10243      2987726.0   27357.012331
+4850       2987726.0   27362.000000
+10178      2988623.0  353812.343669
+1101       2988623.0  353816.000000
+6247       2989291.0   83638.000000
+10049      2989291.0   83637.337790
+root@803b650a44b8:/workspace#

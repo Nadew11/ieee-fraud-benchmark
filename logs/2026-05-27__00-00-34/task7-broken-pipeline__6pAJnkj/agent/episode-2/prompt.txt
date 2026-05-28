@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 /data/pipeline.py
+Loading data...
+Shape: (25000, 22)
+Train: 20000, Val: 5000
+Val fraud rate: 0.0470
+

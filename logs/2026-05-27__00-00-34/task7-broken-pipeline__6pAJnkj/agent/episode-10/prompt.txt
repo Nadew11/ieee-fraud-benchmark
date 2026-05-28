@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "import pandas as pd, numpy as np; from sklearn.model_selection import train_test_split; from sklearn.preprocessing imp
+ort StandardScaler; import xgboost as xgb; df = pd.read_csv('/data/train_transaction.csv'); features = [c for c in df.columns if c not in ['TransactionID', 'isF
+raud', 'ProductCD', 'card4', 'card6']]; X = df[features].fillna(-999).values; y = df['isFraud'].values; scaler = StandardScaler(); X = scaler.fit_transform(X);
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42); model = xgb.XGBClassifier(objective='binary:logistic', eval_metric='rms
+e', n_estimators=300, max_depth=6, learning_rate=0.05, subsample=0.8, colsample_bytree=0.8, random_state=42, use_label_encoder=False, verbosity=0); model.fit(X_
+train, y_train, eval_set=[(X_val, y_val)], verbose=False); print(dict(zip(features, model.feature_importances_)))"
+{'TransactionDT': 0.0010288035, 'TransactionAmt': 0.008966598, 'card1': 0.049285527, 'card2': 0.09281445, 'addr1': 0.17894402, 'dist1': 0.043792844, 'C1': 0.255
+5607, 'C2': 0.13793437, 'C3': 0.00044423537, 'C4': 0.049511917, 'C5': 0.054680806, 'C6': 0.0009981294, 'V1': 0.03702294, 'V2': 0.031079507, 'V3': 0.0013316418,
+'V4': 0.0011616992, 'V5': 0.05544186}
+root@e9645eb65f5b:/workspace#

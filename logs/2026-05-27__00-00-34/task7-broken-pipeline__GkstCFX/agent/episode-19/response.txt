@@ -1,0 +1,10 @@
+{
+  "analysis": "Oh my! Look at that: when `addr1 > 449.50` is True, ALL 584 transactions are `isFraud = 1`! There are ZERO transactions with `isFraud = 0`! That is a massive leak, or is it a feature designed this way? \nWait, let's look at `C1 > 9.50` on the subset where `addr1 <= 449.50`.",
+  "plan": "Let's check the distribution of target `isFraud` for `C1 > 9.50` given `addr1 <= 449.50`.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); subset = df[df['addr1'] <= 449.50]; print(subset.groupby(subset['C1'] > 9.50)['isFraud'].value_counts())\"\n",
+      "duration": 2.0
+    }
+  ]
+}

@@ -1,0 +1,71 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > find_logic.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+> rm = pd.read_csv('/data/region_map.csv')
+>
+> rates_dict = {}
+> for idx, row in fx.iterrows():
+>     rates_dict[(row['currency'], row['date'])] = row['rate_to_usd']
+>
+> def get_rate(currency, date_str):
+>     if currency == 'USD':
+>         return 1.0
+>     if (currency, date_str) in rates_dict:
+>         return rates_dict[(currency, date_str)]
+>     currency_rates = fx[fx['currency'] == currency]
+>     prior_rates = currency_rates[currency_rates['date'] <= date_str]
+>     if len(prior_rates) == 0:
+>         return currency_rates.sort_values('date').iloc[0]['rate_to_usd']
+>     return prior_rates.sort_values('date', ascending=False).iloc[0]['rate_to_usd']
+>
+> rates = []
+> for idx, row in df.iterrows():
+>     rates.append(get_rate(row['currency'], row['transaction_date']))
+> df['fx_rate'] = rates
+> df['amt_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = dict(zip(fees['merchant_category'], fees['fee_rate']))
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee'] = df['amt_usd'] * df['fee_rate']
+>
+> q4_df = df[(df.transaction_date >= '2023-10-01') & (df.transaction_date <= '2023-12-31')].copy()
+> q4_no_declined = q4_df[q4_df.settlement_status != 'declined'].copy()
+> fraud = q4_no_declined[q4_no_declined.isFraud == 1]
+>
+> print("Fraud purchase count for all statuses except declined:", len(fraud[fraud.transaction_type == 'purchase']))
+> print("Fraud purchase count settled:", len(fraud[(fraud.transaction_type == 'purchase') & (fraud.settlement_status == 'settled')]))
+> print("Fraud purchase count pending:", len(fraud[(fraud.transaction_type == 'purchase') & (fraud.settlement_status == 'pending')]))
+>
+> gross_purchase_settled = fraud[(fraud.transaction_type == 'purchase') & (fraud.settlement_status == 'settled')]['amt_usd'].sum()
+> gross_purchase_all = fraud[fraud.transaction_type == 'purchase']['amt_usd'].sum()
+> print("Gross Purchase settled:", gross_purchase_settled)
+> print("Gross Purchase all:", gross_purchase_all)
+>
+> recoveries_settled = fraud[fraud.transaction_type.isin(['refund', 'chargeback_reversal']) & (fraud.settlement_status == 'settled')]['amt_usd'].sum()
+> recoveries_all = fraud[fraud.transaction_type.isin(['refund', 'chargeback_reversal'])]['amt_usd'].sum()
+> print("Recoveries settled:", recoveries_settled)
+> print("Recoveries all:", recoveries_all)
+>
+> fees_settled = fraud[(fraud.transaction_type == 'purchase') & (fraud.settlement_status == 'settled')]['processing_fee'].sum()
+> fees_all = fraud[fraud.transaction_type == 'purchase']['processing_fee'].sum()
+> print("Fees settled:", fees_settled)
+> print("Fees all:", fees_all)
+>
+> EOF
+root@b9e5a18b679d:/workspace# python3 find_logic.py
+Fraud purchase count for all statuses except declined: 278
+Fraud purchase count settled: 264
+Fraud purchase count pending: 14
+Gross Purchase settled: 30309.336008362
+Gross Purchase all: 31521.929699035
+Recoveries settled: 3298.9711221
+Recoveries all: 3298.9711221
+Fees settled: 1025.126345709975
+Fees all: 1068.53852614543
+root@b9e5a18b679d:/workspace#

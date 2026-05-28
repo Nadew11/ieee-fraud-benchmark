@@ -1,0 +1,17 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/train_identity.csv', keep_default_na=False)
+> print('Original shapes:', df.shape)
+>
+> # 1. Remove duplicates
+> df_clean = df.drop_duplicates(subset=['TransactionID'], keep='first').copy()
+>
+> # 2. Replace -999.0 / -999 in id_01 with empty/NaN
+> # Note: since we read with keep_default_na=False, numeric values are string or float, let's check
+> "
+Original shapes: (10500, 41)
+root@cc7b6f7834c9:/workspace#

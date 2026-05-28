@@ -1,0 +1,100 @@
+New Terminal Output:
+
+root@d8276d655354:/workspace# cat << 'EOF' > train_robust.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # Load data
+> df = pd.read_csv('/data/train_transaction.csv')
+> print("Loaded shape:", df.shape)
+>
+> # Let's drop the leakage columns
+> leakage_cols = ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+> # Drop them if they exist
+> existing_leaks = [col for col in leakage_cols if col in df.columns]
+> print("Dropping leakage columns:", existing_leaks)
+> df_clean = df.drop(columns=existing_leaks)
+>
+> # Separate features and target
+> X = df_clean.drop(columns=['isFraud'])
+> y = df_clean['isFraud']
+>
+> # Keep track of TransactionID for predictions
+> trans_id = X['TransactionID']
+> X = X.drop(columns=['TransactionID'])
+>
+> # Identify categorical columns
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+> print("Categorical columns:", cat_cols)
+>
+> # Encode categorical columns
+> from sklearn.preprocessing import LabelEncoder
+> for col in cat_cols:
+>     # Fill missing categorical values with a string placeholder
+>     X[col] = X[col].fillna('Missing').astype(str)
+>     le = LabelEncoder()
+>     X[col] = le.fit_transform(X[col])
+>
+> # Split 80/20
+> X_train, X_val, y_train, y_val, idx_train, idx_val = train_test_split(
+>     X, y, trans_id, test_size=0.20, random_state=42, stratify=y
+> )
+>
+> print("Train shape:", X_train.shape)
+> print("Val shape:", X_val.shape)
+>
+> # Train XGBoost Classifier
+> clf = xgb.XGBClassifier(
+>     n_estimators=300,
+>     learning_rate=0.05,
+>     max_depth=6,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     eval_metric='auc'
+> )
+>
+> clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=50)
+>
+> # Predict
+> val_preds = clf.predict_proba(X_val)[:, 1]
+>
+> # Calculate AUC
+> auc_score = roc_auc_score(y_val, val_preds)
+> print("Validation AUC:", auc_score)
+>
+> # Save predictions
+> predictions_df = pd.DataFrame({
+>     'TransactionID': idx_val,
+>     'fraud_prob': val_preds
+> })
+> predictions_df.to_csv('/output/predictions.csv', index=False)
+> print("Saved predictions to /output/predictions.csv")
+>
+> # Save AUC to /output/auc.txt
+> with open('/output/auc.txt', 'w') as f:
+>     f.write(f"{auc_score:.6f}")
+> print("Saved AUC to /output/auc.txt")
+>
+> EOF
+root@d8276d655354:/workspace# python3 train_robust.py
+Loaded shape: (15000, 58)
+Dropping leakage columns: ['chargeback_amount', 'days_to_chargeback', 'fraud_score']
+Categorical columns: ['ProductCD', 'card4', 'card6', 'P_emaildomain', 'R_emaildomain', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9']
+Train shape: (12000, 53)
+Val shape: (3000, 53)
+[0]     validation_0-auc:0.79836
+[50]    validation_0-auc:0.88451
+[100]   validation_0-auc:0.89059
+[150]   validation_0-auc:0.89554
+[200]   validation_0-auc:0.89615
+[250]   validation_0-auc:0.89661
+[299]   validation_0-auc:0.89677
+Validation AUC: 0.8967708075263068
+Saved predictions to /output/predictions.csv
+Saved AUC to /output/auc.txt
+root@d8276d655354:/workspace#

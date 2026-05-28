@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 6 column 35 (char 577) | Content preview: '{\n  "analysis": "Wait, let\'s look at the ranges! For card1: `overlap range [8000, 14997], overlap fr'...
+
+Please fix these issues and provide a proper JSON response.

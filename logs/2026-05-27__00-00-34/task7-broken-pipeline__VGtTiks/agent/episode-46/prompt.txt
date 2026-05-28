@@ -1,0 +1,50 @@
+New Terminal Output:
+
+Original pipeline (temporal split) AUC: 1.0000
+root@0d5e255b62ea:/workspace# python3 check_orig_temporal.py
+Original pipeline (temporal split) AUC: 1.0000
+root@0d5e255b62ea:/workspace# cat << 'EOF' > get_precise_auc.py
+> import pandas as pd
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> df = pd.read_csv('/data/train_transaction.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> TARGET = 'isFraud'
+> cat_cols = ['ProductCD', 'card4', 'card6']
+> df_encoded = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+>
+> DROP = ['TransactionID', TARGET]
+> features = [c for c in df_encoded.columns if c not in DROP]
+>
+> split_idx = int(len(df_encoded) * 0.8)
+> train_df = df_encoded.iloc[:split_idx]
+> val_df = df_encoded.iloc[split_idx:]
+>
+> X_train = train_df[features]
+> y_train = train_df[TARGET]
+> X_val = val_df[features]
+> y_val = val_df[TARGET]
+>
+> model = xgb.XGBClassifier(
+>     objective='binary:logistic',
+>     eval_metric='auc',
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+> )
+> model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
+>
+> probs = model.predict_proba(X_val)[:, 1]
+> auc = roc_auc_score(y_val, probs)
+> print(f'AUC: {auc:.6f}')
+> EOF
+root@0d5e255b62ea:/workspace# python3 get_precise_auc.py
+AUC: 0.999997
+root@0d5e255b62ea:/workspace#

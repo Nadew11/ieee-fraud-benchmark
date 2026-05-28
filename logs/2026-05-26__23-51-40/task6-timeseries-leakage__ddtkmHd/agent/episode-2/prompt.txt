@@ -1,0 +1,31 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# wc -l /data/transactions.csv
+30001 /data/transactions.csv
+root@f9cb0064b676:/workspace# python3 -c "import pandas, sklearn, lightgbm, xgboost; print('All imported successfully')"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

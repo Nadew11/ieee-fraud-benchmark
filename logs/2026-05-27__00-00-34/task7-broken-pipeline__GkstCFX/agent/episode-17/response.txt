@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, it's taking a second, or it already finished and printed nothing? Let me wait.",
+  "plan": "Wait for the output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 54 (char 55) | Content preview: '{\n  "analysis": "There are 123 non-USD missing matches.\nWait, let\'s write a python script that does '...
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Expecting ',' delimiter: line 2 column 2539 (char 2540) | Content preview: '{\n  "analysis": "This is extremely revealing!\\nLet\'s analyze the performance difference:\\n1. Raw Dat'...
+
+Please fix these issues and provide a proper JSON response.

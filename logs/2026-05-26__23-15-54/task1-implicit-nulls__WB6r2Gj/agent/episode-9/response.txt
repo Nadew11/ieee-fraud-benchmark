@@ -1,0 +1,10 @@
+{
+  "analysis": "There are no files in /workspace. Let's check `/data` and see if there are other files in `/data`.",
+  "plan": "I will list files in `/data`.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /data\n",
+      "duration": 1.0
+    }
+  ]
+}

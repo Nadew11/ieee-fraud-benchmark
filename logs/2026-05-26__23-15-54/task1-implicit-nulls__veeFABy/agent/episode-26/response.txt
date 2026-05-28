@@ -1,0 +1,6 @@
+{
+  "analysis": "The task is complete and verified. The cleaned dataset at `/output/cleaned.csv` has the exact schema, is properly cleaned of duplicates and missing values, has correct data types, and contains all legitimate records.",
+  "plan": "I will submit the completed status.",
+  "commands": [],
+  "task_complete": true
+}

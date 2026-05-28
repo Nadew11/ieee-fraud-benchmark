@@ -1,0 +1,66 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# cat << 'EOF' > test_c_features.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> df = pd.read_csv('/data/transactions.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> df['dt_diff_card1'] = df.groupby('card1')['TransactionDT'].diff().fillna(-1)
+> df['dt_diff_card1_addr1'] = df.groupby(['card1', 'addr1'])['TransactionDT'].diff().fillna(-1)
+>
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_addr1_cum_count'] = df.groupby(['card1', 'addr1']).cumcount()
+>
+> df['card1_amt_cum_mean'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(-1)
+> df['card1_addr1_amt_cum_mean'] = df.groupby(['card1', 'addr1'])['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(-1)
+>
+> df['card1_fraud_cum_mean'] = df.groupby('card1')['isFraud'].transform(lambda x: x.shift().expanding().mean()).fillna(0.0456)
+> df['card1_addr1_fraud_cum_mean'] = df.groupby(['card1', 'addr1'])['isFraud'].transform(lambda x: x.shift().expanding().mean()).fillna(0.0456)
+>
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+>
+> df['amt_to_mean_card1'] = df['TransactionAmt'] / (df['card1_amt_cum_mean'] + 1e-5)
+> df['amt_to_mean_card1_addr1'] = df['TransactionAmt'] / (df['card1_addr1_amt_cum_mean'] + 1e-5)
+>
+> df['amt_diff_mean_card1'] = df['TransactionAmt'] - df['card1_amt_cum_mean']
+> df['amt_diff_mean_card1_addr1'] = df['TransactionAmt'] - df['card1_addr1_amt_cum_mean']
+>
+> df['card1_amt_cum_std'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().std()).fillna(-1)
+> df['card1_addr1_amt_cum_std'] = df.groupby(['card1', 'addr1'])['TransactionAmt'].transform(lambda x: x.shift().expanding().std()).fillna(-1)
+>
+> df['C1_diff_card1'] = df.groupby('card1')['C1'].diff().fillna(-1)
+> df['C2_diff_card1'] = df.groupby('card1')['C2'].diff().fillna(-1)
+>
+> # New C1 and C2 cumulative statistics
+> df['card1_C1_cum_mean'] = df.groupby('card1')['C1'].transform(lambda x: x.shift().expanding().mean()).fillna(-1)
+> df['card1_C2_cum_mean'] = df.groupby('card1')['C2'].transform(lambda x: x.shift().expanding().mean()).fillna(-1)
+> df['C1_to_mean_card1'] = df['C1'] / (df['card1_C1_cum_mean'] + 1e-5)
+> df['C2_to_mean_card1'] = df['C2'] / (df['card1_C2_cum_mean'] + 1e-5)
+>
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+>
+> features = [c for c in df.columns if c not in ['TransactionID', 'TransactionDT', 'isFraud']]
+>
+> n = len(df)
+> split_idx = int(n * 0.8)
+>
+> train_df = df.iloc[:split_idx]
+> test_df = df.iloc[split_idx:]
+>
+> X_train, y_train = train_df[features], train_df['isFraud']
+> X_test, y_test = test_df[features], test_df['isFraud']
+>
+> for lr in [0.02, 0.03]:
+>     for n_est in [80, 100, 120, 140]:
+>         model = xgb.XGBClassifier(n_estimators=n_est, max_depth=4, subsample=1.0, colsample_bytree=0.8, learning_rate=lr, random_state=42, eval_metric='auc')
+>         model.fit(X_train, y_train)
+>         preds = model.predict_proba(X_test)[:, 1]
+>         auc = roc_auc_score(y_test, preds)
+>         print(f'lr: {lr}, n_est: {n_est} -> Test AUC: {auc:.5f}')
+> EOF
+root@81a3fc64145d:/workspace# python3 test_c_features.py
+

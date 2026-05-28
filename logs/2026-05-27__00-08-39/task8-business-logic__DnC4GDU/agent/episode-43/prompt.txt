@@ -1,0 +1,23 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# python3 test_recoveries.py
+Frauds with duplicate TransactionIDs dropped (keep first):
+transaction_type
+chargeback_reversal      9
+purchase               263
+refund                  33
+dtype: int64
+transaction_type
+chargeback_reversal      863.09
+purchase               30212.56
+refund                  2435.89
+Name: amt_usd, dtype: float64
+
+Refunds only, no dup dropping:
+Count: 33 Sum: 2435.89
+Refunds only, keep first dup:
+Count: 33 Sum: 2435.89
+
+All types in frauds_no_dup: ['purchase' 'chargeback_reversal' 'refund']
+root@cf0db7aa8136:/workspace#
+root@cf0db7aa8136:/workspace#

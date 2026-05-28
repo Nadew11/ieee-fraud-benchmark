@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# python3 run_hist_gb.py
+depth=3, lr=0.01 -> Train AUC: 0.85539, Test AUC: 0.85208
+depth=3, lr=0.03 -> Train AUC: 0.87081, Test AUC: 0.86322
+depth=3, lr=0.05 -> Train AUC: 0.87603, Test AUC: 0.86155
+depth=4, lr=0.01 -> Train AUC: 0.86683, Test AUC: 0.86047
+depth=4, lr=0.03 -> Train AUC: 0.87312, Test AUC: 0.86296
+depth=4, lr=0.05 -> Train AUC: 0.88412, Test AUC: 0.85891
+depth=5, lr=0.01 -> Train AUC: 0.86804, Test AUC: 0.86199
+

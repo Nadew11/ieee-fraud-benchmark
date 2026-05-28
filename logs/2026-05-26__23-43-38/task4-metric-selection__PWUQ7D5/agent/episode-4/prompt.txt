@@ -1,0 +1,15 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > analyze.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score, confusion_matrix, accuracy_score
+>
+> df = pd.read_csv('/data/predictions.csv')
+> print("Shape:", df.shape)
+> print("Unique TransactionIDs:", df['TransactionID'].nunique())
+> print("Duplicated TransactionIDs:", df.duplicated(subset=['TransactionID']).sum())
+> print(df.head())
+> EOF
+root@a7f99ad36897:/workspace# python3 analyze.py
+

@@ -1,0 +1,2462 @@
+TransactionID,DeviceType,DeviceInfo,id_01,id_02,id_12
+2987111,desktop,Windows,-5.0,252899.0,NotFound
+2987380,mobile,,-20.0,324495.0,NotFound
+2987750,desktop,,-20.0,120556.0,NotFound
+2987780,mobile,KFFOWI Build/LVY48F,0.0,36004.0,Found
+2987854,desktop,Windows,-5.0,599858.0,NotFound
+2989519,desktop,Windows,-10.0,219208.0,Found
+2989857,desktop,Windows,-5.0,9837.0,NotFound
+2990131,desktop,Windows,-5.0,69878.0,NotFound
+2990540,desktop,rv:11.0,-5.0,162439.0,NotFound
+2990820,desktop,Windows,-5.0,112463.0,NotFound
+2991373,desktop,Windows,-5.0,21697.0,Found
+2992035,desktop,,-5.0,378634.0,NotFound
+2992064,mobile,,-35.0,96576.0,NotFound
+2992198,desktop,Windows,-5.0,56393.0,NotFound
+2992234,desktop,,-10.0,242509.0,NotFound
+2992361,mobile,,-25.0,116367.0,NotFound
+2992626,mobile,LG-D680 Build/KOT49I,-5.0,428917.0,NotFound
+2992877,mobile,,-20.0,571906.0,NotFound
+2993107,mobile,Moto G (4) Build/NPJS25.93-14-10,0.0,134782.0,NotFound
+2993937,mobile,iOS Device,-5.0,240212.0,NotFound
+2994298,desktop,,-35.0,188445.0,NotFound
+2994471,mobile,iOS Device,-5.0,110872.0,NotFound
+2994629,desktop,Windows,-5.0,97098.0,NotFound
+2994679,desktop,Windows,-5.0,161211.0,NotFound
+2994709,mobile,iOS Device,0.0,6613.0,NotFound
+2994714,mobile,SAMSUNG-SM-G930A Build/NRD90M,0.0,102816.0,NotFound
+2995025,desktop,Windows,-5.0,437959.0,NotFound
+2995763,desktop,,0.0,9978.0,NotFound
+2996069,mobile,,0.0,30522.0,NotFound
+2996095,desktop,Windows,-5.0,73150.0,NotFound
+2996454,desktop,MacOS,-5.0,65318.0,NotFound
+2996608,mobile,HTC,-5.0,129534.0,NotFound
+2996628,desktop,Windows,-5.0,33588.0,NotFound
+2996790,mobile,SM-G935F Build/NRD90M,-5.0,137854.0,NotFound
+2996935,mobile,iOS Device,0.0,44056.0,NotFound
+2996936,desktop,Windows,-5.0,4162.0,NotFound
+2996941,desktop,Windows,-20.0,560962.0,NotFound
+2997568,mobile,,-5.0,100217.0,NotFound
+2997569,mobile,iOS Device,-5.0,46717.0,NotFound
+2997635,mobile,SAMSUNG SM-G891A Build/NRD90M,-5.0,156566.0,Found
+2997850,mobile,LG-TP450 Build/NRD90U,-40.0,181968.0,NotFound
+2997941,desktop,,-5.0,296466.0,NotFound
+2998384,desktop,Windows,-25.0,399472.0,NotFound
+2998746,desktop,MacOS,-5.0,85550.0,NotFound
+2999328,mobile,SM-G531H Build/LMY48B,-5.0,71433.0,NotFound
+2999345,mobile,KFGIWI Build/LVY48F,0.0,132799.0,NotFound
+2999583,mobile,iOS Device,-5.0,17345.0,NotFound
+3000087,desktop,Windows,-5.0,30292.0,NotFound
+3000506,desktop,rv:11.0,-5.0,71507.0,NotFound
+3000954,desktop,Windows,-5.0,77653.0,Found
+3001201,desktop,Windows,-5.0,72967.0,Found
+3001941,desktop,Windows,-5.0,111977.0,Found
+3002101,desktop,Windows,-5.0,43766.0,NotFound
+3002525,desktop,Windows,-5.0,24754.0,NotFound
+3002625,desktop,Windows,-5.0,178674.0,NotFound
+3003603,desktop,,-5.0,304945.0,NotFound
+3004000,desktop,MacOS,0.0,29551.0,NotFound
+3004365,desktop,Windows,-45.0,60134.0,Found
+3004612,desktop,,-5.0,108471.0,NotFound
+3004648,desktop,Windows,-20.0,36466.0,NotFound
+3004960,mobile,,-25.0,332198.0,NotFound
+3005012,desktop,rv:11.0,0.0,283949.0,NotFound
+3005675,desktop,Windows,-15.0,38199.0,NotFound
+3005700,mobile,,-20.0,297660.0,NotFound
+3005763,mobile,iOS Device,-5.0,75637.0,NotFound
+3005787,desktop,Windows NT 6.1,0.0,110284.0,Found
+3005818,desktop,Windows,-10.0,75592.0,NotFound
+3006047,mobile,,-100.0,301062.0,NotFound
+3006227,desktop,MacOS,0.0,40272.0,NotFound
+3006618,desktop,Windows,-5.0,93589.0,NotFound
+3007017,desktop,Windows,-10.0,103551.0,NotFound
+3007026,desktop,Windows,-10.0,111312.0,NotFound
+3007107,desktop,Windows,-5.0,11814.0,NotFound
+3007413,desktop,Windows,-5.0,22495.0,Found
+3007415,desktop,Windows,-5.0,7996.0,NotFound
+3008039,mobile,LG-H542 Build/LRX22G,0.0,162338.0,NotFound
+3008502,desktop,Windows,-5.0,24547.0,NotFound
+3008644,mobile,,-20.0,142786.0,NotFound
+3008699,mobile,iOS Device,-5.0,166702.0,NotFound
+3008748,desktop,Windows,-10.0,16127.0,NotFound
+3008983,desktop,MacOS,-5.0,12205.0,NotFound
+3009017,desktop,Windows,-5.0,26454.0,NotFound
+3009153,desktop,Windows,-5.0,288549.0,NotFound
+3009160,desktop,Windows,-5.0,70661.0,Found
+3009214,desktop,,-20.0,73535.0,NotFound
+3009593,desktop,MacOS,0.0,38381.0,Found
+3009798,desktop,Windows,-5.0,34719.0,NotFound
+3010396,desktop,Windows,-5.0,922757.0,Found
+3010787,mobile,iOS Device,-5.0,36686.0,NotFound
+3010790,desktop,Windows,-5.0,133492.0,NotFound
+3010902,desktop,Windows,-5.0,12081.0,NotFound
+3011317,mobile,iOS Device,-5.0,151050.0,NotFound
+3011674,mobile,,-60.0,119582.0,NotFound
+3011734,mobile,,-100.0,315472.0,NotFound
+3011938,desktop,Windows,-5.0,353869.0,NotFound
+3011989,desktop,rv:11.0,0.0,117918.0,Found
+3012023,desktop,Linux x86_64,0.0,3090.0,Found
+3012072,,,-15.0,,Found
+3012119,,,-15.0,,NotFound
+3012383,desktop,Windows,-5.0,58265.0,NotFound
+3012555,desktop,Windows,-5.0,82798.0,Found
+3012762,desktop,rv:11.0,-5.0,186006.0,Found
+3012778,desktop,,-5.0,184061.0,Found
+3013060,mobile,SAMSUNG SM-G955U Build/NRD90M,0.0,132860.0,NotFound
+3013584,desktop,MacOS,0.0,572968.0,NotFound
+3013600,desktop,Windows,-5.0,27530.0,NotFound
+3013927,desktop,Trident/7.0,-10.0,69709.0,Found
+3013981,desktop,,-25.0,80435.0,NotFound
+3014133,mobile,iOS Device,0.0,196365.0,NotFound
+3014203,desktop,rv:11.0,0.0,87497.0,NotFound
+3014228,mobile,,-25.0,418710.0,NotFound
+3014610,desktop,Windows,-40.0,106874.0,NotFound
+3014694,desktop,Windows,-5.0,90940.0,NotFound
+3014733,desktop,rv:11.0,-10.0,208369.0,Found
+3014751,desktop,,-35.0,116512.0,NotFound
+3014823,mobile,SM-G920V Build/MMB29K,0.0,181796.0,NotFound
+3015105,desktop,Windows,-5.0,60312.0,NotFound
+3015300,mobile,iOS Device,0.0,48976.0,NotFound
+3015425,desktop,MacOS,0.0,12857.0,NotFound
+3015863,desktop,Windows,-5.0,133624.0,NotFound
+3016039,mobile,iOS Device,0.0,83784.0,NotFound
+3016454,desktop,Windows,-5.0,113910.0,NotFound
+3016681,mobile,5054N,0.0,244577.0,NotFound
+3016766,,,-15.0,,NotFound
+3016887,mobile,SAMSUNG SM-G900A Build/MMB29M,0.0,133539.0,NotFound
+3016947,desktop,Windows,-5.0,116328.0,NotFound
+3016981,desktop,Trident/7.0,0.0,149295.0,NotFound
+3017081,mobile,Ilium X710 Build/MRA58K,0.0,129367.0,NotFound
+3017319,mobile,iOS Device,0.0,123438.0,NotFound
+3017596,mobile,iOS Device,-5.0,74002.0,NotFound
+3017664,desktop,Windows,-5.0,183962.0,NotFound
+3017812,desktop,Windows,-10.0,300599.0,NotFound
+3017921,desktop,Windows,-25.0,34818.0,NotFound
+3018741,desktop,MacOS,-5.0,116606.0,NotFound
+3018824,mobile,,-20.0,103315.0,NotFound
+3018867,desktop,MacOS,-5.0,32846.0,NotFound
+3018939,desktop,Windows,-5.0,113531.0,NotFound
+3019055,desktop,MacOS,-5.0,186664.0,NotFound
+3019086,desktop,Windows,-5.0,33858.0,NotFound
+3019119,mobile,iOS Device,0.0,5046.0,Found
+3019246,desktop,MacOS,0.0,26825.0,NotFound
+3019390,desktop,Windows,-65.0,337754.0,NotFound
+3019570,desktop,Windows,-5.0,86009.0,NotFound
+3019586,mobile,iOS Device,-5.0,66405.0,Found
+3019741,mobile,iOS Device,-5.0,309381.0,NotFound
+3019904,mobile,iOS Device,-5.0,26788.0,NotFound
+3020201,,,-15.0,,NotFound
+3020251,desktop,Windows,-5.0,302441.0,NotFound
+3020271,desktop,Windows,-5.0,86464.0,NotFound
+3020349,desktop,Windows,-5.0,64535.0,Found
+3020403,desktop,Windows,-5.0,205625.0,NotFound
+3020478,mobile,,-25.0,108453.0,NotFound
+3020736,mobile,iOS Device,-5.0,142946.0,NotFound
+3020756,mobile,iOS Device,-25.0,75568.0,NotFound
+3020873,mobile,iOS Device,-5.0,40972.0,Found
+3020914,desktop,Windows,-5.0,16862.0,NotFound
+3020933,mobile,iOS Device,-5.0,21662.0,NotFound
+3021003,mobile,iOS Device,0.0,736578.0,NotFound
+3021377,mobile,iOS Device,-10.0,492713.0,Found
+3021719,mobile,iOS Device,0.0,76815.0,NotFound
+3022156,desktop,MacOS,-5.0,60401.0,NotFound
+3022237,desktop,Windows,-5.0,193626.0,NotFound
+3022283,mobile,iOS Device,-5.0,52278.0,NotFound
+3022650,desktop,,-5.0,91376.0,NotFound
+3022689,mobile,iOS Device,0.0,47768.0,NotFound
+3022727,desktop,Windows,-5.0,375109.0,NotFound
+3022768,desktop,Windows,-45.0,13977.0,NotFound
+3022888,desktop,Windows,-5.0,374530.0,NotFound
+3023304,desktop,Windows,-25.0,121642.0,NotFound
+3023387,desktop,Windows,-5.0,191901.0,NotFound
+3023488,mobile,SM-N920V Build/NRD90M,0.0,165894.0,NotFound
+3023522,mobile,SM-G935W8,0.0,230980.0,NotFound
+3023649,desktop,Windows,-5.0,161156.0,NotFound
+3023910,desktop,Windows,-20.0,254323.0,NotFound
+3023988,desktop,Windows,-10.0,1622.0,Found
+3024176,mobile,iOS Device,0.0,65969.0,NotFound
+3024181,desktop,Windows,-5.0,66504.0,NotFound
+3024201,desktop,Windows,-15.0,172821.0,NotFound
+3024234,desktop,Windows,-5.0,29906.0,NotFound
+3024435,mobile,,-30.0,81633.0,NotFound
+3024572,desktop,Windows,-5.0,142211.0,NotFound
+3024824,desktop,Trident/7.0,0.0,68036.0,NotFound
+3024894,desktop,Windows,-5.0,35377.0,NotFound
+3025001,desktop,Windows,-5.0,150248.0,NotFound
+3025085,desktop,MacOS,-5.0,162692.0,NotFound
+3025317,desktop,Windows,-30.0,337808.0,NotFound
+3025781,mobile,SM-G950U Build/NRD90M,-5.0,149247.0,NotFound
+3025939,mobile,SM-G955U Build/NRD90M,0.0,117180.0,NotFound
+3026301,desktop,Windows,-5.0,148388.0,NotFound
+3026509,desktop,Windows,-5.0,140301.0,NotFound
+3026637,desktop,MacOS,0.0,24042.0,NotFound
+3026646,mobile,iOS Device,-5.0,667961.0,Found
+3026806,mobile,iOS Device,-5.0,54403.0,NotFound
+3027098,desktop,Windows,-5.0,12389.0,NotFound
+3027104,desktop,MacOS,-5.0,22328.0,NotFound
+3027322,,,-15.0,,NotFound
+3027511,mobile,SM-J111M Build/LMY47V,0.0,140547.0,NotFound
+3027579,,,-15.0,,NotFound
+3027631,desktop,Trident/7.0,0.0,95498.0,NotFound
+3027644,desktop,MacOS,-5.0,117686.0,NotFound
+3027666,desktop,Windows,-5.0,96805.0,NotFound
+3027701,desktop,Windows,-5.0,76776.0,NotFound
+3027723,desktop,Windows,-5.0,26206.0,NotFound
+3027780,desktop,MacOS,-5.0,106094.0,NotFound
+3027851,desktop,Windows,-5.0,206865.0,NotFound
+3027935,desktop,Windows,-5.0,65951.0,NotFound
+3028145,desktop,Windows,-5.0,161766.0,NotFound
+3028357,desktop,Windows,-5.0,349157.0,NotFound
+3028381,mobile,Moto G Play Build/MPIS24.241-15.3-7,0.0,171788.0,NotFound
+3028432,mobile,iOS Device,-5.0,2954.0,Found
+3028447,desktop,Windows,-5.0,154284.0,NotFound
+3028935,desktop,Windows,-5.0,4234.0,NotFound
+3028980,desktop,Windows,-5.0,191978.0,NotFound
+3029025,desktop,Windows,-5.0,61166.0,NotFound
+3029058,desktop,Trident/7.0,0.0,21753.0,NotFound
+3029084,desktop,Windows,-5.0,63741.0,Found
+3029200,desktop,Windows,-5.0,150470.0,NotFound
+3029265,desktop,,-95.0,39132.0,NotFound
+3029472,desktop,MacOS,0.0,44024.0,NotFound
+3029715,desktop,MacOS,0.0,82366.0,NotFound
+3029758,desktop,Trident/7.0,0.0,14894.0,Found
+3030710,desktop,Windows,-5.0,228019.0,NotFound
+3030900,mobile,SM-G930V Build/NRD90M,-5.0,89496.0,NotFound
+3030919,mobile,,-20.0,434904.0,NotFound
+3031072,desktop,Windows,-5.0,101396.0,NotFound
+3031075,desktop,MacOS,-5.0,155462.0,NotFound
+3031384,mobile,iOS Device,-5.0,206959.0,NotFound
+3031550,desktop,Windows,-5.0,299259.0,Found
+3031573,desktop,Trident/7.0,-5.0,33102.0,NotFound
+3031636,desktop,rv:11.0,0.0,516218.0,NotFound
+3031910,desktop,MacOS,-5.0,96973.0,Found
+3031957,desktop,Trident/7.0,-5.0,59931.0,NotFound
+3032260,desktop,Trident/7.0,-5.0,510694.0,NotFound
+3032504,desktop,Windows,-5.0,72942.0,NotFound
+3032602,desktop,Windows,-5.0,40461.0,NotFound
+3032890,desktop,MacOS,0.0,19005.0,NotFound
+3032979,desktop,Windows,-5.0,92311.0,NotFound
+3033003,desktop,Windows,-5.0,96907.0,NotFound
+3033156,mobile,,-20.0,654683.0,NotFound
+3033175,desktop,Windows,-5.0,130125.0,NotFound
+3033309,desktop,Windows,-5.0,131324.0,Found
+3033364,desktop,Windows,-5.0,125347.0,NotFound
+3033445,desktop,Windows,-5.0,101584.0,NotFound
+3033540,mobile,iOS Device,-5.0,69724.0,NotFound
+3033858,desktop,Trident/7.0,0.0,62041.0,NotFound
+3033894,mobile,iOS Device,-5.0,33811.0,NotFound
+3033967,desktop,Windows,-5.0,144663.0,NotFound
+3033975,desktop,Trident/7.0,0.0,19730.0,NotFound
+3033983,desktop,MacOS,-5.0,71978.0,NotFound
+3034326,desktop,Windows,-5.0,147667.0,NotFound
+3034453,desktop,Windows,-5.0,405800.0,NotFound
+3035137,mobile,iOS Device,-5.0,42018.0,Found
+3035247,desktop,Windows,-5.0,11843.0,NotFound
+3035333,desktop,Windows,-5.0,103583.0,NotFound
+3035340,mobile,,-20.0,167810.0,NotFound
+3035402,mobile,,-20.0,320274.0,NotFound
+3035442,desktop,Windows,-5.0,88964.0,NotFound
+3035467,desktop,Windows,-10.0,105292.0,NotFound
+3035946,desktop,MacOS,0.0,56318.0,Found
+3035999,desktop,MacOS,-5.0,104656.0,NotFound
+3036003,desktop,Windows,-5.0,81757.0,NotFound
+3036064,desktop,Windows,-5.0,587521.0,NotFound
+3036105,desktop,Windows,-5.0,93068.0,NotFound
+3036137,desktop,Trident/7.0,0.0,11883.0,NotFound
+3036171,desktop,Windows,-5.0,39088.0,NotFound
+3036279,desktop,Trident/7.0,-5.0,89640.0,NotFound
+3036345,mobile,iOS Device,-25.0,115696.0,Found
+3036432,desktop,Windows,-10.0,69397.0,NotFound
+3036433,desktop,Windows,-5.0,60623.0,NotFound
+3036653,desktop,Windows,-5.0,86730.0,NotFound
+3036818,,,-15.0,,NotFound
+3036864,desktop,Windows,-5.0,28060.0,Found
+3036971,desktop,MacOS,-5.0,94526.0,NotFound
+3037187,desktop,rv:11.0,-25.0,169325.0,NotFound
+3037282,desktop,MacOS,0.0,18791.0,NotFound
+3037336,mobile,SM-G925T Build/NRD90M,0.0,930791.0,NotFound
+3037433,mobile,iOS Device,-5.0,44329.0,NotFound
+3037494,desktop,Windows,-5.0,102739.0,NotFound
+3037517,desktop,Windows,-5.0,74474.0,NotFound
+3037518,desktop,Windows,-100.0,20339.0,Found
+3037582,desktop,rv:57.0,-5.0,86592.0,NotFound
+3037782,desktop,MacOS,0.0,55985.0,NotFound
+3037948,desktop,MacOS,-5.0,75778.0,NotFound
+3038025,mobile,SM-G610M Build/MMB29K,0.0,105287.0,NotFound
+3038284,mobile,WAS-LX3 Build/HUAWEIWAS-LX3,-40.0,165955.0,NotFound
+3038582,desktop,Windows,-5.0,13534.0,Found
+3038599,mobile,SM-G900V Build/MMB29M,0.0,114523.0,NotFound
+3038637,desktop,Windows,-5.0,222774.0,NotFound
+3038714,desktop,Trident/7.0,0.0,97743.0,NotFound
+3038716,desktop,Windows,-5.0,67399.0,Found
+3038726,mobile,LG-D693n Build/LRX22G,-15.0,341258.0,NotFound
+3038846,,,-15.0,,NotFound
+3038863,mobile,SAMSUNG SM-N920T Build/NRD90M,0.0,41772.0,NotFound
+3038887,desktop,Windows,-5.0,202761.0,NotFound
+3039038,mobile,iOS Device,-5.0,556627.0,NotFound
+3039150,mobile,iOS Device,-5.0,99993.0,NotFound
+3039183,mobile,iOS Device,-5.0,162998.0,NotFound
+3039247,desktop,,-5.0,83811.0,NotFound
+3039394,mobile,SM-G950F Build/NRD90M,0.0,316780.0,NotFound
+3039418,desktop,MacOS,0.0,156683.0,NotFound
+3039465,mobile,iOS Device,-5.0,74519.0,NotFound
+3039527,mobile,rv:57.0,0.0,137213.0,NotFound
+3039630,desktop,Trident/7.0,0.0,24580.0,NotFound
+3039735,desktop,Windows,-5.0,22854.0,NotFound
+3039757,desktop,MacOS,0.0,56098.0,NotFound
+3039923,desktop,Trident/7.0,-15.0,66022.0,NotFound
+3040128,desktop,Windows,-5.0,73025.0,Found
+3040162,desktop,Trident/7.0,-5.0,43972.0,Found
+3040404,desktop,,0.0,15087.0,NotFound
+3040442,mobile,iOS Device,-25.0,131834.0,NotFound
+3040587,desktop,Windows,-5.0,260683.0,NotFound
+3040608,desktop,MacOS,0.0,33895.0,NotFound
+3040892,mobile,iOS Device,-5.0,83887.0,Found
+3040944,,,-15.0,,Found
+3041007,desktop,Windows,-5.0,148717.0,NotFound
+3041233,mobile,SAMSUNG SM-J730GM Build/NRD90M,0.0,154741.0,NotFound
+3041340,desktop,MacOS,-5.0,94631.0,NotFound
+3041482,desktop,MacOS,0.0,188738.0,NotFound
+3041669,desktop,Windows,-20.0,203221.0,NotFound
+3041735,desktop,Trident/7.0,-5.0,64533.0,NotFound
+3041876,mobile,SM-T800 Build/MMB29K,-15.0,126309.0,NotFound
+3041890,desktop,Trident/7.0,0.0,3088.0,NotFound
+3042001,desktop,Windows,-5.0,3941.0,NotFound
+3042621,desktop,Windows,-5.0,127080.0,NotFound
+3042703,desktop,Windows,0.0,129279.0,NotFound
+3042839,desktop,,-5.0,55995.0,NotFound
+3042843,mobile,,-35.0,286102.0,NotFound
+3042862,desktop,Windows,-25.0,295405.0,NotFound
+3042944,mobile,SM-J320M Build/LMY47V,0.0,70508.0,NotFound
+3043574,mobile,SM-N950U Build/NMF26X,-5.0,52746.0,NotFound
+3044048,mobile,SM-J700M Build/MMB29K,0.0,122256.0,NotFound
+3044073,desktop,,-10.0,90505.0,NotFound
+3044188,mobile,,-25.0,89305.0,NotFound
+3044236,mobile,,-20.0,153477.0,NotFound
+3044299,desktop,Windows,-5.0,714470.0,NotFound
+3044333,desktop,MacOS,0.0,123613.0,NotFound
+3044589,mobile,SM-T810 Build/NRD90M,0.0,20759.0,NotFound
+3044770,mobile,iOS Device,-5.0,173849.0,NotFound
+3044792,desktop,Windows,-5.0,18935.0,NotFound
+3044826,desktop,Trident/7.0,-5.0,93577.0,NotFound
+3044917,desktop,MacOS,-5.0,97773.0,NotFound
+3045040,desktop,,-5.0,148809.0,NotFound
+3045153,desktop,Windows,-100.0,150447.0,NotFound
+3045401,mobile,iOS Device,0.0,62094.0,Found
+3045427,desktop,Windows,-5.0,87205.0,NotFound
+3045925,desktop,Trident/7.0,0.0,211160.0,Found
+3046299,desktop,Trident/7.0,-5.0,882955.0,NotFound
+3046416,desktop,Windows,-5.0,9755.0,NotFound
+3046733,desktop,MacOS,-5.0,52069.0,NotFound
+3046747,desktop,Windows,-5.0,27697.0,NotFound
+3046787,desktop,Windows,-5.0,136380.0,Found
+3046838,desktop,Windows,-5.0,144167.0,NotFound
+3047040,desktop,Windows,-5.0,174921.0,NotFound
+3047164,desktop,Windows,-5.0,231998.0,NotFound
+3047583,mobile,SM-G955U Build/NRD90M,-40.0,85611.0,Found
+3047668,desktop,Trident/7.0,0.0,5322.0,NotFound
+3047982,desktop,MacOS,0.0,23538.0,NotFound
+3048042,desktop,Windows,-5.0,132682.0,NotFound
+3048143,desktop,MacOS,-45.0,30723.0,NotFound
+3048449,mobile,iOS Device,-25.0,72565.0,NotFound
+3048496,desktop,Windows,-5.0,205855.0,Found
+3048619,desktop,,-25.0,412364.0,NotFound
+3048677,mobile,C2104,0.0,417699.0,NotFound
+3048774,desktop,MacOS,-5.0,86054.0,NotFound
+3048874,mobile,Hisense L675 Build/MRA58K,0.0,195215.0,NotFound
+3048888,desktop,,-20.0,136974.0,Found
+3048890,mobile,iOS Device,-5.0,106397.0,NotFound
+3049022,mobile,iOS Device,-5.0,173176.0,NotFound
+3049032,desktop,Windows,-5.0,282191.0,NotFound
+3049188,mobile,iOS Device,-5.0,185449.0,NotFound
+3049205,mobile,iOS Device,-5.0,49954.0,NotFound
+3049320,mobile,iOS Device,-25.0,165038.0,NotFound
+3049365,mobile,iOS Device,-5.0,78985.0,NotFound
+3049573,desktop,MacOS,-10.0,86368.0,NotFound
+3049600,mobile,iOS Device,-5.0,109548.0,NotFound
+3049806,desktop,MacOS,-5.0,33755.0,NotFound
+3049941,desktop,Windows,-5.0,144025.0,Found
+3050408,desktop,,0.0,44862.0,NotFound
+3050420,desktop,Windows,-5.0,19663.0,NotFound
+3050538,desktop,Trident/7.0,-5.0,81123.0,NotFound
+3050667,mobile,iOS Device,-25.0,65927.0,NotFound
+3050737,desktop,rv:11.0,-5.0,139793.0,NotFound
+3050930,mobile,iOS Device,-20.0,47108.0,NotFound
+3051072,desktop,Windows,-5.0,115265.0,NotFound
+3051147,desktop,rv:11.0,-5.0,239582.0,NotFound
+3051223,mobile,GT-N5110,0.0,158753.0,NotFound
+3051307,desktop,Windows,-10.0,208001.0,NotFound
+3051456,desktop,Windows,-5.0,90312.0,NotFound
+3051614,desktop,Windows,-5.0,118415.0,NotFound
+3051743,mobile,iOS Device,-5.0,110464.0,NotFound
+3051897,mobile,SM-G900I,-5.0,275391.0,NotFound
+3051900,mobile,SAMSUNG,0.0,28794.0,NotFound
+3052013,mobile,SM-G920F Build/NRD90M,-5.0,134943.0,NotFound
+3052138,desktop,Windows,-25.0,327234.0,NotFound
+3052168,desktop,Windows,-5.0,97550.0,NotFound
+3052327,desktop,,0.0,38647.0,NotFound
+3052902,mobile,,-25.0,252119.0,NotFound
+3053160,desktop,Windows,-5.0,23728.0,NotFound
+3053217,mobile,Pixel 2 XL Build/OPM1.171019.011,0.0,24754.0,NotFound
+3053309,mobile,Pixel XL Build/OPM1.171019.011,0.0,146621.0,NotFound
+3053318,desktop,,-5.0,313986.0,NotFound
+3053544,desktop,Windows,-5.0,49091.0,NotFound
+3053548,desktop,Windows,-5.0,62536.0,NotFound
+3053583,mobile,,-25.0,381258.0,NotFound
+3053600,desktop,Windows,-5.0,89534.0,NotFound
+3053613,desktop,MacOS,0.0,41826.0,NotFound
+3053766,desktop,Windows,-5.0,62276.0,NotFound
+3053911,desktop,,-20.0,90004.0,NotFound
+3053969,mobile,iOS Device,0.0,29264.0,NotFound
+3054005,desktop,Windows,-5.0,95676.0,NotFound
+3054121,mobile,SM-G955U Build/NRD90M,0.0,36514.0,NotFound
+3054262,mobile,Moto G (5) Build/NPP25.137-72,0.0,180916.0,NotFound
+3054408,desktop,Windows,-5.0,109497.0,NotFound
+3054619,mobile,SM-N920T Build/NRD90M,0.0,169064.0,Found
+3054729,desktop,,-5.0,152862.0,NotFound
+3054942,desktop,Windows,-5.0,142368.0,NotFound
+3054984,mobile,iOS Device,-45.0,109234.0,NotFound
+3055068,mobile,,-20.0,133070.0,NotFound
+3055092,desktop,Windows,-5.0,158455.0,NotFound
+3055127,mobile,SAMSUNG-SM-G935A Build/NRD90M,0.0,154318.0,NotFound
+3055523,desktop,Windows,-10.0,765416.0,Found
+3055658,mobile,iOS Device,-5.0,45098.0,NotFound
+3056241,desktop,Windows,-5.0,51923.0,NotFound
+3056326,mobile,iOS Device,-5.0,319159.0,Found
+3056345,mobile,iOS Device,-5.0,157951.0,NotFound
+3056413,desktop,MacOS,-5.0,132982.0,NotFound
+3056424,desktop,Windows,-5.0,68383.0,NotFound
+3056575,mobile,Pixel XL Build/OPM1.171019.011,0.0,28057.0,NotFound
+3056867,desktop,Windows,-5.0,37441.0,NotFound
+3057082,desktop,MacOS,-40.0,6264.0,NotFound
+3057135,desktop,Windows,-10.0,61370.0,NotFound
+3057201,mobile,SM-G955U Build/NRD90M,0.0,197409.0,NotFound
+3057281,desktop,Windows,-5.0,193069.0,Found
+3057378,desktop,Windows,-15.0,57872.0,Found
+3057457,desktop,Windows,-5.0,115263.0,NotFound
+3057525,,,-15.0,,NotFound
+3057586,mobile,iOS Device,-5.0,57433.0,NotFound
+3057663,mobile,iOS Device,-5.0,37871.0,NotFound
+3057691,desktop,Trident/7.0,0.0,289922.0,NotFound
+3057720,mobile,,-25.0,254764.0,NotFound
+3057879,desktop,MacOS,-5.0,77497.0,NotFound
+3058012,desktop,Trident/7.0,-5.0,100929.0,NotFound
+3058108,desktop,,-5.0,90150.0,NotFound
+3058124,desktop,Trident/7.0,-5.0,178400.0,NotFound
+3058315,desktop,MacOS,0.0,41965.0,NotFound
+3058348,desktop,Windows NT 6.1,-7.0,75594.0,NotFound
+3058577,desktop,Trident/7.0,-5.0,368830.0,NotFound
+3058647,desktop,,0.0,104077.0,NotFound
+3058659,mobile,iOS Device,-5.0,124595.0,NotFound
+3058877,mobile,,-7.0,117681.0,Found
+3058938,desktop,Trident/7.0,-5.0,77133.0,Found
+3059078,desktop,Windows,-5.0,3731.0,NotFound
+3059141,desktop,Trident/7.0,-5.0,118506.0,NotFound
+3059156,desktop,Windows,-5.0,96808.0,NotFound
+3059200,desktop,rv:11.0,-10.0,184687.0,NotFound
+3059286,desktop,Windows,-5.0,243126.0,NotFound
+3059301,desktop,Trident/7.0,-5.0,596579.0,NotFound
+3059348,mobile,iOS Device,-5.0,142883.0,NotFound
+3059485,desktop,Trident/7.0,-5.0,52651.0,NotFound
+3059509,desktop,Windows,-5.0,276075.0,NotFound
+3059566,mobile,iOS Device,-45.0,72095.0,NotFound
+3059679,mobile,iOS Device,-5.0,155017.0,NotFound
+3059759,desktop,Trident/7.0,-5.0,44533.0,NotFound
+3059829,desktop,Windows,-5.0,90868.0,NotFound
+3060051,mobile,,-20.0,207211.0,NotFound
+3060173,desktop,,-5.0,239542.0,NotFound
+3060289,desktop,Trident/7.0,0.0,66011.0,NotFound
+3060520,desktop,Windows,-5.0,142997.0,NotFound
+3060624,mobile,iOS Device,-25.0,99271.0,NotFound
+3060781,mobile,iOS Device,-5.0,314748.0,NotFound
+3060816,desktop,rv:11.0,-60.0,98168.0,NotFound
+3060883,desktop,Windows,-5.0,21635.0,NotFound
+3060895,desktop,Windows,-5.0,450227.0,NotFound
+3060957,desktop,MacOS,-5.0,133028.0,NotFound
+3061243,desktop,Windows,-5.0,29250.0,Found
+3061331,desktop,Trident/7.0,-5.0,31317.0,NotFound
+3061417,mobile,iOS Device,-5.0,98667.0,Found
+3061461,desktop,Windows,-5.0,94145.0,NotFound
+3061599,desktop,Trident/7.0,-5.0,45119.0,Found
+3061978,desktop,Trident/7.0,0.0,107535.0,NotFound
+3062033,desktop,Windows,-5.0,36430.0,Found
+3062154,desktop,Windows,-5.0,65414.0,NotFound
+3062193,desktop,Windows,-5.0,59517.0,NotFound
+3062233,desktop,Windows,-5.0,100772.0,Found
+3062447,mobile,,-20.0,293022.0,NotFound
+3062652,,,-15.0,,NotFound
+3062771,desktop,Windows,-5.0,57057.0,NotFound
+3062806,desktop,Windows,-5.0,155701.0,NotFound
+3063210,desktop,MacOS,-5.0,144591.0,Found
+3063316,desktop,Windows,-5.0,212387.0,NotFound
+3063404,mobile,KFSUWI Build/LVY48F,-5.0,62095.0,NotFound
+3063558,desktop,Windows,-5.0,437447.0,NotFound
+3063680,,,-15.0,,NotFound
+3063726,desktop,Windows,-5.0,100804.0,NotFound
+3064029,desktop,Windows,-5.0,147022.0,NotFound
+3064116,desktop,Windows,-5.0,90875.0,NotFound
+3064202,mobile,E5803 Build/32.4.A.1.54,0.0,173235.0,NotFound
+3064233,mobile,iOS Device,0.0,122414.0,NotFound
+3064237,,,-15.0,,NotFound
+3064244,desktop,Windows,-5.0,232598.0,NotFound
+3064282,desktop,Windows,-5.0,56374.0,Found
+3064387,desktop,Windows,-10.0,195371.0,NotFound
+3064435,desktop,Windows,-5.0,87290.0,NotFound
+3064471,desktop,Windows,-5.0,78419.0,NotFound
+3064634,desktop,Trident/7.0,-5.0,169959.0,NotFound
+3064686,desktop,,-5.0,353233.0,NotFound
+3064921,mobile,iOS Device,-20.0,127200.0,NotFound
+3065112,desktop,Windows,-5.0,79632.0,NotFound
+3065223,desktop,Windows,-5.0,126817.0,NotFound
+3065439,desktop,Trident/7.0,-5.0,168618.0,NotFound
+3065726,desktop,rv:11.0,-55.0,155308.0,NotFound
+3065761,desktop,Windows,-5.0,21312.0,NotFound
+3065875,desktop,Windows,-10.0,69453.0,Found
+3066087,desktop,Windows,-5.0,119471.0,NotFound
+3066150,mobile,iOS Device,-5.0,86591.0,Found
+3066208,desktop,Windows,-5.0,110518.0,NotFound
+3066286,desktop,Windows,-5.0,71048.0,Found
+3066453,desktop,,-5.0,171368.0,NotFound
+3066594,mobile,iOS Device,-20.0,29325.0,NotFound
+3066690,desktop,,-20.0,178326.0,NotFound
+3066773,desktop,Windows,-5.0,90999.0,NotFound
+3066790,desktop,Windows,-5.0,66604.0,NotFound
+3066807,mobile,iOS Device,-5.0,73948.0,NotFound
+3066813,desktop,Windows,-5.0,27372.0,NotFound
+3066856,desktop,MacOS,-5.0,94426.0,NotFound
+3066878,desktop,Windows,-5.0,76407.0,NotFound
+3067017,desktop,Windows,-5.0,109839.0,NotFound
+3067074,desktop,Windows,-5.0,189242.0,NotFound
+3067087,desktop,Windows,-5.0,202565.0,NotFound
+3067253,desktop,Windows,-5.0,891822.0,Found
+3067307,desktop,Windows,-5.0,27979.0,NotFound
+3067478,desktop,Trident/7.0,-5.0,53310.0,NotFound
+3067728,desktop,Windows,-5.0,146088.0,Found
+3067751,desktop,Windows,-5.0,55024.0,NotFound
+3067958,mobile,iOS Device,-5.0,937191.0,NotFound
+3067980,mobile,iOS Device,-5.0,586116.0,Found
+3068001,desktop,rv:48.0,-5.0,74913.0,NotFound
+3068095,mobile,XT1033,-35.0,335022.0,NotFound
+3068101,desktop,Windows,-5.0,272906.0,Found
+3068182,desktop,Trident/7.0,-10.0,153727.0,NotFound
+3068215,desktop,MacOS,-5.0,104293.0,Found
+3068341,mobile,F3213 Build/36.1.A.1.86,0.0,161426.0,NotFound
+3068498,mobile,iOS Device,-5.0,400393.0,NotFound
+3068568,desktop,Windows,-5.0,102157.0,NotFound
+3068583,desktop,Windows,-5.0,66772.0,NotFound
+3068627,desktop,MacOS,0.0,14477.0,NotFound
+3068657,desktop,Windows,-10.0,59352.0,NotFound
+3068744,mobile,iOS Device,-5.0,169133.0,NotFound
+3068944,desktop,Trident/7.0,0.0,139118.0,NotFound
+3069208,desktop,MacOS,0.0,27519.0,NotFound
+3069276,desktop,Windows,-5.0,127215.0,Found
+3069397,desktop,Trident/7.0,-5.0,196116.0,NotFound
+3069444,desktop,Windows,-5.0,49606.0,NotFound
+3069463,desktop,Windows,-5.0,58803.0,NotFound
+3069934,mobile,iOS Device,0.0,102709.0,NotFound
+3069949,desktop,Trident/7.0,-16.0,101310.0,NotFound
+3070028,desktop,MacOS,-5.0,242294.0,Found
+3070183,desktop,Windows,-5.0,193730.0,NotFound
+3070209,desktop,Windows,-5.0,112747.0,NotFound
+3070270,desktop,Windows,-20.0,199966.0,NotFound
+3070294,desktop,,-5.0,137500.0,NotFound
+3070358,mobile,iOS Device,-5.0,433887.0,NotFound
+3070363,desktop,rv:11.0,0.0,57169.0,Found
+3070503,desktop,Windows,-5.0,100136.0,NotFound
+3070666,mobile,iOS Device,-5.0,109176.0,NotFound
+3070692,mobile,KFAUWI Build/LVY48F,0.0,4103.0,NotFound
+3070702,mobile,LG-D693n Build/LRX22G,0.0,136244.0,NotFound
+3070722,mobile,iOS Device,-5.0,128948.0,NotFound
+3070734,desktop,Windows,-5.0,309362.0,NotFound
+3070808,desktop,rv:11.0,-25.0,140817.0,NotFound
+3070822,desktop,Windows,-5.0,46198.0,NotFound
+3071067,desktop,Windows,-5.0,182214.0,Found
+3071165,desktop,MacOS,-20.0,132152.0,Found
+3071214,desktop,Windows,-5.0,60285.0,NotFound
+3071219,desktop,Windows,-5.0,75458.0,NotFound
+3071229,mobile,Moto E (4) Build/NMA26.42-69,-15.0,186715.0,NotFound
+3071284,desktop,,-5.0,296482.0,NotFound
+3071477,desktop,Windows,-5.0,73181.0,NotFound
+3071510,desktop,Windows,-5.0,173556.0,NotFound
+3071688,desktop,Windows,-90.0,149149.0,NotFound
+3071804,desktop,Windows,-5.0,117220.0,NotFound
+3071880,mobile,iOS Device,-5.0,59033.0,NotFound
+3071954,desktop,MacOS,-5.0,187397.0,NotFound
+3071999,,,-20.0,,NotFound
+3072020,,,-20.0,,NotFound
+3072152,desktop,Windows,-5.0,234456.0,NotFound
+3072183,desktop,MacOS,-5.0,68409.0,NotFound
+3072208,desktop,Windows,-5.0,35825.0,Found
+3072287,mobile,iOS Device,-5.0,93926.0,NotFound
+3072492,mobile,iOS Device,-5.0,115965.0,NotFound
+3072512,desktop,Trident/7.0,-5.0,91295.0,NotFound
+3072594,desktop,,-5.0,143521.0,NotFound
+3072667,desktop,Windows,-5.0,37008.0,NotFound
+3072729,desktop,MacOS,-5.0,71100.0,NotFound
+3072831,desktop,Windows,-5.0,108438.0,NotFound
+3072859,mobile,Android 5.1,-95.0,524690.0,NotFound
+3072905,desktop,Windows,-5.0,154717.0,NotFound
+3072960,desktop,Windows,-5.0,122637.0,Found
+3073031,mobile,iOS Device,0.0,66252.0,NotFound
+3073057,desktop,Windows,-5.0,74255.0,NotFound
+3073078,desktop,MacOS,-5.0,102901.0,NotFound
+3073125,desktop,,-5.0,114659.0,NotFound
+3073369,desktop,Windows,-5.0,259853.0,NotFound
+3073434,mobile,iOS Device,-5.0,197001.0,NotFound
+3073819,mobile,Redmi,-5.0,55581.0,NotFound
+3073941,mobile,Moto E (4) Build/NMA26.42-69,0.0,172027.0,NotFound
+3073981,desktop,Windows,-5.0,161802.0,NotFound
+3074039,desktop,,-5.0,229746.0,NotFound
+3074065,desktop,MacOS,-5.0,90357.0,NotFound
+3074146,desktop,Windows,-5.0,78458.0,NotFound
+3074442,mobile,,-20.0,371893.0,NotFound
+3074850,desktop,Trident/7.0,-5.0,84210.0,NotFound
+3074906,desktop,Windows,-5.0,136860.0,NotFound
+3074950,desktop,MacOS,-5.0,61829.0,NotFound
+3075016,desktop,Windows,-5.0,124725.0,NotFound
+3075083,desktop,MacOS,-5.0,98417.0,NotFound
+3075089,desktop,Windows,-5.0,156161.0,NotFound
+3075335,desktop,Windows,-5.0,250026.0,NotFound
+3075363,desktop,MacOS,-5.0,58799.0,NotFound
+3075456,mobile,C6743 Build/LMY47V,0.0,144249.0,NotFound
+3075504,desktop,Windows,-5.0,22900.0,NotFound
+3075561,desktop,MacOS,-5.0,161875.0,NotFound
+3075568,desktop,Windows,-5.0,159929.0,NotFound
+3075581,desktop,rv:56.0,-5.0,102904.0,NotFound
+3075699,mobile,iOS Device,-5.0,158306.0,NotFound
+3075902,desktop,Trident/7.0,0.0,106314.0,NotFound
+3075933,desktop,Windows,-5.0,105020.0,NotFound
+3076026,desktop,Windows,-5.0,50749.0,NotFound
+3076058,desktop,Windows,-5.0,153899.0,NotFound
+3076061,desktop,MacOS,-5.0,83474.0,NotFound
+3076344,mobile,iOS Device,-5.0,45393.0,NotFound
+3076403,desktop,MacOS,-5.0,45064.0,NotFound
+3076588,mobile,iOS Device,-40.0,46578.0,NotFound
+3076645,desktop,Windows,-5.0,207670.0,NotFound
+3076795,desktop,Trident/7.0,-5.0,87894.0,NotFound
+3076838,mobile,iOS Device,-5.0,117555.0,NotFound
+3076916,desktop,Windows,-30.0,177287.0,NotFound
+3076994,desktop,Windows,-5.0,169982.0,NotFound
+3077100,desktop,Windows,-5.0,80760.0,NotFound
+3077256,desktop,rv:11.0,-60.0,245948.0,Found
+3077324,desktop,Windows,-5.0,56857.0,NotFound
+3077343,desktop,rv:57.0,0.0,40418.0,NotFound
+3077391,desktop,Trident/7.0,0.0,66938.0,NotFound
+3077395,desktop,Windows,-10.0,71482.0,NotFound
+3077423,desktop,rv:11.0,-55.0,99832.0,NotFound
+3077553,desktop,Windows,-10.0,236974.0,NotFound
+3077569,desktop,Windows,-5.0,56803.0,Found
+3077599,desktop,Windows NT 6.1,-5.0,56762.0,Found
+3077659,desktop,Windows,-10.0,37913.0,NotFound
+3077757,desktop,Windows,-5.0,167300.0,NotFound
+3077795,desktop,MacOS,0.0,34001.0,Found
+3078010,mobile,iOS Device,-5.0,162121.0,NotFound
+3078015,desktop,Windows,-5.0,46533.0,NotFound
+3078052,desktop,Windows,-5.0,54291.0,NotFound
+3078137,desktop,Windows,-5.0,78792.0,NotFound
+3078319,desktop,Windows,-5.0,206460.0,NotFound
+3078581,desktop,Windows,-5.0,122044.0,NotFound
+3078701,,,-20.0,,NotFound
+3078988,,,-15.0,,NotFound
+3079125,desktop,Trident/7.0,0.0,149083.0,NotFound
+3079213,desktop,Windows,-30.0,80722.0,NotFound
+3079248,mobile,iOS Device,0.0,230866.0,NotFound
+3079321,desktop,Windows,-5.0,94396.0,NotFound
+3079409,desktop,Trident/7.0,-5.0,77464.0,NotFound
+3079412,desktop,Windows,-5.0,35309.0,NotFound
+3079581,mobile,iOS Device,-5.0,120116.0,NotFound
+3079641,mobile,SM-T550 Build/NMF26X,0.0,218533.0,NotFound
+3079873,desktop,Windows,-5.0,432411.0,Found
+3079988,mobile,iOS Device,-5.0,286162.0,NotFound
+3079993,desktop,,0.0,68259.0,NotFound
+3080076,mobile,,0.0,14143.0,Found
+3080094,mobile,,-20.0,190084.0,NotFound
+3080241,mobile,Moto C Plus Build/NRD90M.05.022,0.0,276047.0,NotFound
+3080707,desktop,Windows,-5.0,82505.0,NotFound
+3080709,desktop,,-25.0,177668.0,NotFound
+3080836,desktop,MacOS,-10.0,276525.0,Found
+3080845,desktop,Trident/7.0,-5.0,156518.0,NotFound
+3081043,mobile,iOS Device,-5.0,80552.0,NotFound
+3081225,desktop,Windows,-5.0,93738.0,NotFound
+3081642,desktop,MacOS,-5.0,66350.0,NotFound
+3081724,mobile,,-20.0,170753.0,NotFound
+3081849,desktop,Windows,-5.0,126690.0,NotFound
+3081859,desktop,Windows,-5.0,122894.0,Found
+3081893,desktop,rv:11.0,-5.0,86650.0,NotFound
+3081948,desktop,Windows,-10.0,138241.0,NotFound
+3082174,desktop,Windows,-5.0,125603.0,NotFound
+3082185,desktop,MacOS,-5.0,113459.0,Found
+3082455,desktop,Windows,-5.0,320099.0,Found
+3082667,,,-15.0,,NotFound
+3082682,mobile,iOS Device,-5.0,146945.0,NotFound
+3082771,mobile,iOS Device,-5.0,138126.0,NotFound
+3082848,desktop,rv:52.0,-5.0,202228.0,Found
+3082868,desktop,Trident/7.0,-5.0,116401.0,NotFound
+3083049,desktop,Windows,-5.0,177163.0,NotFound
+3083094,mobile,SM-N950U Build/NMF26X,-5.0,123250.0,NotFound
+3083134,desktop,Windows,-19.0,156079.0,NotFound
+3083237,desktop,Trident/7.0,-20.0,44196.0,Found
+3083252,desktop,Windows,-5.0,184243.0,NotFound
+3083292,mobile,iOS Device,-5.0,187609.0,Found
+3083350,mobile,iOS Device,-5.0,264329.0,NotFound
+3083636,mobile,SM-N950U Build/NMF26X,-20.0,60320.0,NotFound
+3083697,desktop,MacOS,-5.0,42852.0,NotFound
+3083829,desktop,MacOS,0.0,22125.0,NotFound
+3083869,desktop,Trident/7.0,0.0,82103.0,NotFound
+3084161,desktop,Windows,-5.0,44576.0,NotFound
+3084467,mobile,iOS Device,-5.0,56329.0,NotFound
+3084585,desktop,Windows,-15.0,75596.0,NotFound
+3084593,desktop,MacOS,0.0,97151.0,Found
+3084598,mobile,iOS Device,-5.0,74503.0,NotFound
+3085187,mobile,iOS Device,-5.0,63145.0,Found
+3085270,desktop,Windows,-5.0,70065.0,NotFound
+3085337,desktop,Windows,-5.0,38869.0,Found
+3085406,desktop,MacOS,-5.0,486800.0,NotFound
+3085493,desktop,rv:11.0,-5.0,128515.0,Found
+3086546,desktop,Windows,-5.0,244336.0,NotFound
+3086670,desktop,Windows,-5.0,39053.0,Found
+3086766,desktop,MacOS,-20.0,139023.0,NotFound
+3087043,desktop,,-10.0,304951.0,NotFound
+3087128,desktop,Windows,-5.0,411500.0,NotFound
+3087426,mobile,iOS Device,-10.0,108260.0,Found
+3087746,desktop,Windows,-20.0,293060.0,NotFound
+3087988,mobile,iOS Device,-5.0,216512.0,NotFound
+3088063,mobile,iOS Device,-5.0,177971.0,NotFound
+3088478,desktop,Windows,-5.0,107075.0,Found
+3088675,desktop,Windows,-5.0,55673.0,NotFound
+3088684,desktop,MacOS,0.0,93084.0,NotFound
+3088746,desktop,Windows,-5.0,123210.0,NotFound
+3088817,mobile,Build/OPR6.170623.013,0.0,108441.0,NotFound
+3088831,desktop,Windows,-5.0,88241.0,NotFound
+3088935,mobile,iOS Device,-5.0,64242.0,NotFound
+3088963,mobile,SM-G950U Build/NRD90M,0.0,108509.0,NotFound
+3088985,desktop,Windows,-5.0,194891.0,Found
+3089112,desktop,MacOS,0.0,39889.0,NotFound
+3089624,desktop,Trident/7.0,-5.0,118373.0,NotFound
+3089703,mobile,iOS Device,-25.0,566595.0,NotFound
+3089972,desktop,Windows,-45.0,280491.0,NotFound
+3090109,desktop,rv:45.0,-25.0,545274.0,NotFound
+3090206,desktop,Windows,-5.0,107191.0,NotFound
+3090217,desktop,Windows,-5.0,45203.0,NotFound
+3090400,mobile,iOS Device,-5.0,49985.0,Found
+3090434,mobile,iOS Device,-5.0,38066.0,NotFound
+3090458,desktop,MacOS,-5.0,88356.0,NotFound
+3090690,desktop,Windows,-5.0,106269.0,NotFound
+3090701,desktop,Windows,-5.0,63217.0,NotFound
+3090746,mobile,iOS Device,-5.0,253661.0,NotFound
+3090801,desktop,Windows,-5.0,171787.0,NotFound
+3090850,desktop,Windows,-5.0,147174.0,NotFound
+3090925,mobile,XT1040,0.0,205184.0,NotFound
+3090928,desktop,Trident/7.0,-10.0,47682.0,NotFound
+3090950,desktop,Windows,-5.0,137677.0,NotFound
+3091023,mobile,iOS Device,0.0,159075.0,NotFound
+3091236,desktop,,-5.0,80292.0,NotFound
+3091373,mobile,iOS Device,-80.0,353675.0,NotFound
+3091429,desktop,MacOS,0.0,44949.0,NotFound
+3091515,desktop,Windows,-5.0,79188.0,Found
+3091614,mobile,iOS Device,-5.0,197014.0,NotFound
+3091673,desktop,Windows,-5.0,68397.0,NotFound
+3091795,mobile,,0.0,39243.0,NotFound
+3091799,desktop,MacOS,-5.0,56256.0,NotFound
+3092010,mobile,SAMSUNG SM-G955U Build/NRD90M,0.0,68423.0,NotFound
+3092056,mobile,iOS Device,-5.0,133286.0,NotFound
+3092076,mobile,iOS Device,0.0,110043.0,NotFound
+3092129,mobile,iOS Device,-5.0,100326.0,NotFound
+3092174,desktop,MacOS,0.0,146807.0,NotFound
+3092231,desktop,,-5.0,98752.0,NotFound
+3092594,desktop,,-10.0,79893.0,NotFound
+3092647,desktop,MacOS,0.0,39685.0,Found
+3092699,mobile,Moto G Play Build/MPIS24.241-15.3-26,0.0,181855.0,NotFound
+3092764,mobile,SAMSUNG SM-G531H Build/LMY48B,-5.0,191667.0,NotFound
+3092941,mobile,iOS Device,-5.0,105760.0,NotFound
+3093139,desktop,rv:11.0,-5.0,525745.0,Found
+3093146,mobile,iOS Device,-5.0,109050.0,NotFound
+3093413,mobile,GT-I9195L,0.0,269894.0,NotFound
+3093443,desktop,Windows,-15.0,170323.0,NotFound
+3093475,desktop,Trident/7.0,-45.0,218578.0,NotFound
+3093628,desktop,Windows,-5.0,96852.0,NotFound
+3093805,desktop,Windows,-5.0,118541.0,NotFound
+3093962,mobile,iOS Device,-5.0,118496.0,NotFound
+3094061,mobile,iOS Device,-5.0,110407.0,NotFound
+3094207,desktop,Windows,-5.0,75953.0,NotFound
+3094234,desktop,Windows,-5.0,122537.0,NotFound
+3094245,desktop,Windows,-25.0,94138.0,NotFound
+3094259,desktop,MacOS,-5.0,182460.0,NotFound
+3094335,mobile,SM-G920T Build/NRD90M,-40.0,85605.0,NotFound
+3094546,desktop,Windows,-5.0,59279.0,NotFound
+3094552,desktop,,-5.0,61833.0,Found
+3094640,desktop,MacOS,0.0,16785.0,NotFound
+3094684,desktop,Windows,-5.0,18141.0,NotFound
+3094687,desktop,Windows,-5.0,29566.0,Found
+3094766,mobile,SM-G950U Build/NRD90M,-5.0,98763.0,NotFound
+3094944,desktop,Windows,-10.0,29087.0,Found
+3095083,desktop,MacOS,-5.0,80360.0,NotFound
+3095152,desktop,Trident/7.0,-5.0,18680.0,NotFound
+3095322,,,-15.0,,NotFound
+3095346,mobile,SM-G955U Build/NRD90M,-45.0,110469.0,Found
+3095465,mobile,iOS Device,0.0,179374.0,NotFound
+3095517,desktop,rv:57.0,0.0,109810.0,NotFound
+3095789,mobile,SM-J700M Build/MMB29K,-15.0,522802.0,NotFound
+3095925,mobile,iOS Device,0.0,54886.0,NotFound
+3096058,desktop,Windows,-5.0,83910.0,NotFound
+3096159,mobile,iOS Device,-5.0,89745.0,NotFound
+3096193,desktop,Windows,-5.0,63214.0,NotFound
+3096249,mobile,LG-H918 Build/NRD90M,-45.0,104181.0,NotFound
+3096325,desktop,Windows,-5.0,74103.0,NotFound
+3096378,mobile,iOS Device,-25.0,19968.0,Found
+3096743,desktop,Windows,-5.0,225299.0,NotFound
+3096794,mobile,iOS Device,-5.0,269042.0,NotFound
+3096833,desktop,Windows,-5.0,68214.0,NotFound
+3096873,desktop,Windows,-5.0,15633.0,NotFound
+3096987,mobile,XT1021 Build/KXC21.5-40,0.0,229825.0,NotFound
+3097067,desktop,Windows,-5.0,204732.0,NotFound
+3097152,desktop,MacOS,-5.0,144204.0,Found
+3097185,desktop,MacOS,-5.0,73082.0,NotFound
+3097445,desktop,MacOS,-5.0,94376.0,NotFound
+3097488,desktop,Windows,-5.0,227327.0,NotFound
+3097588,desktop,Windows,-5.0,72809.0,NotFound
+3097626,desktop,Windows,-5.0,103644.0,NotFound
+3097921,desktop,MacOS,0.0,105932.0,NotFound
+3098053,mobile,iOS Device,0.0,59897.0,NotFound
+3098088,mobile,iOS Device,-5.0,159021.0,NotFound
+3098090,desktop,MacOS,-5.0,91048.0,NotFound
+3098096,mobile,iOS Device,0.0,58603.0,NotFound
+3098176,desktop,MacOS,0.0,41180.0,NotFound
+3098246,mobile,iOS Device,-5.0,83861.0,NotFound
+3098403,mobile,M4 SS4453 Build/MMB29M,0.0,168676.0,NotFound
+3098522,mobile,iOS Device,-5.0,90325.0,NotFound
+3098548,mobile,TRT-L53 Build/HUAWEITRT-L53,0.0,207995.0,NotFound
+3098561,desktop,MacOS,-5.0,72926.0,Found
+3098604,desktop,MacOS,-10.0,62346.0,NotFound
+3098623,mobile,iOS Device,-5.0,45610.0,NotFound
+3098644,mobile,iOS Device,-5.0,117408.0,Found
+3098667,desktop,MacOS,-5.0,42529.0,Found
+3098751,mobile,KFMEWI,0.0,58109.0,NotFound
+3098836,mobile,SM-G930T Build/NRD90M,0.0,145823.0,NotFound
+3098946,mobile,iOS Device,-5.0,335884.0,Found
+3099087,mobile,,-25.0,172899.0,NotFound
+3099176,mobile,iOS Device,-5.0,226524.0,NotFound
+3099270,desktop,Windows,-5.0,58145.0,Found
+3099285,mobile,iOS Device,-5.0,954953.0,NotFound
+3099288,mobile,iOS Device,-5.0,54992.0,NotFound
+3099391,desktop,MacOS,-45.0,207057.0,Found
+3099435,desktop,Windows,-5.0,130928.0,NotFound
+3099727,mobile,SM-G950U Build/NRD90M,-40.0,189657.0,NotFound
+3099811,desktop,Windows,-5.0,65606.0,NotFound
+3099872,mobile,SAMSUNG SM-G930P Build/NRD90M,0.0,116289.0,NotFound
+3100071,desktop,MacOS,-5.0,38099.0,NotFound
+3100111,mobile,SM-G920V Build/NRD90M,0.0,100786.0,NotFound
+3100147,desktop,Windows,-5.0,155524.0,NotFound
+3100173,desktop,MacOS,-5.0,91275.0,NotFound
+3100243,desktop,Trident/7.0,0.0,30165.0,NotFound
+3100415,desktop,Windows,-5.0,133252.0,NotFound
+3100505,desktop,,-5.0,187609.0,NotFound
+3100520,desktop,Windows,-45.0,73395.0,NotFound
+3100540,desktop,Windows,-5.0,64631.0,NotFound
+3100549,mobile,iOS Device,0.0,102561.0,NotFound
+3100591,mobile,SM-G950U Build/NRD90M,-5.0,57784.0,NotFound
+3100855,mobile,SM-G920V Build/NRD90M,-5.0,83109.0,NotFound
+3100913,mobile,iOS Device,-5.0,131799.0,Found
+3100935,desktop,Windows,-5.0,57622.0,NotFound
+3101038,mobile,iOS Device,-25.0,104760.0,NotFound
+3101054,desktop,MacOS,-5.0,24647.0,NotFound
+3101130,mobile,SAMSUNG SM-G955U Build/NRD90M,0.0,21596.0,Found
+3101171,mobile,iOS Device,-5.0,193295.0,Found
+3101198,desktop,MacOS,-5.0,88899.0,NotFound
+3101254,mobile,SM-N920V Build/NRD90M,-5.0,144068.0,NotFound
+3101332,mobile,iOS Device,-5.0,23132.0,NotFound
+3101535,desktop,Windows,-5.0,70932.0,Found
+3101894,mobile,iOS Device,-5.0,83024.0,NotFound
+3101928,mobile,LG-M700 Build/NMF26X,0.0,211864.0,NotFound
+3102085,desktop,MacOS,-5.0,99070.0,NotFound
+3102109,desktop,Windows,-5.0,140092.0,NotFound
+3102225,desktop,Windows,-5.0,94484.0,NotFound
+3102261,desktop,Windows,-5.0,247031.0,NotFound
+3102860,desktop,,-20.0,258561.0,NotFound
+3102908,desktop,Windows,-5.0,65479.0,NotFound
+3102918,mobile,iOS Device,-5.0,77060.0,NotFound
+3102960,desktop,MacOS,-5.0,294349.0,Found
+3103038,,,-15.0,,NotFound
+3103111,mobile,SM-N950U Build/NMF26X,-45.0,228891.0,NotFound
+3103119,mobile,SM-J700T Build/NMF26X,0.0,141066.0,NotFound
+3103176,mobile,iOS Device,-55.0,38755.0,Found
+3103223,mobile,SM-G935V Build/NRD90M,-5.0,64943.0,NotFound
+3103301,mobile,2PS64 Build/NRD90M,0.0,18260.0,NotFound
+3103312,desktop,Windows,-5.0,118385.0,NotFound
+3103372,mobile,SAMSUNG SM-G920T Build/NRD90M,-40.0,282032.0,Found
+3103397,mobile,iOS Device,-5.0,66069.0,NotFound
+3103415,mobile,iOS Device,-5.0,130566.0,NotFound
+3103433,mobile,iOS Device,-5.0,354653.0,Found
+3103485,desktop,,-20.0,135445.0,NotFound
+3103507,mobile,iOS Device,0.0,36628.0,NotFound
+3103573,mobile,iOS Device,-5.0,136902.0,NotFound
+3103589,mobile,iOS Device,-5.0,93063.0,NotFound
+3103658,mobile,iOS Device,0.0,250195.0,Found
+3103736,mobile,iOS Device,-5.0,69247.0,NotFound
+3103843,desktop,Windows,-5.0,23879.0,NotFound
+3103891,mobile,iOS Device,0.0,26707.0,NotFound
+3103912,mobile,SM-J320M Build/LMY47V,-15.0,154492.0,NotFound
+3103920,mobile,,-20.0,193036.0,NotFound
+3104083,desktop,MacOS,0.0,37904.0,NotFound
+3104145,desktop,,-5.0,102505.0,NotFound
+3104168,mobile,SM-G610M Build/MMB29K,0.0,119651.0,NotFound
+3104247,mobile,iOS Device,-5.0,101835.0,NotFound
+3104262,mobile,,-20.0,42568.0,Found
+3104490,desktop,Windows,-5.0,29500.0,Found
+3104706,mobile,SM-N950U Build/NMF26X,0.0,174167.0,NotFound
+3104773,mobile,SAMSUNG SM-G930A Build/NRD90M,-5.0,23461.0,NotFound
+3104822,mobile,iOS Device,-5.0,92287.0,Found
+3104891,mobile,iOS Device,-5.0,71337.0,NotFound
+3104952,mobile,,-10.0,60670.0,NotFound
+3105017,desktop,Windows,-5.0,110267.0,NotFound
+3105100,desktop,MacOS,-5.0,79975.0,NotFound
+3105345,desktop,MacOS,0.0,20845.0,NotFound
+3105366,mobile,iOS Device,-10.0,134040.0,Found
+3105377,desktop,Windows,-5.0,110804.0,NotFound
+3105625,mobile,,-35.0,152871.0,NotFound
+3105838,desktop,rv:11.0,-5.0,124361.0,NotFound
+3106006,desktop,Windows,-5.0,135044.0,NotFound
+3106031,desktop,Windows,-5.0,511665.0,Found
+3106175,desktop,Trident/7.0,-15.0,127217.0,NotFound
+3106281,desktop,Trident/7.0,0.0,22158.0,Found
+3106470,desktop,Windows,-5.0,282746.0,NotFound
+3106482,mobile,HTC Desire 10 lifestyle Build/MMB29M,0.0,122477.0,NotFound
+3106562,desktop,MacOS,-5.0,90146.0,NotFound
+3107169,mobile,iOS Device,-5.0,48623.0,NotFound
+3107171,mobile,,-20.0,137822.0,NotFound
+3107181,mobile,Moto G Play Build/MPIS24.241-15.3-7,0.0,183649.0,NotFound
+3107345,mobile,SM-T530,0.0,386685.0,NotFound
+3107396,desktop,Windows,-5.0,92698.0,NotFound
+3107764,desktop,Windows,-10.0,226805.0,NotFound
+3108006,desktop,Windows,-5.0,92459.0,NotFound
+3108328,desktop,MacOS,-5.0,47286.0,Found
+3108382,desktop,Windows,-25.0,222767.0,NotFound
+3108419,mobile,iOS Device,-5.0,228775.0,NotFound
+3108792,desktop,,0.0,76021.0,NotFound
+3109032,mobile,iOS Device,-25.0,148587.0,NotFound
+3109045,desktop,Trident/7.0,-10.0,172083.0,NotFound
+3109098,desktop,MacOS,-5.0,194144.0,NotFound
+3109119,desktop,Windows,-45.0,171681.0,NotFound
+3109191,desktop,,-10.0,279259.0,NotFound
+3109317,desktop,,-15.0,118974.0,NotFound
+3109666,mobile,,-35.0,555334.0,NotFound
+3109719,desktop,rv:11.0,-25.0,79342.0,Found
+3109740,desktop,rv:11.0,-25.0,86495.0,NotFound
+3109890,mobile,SM-A500W,-5.0,118702.0,NotFound
+3110403,mobile,Blade A475 Build/LMY47D,0.0,183192.0,NotFound
+3110494,desktop,MacOS,-5.0,114192.0,Found
+3110587,mobile,iOS Device,-5.0,220603.0,NotFound
+3110640,mobile,iOS Device,-5.0,169788.0,NotFound
+3111098,desktop,Windows,-5.0,294913.0,Found
+3111165,mobile,iOS Device,-5.0,188260.0,NotFound
+3111185,mobile,SM-A300H Build/LRX22G,0.0,216020.0,NotFound
+3111224,mobile,,-20.0,140836.0,NotFound
+3111225,mobile,,-20.0,111665.0,NotFound
+3111427,desktop,MacOS,-5.0,184783.0,NotFound
+3111517,desktop,,-20.0,564558.0,NotFound
+3111538,desktop,Windows,-5.0,291124.0,NotFound
+3111963,mobile,5056A Build/MMB29M,0.0,113026.0,NotFound
+3112288,desktop,rv:11.0,-5.0,284075.0,NotFound
+3112401,mobile,iOS Device,-5.0,96916.0,NotFound
+3112427,desktop,rv:11.0,-5.0,32134.0,Found
+3112583,desktop,Windows,-5.0,129508.0,NotFound
+3112610,desktop,,0.0,81041.0,NotFound
+3112797,mobile,iOS Device,-5.0,141133.0,NotFound
+3112923,desktop,Windows,-5.0,6393.0,Found
+3113133,desktop,Trident/7.0,-5.0,79340.0,NotFound
+3113408,mobile,LG-D693n,0.0,206102.0,NotFound
+3113720,desktop,,-5.0,108813.0,NotFound
+3113729,desktop,MacOS,-5.0,84545.0,NotFound
+3113991,desktop,Trident/7.0,-10.0,135141.0,NotFound
+3114047,mobile,,-20.0,135791.0,NotFound
+3114077,mobile,SM-G532M Build/MMB29T,0.0,226624.0,NotFound
+3114080,mobile,KFFOWI Build/LVY48F,0.0,68977.0,NotFound
+3114252,desktop,,-15.0,150850.0,NotFound
+3114353,desktop,Windows,-5.0,89453.0,NotFound
+3114618,desktop,,-5.0,191940.0,NotFound
+3114638,mobile,SM-G610M Build/MMB29K,-5.0,168041.0,NotFound
+3114677,mobile,SM-G935F Build/NRD90M,0.0,224023.0,NotFound
+3115427,mobile,iOS Device,-5.0,211158.0,NotFound
+3115563,desktop,Windows,-5.0,214477.0,NotFound
+3115730,mobile,,0.0,195701.0,NotFound
+3116365,mobile,iOS Device,-5.0,135769.0,NotFound
+3116454,desktop,Windows,-5.0,113840.0,NotFound
+3116792,mobile,iOS Device,-5.0,132361.0,NotFound
+3116795,desktop,Windows,-5.0,175061.0,NotFound
+3116884,desktop,Windows,-5.0,264501.0,Found
+3117131,mobile,,-25.0,106130.0,NotFound
+3117169,desktop,Windows,-5.0,45114.0,Found
+3117241,desktop,Windows,-5.0,22007.0,Found
+3117269,desktop,Windows,-5.0,112132.0,Found
+3117370,mobile,iOS Device,-5.0,203623.0,NotFound
+3118278,mobile,iOS Device,-5.0,217958.0,Found
+3118902,mobile,VK700 Build/LRX22G,0.0,38665.0,NotFound
+3119060,mobile,iOS Device,-5.0,51087.0,Found
+3119262,mobile,SM-A300H Build/LRX22G,0.0,187447.0,NotFound
+3119386,desktop,,-5.0,102688.0,NotFound
+3119440,mobile,,-20.0,134525.0,NotFound
+3119640,desktop,,-15.0,255546.0,NotFound
+3120042,mobile,iOS Device,-5.0,143610.0,NotFound
+3120254,mobile,,-20.0,206533.0,NotFound
+3120461,mobile,LG-M700 Build/NMF26X,0.0,203610.0,NotFound
+3120474,desktop,Windows,-5.0,191307.0,NotFound
+3120561,desktop,Windows,-15.0,64325.0,NotFound
+3120787,mobile,iOS Device,-5.0,118542.0,NotFound
+3121359,mobile,SM-T817V Build/NRD90M,-5.0,99192.0,NotFound
+3121596,desktop,Windows,-10.0,121888.0,NotFound
+3121992,desktop,Windows,-70.0,133153.0,NotFound
+3122181,mobile,,0.0,123775.0,NotFound
+3122241,desktop,,-10.0,42337.0,NotFound
+3122273,desktop,Windows,-10.0,195655.0,NotFound
+3122610,desktop,Windows,-5.0,131288.0,NotFound
+3123226,desktop,Windows,-5.0,23666.0,Found
+3123278,mobile,iOS Device,-5.0,66860.0,Found
+3123434,desktop,,-5.0,169026.0,NotFound
+3123867,desktop,MacOS,0.0,97695.0,NotFound
+3124257,desktop,,0.0,126313.0,NotFound
+3124845,desktop,MacOS,0.0,150471.0,NotFound
+3125796,mobile,Moto G (4) Build/NPJS25.93-14-13,0.0,173666.0,NotFound
+3125899,desktop,,-10.0,118842.0,NotFound
+3125994,mobile,SAMSUNG,-20.0,137845.0,NotFound
+3126314,mobile,iOS Device,-5.0,141480.0,Found
+3126351,desktop,,-5.0,112590.0,NotFound
+3126502,desktop,,-15.0,206103.0,NotFound
+3126763,mobile,SM-G532M Build/MMB29T,0.0,441698.0,NotFound
+3127044,desktop,MacOS,-5.0,155616.0,NotFound
+3127340,desktop,Windows,-5.0,206917.0,NotFound
+3127492,desktop,Windows,-5.0,67858.0,NotFound
+3127551,desktop,Windows,-25.0,280051.0,NotFound
+3127594,mobile,iOS Device,-45.0,96620.0,NotFound
+3127626,desktop,MacOS,-5.0,52481.0,NotFound
+3128418,desktop,Windows,-5.0,78683.0,NotFound
+3128604,mobile,,-20.0,89990.0,NotFound
+3129033,mobile,,-5.0,109375.0,Found
+3129093,desktop,Windows,-5.0,290237.0,NotFound
+3129329,mobile,,-35.0,456452.0,NotFound
+3129427,desktop,,-5.0,328336.0,NotFound
+3129705,desktop,rv:11.0,-5.0,147843.0,NotFound
+3129767,desktop,,-5.0,81841.0,NotFound
+3129796,mobile,,-20.0,203185.0,NotFound
+3129875,mobile,iOS Device,-5.0,113121.0,NotFound
+3129930,desktop,Windows,-5.0,143765.0,NotFound
+3130392,mobile,SM-J710MN Build/NRD90M,-5.0,163032.0,NotFound
+3130538,mobile,iOS Device,0.0,109061.0,NotFound
+3130824,mobile,,-20.0,68276.0,NotFound
+3130963,mobile,,-20.0,257237.0,NotFound
+3130971,desktop,Windows,-5.0,291365.0,NotFound
+3131079,mobile,SM-G900M Build/LRX21T,0.0,268643.0,NotFound
+3131954,desktop,Windows,-10.0,153590.0,NotFound
+3133208,desktop,,-20.0,264591.0,NotFound
+3133717,desktop,Windows,-5.0,138992.0,NotFound
+3134467,desktop,Windows,-5.0,341130.0,NotFound
+3134964,mobile,iOS Device,-25.0,911538.0,NotFound
+3135075,mobile,MotoG3 Build/MPIS24.65-33.1-2-16,-5.0,405815.0,NotFound
+3135287,desktop,rv:57.0,-5.0,77188.0,NotFound
+3135326,desktop,Windows,-20.0,51317.0,NotFound
+3135355,desktop,,-5.0,408636.0,NotFound
+3136171,mobile,,-20.0,177391.0,NotFound
+3136209,desktop,Windows,-15.0,116079.0,NotFound
+3136266,mobile,Moto G (5) Build/NPP25.137-72,0.0,362679.0,NotFound
+3136886,mobile,SAMSUNG SM-T587P Build/NRD90M,0.0,59920.0,Found
+3137278,desktop,Trident/7.0,-5.0,74974.0,NotFound
+3137550,desktop,Windows,-5.0,110651.0,NotFound
+3137999,mobile,,-20.0,141802.0,NotFound
+3138037,mobile,SM-A310F Build/NRD90M,-5.0,393353.0,NotFound
+3138130,desktop,Windows,-5.0,436495.0,NotFound
+3138353,mobile,SM-G935F Build/NRD90M,0.0,502444.0,NotFound
+3138897,mobile,SGP521,0.0,165181.0,NotFound
+3139075,desktop,Windows,-5.0,47255.0,NotFound
+3139086,desktop,Windows,-70.0,65826.0,NotFound
+3139190,desktop,Windows,-5.0,74719.0,NotFound
+3139232,desktop,Windows,-5.0,38940.0,Found
+3139367,desktop,Windows,-5.0,48965.0,Found
+3139646,mobile,,-25.0,454358.0,NotFound
+3139825,desktop,Windows,-5.0,88349.0,NotFound
+3140261,desktop,MacOS,0.0,32571.0,Found
+3140351,mobile,,-20.0,534306.0,NotFound
+3140670,desktop,Windows,-5.0,634171.0,NotFound
+3140924,desktop,Windows,-5.0,31695.0,NotFound
+3141396,desktop,Windows,-5.0,151654.0,NotFound
+3141480,desktop,Trident/7.0,0.0,179125.0,NotFound
+3141672,mobile,,0.0,28298.0,Found
+3141869,mobile,,-25.0,128823.0,NotFound
+3142320,,,-15.0,,NotFound
+3142377,desktop,Windows,-5.0,153795.0,NotFound
+3142447,mobile,SM-G955F Build/NRD90M,-15.0,98609.0,NotFound
+3142449,desktop,Windows,-5.0,154051.0,NotFound
+3143128,desktop,Windows,-5.0,426780.0,NotFound
+3143187,mobile,XT1635-02,0.0,138388.0,NotFound
+3143434,mobile,iOS Device,-5.0,105386.0,NotFound
+3143586,desktop,Windows,-5.0,61157.0,NotFound
+3143848,mobile,HUAWEI G7-L03 Build/HuaweiG7-L03,0.0,308199.0,NotFound
+3144181,mobile,iOS Device,-5.0,109344.0,NotFound
+3144258,mobile,iOS Device,0.0,3004.0,Found
+3145375,desktop,Windows,-5.0,191356.0,NotFound
+3145521,desktop,Windows,-5.0,233587.0,NotFound
+3145861,mobile,,0.0,16470.0,Found
+3145928,mobile,Moto G (5) Build/NPP25.137-72,0.0,126085.0,NotFound
+3146507,mobile,F3313 Build/37.0.A.2.108,0.0,97698.0,NotFound
+3146775,mobile,iOS Device,-5.0,193534.0,NotFound
+3146926,mobile,SAMSUNG SM-J510MN Build/MMB29M,0.0,559315.0,NotFound
+3147033,mobile,,-40.0,81233.0,Found
+3147277,mobile,SM-G930F Build/NRD90M,0.0,154494.0,NotFound
+3147547,desktop,MacOS,-5.0,325404.0,NotFound
+3148015,desktop,Windows,-5.0,24264.0,NotFound
+3148820,desktop,Windows,-5.0,103595.0,NotFound
+3149327,desktop,Windows,-5.0,161486.0,NotFound
+3149348,desktop,Windows,-5.0,41621.0,NotFound
+3149361,desktop,,-10.0,88481.0,NotFound
+3149496,mobile,,-25.0,109140.0,NotFound
+3149779,desktop,Windows,-5.0,55683.0,NotFound
+3150014,desktop,,-20.0,21088.0,Found
+3150070,mobile,Hisense L675 Build/MRA58K,0.0,184349.0,NotFound
+3150367,desktop,MacOS,-5.0,42075.0,NotFound
+3150560,desktop,Windows,-5.0,485665.0,NotFound
+3150561,mobile,iOS Device,-5.0,77618.0,NotFound
+3150924,mobile,iOS Device,-5.0,338891.0,NotFound
+3151017,desktop,Windows,-5.0,84806.0,NotFound
+3151118,mobile,WAS-LX3 Build/HUAWEIWAS-LX3,-40.0,53535.0,NotFound
+3151398,mobile,SM-J320M Build/LMY47V,0.0,228484.0,NotFound
+3151755,desktop,Trident/7.0,-5.0,99609.0,NotFound
+3151760,mobile,,-20.0,197349.0,NotFound
+3151913,desktop,,0.0,164408.0,NotFound
+3152807,mobile,moto x4 Build/NPW26.83-42,0.0,140861.0,NotFound
+3153025,desktop,Windows,-10.0,377466.0,NotFound
+3153248,desktop,Windows,-5.0,122706.0,NotFound
+3153723,desktop,Windows,-10.0,221220.0,NotFound
+3153851,mobile,MotoG3 Build/MPIS24.65-33.1-2-16,0.0,255519.0,NotFound
+3153929,desktop,,0.0,263239.0,NotFound
+3154029,mobile,Moto G (4) Build/NPJS25.93-14-13,0.0,105082.0,NotFound
+3154278,mobile,iOS Device,-20.0,387971.0,NotFound
+3154504,desktop,Windows,-5.0,100733.0,NotFound
+3154513,desktop,Windows,-5.0,79329.0,NotFound
+3154778,desktop,,-5.0,282874.0,NotFound
+3154897,mobile,iOS Device,-5.0,157424.0,NotFound
+3155006,desktop,Windows,-5.0,87793.0,NotFound
+3155194,desktop,Windows,-35.0,43880.0,Found
+3155590,,,-15.0,,NotFound
+3155781,desktop,MacOS,-5.0,68189.0,NotFound
+3156050,desktop,Trident/7.0,-20.0,395098.0,NotFound
+3156078,desktop,,-5.0,83691.0,NotFound
+3157496,desktop,MacOS,-5.0,75547.0,NotFound
+3157507,desktop,Trident/7.0,0.0,258841.0,NotFound
+3157592,desktop,Windows,-5.0,25225.0,Found
+3158129,desktop,Windows,-5.0,62875.0,Found
+3158773,desktop,rv:57.0,-5.0,37738.0,NotFound
+3159358,mobile,,-20.0,281580.0,NotFound
+3159818,mobile,iOS Device,-5.0,105783.0,Found
+3160017,desktop,Windows,-5.0,65566.0,NotFound
+3160991,desktop,Windows,-20.0,94101.0,NotFound
+3161061,desktop,Trident/7.0,-5.0,69117.0,NotFound
+3161351,desktop,Windows,-5.0,121541.0,NotFound
+3162868,mobile,iOS Device,0.0,19283.0,Found
+3163041,mobile,HUAWEI VNS-L53 Build/HUAWEIVNS-L53,-45.0,205492.0,NotFound
+3163598,mobile,iOS Device,-5.0,194011.0,NotFound
+3164239,desktop,Windows,-5.0,352952.0,NotFound
+3164526,desktop,Trident/7.0,0.0,79927.0,NotFound
+3164636,desktop,MacOS,0.0,72729.0,NotFound
+3165081,mobile,iOS Device,-5.0,96277.0,NotFound
+3165592,mobile,iOS Device,-25.0,265925.0,NotFound
+3165799,mobile,iOS Device,0.0,62825.0,NotFound
+3165834,desktop,,-5.0,241523.0,NotFound
+3166183,mobile,SAMSUNG SM-J120H Build/LMY47V,-10.0,412245.0,NotFound
+3166459,desktop,MacOS,-5.0,57971.0,NotFound
+3166575,mobile,SAMSUNG SM-J700M Build/MMB29K,-5.0,155398.0,NotFound
+3166956,desktop,Windows,-5.0,139433.0,Found
+3167155,mobile,iOS Device,-80.0,173903.0,Found
+3167550,desktop,Windows,-5.0,160301.0,NotFound
+3167621,mobile,iOS Device,0.0,70041.0,Found
+3168464,desktop,Windows,-5.0,180159.0,NotFound
+3170330,desktop,Windows,-5.0,93137.0,NotFound
+3170697,mobile,Build/OPR6.170623.013,-25.0,280114.0,NotFound
+3171060,desktop,Windows,-5.0,76407.0,Found
+3173086,mobile,,-25.0,179344.0,NotFound
+3173951,mobile,,-20.0,139504.0,NotFound
+3174236,desktop,MacOS,0.0,4259.0,Found
+3174238,desktop,MacOS,0.0,2894.0,NotFound
+3174314,mobile,iOS Device,0.0,145594.0,NotFound
+3174769,,,-15.0,,Found
+3175651,desktop,Windows,-5.0,58620.0,NotFound
+3175667,desktop,rv:57.0,-5.0,102275.0,NotFound
+3176414,mobile,,-60.0,69343.0,NotFound
+3177007,desktop,,-5.0,199367.0,NotFound
+3177094,mobile,iOS Device,0.0,203886.0,NotFound
+3177163,mobile,,-20.0,309690.0,NotFound
+3177459,desktop,Windows,-5.0,37472.0,NotFound
+3177667,mobile,,-5.0,241776.0,NotFound
+3178723,desktop,Windows,-5.0,125144.0,NotFound
+3178842,mobile,Moto G (5) Plus Build/NPN25.137-72,-5.0,265473.0,NotFound
+3179118,desktop,Windows,-5.0,103096.0,NotFound
+3179222,desktop,Windows,-5.0,137194.0,NotFound
+3179320,mobile,iOS Device,-5.0,99619.0,Found
+3179678,mobile,F8331,-5.0,140141.0,NotFound
+3180745,desktop,Windows,-5.0,93184.0,NotFound
+3180819,mobile,iOS Device,-5.0,153098.0,NotFound
+3180826,desktop,Windows,-5.0,266354.0,NotFound
+3181418,mobile,,-35.0,417091.0,NotFound
+3181721,desktop,Windows,-5.0,5048.0,Found
+3182116,mobile,SM-G950U1 Build/NRD90M,-5.0,111814.0,NotFound
+3182194,desktop,,-5.0,33774.0,NotFound
+3182257,desktop,MacOS,-5.0,75651.0,NotFound
+3182299,mobile,5012G Build/MRA58K,-20.0,196313.0,NotFound
+3182976,mobile,iOS Device,-5.0,190831.0,NotFound
+3183102,desktop,Windows,-5.0,222739.0,NotFound
+3183765,mobile,,-25.0,477153.0,NotFound
+3183801,desktop,,-5.0,59124.0,NotFound
+3183813,desktop,Windows,-5.0,147088.0,NotFound
+3183889,desktop,Windows,-10.0,207776.0,NotFound
+3184217,mobile,,-20.0,273501.0,NotFound
+3184301,,,-15.0,,NotFound
+3184437,mobile,iOS Device,-25.0,120204.0,Found
+3184535,desktop,Windows,-5.0,76842.0,NotFound
+3184580,desktop,Windows,-5.0,56158.0,NotFound
+3184590,desktop,Windows,-5.0,200014.0,NotFound
+3184993,desktop,Windows,-5.0,49304.0,NotFound
+3185551,mobile,SM-A720F Build/NRD90M,-5.0,86369.0,NotFound
+3185769,desktop,MacOS,-10.0,756462.0,Found
+3185771,desktop,MacOS,-10.0,777303.0,Found
+3186243,desktop,MacOS,-5.0,125540.0,NotFound
+3186306,desktop,Windows,-5.0,99039.0,NotFound
+3186313,mobile,iOS Device,-5.0,84136.0,NotFound
+3186348,mobile,SM-N920T Build/NRD90M,-10.0,169633.0,NotFound
+3186368,mobile,,-20.0,77166.0,NotFound
+3186920,mobile,SAMSUNG SM-A520F Build/NRD90M,-5.0,53234.0,NotFound
+3187023,mobile,F5321 Build/34.3.A.0.238,-5.0,99120.0,NotFound
+3187318,mobile,,-25.0,219658.0,NotFound
+3188479,desktop,MacOS,0.0,6836.0,NotFound
+3188656,desktop,Windows,-5.0,37556.0,Found
+3188697,mobile,SM-N900W8 Build/LRX21V,-5.0,335744.0,NotFound
+3188746,mobile,iOS Device,-5.0,82837.0,NotFound
+3189653,desktop,,-5.0,174815.0,NotFound
+3189999,desktop,,-20.0,362505.0,NotFound
+3190159,desktop,Windows,-5.0,55663.0,Found
+3190226,desktop,Windows,-10.0,123864.0,NotFound
+3190488,mobile,,-25.0,65877.0,NotFound
+3190865,desktop,,-5.0,35849.0,NotFound
+3191230,desktop,MacOS,-5.0,206316.0,NotFound
+3191872,mobile,iOS Device,-5.0,157081.0,NotFound
+3192026,desktop,Windows,-5.0,138771.0,Found
+3192761,desktop,Windows,-5.0,119991.0,NotFound
+3192811,desktop,Windows,-20.0,239738.0,NotFound
+3193990,mobile,,-5.0,3163.0,Found
+3194178,desktop,Windows,-5.0,514597.0,NotFound
+3194212,desktop,Windows,-5.0,402592.0,NotFound
+3194615,desktop,Trident/7.0,0.0,145321.0,NotFound
+3195371,mobile,,-20.0,278726.0,NotFound
+3196117,desktop,Windows,-5.0,55946.0,NotFound
+3196149,mobile,Blade A510 Build/MRA58K,-5.0,127095.0,NotFound
+3197285,mobile,SAMSUNG SM-J701M Build/NRD90M,-5.0,181699.0,NotFound
+3198478,desktop,rv:46.0,-5.0,115942.0,NotFound
+3198545,mobile,ASUS_X015D Build/NRD90M,-20.0,354710.0,NotFound
+3199356,desktop,MacOS,0.0,53230.0,Found
+3199392,desktop,Windows,-5.0,166503.0,NotFound
+3199512,mobile,,-20.0,239459.0,NotFound
+3199818,mobile,,-20.0,90891.0,NotFound
+3199828,mobile,iOS Device,-25.0,204978.0,NotFound
+3200196,desktop,MacOS,-5.0,73041.0,NotFound
+3200402,desktop,Windows,-5.0,61345.0,NotFound
+3200715,desktop,Windows,-5.0,90861.0,NotFound
+3200947,desktop,Trident/7.0,-5.0,123603.0,NotFound
+3201619,mobile,iOS Device,0.0,436692.0,NotFound
+3202576,desktop,MacOS,0.0,127336.0,NotFound
+3202839,desktop,Windows,-5.0,25930.0,Found
+3203262,desktop,Windows,-60.0,50627.0,NotFound
+3203330,mobile,,-5.0,148561.0,NotFound
+3203371,desktop,Windows,-5.0,153744.0,NotFound
+3203553,mobile,TA-1039 Build/NMF26F,-5.0,382354.0,NotFound
+3203783,mobile,,-25.0,63435.0,NotFound
+3204112,desktop,Windows,-5.0,227655.0,NotFound
+3205920,desktop,Windows,-5.0,111835.0,NotFound
+3206312,mobile,TR10CS1 Build/JDQ39,-5.0,145886.0,NotFound
+3206374,desktop,Windows,-25.0,40023.0,NotFound
+3206504,mobile,SM-G550T1 Build/MMB29K,0.0,22625.0,Found
+3206686,mobile,iOS Device,-25.0,286344.0,NotFound
+3207241,mobile,SAMSUNG SM-G935F Build/NRD90M,-10.0,149518.0,NotFound
+3208022,mobile,SM-J320M Build/LMY47V,-100.0,172470.0,NotFound
+3208191,mobile,SM-G935F Build/NRD90M,-5.0,224341.0,NotFound
+3208339,desktop,Windows,-5.0,200014.0,NotFound
+3208847,mobile,iOS Device,-5.0,107137.0,NotFound
+3209205,mobile,,-20.0,508713.0,NotFound
+3209277,desktop,Windows,-5.0,41010.0,Found
+3209626,mobile,,-20.0,309862.0,NotFound
+3209819,mobile,SM-G531F,-25.0,383484.0,NotFound
+3209911,desktop,Windows,-10.0,80628.0,NotFound
+3210024,desktop,Windows,-10.0,535033.0,NotFound
+3210231,mobile,iOS Device,-5.0,57873.0,NotFound
+3211128,mobile,,-20.0,210725.0,NotFound
+3211272,desktop,Windows,-5.0,119193.0,NotFound
+3211277,desktop,Windows,-5.0,173972.0,NotFound
+3211282,mobile,iOS Device,-5.0,109711.0,NotFound
+3211295,mobile,,-25.0,177192.0,NotFound
+3211567,mobile,,-20.0,142537.0,NotFound
+3212062,desktop,Windows,-5.0,49698.0,NotFound
+3212463,mobile,SAMSUNG SM-G950F Build/NRD90M,-5.0,217779.0,NotFound
+3213045,desktop,MacOS,-5.0,104993.0,NotFound
+3213110,mobile,iOS Device,-5.0,128722.0,NotFound
+3213715,desktop,Windows,-5.0,37442.0,NotFound
+3214585,desktop,Windows,-5.0,353588.0,Found
+3215697,desktop,Windows,-5.0,25468.0,Found
+3215806,mobile,F5121 Build/34.3.A.0.252,-20.0,35719.0,NotFound
+3216296,desktop,,-20.0,125749.0,NotFound
+3216558,mobile,,-20.0,179511.0,NotFound
+3216651,desktop,Windows,-5.0,31593.0,Found
+3216675,desktop,Windows,-15.0,66283.0,NotFound
+3216904,mobile,RNE-L03 Build/HUAWEIRNE-L03,-100.0,320234.0,NotFound
+3217122,mobile,,0.0,22900.0,Found
+3217366,mobile,Nexus 5X Build/OPM3.171019.013,-5.0,38023.0,NotFound
+3217933,desktop,Windows,-5.0,90639.0,NotFound
+3218156,desktop,Windows,-5.0,194183.0,NotFound
+3218426,mobile,Turbo C5 Build/LMY47I,-5.0,181895.0,NotFound
+3219472,desktop,MacOS,-5.0,52813.0,NotFound
+3219675,desktop,Windows,-5.0,31527.0,NotFound
+3219856,desktop,Windows,-5.0,427678.0,NotFound
+3220978,mobile,,-25.0,99241.0,NotFound
+3221056,mobile,,0.0,3444.0,Found
+3221205,mobile,F3113 Build/33.3.A.1.97,-20.0,443513.0,NotFound
+3221278,mobile,8050G Build/LMY47I,-20.0,148515.0,NotFound
+3221683,mobile,SM-G930F Build/NRD90M,-5.0,217337.0,NotFound
+3221743,desktop,Windows,-5.0,194047.0,NotFound
+3221746,mobile,SM-G531H Build/LMY48B,-5.0,379805.0,NotFound
+3221918,desktop,Windows,-10.0,116705.0,NotFound
+3222831,mobile,LGLS770,0.0,83905.0,NotFound
+3223259,mobile,,-20.0,125355.0,NotFound
+3223670,mobile,G8141,-5.0,565603.0,NotFound
+3223935,mobile,SM-J730GM Build/NRD90M,-5.0,511269.0,NotFound
+3224630,desktop,,-5.0,131663.0,NotFound
+3225183,mobile,iOS Device,-5.0,209454.0,NotFound
+3225631,mobile,LG-D331 Build/LRX22G,-5.0,370403.0,NotFound
+3225820,desktop,,-20.0,175839.0,NotFound
+3225982,mobile,iOS Device,-5.0,66435.0,Found
+3226008,mobile,iOS Device,-5.0,91428.0,NotFound
+3226145,desktop,Windows,-5.0,251172.0,NotFound
+3226242,mobile,LG-X240 Build/MRA58K,-5.0,184008.0,NotFound
+3226864,mobile,iOS Device,-5.0,509451.0,NotFound
+3227062,desktop,,-10.0,343299.0,NotFound
+3228130,desktop,Windows,-5.0,12411.0,Found
+3228152,mobile,Moto E (4) Plus Build/NMA26.42-11-3,-5.0,233192.0,NotFound
+3228993,mobile,HTC Desire 10 lifestyle Build/MMB29M,-20.0,224479.0,NotFound
+3229115,mobile,,-25.0,118632.0,NotFound
+3229167,mobile,verykoolS5525,-5.0,251812.0,NotFound
+3229520,mobile,LG-K410 Build/LRX22G,-5.0,152451.0,NotFound
+3229585,mobile,iOS Device,-25.0,171117.0,Found
+3230694,desktop,,-5.0,84379.0,NotFound
+3230810,mobile,SM-G570M Build/MMB29K,-5.0,205097.0,NotFound
+3231193,desktop,Trident/7.0,-5.0,365182.0,NotFound
+3231379,mobile,,-95.0,201911.0,NotFound
+3231532,mobile,LG-K580 Build/MRA58K,-5.0,137260.0,NotFound
+3231585,desktop,Windows,-5.0,108092.0,NotFound
+3232011,mobile,SM-J730GM Build/NRD90M,-5.0,281228.0,NotFound
+3232774,desktop,Windows,-5.0,151330.0,NotFound
+3233135,desktop,Windows,-10.0,129998.0,NotFound
+3233168,mobile,iOS Device,-5.0,97035.0,NotFound
+3233382,desktop,Windows,-5.0,106950.0,NotFound
+3234769,desktop,Windows,-5.0,3235.0,NotFound
+3234900,mobile,SM-J700M Build/MMB29K,-5.0,103785.0,NotFound
+3235059,mobile,5010S Build/MRA58K,-20.0,353119.0,NotFound
+3235112,mobile,HUAWEI TAG-L13 Build/HUAWEITAG-L13,-5.0,249673.0,NotFound
+3236081,mobile,iOS Device,-5.0,131982.0,NotFound
+3236170,desktop,,-5.0,141650.0,NotFound
+3236399,desktop,Windows,-5.0,76527.0,Found
+3236404,desktop,Windows,-5.0,503347.0,NotFound
+3236710,desktop,Trident/7.0,-45.0,625757.0,Found
+3237749,desktop,MacOS,-5.0,175041.0,NotFound
+3238513,desktop,Windows,-10.0,104841.0,NotFound
+3238778,desktop,Windows,-5.0,113961.0,NotFound
+3239471,desktop,MacOS,-5.0,655585.0,NotFound
+3240793,desktop,,-10.0,445561.0,NotFound
+3241025,mobile,iOS Device,-5.0,63144.0,Found
+3241034,desktop,MacOS,0.0,44499.0,NotFound
+3241151,desktop,rv:31.0,-5.0,119867.0,NotFound
+3241328,desktop,Windows,-5.0,212515.0,NotFound
+3241911,desktop,Trident/7.0,0.0,46471.0,Found
+3241967,desktop,Windows,-30.0,77370.0,NotFound
+3242138,mobile,SAMSUNG-SM-G930A Build/NRD90M,-30.0,117002.0,NotFound
+3242507,mobile,SAMSUNG SM-G935F Build/NRD90M,-5.0,251851.0,NotFound
+3243570,desktop,Windows,-10.0,74792.0,NotFound
+3243712,mobile,,-25.0,131951.0,NotFound
+3244007,desktop,Trident/7.0,0.0,10182.0,NotFound
+3244133,mobile,SM-G930W8 Build/NRD90M,-10.0,227158.0,NotFound
+3244207,mobile,Moto X Play Build/NPD26.48-24-1,-100.0,233695.0,NotFound
+3244841,mobile,SM-A320FL Build/NRD90M,-10.0,348662.0,NotFound
+3245137,desktop,MacOS,-5.0,118453.0,NotFound
+3245170,desktop,,-5.0,94792.0,NotFound
+3245238,desktop,Windows,-5.0,158361.0,NotFound
+3245653,desktop,Windows,-5.0,97997.0,NotFound
+3245666,desktop,Trident/7.0,-10.0,178032.0,NotFound
+3245739,desktop,,0.0,23370.0,Found
+3245924,mobile,SM-J105B Build/LMY47V,-5.0,100837.0,NotFound
+3245936,desktop,Windows,-5.0,146581.0,NotFound
+3246108,mobile,iOS Device,-5.0,266531.0,NotFound
+3246608,desktop,Windows,-5.0,71341.0,NotFound
+3246709,desktop,Windows,-5.0,33587.0,Found
+3247047,desktop,Windows,-5.0,50450.0,Found
+3247049,mobile,,-20.0,181513.0,NotFound
+3247224,mobile,LG-M320 Build/NRD90U,-5.0,267456.0,NotFound
+3247468,mobile,TREKKER-X3 Build/MMB29M,-10.0,424773.0,NotFound
+3247488,desktop,,-5.0,190241.0,NotFound
+3248090,mobile,iOS Device,-5.0,126509.0,NotFound
+3248370,mobile,iOS Device,-5.0,239833.0,NotFound
+3248965,desktop,MacOS,0.0,34260.0,NotFound
+3249465,desktop,Windows,-5.0,285292.0,NotFound
+3249815,mobile,SM-G532M Build/MMB29T,-10.0,570760.0,NotFound
+3249912,mobile,SAMSUNG SM-J700M Build/MMB29K,-95.0,456277.0,NotFound
+3250203,desktop,rv:11.0,-10.0,171226.0,NotFound
+3250335,mobile,iOS Device,-5.0,430540.0,Found
+3250421,mobile,iOS Device,0.0,41197.0,NotFound
+3250467,desktop,,-5.0,118348.0,NotFound
+3250468,desktop,MacOS,0.0,49549.0,NotFound
+3250576,desktop,Trident/7.0,-5.0,162878.0,NotFound
+3250903,mobile,PE-TL10,-75.0,387165.0,NotFound
+3250990,desktop,Windows,-5.0,147512.0,NotFound
+3251283,desktop,,-5.0,305497.0,NotFound
+3251298,desktop,,-5.0,218574.0,NotFound
+3251371,desktop,Windows,0.0,51129.0,Found
+3251741,desktop,Windows,-10.0,99612.0,NotFound
+3252048,desktop,Windows,-5.0,30782.0,Found
+3252127,mobile,SM-A720F Build/NRD90M,-5.0,398405.0,NotFound
+3252160,desktop,Windows,-5.0,133133.0,NotFound
+3252243,mobile,,-20.0,234681.0,NotFound
+3252922,desktop,,-45.0,109841.0,NotFound
+3253180,mobile,SM-N950U Build/NMF26X,0.0,196834.0,NotFound
+3253385,desktop,rv:11.0,-5.0,154910.0,NotFound
+3253437,desktop,Windows,-5.0,474358.0,NotFound
+3253683,desktop,Windows,-5.0,611297.0,NotFound
+3253961,desktop,Windows,-5.0,364792.0,NotFound
+3254101,desktop,Windows,-5.0,171334.0,NotFound
+3254195,desktop,Windows,-5.0,214205.0,NotFound
+3254467,mobile,,-25.0,201412.0,NotFound
+3254473,mobile,iOS Device,-5.0,162714.0,NotFound
+3254793,desktop,Windows,-5.0,343361.0,NotFound
+3255229,desktop,,-20.0,228517.0,NotFound
+3255241,desktop,,-5.0,1862.0,Found
+3255751,desktop,Windows,-5.0,943639.0,NotFound
+3255766,mobile,,-25.0,404997.0,NotFound
+3256427,desktop,Trident/7.0,-60.0,71995.0,NotFound
+3256743,mobile,iOS Device,0.0,44156.0,NotFound
+3256933,mobile,hi6210sft Build/MRA58K,-100.0,298444.0,NotFound
+3257035,desktop,Windows,-5.0,19776.0,Found
+3257102,desktop,Windows,-5.0,124575.0,NotFound
+3257273,mobile,iOS Device,0.0,47302.0,NotFound
+3257392,,,-15.0,,NotFound
+3257446,desktop,Trident/7.0,-10.0,655657.0,NotFound
+3257460,desktop,Trident/7.0,-10.0,131428.0,NotFound
+3257592,desktop,Windows,-5.0,110614.0,NotFound
+3257745,desktop,Windows,-10.0,114671.0,NotFound
+3258348,desktop,Windows,-5.0,88953.0,Found
+3258811,desktop,MacOS,0.0,15625.0,Found
+3259239,mobile,Moto C Build/NRD90M.063,-10.0,262615.0,NotFound
+3259243,desktop,Windows,-5.0,2120.0,NotFound
+3260110,mobile,,-10.0,428110.0,NotFound
+3260123,mobile,SAMSUNG,-10.0,389172.0,NotFound
+3260324,mobile,BLADE V8 SE Build/NRD90M,-5.0,408362.0,NotFound
+3260803,mobile,iOS Device,-25.0,79894.0,Found
+3261001,mobile,iOS Device,-5.0,735292.0,NotFound
+3261133,mobile,iOS Device,-5.0,248736.0,Found
+3261745,mobile,iOS Device,-5.0,210024.0,Found
+3261794,desktop,Trident/7.0,-5.0,58414.0,NotFound
+3261877,desktop,Windows,-5.0,271430.0,NotFound
+3262437,desktop,Windows,-5.0,171993.0,NotFound
+3262720,mobile,SM-J500M Build/MMB29M,-20.0,306285.0,NotFound
+3263213,mobile,,-20.0,304181.0,NotFound
+3263731,desktop,,-5.0,96701.0,NotFound
+3264213,desktop,Windows,-10.0,74590.0,NotFound
+3264647,mobile,iOS Device,0.0,45177.0,NotFound
+3264805,mobile,LG-H850 Build/MMB29M,-10.0,231465.0,NotFound
+3265044,mobile,iOS Device,-5.0,69014.0,NotFound
+3265097,desktop,Moto G (5) Build/NPP25.137-72,-15.0,240846.0,NotFound
+3265116,desktop,Windows,-5.0,159621.0,NotFound
+3265127,mobile,Microsoft,-45.0,694517.0,NotFound
+3265310,desktop,rv:60.0,-65.0,405248.0,NotFound
+3265350,desktop,MacOS,-5.0,285820.0,NotFound
+3265506,desktop,,0.0,52771.0,Found
+3265543,desktop,Windows,-5.0,30790.0,NotFound
+3265707,desktop,Windows,-5.0,22205.0,NotFound
+3265717,,,-15.0,,NotFound
+3265902,desktop,MacOS,0.0,75663.0,NotFound
+3266427,desktop,Trident/7.0,-5.0,7684.0,NotFound
+3266811,desktop,Windows,-5.0,124249.0,NotFound
+3266890,mobile,LG-K220 Build/MXB48T,-20.0,240499.0,NotFound
+3266901,desktop,Trident/7.0,-15.0,89622.0,NotFound
+3266994,desktop,Windows,-5.0,118028.0,NotFound
+3267483,desktop,,-5.0,123221.0,NotFound
+3267766,mobile,HUAWEI RIO-L03 Build/HUAWEIRIO-L03,-60.0,446442.0,NotFound
+3267768,desktop,,-5.0,1375.0,Found
+3268671,desktop,Windows,-5.0,278843.0,NotFound
+3268725,desktop,,-25.0,191494.0,NotFound
+3269565,mobile,iOS Device,-5.0,31222.0,Found
+3270077,desktop,Windows,-10.0,147606.0,NotFound
+3270268,mobile,HUAWEI RIO-L03 Build/HUAWEIRIO-L03,-60.0,306405.0,NotFound
+3270280,mobile,iOS Device,-5.0,179146.0,NotFound
+3270529,desktop,Windows,-20.0,174506.0,NotFound
+3270545,mobile,iOS Device,-5.0,94762.0,NotFound
+3270860,mobile,,-10.0,276946.0,NotFound
+3270936,mobile,LG-H870DS Build/NRD90U,-10.0,124238.0,NotFound
+3271477,desktop,Moto G (5) Build/NPP25.137-72,-5.0,232149.0,NotFound
+3273419,mobile,LG-M700 Build/NMF26X,-5.0,119449.0,NotFound
+3273503,desktop,Windows,-10.0,552.0,Found
+3273762,mobile,GT-N8000,-10.0,284503.0,NotFound
+3274084,desktop,Windows,-10.0,28278.0,NotFound
+3274416,desktop,Trident/7.0,0.0,1739.0,NotFound
+3275063,mobile,SM-G610M Build/NRD90M,-20.0,246332.0,NotFound
+3275270,desktop,Windows,-5.0,205911.0,NotFound
+3275393,desktop,Windows,-5.0,479166.0,Found
+3275981,mobile,SM-G935F Build/NRD90M,-5.0,673861.0,NotFound
+3276177,mobile,LG-X230 Build/MRA58K,-5.0,599243.0,NotFound
+3276523,desktop,Windows,-10.0,1451.0,NotFound
+3277124,mobile,iOS Device,0.0,38316.0,Found
+3277560,mobile,5080A Build/MRA58K,-20.0,582345.0,NotFound
+3277965,desktop,,-10.0,148586.0,NotFound
+3278212,desktop,Windows,-5.0,1638.0,NotFound
+3278218,desktop,Windows,-5.0,183558.0,NotFound
+3278226,desktop,MacOS,-5.0,87707.0,NotFound
+3279032,desktop,Windows,-5.0,110170.0,NotFound
+3279444,desktop,Windows,-5.0,1098.0,Found
+3279518,desktop,,-5.0,238511.0,NotFound
+3279595,mobile,HUAWEI TAG-L13 Build/HUAWEITAG-L13,-5.0,453091.0,NotFound
+3279690,desktop,Windows,-45.0,37279.0,Found
+3279906,mobile,,-25.0,327922.0,NotFound
+3280149,desktop,rv:58.0,0.0,769.0,Found
+3281190,desktop,Windows,-5.0,230528.0,NotFound
+3281207,mobile,iOS Device,0.0,42807.0,NotFound
+3282070,desktop,Windows NT 6.1,-85.0,149857.0,NotFound
+3282364,desktop,Windows,-5.0,41308.0,NotFound
+3283388,mobile,SM-S727VL Build/MMB29M,-20.0,112328.0,NotFound
+3283392,desktop,Windows,-10.0,247426.0,NotFound
+3283675,desktop,Windows,-5.0,24842.0,Found
+3284318,desktop,MacOS,0.0,136021.0,Found
+3284347,desktop,,-5.0,201044.0,NotFound
+3284444,desktop,Windows,-20.0,96194.0,NotFound
+3284799,desktop,Windows,-5.0,217456.0,NotFound
+3285101,mobile,SM-G570M Build/MMB29K,-5.0,367288.0,NotFound
+3285276,,,-15.0,,NotFound
+3285281,mobile,,-25.0,343245.0,NotFound
+3285308,mobile,VTR-L09 Build/HUAWEIVTR-L09,-5.0,546645.0,NotFound
+3286018,mobile,SM-G532M Build/MMB29T,-5.0,462297.0,NotFound
+3286115,desktop,,-10.0,133482.0,NotFound
+3286305,desktop,Windows,-5.0,160598.0,NotFound
+3287303,mobile,iOS Device,-5.0,90568.0,Found
+3287849,mobile,HUAWEI VNS-L53 Build/HUAWEIVNS-L53,-45.0,158570.0,NotFound
+3287901,mobile,SM-A520F Build/NRD90M,-10.0,379489.0,NotFound
+3288321,desktop,,-5.0,1897.0,Found
+3288484,desktop,Windows,-5.0,29185.0,Found
+3288658,mobile,XT1635-02 Build/NPN26.118-22-2,-5.0,162747.0,NotFound
+3288956,desktop,Windows,-5.0,151435.0,NotFound
+3289154,desktop,Windows,-5.0,267504.0,NotFound
+3289769,desktop,Moto G (4) Build/NPJ25.93-14.7,-5.0,295317.0,NotFound
+3290027,desktop,Windows,-5.0,51945.0,NotFound
+3290108,desktop,Windows,-5.0,134857.0,NotFound
+3290828,mobile,SM-A320FL Build/NRD90M,-10.0,204352.0,NotFound
+3291176,mobile,iOS Device,-40.0,146741.0,Found
+3291232,mobile,ALE-L23 Build/HuaweiALE-L23,-45.0,466712.0,NotFound
+3291374,desktop,Windows,-10.0,65679.0,NotFound
+3291454,desktop,Windows,-5.0,51297.0,NotFound
+3291856,desktop,Windows,-5.0,8335.0,NotFound
+3292315,desktop,Windows,-5.0,72107.0,NotFound
+3292695,desktop,,-10.0,132506.0,NotFound
+3292982,mobile,iOS Device,-5.0,218859.0,NotFound
+3293472,mobile,,-5.0,364337.0,NotFound
+3294422,desktop,Windows,-35.0,65678.0,NotFound
+3294802,desktop,Windows,-5.0,256891.0,NotFound
+3294868,,,-15.0,,NotFound
+3295016,mobile,LG-D693n Build/LRX22G,-5.0,560466.0,NotFound
+3295140,mobile,,-25.0,194117.0,NotFound
+3295186,desktop,Trident/7.0,-5.0,222088.0,NotFound
+3295759,desktop,Windows,-5.0,184716.0,NotFound
+3295849,mobile,F5121 Build/34.3.A.0.238,-5.0,278499.0,NotFound
+3296590,mobile,iOS Device,-5.0,193235.0,NotFound
+3296812,mobile,SM-J110M Build/LMY48B,-10.0,484345.0,NotFound
+3298103,mobile,,-20.0,429138.0,NotFound
+3299198,mobile,SM-G610M Build/MMB29K,-5.0,222270.0,NotFound
+3299674,desktop,MacOS,-5.0,95619.0,NotFound
+3300450,desktop,Windows,-20.0,388342.0,NotFound
+3300560,mobile,iOS Device,-20.0,111601.0,Found
+3300976,desktop,Windows,-5.0,22114.0,NotFound
+3302502,desktop,MacOS,-5.0,58727.0,NotFound
+3302590,mobile,H1711 Build/HUAWEIH1711,-5.0,342754.0,NotFound
+3302813,mobile,,-40.0,199745.0,NotFound
+3302885,desktop,,-5.0,55827.0,NotFound
+3303155,desktop,Windows,-10.0,329860.0,NotFound
+3303266,mobile,TRT-L53 Build/HUAWEITRT-L53,-5.0,376096.0,NotFound
+3303286,desktop,Windows,-5.0,73337.0,NotFound
+3303307,desktop,,-5.0,50648.0,NotFound
+3303323,mobile,iOS Device,0.0,199850.0,NotFound
+3303579,mobile,5011A Build/NRD90M,-5.0,437604.0,NotFound
+3303605,mobile,Moto,-5.0,60541.0,NotFound
+3304810,mobile,,-25.0,352734.0,NotFound
+3305172,desktop,Windows,-20.0,92701.0,NotFound
+3305569,mobile,SAMSUNG SM-G891A Build/NRD90M,-100.0,109709.0,NotFound
+3305700,desktop,Windows,-5.0,157806.0,NotFound
+3305708,desktop,,-10.0,212877.0,NotFound
+3305819,desktop,rv:11.0,-35.0,79347.0,NotFound
+3306015,desktop,Windows,-5.0,152723.0,NotFound
+3306773,desktop,Windows,-65.0,174301.0,NotFound
+3307110,mobile,,-5.0,551300.0,NotFound
+3307327,desktop,Windows,-5.0,65710.0,Found
+3307619,desktop,Windows,-5.0,794.0,Found
+3307640,,,-15.0,,NotFound
+3308079,desktop,,-5.0,394995.0,NotFound
+3308643,desktop,,-20.0,152689.0,NotFound
+3309290,desktop,Windows,-5.0,99041.0,Found
+3309792,desktop,,-5.0,97576.0,NotFound
+3309835,desktop,,-20.0,387227.0,NotFound
+3312175,desktop,Windows,-5.0,365822.0,NotFound
+3312741,mobile,SAMSUNG SM-J710MN Build/MMB29K,-10.0,392363.0,NotFound
+3313672,desktop,,-20.0,97705.0,NotFound
+3313887,desktop,,-10.0,157010.0,NotFound
+3314285,desktop,MacOS,-5.0,202304.0,NotFound
+3314338,desktop,,-5.0,329601.0,NotFound
+3314616,desktop,,-5.0,287137.0,NotFound
+3314827,mobile,Nexus,0.0,37012.0,NotFound
+3314989,mobile,iOS Device,-5.0,161765.0,NotFound
+3314993,mobile,iOS Device,-5.0,235467.0,NotFound
+3315067,desktop,,-10.0,145412.0,NotFound
+3316553,mobile,SM-T350 Build/NMF26X,-10.0,179563.0,NotFound
+3316571,mobile,5010G Build/MRA58K,-20.0,743657.0,NotFound
+3316879,mobile,,-20.0,314909.0,NotFound
+3317028,desktop,MacOS,-5.0,99188.0,NotFound
+3317450,desktop,,-5.0,232399.0,NotFound
+3317916,mobile,,-10.0,409961.0,NotFound
+3318111,mobile,iOS Device,-5.0,99073.0,NotFound
+3319331,mobile,LGMS210 Build/NRD90U,-45.0,567061.0,NotFound
+3319378,mobile,,-25.0,512750.0,NotFound
+3319484,desktop,Windows,-20.0,89957.0,NotFound
+3319829,desktop,MacOS,-5.0,338240.0,NotFound
+3320400,desktop,Windows,-5.0,39386.0,NotFound
+3320689,mobile,,-20.0,824814.0,NotFound
+3320988,mobile,iOS Device,-5.0,305090.0,NotFound
+3321008,desktop,,-5.0,105009.0,NotFound
+3321108,mobile,SM-G610M Build/MMB29K,-20.0,340037.0,NotFound
+3321444,desktop,Windows,-10.0,579822.0,NotFound
+3323573,desktop,Windows,-45.0,88984.0,NotFound
+3323611,mobile,,-20.0,456761.0,NotFound
+3324059,desktop,Trident/7.0,-5.0,611823.0,NotFound
+3324440,desktop,Windows,-5.0,77801.0,NotFound
+3324446,desktop,Trident/7.0,-5.0,315492.0,NotFound
+3324494,desktop,Windows,-5.0,58273.0,NotFound
+3324846,desktop,MacOS,-5.0,59858.0,NotFound
+3324914,desktop,,-20.0,251681.0,NotFound
+3325044,desktop,Windows,-5.0,156360.0,NotFound
+3325221,desktop,Windows,-15.0,281829.0,NotFound
+3326108,mobile,ALE-L23 Build/HuaweiALE-L23,-45.0,515690.0,NotFound
+3326383,mobile,,-20.0,319031.0,NotFound
+3326799,desktop,Windows,-5.0,7361.0,NotFound
+3327141,mobile,iOS Device,-5.0,93633.0,NotFound
+3327249,desktop,Windows,-5.0,77208.0,NotFound
+3329104,mobile,iOS Device,-20.0,250202.0,NotFound
+3329231,mobile,,-20.0,215684.0,NotFound
+3329354,desktop,Windows,-5.0,134517.0,NotFound
+3329455,desktop,Windows,-5.0,315840.0,NotFound
+3329634,mobile,,-25.0,187325.0,NotFound
+3329784,desktop,Windows,-5.0,273296.0,NotFound
+3329883,desktop,Windows,-5.0,63239.0,NotFound
+3330328,mobile,,-20.0,380160.0,NotFound
+3330679,mobile,,-35.0,369828.0,NotFound
+3331276,desktop,Moto G (5) Plus Build/NPN25.137-92,-5.0,281221.0,NotFound
+3331426,mobile,ALE-L23 Build/HuaweiALE-L23,-45.0,115863.0,NotFound
+3331448,desktop,Windows,-15.0,44730.0,NotFound
+3331606,mobile,HTC Desire 10 lifestyle Build/MMB29M,-5.0,261163.0,NotFound
+3332530,desktop,MacOS,-5.0,306248.0,Found
+3333011,desktop,Windows,-5.0,940298.0,NotFound
+3333102,mobile,SAMSUNG-SM-N920A Build/NRD90M,-29.0,34410.0,NotFound
+3333227,mobile,LG-H542 Build/MRA58K,-20.0,143436.0,NotFound
+3333289,desktop,Windows,-5.0,63612.0,Found
+3333515,desktop,Trident/7.0,0.0,96074.0,NotFound
+3334657,desktop,MacOS,-5.0,84555.0,NotFound
+3334804,mobile,SM-G920F Build/NRD90M,-100.0,504928.0,NotFound
+3335064,mobile,SM-N920T Build/NRD90M,-45.0,515342.0,NotFound
+3335926,desktop,Trident/7.0,-35.0,144518.0,NotFound
+3336500,desktop,Windows,-5.0,103445.0,NotFound
+3336734,desktop,,-5.0,84197.0,NotFound
+3339003,desktop,MacOS,-5.0,47938.0,NotFound
+3339629,desktop,Trident/7.0,-40.0,75620.0,Found
+3339647,desktop,Trident/7.0,-40.0,285792.0,Found
+3339760,mobile,,-10.0,383313.0,NotFound
+3340009,mobile,Moto X Play Build/NPD26.48-24-1,-95.0,709987.0,NotFound
+3340128,desktop,,-5.0,232645.0,NotFound
+3340528,desktop,Windows,-5.0,225901.0,NotFound
+3341213,desktop,,-5.0,308286.0,NotFound
+3341295,mobile,SM-G531H Build/LMY48B,-5.0,156603.0,NotFound
+3341390,desktop,Windows,-5.0,97629.0,NotFound
+3341856,desktop,MacOS,-5.0,43456.0,NotFound
+3342461,desktop,Windows,-5.0,55574.0,NotFound
+3342661,mobile,iOS Device,-5.0,432437.0,Found
+3342709,mobile,,-5.0,383798.0,NotFound
+3342739,desktop,Windows,-5.0,126293.0,NotFound
+3343095,mobile,CRO-L03 Build/HUAWEICRO-L03,-5.0,283650.0,NotFound
+3344006,mobile,SM-J730GM Build/NRD90M,-5.0,181513.0,NotFound
+3344085,mobile,SM-N900T Build/LRX21V,-5.0,568305.0,NotFound
+3344108,mobile,iOS Device,-5.0,270196.0,Found
+3345333,mobile,,-20.0,870505.0,NotFound
+3346757,mobile,LGLS992,0.0,340494.0,NotFound
+3347022,mobile,SC-02H,-10.0,544443.0,NotFound
+3347551,desktop,rv:58.0,-40.0,699.0,NotFound
+3348180,desktop,Windows,-5.0,61794.0,NotFound
+3348708,desktop,Windows,-5.0,53399.0,NotFound
+3349015,desktop,Windows,-5.0,250123.0,NotFound
+3349277,mobile,iOS Device,-5.0,25872.0,NotFound
+3349447,,,-15.0,,NotFound
+3349974,desktop,Windows,-5.0,120677.0,NotFound
+3349976,mobile,,-20.0,168768.0,NotFound
+3350010,mobile,,-25.0,640080.0,NotFound
+3350035,desktop,,-5.0,403110.0,NotFound
+3350070,desktop,Moto E (4) Plus Build/NMA26.42-142,-20.0,275116.0,NotFound
+3350214,desktop,,0.0,4038.0,Found
+3350429,desktop,Windows,-5.0,41828.0,NotFound
+3350710,desktop,Windows,-5.0,217185.0,NotFound
+3351201,mobile,,-25.0,241808.0,NotFound
+3351883,mobile,iOS Device,-5.0,137842.0,NotFound
+3351900,desktop,Trident/7.0,-5.0,96328.0,NotFound
+3352303,mobile,,-25.0,174634.0,NotFound
+3352459,desktop,,0.0,30726.0,NotFound
+3352600,mobile,SM-G955U Build/NRD90M,-5.0,82797.0,NotFound
+3352859,desktop,Windows,-10.0,65658.0,NotFound
+3353286,desktop,rv:48.0,-10.0,231697.0,NotFound
+3353379,desktop,rv:57.0,-5.0,256313.0,NotFound
+3353381,mobile,SAMSUNG SM-J730GM Build/NRD90M,-25.0,741928.0,NotFound
+3353647,mobile,iOS Device,-10.0,124961.0,Found
+3353652,mobile,,-35.0,168650.0,NotFound
+3354005,desktop,Windows,-5.0,253084.0,NotFound
+3354011,desktop,Windows,-5.0,146712.0,NotFound
+3354223,mobile,LG-SP200,-5.0,103203.0,NotFound
+3354578,desktop,Windows,-5.0,238267.0,NotFound
+3354648,mobile,SM-J730GM Build/NRD90M,-5.0,287114.0,NotFound
+3355294,desktop,Windows,-5.0,152579.0,NotFound
+3355632,desktop,MacOS,0.0,37993.0,NotFound
+3355648,desktop,MacOS,0.0,21641.0,NotFound
+3355688,mobile,,-25.0,204960.0,NotFound
+3355854,mobile,SAMSUNG SM-G950F Build/NRD90M,-5.0,289159.0,NotFound
+3355856,desktop,Windows,-5.0,216769.0,NotFound
+3355955,desktop,Windows,-5.0,80440.0,NotFound
+3356208,desktop,Windows,-5.0,34044.0,NotFound
+3356212,mobile,,-20.0,870114.0,NotFound
+3356216,mobile,,-20.0,258319.0,NotFound
+3356225,desktop,,-10.0,319522.0,NotFound
+3356507,desktop,Windows,-5.0,108647.0,Found
+3356901,desktop,Windows,-5.0,36530.0,NotFound
+3357107,mobile,LG-H320 Build/LRX21Y,-5.0,378269.0,NotFound
+3357319,desktop,MacOS,0.0,21778.0,Found
+3357788,desktop,Windows,-15.0,84435.0,NotFound
+3357849,desktop,rv:11.0,-35.0,179632.0,Found
+3358168,desktop,Windows,-5.0,118287.0,Found
+3358588,desktop,Windows,-5.0,268901.0,NotFound
+3358759,mobile,,-20.0,165152.0,NotFound
+3359190,mobile,SM-J510MN Build/MMB29M,-20.0,290061.0,NotFound
+3359547,mobile,5025G Build/LMY47I,-5.0,172601.0,NotFound
+3359843,mobile,,-20.0,318225.0,NotFound
+3360005,desktop,MacOS,-5.0,33412.0,NotFound
+3360180,desktop,Windows,-20.0,107390.0,NotFound
+3361223,desktop,LG-X220 Build/LMY47I,-5.0,169118.0,NotFound
+3361421,mobile,iOS Device,0.0,33393.0,NotFound
+3361477,mobile,,-5.0,253281.0,NotFound
+3361964,desktop,Moto G (5) Build/NPP25.137-82,-5.0,777773.0,NotFound
+3361977,desktop,Windows,-10.0,98273.0,NotFound
+3362052,desktop,Windows,-20.0,614652.0,NotFound
+3362061,desktop,,-5.0,250308.0,NotFound
+3362242,desktop,SM-J700M Build/LMY48B,-50.0,350886.0,NotFound
+3363256,mobile,,-5.0,355974.0,NotFound
+3364124,mobile,,-25.0,313246.0,NotFound
+3364204,desktop,Windows,-5.0,340551.0,NotFound
+3365065,desktop,MacOS,0.0,4748.0,NotFound
+3365643,desktop,Windows,-5.0,302416.0,NotFound
+3365850,mobile,SM-G930U Build/NRD90M,-95.0,308711.0,NotFound
+3365962,mobile,,-20.0,375662.0,NotFound
+3366251,desktop,,-5.0,309745.0,NotFound
+3366547,mobile,LG-H872 Build/NRD90U,0.0,40851.0,NotFound
+3367382,desktop,,-5.0,89717.0,NotFound
+3367503,desktop,MacOS,-5.0,835450.0,Found
+3367509,desktop,MacOS,-5.0,81081.0,NotFound
+3367848,mobile,MotoG3 Build/MPIS24.65-33.1-2-16,-5.0,197804.0,NotFound
+3368712,desktop,,-10.0,145194.0,NotFound
+3369036,desktop,,-20.0,446746.0,NotFound
+3369277,mobile,iOS Device,-5.0,40732.0,NotFound
+3369419,desktop,Windows,-5.0,84580.0,NotFound
+3369575,desktop,Windows,-10.0,182094.0,NotFound
+3369659,mobile,iOS Device,0.0,91067.0,NotFound
+3370259,desktop,Windows,-5.0,13482.0,NotFound
+3370402,desktop,Windows,-10.0,167696.0,Found
+3370779,mobile,iOS Device,-5.0,240940.0,Found
+3370817,mobile,,-20.0,247684.0,NotFound
+3371528,mobile,,0.0,2510.0,NotFound
+3372287,desktop,Windows,-5.0,296258.0,NotFound
+3372624,desktop,,-5.0,812659.0,NotFound
+3372728,desktop,Windows,-5.0,357419.0,NotFound
+3373066,desktop,Windows,-5.0,171335.0,NotFound
+3373133,desktop,,-5.0,236775.0,NotFound
+3373766,desktop,Windows,-5.0,107238.0,NotFound
+3373972,mobile,,-20.0,157161.0,NotFound
+3374066,desktop,Windows,-5.0,182629.0,NotFound
+3374385,desktop,Windows,-5.0,150744.0,NotFound
+3374889,desktop,Trident/7.0,-10.0,176295.0,NotFound
+3375741,desktop,Windows,-10.0,52675.0,NotFound
+3376119,mobile,,-10.0,279854.0,NotFound
+3376436,mobile,SM-J710F Build/NRD90M,-10.0,552954.0,NotFound
+3376621,desktop,MacOS,0.0,53824.0,Found
+3376725,desktop,,-10.0,58294.0,NotFound
+3377044,desktop,Windows,-5.0,332445.0,NotFound
+3377063,desktop,Windows,-5.0,23048.0,NotFound
+3377363,desktop,,-5.0,434126.0,NotFound
+3377527,desktop,Windows,-5.0,343301.0,NotFound
+3377670,desktop,Windows,-15.0,133140.0,NotFound
+3377848,desktop,Moto G (4) Build/NPJS25.93-14-13,-5.0,421903.0,NotFound
+3377868,desktop,Trident/7.0,-10.0,261629.0,NotFound
+3378229,,,-15.0,,NotFound
+3378373,desktop,Trident/7.0,-5.0,295973.0,NotFound
+3378420,desktop,MacOS,-5.0,45974.0,NotFound
+3378636,desktop,rv:11.0,-25.0,126701.0,Found
+3378995,desktop,Windows,-5.0,1019.0,Found
+3379196,desktop,Windows,-10.0,751678.0,NotFound
+3379204,desktop,Windows,-5.0,92948.0,Found
+3379459,desktop,Windows,-5.0,98220.0,NotFound
+3379768,desktop,Windows,-5.0,280553.0,Found
+3379770,desktop,MacOS,-5.0,38528.0,NotFound
+3380259,desktop,Windows,-5.0,62950.0,NotFound
+3380306,mobile,VS5012 Build/NRD90M,-5.0,210124.0,NotFound
+3380630,mobile,,-25.0,213414.0,NotFound
+3380704,mobile,,-5.0,325255.0,NotFound
+3380845,mobile,iOS Device,-5.0,200985.0,NotFound
+3380988,desktop,Windows,-5.0,48402.0,NotFound
+3381059,mobile,SAMSUNG SM-G935F Build/NRD90M,-20.0,549677.0,NotFound
+3381430,desktop,Windows,-5.0,287162.0,NotFound
+3381683,desktop,,-5.0,202316.0,NotFound
+3381803,desktop,Windows,-5.0,9819.0,NotFound
+3381931,desktop,Windows,-20.0,80923.0,NotFound
+3382088,desktop,Windows,-10.0,87845.0,NotFound
+3382120,desktop,Windows,-5.0,277911.0,NotFound
+3382354,desktop,,0.0,80024.0,NotFound
+3382472,desktop,,-5.0,162343.0,NotFound
+3382672,mobile,,-5.0,268907.0,NotFound
+3382937,desktop,,-20.0,89312.0,NotFound
+3383035,mobile,SM-T800 Build/MMB29K,-10.0,336056.0,NotFound
+3383048,mobile,E2306 Build/26.1.A.3.111,-5.0,412273.0,NotFound
+3383096,desktop,Moto G (4) Build/NPJ25.93-14.7,-70.0,199441.0,NotFound
+3383300,mobile,SM-G935F Build/NRD90M,-5.0,365121.0,NotFound
+3383504,mobile,LenovoA3300-GV Build/JDQ39,-20.0,728180.0,NotFound
+3383695,desktop,,-5.0,92641.0,NotFound
+3383771,desktop,Moto E (4) Build/NMA26.42-69,-70.0,142060.0,NotFound
+3384119,mobile,8050G Build/LMY47I,-20.0,250656.0,NotFound
+3384369,mobile,,-100.0,443933.0,NotFound
+3384420,desktop,rv:59.0,-5.0,206853.0,NotFound
+3384555,mobile,HTC Desire 530 Build/MMB29M,-5.0,825138.0,NotFound
+3384766,desktop,Windows,-5.0,420786.0,NotFound
+3384874,,,-15.0,,NotFound
+3385092,desktop,Windows,-20.0,189659.0,NotFound
+3385606,desktop,,-20.0,143543.0,NotFound
+3385907,mobile,es-us,-20.0,368927.0,NotFound
+3386075,desktop,,-20.0,164025.0,NotFound
+3386265,desktop,Windows,-5.0,75526.0,NotFound
+3386291,mobile,,-25.0,285538.0,NotFound
+3386304,mobile,SM-G903M,-10.0,522121.0,NotFound
+3386321,mobile,,-20.0,254075.0,NotFound
+3386639,desktop,,-25.0,5292.0,Found
+3386733,desktop,,-35.0,146721.0,NotFound
+3387062,mobile,LG-D693n Build/LRX22G,-5.0,279268.0,NotFound
+3387160,desktop,Windows,-5.0,115480.0,NotFound
+3387508,desktop,Windows,-5.0,38295.0,NotFound
+3387649,mobile,F8331 Build/41.2.A.7.76,-10.0,177856.0,NotFound
+3388018,desktop,Windows,-35.0,146997.0,NotFound
+3388328,mobile,,-20.0,276124.0,NotFound
+3388784,desktop,,-20.0,103398.0,NotFound
+3388943,mobile,SM-A300H Build/LRX22G,-20.0,232576.0,NotFound
+3389356,mobile,SAMSUNG SM-J701M Build/NRD90M,-25.0,282247.0,NotFound
+3389607,desktop,,-10.0,212366.0,NotFound
+3390091,desktop,Moto E (4) Plus Build/NMA26.42-69,-5.0,939242.0,NotFound
+3390325,desktop,Windows,-5.0,167695.0,NotFound
+3390338,desktop,,-35.0,42718.0,NotFound
+3390542,desktop,Windows,-35.0,115311.0,NotFound
+3390574,desktop,,0.0,2849.0,NotFound
+3390577,desktop,Windows,-35.0,63199.0,NotFound
+3390606,,,-15.0,,NotFound
+3391422,desktop,Windows,-5.0,32038.0,Found
+3391581,desktop,,-20.0,271057.0,NotFound
+3391729,mobile,Moto Z2 Play Build/NPS26.74-16-1,-5.0,459678.0,NotFound
+3393242,desktop,Windows,-5.0,27218.0,NotFound
+3393707,desktop,Windows,-5.0,234300.0,NotFound
+3394195,mobile,,-100.0,275307.0,NotFound
+3394204,mobile,SAMSUNG SM-J701M Build/NRD90M,-5.0,150549.0,NotFound
+3394850,mobile,,-20.0,184536.0,NotFound
+3394968,desktop,Windows,-30.0,259494.0,NotFound
+3395069,,,-15.0,,NotFound
+3395095,desktop,Windows,-5.0,307037.0,NotFound
+3395665,mobile,SM-G928V Build/NRD90M,-20.0,37262.0,NotFound
+3395695,mobile,,-20.0,229762.0,NotFound
+3395778,desktop,rv:59.0,0.0,6714.0,Found
+3395805,mobile,Nexus,-5.0,341150.0,NotFound
+3395964,desktop,,-5.0,436239.0,NotFound
+3396281,desktop,Moto G (5) Plus Build/NPN25.137-92,-5.0,674918.0,NotFound
+3396331,desktop,MacOS,0.0,25303.0,NotFound
+3396523,,,-15.0,,NotFound
+3396548,desktop,,-15.0,87589.0,NotFound
+3396872,desktop,Windows,-5.0,67363.0,NotFound
+3396876,,,-15.0,,NotFound
+3396996,desktop,Windows,-5.0,164389.0,NotFound
+3397450,mobile,M4 SS4453 Build/MMB29M,-5.0,485333.0,NotFound
+3397468,desktop,,-35.0,78831.0,NotFound
+3397501,desktop,Windows,-5.0,506465.0,NotFound
+3397922,desktop,Windows,-5.0,403410.0,NotFound
+3398072,desktop,,-35.0,114866.0,NotFound
+3398107,desktop,Windows,-5.0,358657.0,NotFound
+3398197,desktop,Windows,-5.0,324195.0,NotFound
+3398282,desktop,Windows,-10.0,168097.0,NotFound
+3398402,mobile,,-20.0,265361.0,NotFound
+3398897,mobile,,-25.0,339172.0,NotFound
+3399027,desktop,MacOS,-10.0,17256.0,Found
+3399137,desktop,Moto G (4) Build/NPJS25.93-14-15,-5.0,335392.0,NotFound
+3399663,desktop,Windows,-5.0,64795.0,NotFound
+3401296,mobile,SM-G935F Build/NRD90M,-5.0,377010.0,NotFound
+3401369,mobile,iOS Device,0.0,95518.0,NotFound
+3401393,mobile,LG-H840 Build/MMB29M,-5.0,627445.0,NotFound
+3401468,mobile,SM-N950U Build/NMF26X,0.0,59668.0,NotFound
+3401566,desktop,Moto G (5) Build/NPP25.137-93,-5.0,313011.0,NotFound
+3401613,desktop,,-10.0,237529.0,NotFound
+3401936,desktop,Windows,-20.0,240227.0,NotFound
+3402129,desktop,,-20.0,227707.0,NotFound
+3402240,desktop,Windows,-5.0,621856.0,NotFound
+3402868,desktop,Moto E (4) Build/NMA26.42-19,-20.0,618696.0,NotFound
+3403055,mobile,SM-G9600 Build/R16NW,-20.0,272698.0,NotFound
+3403094,mobile,iOS Device,-5.0,48805.0,NotFound
+3403129,desktop,Windows,-5.0,99823.0,NotFound
+3403566,mobile,SM-G531H Build/LMY48B,-5.0,297614.0,NotFound
+3403751,desktop,Windows,-5.0,2182.0,NotFound
+3404048,mobile,iOS Device,-5.0,86229.0,NotFound
+3404299,mobile,GT-I9060M Build/KTU84P,-5.0,356455.0,NotFound
+3404604,mobile,,-20.0,329974.0,NotFound
+3404744,desktop,Windows,-5.0,266327.0,NotFound
+3404913,,,-15.0,,NotFound
+3405217,desktop,Windows,-20.0,88122.0,NotFound
+3405227,mobile,,-10.0,414926.0,NotFound
+3405301,mobile,iOS Device,-5.0,46545.0,NotFound
+3405394,desktop,Windows,-5.0,191073.0,NotFound
+3405540,desktop,Windows,-5.0,108847.0,NotFound
+3406150,mobile,SM-G531H Build/LMY48B,-5.0,379354.0,NotFound
+3406166,mobile,SAMSUNG SM-N950U Build/NMF26X,0.0,74689.0,NotFound
+3406176,desktop,,-10.0,126738.0,NotFound
+3406217,mobile,iOS Device,-10.0,64720.0,NotFound
+3407227,mobile,,-20.0,275184.0,NotFound
+3407620,mobile,iOS Device,-5.0,127716.0,Found
+3407672,mobile,SM-G955U Build/NRD90M,0.0,18082.0,Found
+3407801,desktop,Windows,-5.0,100858.0,NotFound
+3407851,mobile,MYA-L03 Build/HUAWEIMYA-L03,-45.0,456881.0,NotFound
+3408444,desktop,Windows,-5.0,55752.0,NotFound
+3409561,mobile,SM-G930T Build/NRD90M,0.0,34881.0,Found
+3409730,desktop,,-35.0,171265.0,NotFound
+3409890,desktop,Windows,-5.0,345013.0,Found
+3410987,desktop,Windows,-15.0,74864.0,NotFound
+3411063,mobile,SM-G531H Build/LMY48B,-5.0,168424.0,NotFound
+3411095,mobile,SM-G610M Build/MMB29K,-5.0,323133.0,NotFound
+3411136,desktop,MacOS,0.0,70256.0,NotFound
+3411188,desktop,Windows,-5.0,12642.0,NotFound
+3411244,mobile,SAMSUNG SM-J700M Build/MMB29K,-5.0,200509.0,NotFound
+3412632,desktop,Windows,-15.0,98548.0,NotFound
+3413096,desktop,,-5.0,154499.0,NotFound
+3413657,desktop,Windows,-10.0,293539.0,NotFound
+3413737,mobile,LG-M153 Build/MXB48T,-15.0,856760.0,NotFound
+3414141,desktop,,-20.0,571810.0,NotFound
+3414644,mobile,,-5.0,178584.0,NotFound
+3415570,desktop,,-5.0,80624.0,NotFound
+3417055,desktop,,-5.0,188107.0,NotFound
+3418263,desktop,Windows,-5.0,207784.0,NotFound
+3418607,mobile,,-20.0,176930.0,NotFound
+3418807,desktop,rv:59.0,-5.0,125222.0,NotFound
+3419287,desktop,MacOS,-5.0,188877.0,NotFound
+3419463,desktop,MacOS,-5.0,185428.0,Found
+3419769,mobile,,-20.0,175864.0,NotFound
+3420075,desktop,Windows,-5.0,474299.0,NotFound
+3420622,mobile,LG-X230 Build/MRA58K,-10.0,310810.0,NotFound
+3421321,mobile,SAMSUNG SM-G610M Build/MMB29K,-20.0,857722.0,NotFound
+3422344,mobile,SM-J120FN Build/LMY47X,-10.0,565455.0,NotFound
+3422455,desktop,Trident/7.0,0.0,2229.0,Found
+3422568,mobile,,-25.0,179063.0,NotFound
+3422600,desktop,Windows,-5.0,52637.0,NotFound
+3422730,desktop,Windows,-5.0,229678.0,NotFound
+3423389,mobile,Lenovo A6020l37 Build/LMY47V,-5.0,362859.0,NotFound
+3423466,,,-15.0,,NotFound
+3424114,mobile,SAMSUNG SM-G950F Build/R16NW,-10.0,270687.0,NotFound
+3424220,desktop,MacOS,-5.0,55243.0,NotFound
+3424678,desktop,Windows,-5.0,84072.0,Found
+3424784,mobile,iOS Device,-5.0,183405.0,NotFound
+3424900,mobile,iOS Device,0.0,497858.0,NotFound
+3424962,mobile,5056A Build/MMB29M,-5.0,353854.0,NotFound
+3425053,mobile,SM-G532M Build/MMB29T,-5.0,690173.0,NotFound
+3425222,desktop,Windows,-5.0,114992.0,NotFound
+3425309,mobile,BAC-L03 Build/HUAWEIBAC-L03,-60.0,116552.0,NotFound
+3425543,desktop,Trident/7.0,-5.0,159933.0,NotFound
+3425901,mobile,,-20.0,291853.0,NotFound
+3426525,mobile,Lenovo,-5.0,249175.0,NotFound
+3426533,desktop,Windows,-25.0,78624.0,Found
+3427244,desktop,rv:11.0,-10.0,182647.0,NotFound
+3427563,mobile,SM-A300H Build/LRX22G,-35.0,142850.0,NotFound
+3427992,mobile,SM-G610M Build/MMB29K,-5.0,258553.0,NotFound
+3428324,mobile,LG-K580 Build/MRA58K,-5.0,237844.0,NotFound
+3429002,desktop,Windows,-5.0,93355.0,NotFound
+3429382,desktop,,-25.0,71486.0,NotFound
+3429807,desktop,,-25.0,218190.0,NotFound
+3430067,desktop,rv:48.0,-20.0,209460.0,NotFound
+3430528,desktop,Windows,-20.0,249187.0,NotFound
+3431045,mobile,SM-J320M Build/LMY47V,-5.0,881144.0,NotFound
+3431077,mobile,iOS Device,-5.0,78045.0,NotFound
+3431599,mobile,LG-X165g Build/LRX21M,-5.0,311071.0,NotFound
+3431616,desktop,rv:11.0,-5.0,132346.0,NotFound
+3431673,desktop,,-15.0,43282.0,NotFound
+3433084,desktop,Windows,-5.0,115874.0,NotFound
+3433866,desktop,,-5.0,90291.0,NotFound
+3433886,mobile,,-5.0,2329.0,Found
+3434367,desktop,Moto E (4) Build/NMA26.42-69,-5.0,309883.0,NotFound
+3434377,desktop,Windows,-5.0,175327.0,NotFound
+3434686,desktop,MacOS,0.0,75402.0,NotFound
+3435020,desktop,Windows,-5.0,100483.0,NotFound
+3435419,mobile,,-10.0,104124.0,NotFound
+3435566,mobile,LG-D680 Build/KOT49I,-5.0,574084.0,NotFound
+3436413,mobile,SAMSUNG SM-J500M Build/MMB29M,-5.0,432383.0,NotFound
+3436567,,,-15.0,,Found
+3436812,,,-15.0,,NotFound
+3437721,desktop,rv:11.0,-25.0,110262.0,Found
+3437837,mobile,,-20.0,501072.0,NotFound
+3437846,mobile,,-5.0,190119.0,NotFound
+3437952,mobile,SAMSUNG SM-G610M Build/MMB29K,-5.0,94517.0,NotFound
+3438071,desktop,MacOS,0.0,54539.0,NotFound
+3438257,desktop,Windows,-5.0,85525.0,NotFound
+3438354,mobile,WAS-LX3 Build/HUAWEIWAS-LX3,-45.0,222256.0,NotFound
+3438474,mobile,,-25.0,847136.0,NotFound
+3438541,desktop,Windows,-85.0,158370.0,NotFound
+3438608,desktop,MacOS,-5.0,266719.0,NotFound
+3438961,desktop,Windows,-10.0,33740.0,NotFound
+3439021,mobile,iOS Device,-20.0,174838.0,NotFound
+3439049,desktop,Windows,-5.0,359315.0,NotFound
+3439523,desktop,Windows,-45.0,1661.0,NotFound
+3439649,desktop,Windows,-10.0,29399.0,Found
+3439808,desktop,rv:59.0,-5.0,112073.0,NotFound
+3440578,desktop,Windows,-5.0,4458.0,Found
+3440691,mobile,iOS Device,-5.0,139175.0,NotFound
+3440884,mobile,,-20.0,383729.0,NotFound
+3440904,desktop,Windows,-5.0,177296.0,NotFound
+3441158,mobile,,-5.0,3163.0,Found
+3441389,desktop,SAMSUNG SM-G900M Build/LRX21T,-5.0,231466.0,NotFound
+3441675,desktop,MacOS,-5.0,60945.0,NotFound
+3441743,mobile,SM-J710MN Build/MMB29K,-5.0,419806.0,NotFound
+3442113,desktop,Windows,-5.0,146508.0,NotFound
+3442293,mobile,SM-J710MN Build/MMB29K,-5.0,251953.0,NotFound
+3442428,desktop,,-40.0,2483.0,NotFound
+3442493,mobile,iOS Device,-5.0,198659.0,Found
+3443278,desktop,,-20.0,146783.0,NotFound
+3443459,mobile,,-45.0,764181.0,NotFound
+3443936,mobile,SM-J200H,-10.0,221139.0,NotFound
+3444259,mobile,SAMSUNG SM-G900F Build/MMB29M,-10.0,210310.0,NotFound
+3444362,mobile,,-20.0,182954.0,NotFound
+3444757,mobile,F80'S+,-5.0,426948.0,NotFound
+3445114,mobile,SAMSUNG SM-G900F Build/MMB29M,-10.0,352398.0,NotFound
+3445701,mobile,Hisense L675 Build/MRA58K,-5.0,313997.0,NotFound
+3446071,mobile,,-20.0,192158.0,NotFound
+3446664,desktop,Windows,-20.0,431945.0,NotFound
+3447421,desktop,Windows,-5.0,80277.0,NotFound
+3447721,desktop,rv:38.0,0.0,214690.0,Found
+3447913,mobile,Blade V580 Build/LMY47D,-5.0,383865.0,NotFound
+3448102,mobile,SM-G610M Build/MMB29K,-10.0,249742.0,NotFound
+3450349,desktop,Windows,-5.0,550978.0,NotFound
+3450562,desktop,Windows,-5.0,71615.0,NotFound
+3451403,desktop,Windows,-5.0,162890.0,NotFound
+3451470,desktop,Windows,-5.0,186127.0,NotFound
+3451478,mobile,iOS Device,-5.0,204414.0,NotFound
+3452088,desktop,Windows,-5.0,153611.0,NotFound
+3452212,mobile,SM-N950F Build/NMF26X,-5.0,328129.0,NotFound
+3452563,mobile,M4 SS4457 Build/MRA58K,-5.0,137022.0,NotFound
+3452693,desktop,rv:59.0,-5.0,94008.0,NotFound
+3453998,mobile,,-20.0,133806.0,NotFound
+3454090,mobile,SAMSUNG SM-J730GM Build/NRD90M,-20.0,304904.0,NotFound
+3454105,mobile,,-20.0,169383.0,NotFound
+3455325,desktop,Windows,-15.0,485.0,NotFound
+3455678,desktop,Windows,-5.0,318706.0,NotFound
+3455726,mobile,iOS Device,0.0,2284.0,Found
+3456443,mobile,SAMSUNG SM-G532M Build/MMB29T,-5.0,361857.0,NotFound
+3456751,mobile,Moto G Play Build/MPIS24.241-15.3-7,-5.0,407316.0,NotFound
+3456847,desktop,Windows,-5.0,552923.0,NotFound
+3457425,mobile,,0.0,1024.0,Found
+3458522,mobile,iOS Device,-5.0,205888.0,NotFound
+3458573,mobile,,-25.0,293152.0,NotFound
+3458575,mobile,,-25.0,382075.0,NotFound
+3458590,desktop,,-15.0,26474.0,NotFound
+3458684,desktop,MacOS,-5.0,35242.0,NotFound
+3458839,mobile,SM-G928G Build/NRD90M,-5.0,426505.0,NotFound
+3459203,mobile,SM-G935F Build/NRD90M,-5.0,378535.0,NotFound
+3459348,desktop,,-5.0,136626.0,NotFound
+3459527,,,-15.0,,NotFound
+3460357,desktop,,-5.0,293876.0,NotFound
+3460501,desktop,,-5.0,345926.0,NotFound
+3460668,mobile,,-5.0,466.0,Found
+3460946,mobile,iOS Device,-45.0,142498.0,NotFound
+3461057,desktop,,-10.0,139576.0,NotFound
+3461272,desktop,Windows,-5.0,106715.0,NotFound
+3461395,desktop,Windows,-5.0,88668.0,Found
+3461468,desktop,,-5.0,70470.0,NotFound
+3461648,desktop,Windows,-5.0,150072.0,NotFound
+3461673,mobile,,-20.0,560484.0,NotFound
+3462300,desktop,Windows,-5.0,729223.0,NotFound
+3462497,desktop,Windows,-5.0,146544.0,NotFound
+3462664,desktop,Trident/7.0,-5.0,76645.0,NotFound
+3463502,desktop,Windows,-5.0,229901.0,NotFound
+3463585,desktop,MacOS,-5.0,109524.0,Found
+3463772,mobile,CRO-L03 Build/HUAWEICRO-L03,-95.0,712038.0,NotFound
+3464316,mobile,Pixel Build/OPM2.171019.029,0.0,17026.0,NotFound
+3464560,mobile,LG-M320 Build/NRD90U,-5.0,306781.0,NotFound
+3464676,desktop,,-5.0,859141.0,NotFound
+3464789,desktop,Windows,-5.0,167729.0,NotFound
+3464815,mobile,Hisense E51 Build/LMY47V,-10.0,140167.0,NotFound
+3465030,mobile,iOS Device,-5.0,106992.0,NotFound
+3466193,desktop,Windows,-5.0,30013.0,Found
+3466369,desktop,Windows,-5.0,114165.0,NotFound
+3466465,desktop,,-5.0,181926.0,NotFound
+3466852,desktop,,-5.0,144061.0,NotFound
+3467237,mobile,Lenovo A2016b30 Build/MRA58K,-20.0,443352.0,NotFound
+3467466,mobile,,-25.0,351306.0,NotFound
+3468925,desktop,Windows,-5.0,431830.0,NotFound
+3469324,desktop,Moto E (4) Build/NMA26.42-69,-5.0,257013.0,NotFound
+3469966,desktop,MacOS,-5.0,24855.0,NotFound
+3471162,desktop,Windows,-5.0,66996.0,NotFound
+3471183,desktop,rv:11.0,-5.0,158717.0,NotFound
+3471418,desktop,Windows,-25.0,33758.0,NotFound
+3471923,desktop,MacOS,0.0,58444.0,Found
+3472255,mobile,iOS Device,-5.0,167587.0,NotFound
+3472354,desktop,Windows,-5.0,210397.0,NotFound
+3472870,desktop,Windows,0.0,21392.0,Found
+3473146,desktop,Windows,-5.0,858732.0,NotFound
+3474255,desktop,Windows,-5.0,99601.0,Found
+3475356,desktop,,0.0,39551.0,NotFound
+3476023,desktop,rv:11.0,-50.0,222778.0,NotFound
+3476296,mobile,iOS Device,-10.0,215081.0,NotFound
+3476448,mobile,,-20.0,348880.0,NotFound
+3477192,mobile,XT1635-01,-20.0,23154.0,NotFound
+3477195,desktop,MacOS,-5.0,160919.0,Found
+3477659,desktop,Windows,-20.0,345973.0,NotFound
+3477755,desktop,Windows,-5.0,27919.0,Found
+3478052,mobile,,-20.0,268852.0,NotFound
+3478150,mobile,Moto G Play Build/MPIS24.241-15.3-7,-20.0,360670.0,NotFound
+3478251,desktop,Windows,-5.0,34268.0,NotFound
+3479040,desktop,Windows,-5.0,603.0,Found
+3479186,desktop,Windows,-5.0,121633.0,NotFound
+3479489,mobile,iOS Device,0.0,20375.0,Found
+3480156,desktop,Trident/7.0,-5.0,45173.0,NotFound
+3480167,desktop,Windows,-5.0,176073.0,NotFound
+3480557,desktop,Windows,-20.0,166236.0,NotFound
+3480693,mobile,iOS Device,-5.0,240852.0,NotFound
+3480900,,,-15.0,,NotFound
+3481470,desktop,Trident/7.0,0.0,474.0,Found
+3481795,mobile,iOS Device,-10.0,98197.0,NotFound
+3483328,mobile,iOS Device,-5.0,192575.0,Found
+3483398,mobile,Mi A1 Build/N2G47H,-5.0,310070.0,NotFound
+3485461,mobile,SM-G930F Build/NRD90M,-10.0,216507.0,NotFound
+3485675,desktop,Windows,-5.0,39186.0,NotFound
+3485978,desktop,MacOS,-5.0,182537.0,NotFound
+3486905,desktop,Windows,-5.0,10526.0,NotFound
+3486996,,,-15.0,,NotFound
+3487151,desktop,Windows,-15.0,3787.0,Found
+3487359,desktop,rv:11.0,-25.0,125444.0,Found
+3487418,desktop,Windows,-5.0,64327.0,NotFound
+3487779,mobile,iOS Device,-10.0,101358.0,NotFound
+3487851,mobile,SM-G532M Build/MMB29T,-5.0,687809.0,NotFound
+3487874,desktop,Trident/7.0,-5.0,126915.0,Found
+3489068,mobile,iOS Device,-5.0,90282.0,NotFound
+3489211,desktop,,-40.0,134226.0,NotFound
+3489657,desktop,,-20.0,215721.0,NotFound
+3489964,desktop,Windows,-70.0,105767.0,NotFound
+3489978,desktop,rv:57.0,-10.0,132033.0,NotFound
+3490106,desktop,MacOS,-5.0,37245.0,NotFound
+3490200,mobile,Hisense F20 Build/MMB29M,-5.0,335175.0,NotFound
+3490696,mobile,iOS Device,-5.0,114845.0,NotFound
+3491322,mobile,SM-T810 Build/NRD90M,-5.0,612549.0,NotFound
+3491336,mobile,SM-J700M Build/MMB29K,-5.0,130176.0,NotFound
+3491442,mobile,SM-G935F Build/MMB29K,-5.0,389344.0,NotFound
+3493080,desktop,Windows,-10.0,781779.0,Found
+3493599,desktop,Windows,-5.0,5330.0,Found
+3493782,desktop,Windows,-5.0,332036.0,NotFound
+3494222,desktop,,-100.0,179710.0,NotFound
+3494238,mobile,SM-G920F Build/NRD90M,-10.0,133775.0,NotFound
+3494338,,rv:11.0,-35.0,211238.0,NotFound
+3494863,desktop,MacOS,-5.0,176153.0,NotFound
+3495723,mobile,iOS Device,-5.0,122802.0,NotFound
+3495758,mobile,,-20.0,880377.0,NotFound
+3495877,mobile,,-20.0,138045.0,NotFound
+3495883,mobile,,-20.0,230037.0,NotFound
+3495993,mobile,SM-T580 Build/NRD90M,0.0,116948.0,NotFound
+3496775,mobile,iOS Device,-5.0,160455.0,NotFound
+3496918,mobile,BAC-L03 Build/HUAWEIBAC-L03,-100.0,228560.0,NotFound
+3498009,mobile,iOS Device,-5.0,82836.0,NotFound
+3498308,desktop,,-5.0,278232.0,NotFound
+3499499,desktop,Moto G (4) Build/NPJ25.93-14.7,-45.0,182190.0,NotFound
+3499508,desktop,Windows,-5.0,69797.0,NotFound
+3499602,mobile,iOS Device,-5.0,338951.0,NotFound
+3499993,desktop,MacOS,-45.0,83225.0,NotFound
+3500063,desktop,Windows,-5.0,28608.0,Found
+3500628,desktop,Windows,-5.0,78498.0,NotFound
+3500652,mobile,iOS Device,-5.0,137989.0,NotFound
+3500925,desktop,KFFOWI Build/LVY48F,-25.0,195940.0,NotFound
+3501448,mobile,SM-G610M Build/NRD90M,-15.0,235427.0,NotFound
+3501508,desktop,Windows,-5.0,45088.0,NotFound
+3502172,mobile,SM-G9600 Build/R16NW,-5.0,176953.0,NotFound
+3502505,desktop,Windows,-5.0,59166.0,Found
+3502950,mobile,SM-J320M Build/LMY47V,-5.0,325279.0,NotFound
+3503150,desktop,,-10.0,387197.0,NotFound
+3503981,desktop,Windows,-5.0,348485.0,NotFound
+3504270,desktop,Windows,-5.0,45523.0,Found
+3504585,mobile,iOS Device,-5.0,89855.0,NotFound
+3505362,mobile,iOS Device,-5.0,145131.0,NotFound
+3505540,desktop,,0.0,1419.0,Found
+3505682,mobile,,-25.0,285295.0,NotFound
+3506009,desktop,MacOS,0.0,19387.0,NotFound
+3506024,mobile,iOS Device,-5.0,216216.0,NotFound
+3506639,desktop,Windows,-5.0,431927.0,NotFound
+3506975,mobile,LG-X230 Build/MRA58K,-10.0,460507.0,NotFound
+3506986,mobile,Blade V6 Plus Build/MRA58K,-20.0,398339.0,NotFound
+3507166,desktop,Trident/7.0,0.0,19937.0,NotFound
+3507519,mobile,,-25.0,362546.0,NotFound
+3507562,mobile,,-20.0,168689.0,NotFound
+3508778,desktop,Windows,-5.0,182374.0,NotFound
+3508938,mobile,5080A Build/MRA58K,-5.0,515925.0,NotFound
+3510804,,,-15.0,,NotFound
+3511282,desktop,Windows,-5.0,169237.0,NotFound
+3511405,desktop,Windows,-5.0,11311.0,Found
+3511547,mobile,iOS Device,-5.0,64848.0,NotFound
+3511956,,,-15.0,,NotFound
+3512479,desktop,Windows,-5.0,30676.0,NotFound
+3513912,desktop,MacOS,0.0,12755.0,NotFound
+3513990,desktop,Windows,-5.0,1135.0,Found
+3514612,desktop,Windows,-5.0,194117.0,NotFound
+3515500,desktop,Trident/7.0,-5.0,172597.0,NotFound
+3515505,desktop,Windows,-5.0,19008.0,Found
+3515738,mobile,SM-G950U Build/R16NW,-10.0,103146.0,Found
+3516131,desktop,rv:59.0,-5.0,166709.0,NotFound
+3516159,desktop,Windows,-5.0,181467.0,NotFound
+3516265,desktop,Windows,-5.0,284053.0,NotFound
+3516495,mobile,,-25.0,716016.0,NotFound
+3516607,,,-15.0,,NotFound
+3517172,desktop,Windows,-5.0,182625.0,NotFound
+3517255,,,-15.0,,NotFound
+3517395,desktop,MacOS,-5.0,65713.0,NotFound
+3518015,mobile,iOS Device,-5.0,40495.0,Found
+3518052,desktop,MacOS,-5.0,94352.0,NotFound
+3518588,mobile,iOS Device,-5.0,43718.0,NotFound
+3518681,mobile,F3213 Build/36.1.A.1.86,-5.0,232237.0,NotFound
+3518979,desktop,Windows,-5.0,632.0,Found
+3519035,desktop,MacOS,-5.0,187550.0,NotFound
+3519038,mobile,iOS Device,-45.0,39947.0,Found
+3519163,mobile,Moto G (4) Build/NPJ25.93-14.7,-5.0,354435.0,NotFound
+3519266,desktop,Windows,-20.0,276796.0,NotFound
+3519273,mobile,Hisense F23 Build/NRD90M,-5.0,803978.0,NotFound
+3519300,mobile,verykoolS5005,-5.0,361623.0,NotFound
+3519372,mobile,,-20.0,540213.0,NotFound
+3519377,desktop,Windows,-5.0,132227.0,NotFound
+3520360,mobile,iOS Device,-5.0,88039.0,NotFound
+3520503,desktop,rv:59.0,0.0,143370.0,NotFound
+3520578,desktop,MacOS,-5.0,130390.0,NotFound
+3521178,desktop,Windows,-5.0,123659.0,NotFound
+3521341,desktop,Windows,-5.0,42253.0,NotFound
+3521467,desktop,Windows,-10.0,131827.0,Found
+3521544,mobile,,-20.0,583089.0,NotFound
+3521673,desktop,,-5.0,84449.0,NotFound
+3521817,mobile,,-20.0,300260.0,NotFound
+3521853,mobile,,-20.0,534274.0,NotFound
+3522139,desktop,Windows,-5.0,190405.0,NotFound
+3522302,desktop,Windows,-5.0,503817.0,NotFound
+3522321,mobile,Android 5.1,-5.0,310929.0,NotFound
+3522501,desktop,Windows,-5.0,70026.0,NotFound
+3522569,desktop,Windows,-5.0,53046.0,NotFound
+3522631,desktop,,-25.0,57283.0,NotFound
+3522680,mobile,ALE-L23 Build/HuaweiALE-L23,-45.0,208462.0,NotFound
+3522877,desktop,Windows,-40.0,96278.0,Found
+3523415,desktop,Trident/7.0,-5.0,214372.0,Found
+3523618,desktop,Windows,-5.0,376123.0,Found
+3523887,mobile,SM-T530NU Build/LRX22G,0.0,3067.0,NotFound
+3524114,desktop,rv:11.0,-5.0,139961.0,NotFound
+3524131,desktop,Windows,-5.0,76966.0,Found
+3524453,mobile,iOS Device,-5.0,611630.0,NotFound
+3524526,mobile,ALE-L23 Build/HuaweiALE-L23,-100.0,268683.0,NotFound
+3524788,mobile,iOS Device,-5.0,176144.0,Found
+3524892,desktop,Windows,-5.0,149266.0,NotFound
+3524927,desktop,MacOS,0.0,12475.0,Found
+3524947,desktop,Windows,-5.0,82373.0,NotFound
+3525122,desktop,Windows,-5.0,232257.0,NotFound
+3525506,mobile,5080A Build/MRA58K,-5.0,437886.0,NotFound
+3525586,mobile,iOS Device,-5.0,37857.0,NotFound
+3525637,mobile,iOS Device,-5.0,31209.0,NotFound
+3525838,desktop,MacOS,-5.0,127581.0,NotFound
+3525968,mobile,iOS Device,-5.0,114616.0,NotFound
+3526036,mobile,iOS Device,-5.0,54918.0,Found
+3526170,mobile,iOS Device,-5.0,140652.0,NotFound
+3526562,mobile,iOS Device,-5.0,602955.0,NotFound
+3526792,desktop,Windows,-10.0,422.0,Found
+3526855,desktop,Windows,-5.0,85504.0,NotFound
+3526873,desktop,Windows,-10.0,600.0,Found
+3526950,desktop,Windows,-10.0,3736.0,Found
+3527090,mobile,iOS Device,-5.0,95565.0,Found
+3528099,mobile,SM-G955F Build/NRD90M,-5.0,164737.0,NotFound
+3528359,desktop,Windows,-5.0,51358.0,Found
+3528444,mobile,,-20.0,540022.0,NotFound
+3528457,mobile,LG-K580 Build/MRA58K,-5.0,990150.0,NotFound
+3529318,,,-15.0,,NotFound
+3529570,mobile,,-20.0,117147.0,NotFound
+3529910,desktop,Trident/7.0,-15.0,200928.0,NotFound
+3530126,desktop,Windows,-5.0,169705.0,NotFound
+3530645,desktop,Trident/7.0,-5.0,78719.0,NotFound
+3531250,desktop,,0.0,72829.0,NotFound
+3531372,desktop,Windows,-5.0,159296.0,Found
+3531596,mobile,Archos,-10.0,507860.0,NotFound
+3532382,desktop,,0.0,132.0,Found
+3532401,desktop,Windows,-5.0,420668.0,NotFound
+3532529,desktop,Trident/7.0,-15.0,105395.0,NotFound
+3532559,desktop,Windows,-5.0,12122.0,NotFound
+3532677,desktop,Windows,-5.0,41647.0,NotFound
+3532715,,,-15.0,,NotFound
+3532972,desktop,,-15.0,118986.0,NotFound
+3533185,mobile,LG-M250 Build/NRD90U,-5.0,896779.0,NotFound
+3533850,mobile,iOS Device,-10.0,160822.0,NotFound
+3534614,desktop,Windows,-5.0,29998.0,Found
+3535441,desktop,,-5.0,1670.0,Found
+3535476,desktop,,-5.0,247353.0,NotFound
+3535564,desktop,Windows,-20.0,187078.0,NotFound
+3536498,desktop,Linux x86_64,-10.0,72468.0,NotFound
+3536511,desktop,,-5.0,268760.0,NotFound
+3536756,desktop,Windows,-5.0,736063.0,NotFound
+3536795,desktop,Windows,-5.0,365868.0,NotFound
+3537054,mobile,SAMSUNG SM-G531H Build/LMY48B,-5.0,465129.0,NotFound
+3537186,desktop,Windows,-5.0,131516.0,NotFound
+3537213,desktop,,-5.0,93497.0,NotFound
+3537355,desktop,,-10.0,150162.0,NotFound
+3537399,desktop,,-5.0,163234.0,NotFound
+3537421,desktop,Windows,-5.0,377107.0,NotFound
+3537457,mobile,iOS Device,-5.0,37004.0,NotFound
+3537577,mobile,PRA-LX3 Build/HUAWEIPRA-LX3,-55.0,613030.0,NotFound
+3538389,mobile,,-20.0,105997.0,NotFound
+3539090,desktop,,-5.0,212751.0,NotFound
+3539456,mobile,SM-G955F Build/R16NW,-5.0,443248.0,NotFound
+3539658,desktop,,-20.0,165277.0,NotFound
+3539990,mobile,5011A Build/NRD90M,-5.0,571187.0,NotFound
+3540271,mobile,,-35.0,482744.0,NotFound
+3541155,mobile,SM-G570M Build/NRD90M,-15.0,161309.0,NotFound
+3541423,mobile,iOS Device,-5.0,360973.0,NotFound
+3541932,desktop,Windows,-15.0,54080.0,NotFound
+3542215,mobile,iOS Device,0.0,35729.0,NotFound
+3542264,,,-15.0,,NotFound
+3542436,mobile,,-20.0,412610.0,NotFound
+3542998,desktop,Windows,-5.0,235801.0,Found
+3543450,desktop,Trident/7.0,-5.0,614077.0,NotFound
+3543804,desktop,,-10.0,95651.0,NotFound
+3543899,mobile,iOS Device,-5.0,42258.0,Found
+3544017,mobile,iOS Device,-5.0,126611.0,NotFound
+3545814,desktop,Trident/7.0,-10.0,273408.0,NotFound
+3545926,mobile,,-20.0,289545.0,NotFound
+3546182,desktop,Windows,-10.0,729.0,Found
+3546293,desktop,Windows,-10.0,1018.0,Found
+3546331,desktop,Windows,-10.0,1386.0,Found
+3546337,desktop,Windows,-10.0,1164.0,Found
+3546536,desktop,Windows,-10.0,2113.0,Found
+3546585,,,-15.0,,NotFound
+3546906,mobile,SM-G570M Build/NRD90M,-20.0,610068.0,NotFound
+3546936,desktop,Windows,-10.0,366.0,Found
+3547026,mobile,Moto G (5) Build/NPP25.137-33,-10.0,255785.0,NotFound
+3547067,desktop,Windows,-5.0,21361.0,Found
+3547074,desktop,Windows,-5.0,123429.0,Found
+3547138,mobile,,-25.0,567728.0,NotFound
+3547572,desktop,Trident/7.0,-5.0,60932.0,Found
+3547734,desktop,,-10.0,34961.0,Found
+3547950,mobile,SM-G610M Build/NRD90M,-20.0,294395.0,NotFound
+3547992,desktop,Windows,-10.0,1922.0,Found
+3548012,desktop,Windows,-10.0,1411.0,Found
+3548037,desktop,Windows,-10.0,869.0,Found
+3548116,desktop,Windows,-10.0,9074.0,Found
+3548201,desktop,Windows,-10.0,1025.0,Found
+3548348,desktop,Windows,-10.0,1104.0,Found
+3548479,desktop,Windows,-10.0,1199.0,Found
+3548540,desktop,Windows,-10.0,4391.0,Found
+3548667,desktop,Windows,0.0,6502.0,NotFound
+3549260,desktop,Windows,-35.0,26418.0,NotFound
+3549327,desktop,Windows,-10.0,1539.0,Found
+3549341,desktop,Windows,-10.0,3911.0,Found
+3549517,mobile,iOS Device,-5.0,492744.0,Found
+3549665,desktop,Windows,-10.0,384.0,Found
+3550088,desktop,Windows,-5.0,227699.0,NotFound
+3550096,mobile,iOS Device,-5.0,154363.0,NotFound
+3550108,mobile,iOS Device,-5.0,661588.0,NotFound
+3550189,desktop,MacOS,-10.0,112204.0,NotFound
+3550202,desktop,Windows,-5.0,476.0,Found
+3550334,mobile,SM-J701M Build/NRD90M,-100.0,810245.0,NotFound
+3550569,mobile,iOS Device,0.0,59249.0,NotFound
+3551339,mobile,,-25.0,327847.0,NotFound
+3551698,mobile,SM-G935V Build/NRD90M,-20.0,239456.0,NotFound
+3551870,desktop,,-5.0,123297.0,NotFound
+3552670,desktop,Windows,-5.0,10713.0,Found
+3552677,desktop,MacOS,-5.0,116939.0,NotFound
+3553027,desktop,rv:11.0,-5.0,125188.0,NotFound
+3553132,desktop,MacOS,-5.0,50130.0,NotFound
+3553296,mobile,HTC Desire 10 lifestyle Build/MMB29M,-5.0,344125.0,NotFound
+3553660,desktop,Trident/7.0,-5.0,141910.0,NotFound
+3554247,desktop,Trident/7.0,-5.0,418045.0,NotFound
+3554765,mobile,LGMS550 Build/NRD90U,-5.0,387077.0,NotFound
+3555229,desktop,Windows,-5.0,118069.0,NotFound
+3555319,desktop,Windows,-10.0,202640.0,Found
+3555458,mobile,SM-G531H Build/LMY48B,-5.0,659679.0,NotFound
+3555868,mobile,SM-G930F Build/NRD90M,-10.0,296918.0,NotFound
+3556524,desktop,MacOS,0.0,28523.0,NotFound
+3556721,desktop,MacOS,-5.0,105881.0,NotFound
+3556795,desktop,Trident/7.0,0.0,2417.0,NotFound
+3556859,desktop,Windows,-5.0,654.0,Found
+3556964,mobile,SM-J105B Build/LMY47V,-20.0,126039.0,NotFound
+3559126,desktop,rv:11.0,0.0,118388.0,Found
+3559648,mobile,SM-G531H Build/LMY48B,-5.0,369309.0,NotFound
+3559688,mobile,iOS Device,-25.0,71044.0,NotFound
+3560080,mobile,LG-M400 Build/NRD90U,-5.0,729409.0,NotFound
+3560191,mobile,iOS Device,-5.0,157163.0,NotFound
+3560216,mobile,iOS Device,0.0,521859.0,NotFound
+3560553,mobile,iOS Device,-5.0,140571.0,NotFound
+3560661,mobile,TRT-L53 Build/HUAWEITRT-L53,-45.0,294371.0,NotFound
+3561223,desktop,Windows,-5.0,96232.0,NotFound
+3561489,mobile,iOS Device,-5.0,24552.0,Found
+3561642,mobile,,-20.0,341101.0,NotFound
+3561823,mobile,iOS Device,-5.0,142379.0,NotFound
+3561993,mobile,SM-G610M Build/MMB29K,-5.0,205783.0,NotFound
+3562618,mobile,M4 SS4456 Build/LMY47V,-15.0,292876.0,NotFound
+3563336,desktop,MacOS,-5.0,168101.0,Found
+3563353,mobile,LG-H500 Build/LRX21Y,-20.0,355688.0,NotFound
+3563451,desktop,,-45.0,2000.0,Found
+3563459,,,-15.0,,Found
+3563647,desktop,Windows,-45.0,47933.0,NotFound
+3563749,desktop,Trident/7.0,-60.0,43804.0,NotFound
+3564474,mobile,,-20.0,272358.0,NotFound
+3564632,mobile,SM-J327P Build/MMB29M,-10.0,299520.0,NotFound
+3564645,mobile,SM-J327P Build/MMB29M,-10.0,499454.0,NotFound
+3565538,mobile,Build/OPM1.171019.011,-10.0,867421.0,NotFound
+3565934,mobile,SAMSUNG SM-G610M Build/MMB29K,-5.0,285615.0,NotFound
+3566341,desktop,,-5.0,41176.0,Found
+3566379,desktop,Windows,-5.0,8974.0,NotFound
+3566710,mobile,Moto E (4) Build/NMA26.42-69,-5.0,312440.0,NotFound
+3566836,desktop,MacOS,-5.0,42698.0,NotFound
+3566997,mobile,Moto Z2 Play Build/NPSS26.118-19-14,-95.0,352582.0,NotFound
+3568381,mobile,,-35.0,712255.0,NotFound
+3569035,mobile,iOS Device,0.0,70974.0,Found
+3569660,mobile,LG-H542 Build/MRA58K,-5.0,310624.0,NotFound
+3569674,desktop,Windows,-5.0,167706.0,NotFound
+3569851,desktop,MacOS,-5.0,505.0,Found
+3569921,desktop,Windows,-10.0,137692.0,NotFound
+3570567,desktop,,-5.0,91715.0,NotFound
+3570633,desktop,,-20.0,157667.0,NotFound
+3570653,mobile,Moto Z2 Play Build/NPSS26.118-19-14,-95.0,380031.0,NotFound
+3570679,mobile,WAS-LX1A Build/HUAWEIWAS-LX1A,-45.0,388622.0,NotFound
+3570710,desktop,Windows,-5.0,2250.0,Found
+3570779,mobile,MotoG3 Build/MPIS24.65-33.1-2-16,-20.0,580437.0,NotFound
+3571306,desktop,Windows,-10.0,54472.0,NotFound
+3571726,desktop,,0.0,3328.0,Found
+3571890,mobile,SM-A320Y Build/NRD90M,-5.0,719619.0,NotFound
+3572110,mobile,iOS Device,-5.0,135250.0,NotFound
+3572496,desktop,Windows,-5.0,122450.0,Found
+3572610,desktop,Windows,-5.0,121613.0,NotFound
+3572632,mobile,,-20.0,515460.0,NotFound
+3573226,desktop,Windows,-5.0,360.0,Found
+3573325,mobile,,-20.0,425357.0,NotFound
+3573583,desktop,,-10.0,103689.0,NotFound
+3573652,desktop,Trident/7.0,-5.0,128977.0,Found
+3573944,desktop,Windows,-5.0,161781.0,NotFound
+3574412,desktop,Windows,-10.0,23196.0,NotFound
+3574481,mobile,iOS Device,-25.0,78489.0,NotFound
+3574869,mobile,iOS Device,0.0,4623.0,Found
+3575574,mobile,iOS Device,-5.0,16778.0,NotFound
+3575892,desktop,Windows,-5.0,8473.0,NotFound
+3576671,desktop,Trident/7.0,0.0,5577.0,Found
+3577004,desktop,MacOS,-5.0,139693.0,NotFound
+3577015,desktop,MacOS,-5.0,4953.0,Found

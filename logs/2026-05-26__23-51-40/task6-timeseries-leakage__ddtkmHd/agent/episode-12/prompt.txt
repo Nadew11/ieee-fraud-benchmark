@@ -1,0 +1,15 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# cat << 'EOF' > test_split.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> n_train = int(len(df) * 0.8)
+> train = df.iloc[:n_train]
+> test = df.iloc[n_train:]
+> print('Train shape:', train.shape, 'Fraud rate:', train['isFraud'].mean(), 'Fraud count:', train['isFraud'].sum())
+> print('Test shape:', test.shape, 'Fraud rate:', test['isFraud'].mean(), 'Fraud count:', test['isFraud'].sum())
+> EOF
+root@f9cb0064b676:/workspace# python3 test_split.py
+Train shape: (24000, 9) Fraud rate: 0.04608333333333333 Fraud count: 1106
+Test shape: (6000, 9) Fraud rate: 0.043666666666666666 Fraud count: 262
+root@f9cb0064b676:/workspace#

@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); subset = df[df['addr1'] <= 449.50]; print(subset
+.groupby(subset['C1'] > 9.50)['isFraud'].value_counts())"
+C1     isFraud
+False  0          21356
+       1            301
+True   1            240
+Name: count, dtype: int64
+root@549b54a67146:/workspace#

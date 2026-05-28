@@ -1,0 +1,47 @@
+New Terminal Output:
+
+Fraud with duplicate transaction IDs: 16
+root@b9e5a18b679d:/workspace# cat << 'EOF' > inspect_fraud_dups.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> fraud = df[df.isFraud == 1]
+> dups = fraud[fraud.TransactionID.duplicated(keep=False)].sort_values('TransactionID')
+> print("Total fraud rows with duplicate IDs:", len(dups))
+> print(dups[['TransactionID', 'TransactionAmt', 'currency', 'transaction_date', 'transaction_type', 'settlement_status']])
+> EOF
+root@b9e5a18b679d:/workspace# python3 inspect_fraud_dups.py
+Total fraud rows with duplicate IDs: 32
+      TransactionID  TransactionAmt currency transaction_date transaction_type settlement_status
+6796        3004648          39.400      ETB       2023-10-15         purchase           settled
+929         3004648          38.669      ETB       2023-10-15         purchase           settled
+7260        3107345         102.142      ETB       2023-10-15         purchase           settled
+1304        3107345         106.740      ETB       2023-10-15         purchase           settled
+2264        3144258         175.000      ETB       2023-11-18         purchase           settled
+128         3144258         183.120      ETB       2023-11-18         purchase           settled
+2503        3150070          10.494      USD       2023-10-22         purchase           settled
+4326        3150070          10.450      USD       2023-10-22         purchase           settled
+336         3180745         200.000      USD       2023-12-29         purchase           settled
+7422        3180745         202.000      USD       2023-12-29         purchase           settled
+1378        3186368          49.672      USD       2023-10-31         purchase           settled
+5821        3186368          47.880      USD       2023-10-31         purchase           settled
+525         3257273         152.070      USD       2023-10-27         purchase           settled
+3501        3257273         150.000      USD       2023-10-27         purchase           settled
+1610        3264116          86.340      EUR       2023-12-12         purchase           settled
+6606        3264116          87.000      EUR       2023-12-12         purchase           settled
+302         3274084           8.580      NGN       2023-11-22         purchase           settled
+3646        3274084           8.280      NGN       2023-11-22         purchase           settled
+3902        3290643         427.030      USD       2023-10-28         purchase           settled
+1029        3290643         422.500      USD       2023-10-28         purchase           settled
+5198        3294415         101.450      EUR       2023-11-20         purchase           settled
+4630        3294415         103.681      EUR       2023-11-20         purchase           settled
+7520        3369036          16.070      GBP       2023-12-11         purchase          declined
+2906        3369036          15.951      GBP       2023-12-11         purchase          declined
+6221        3394968          16.313      EUR       2023-11-20         purchase           settled
+3300        3394968          17.120      EUR       2023-11-20         purchase           settled
+3315        3407851         119.994      EUR       2023-10-30         purchase           settled
+1709        3407851         115.210      EUR       2023-10-30         purchase           settled
+5370        3564645          38.118      NGN       2023-12-21         purchase           settled
+2966        3564645          39.070      NGN       2023-12-21         purchase           settled
+1829        3571889         107.950      USD       2023-10-03         purchase           settled
+3618        3571889         108.870      USD       2023-10-03         purchase           settled
+root@b9e5a18b679d:/workspace#

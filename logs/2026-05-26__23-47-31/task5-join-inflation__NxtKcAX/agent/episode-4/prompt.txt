@@ -1,0 +1,30 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# cat << 'EOF' >> test.py
+> print("Identity file NaN DeviceType count:", ident['DeviceType'].isna().sum())
+> inner_merged = pd.merge(trans, ident, on='TransactionID', how='inner')
+> print("Inner joined total fraud count:", inner_merged[inner_merged['isFraud'] == 1].shape[0])
+> print(inner_merged[inner_merged['isFraud'] == 1].groupby('DeviceType', dropna=False).agg(
+>     total_fraud_amount=('TransactionAmt', 'sum'),
+>     fraud_transaction_count=('TransactionAmt', 'count')
+> ))
+> EOF
+root@3532236a873b:/workspace# python3 test.py
+Transactions count: 10000
+Transactions fraud count: 351
+Transactions total fraud amt: 49056.519
+Identity count: 2953
+Unique DeviceTypes: ['mobile' 'desktop' nan]
+Merged fraud with DeviceType:
+            total_fraud_amount  fraud_transaction_count
+DeviceType
+desktop              11283.189                      138
+mobile               10890.288                       94
+NaN                  29634.877                      153
+Identity file NaN DeviceType count: 68
+Inner joined total fraud count: 232
+            total_fraud_amount  fraud_transaction_count
+DeviceType
+desktop              11283.189                      138
+mobile               10890.288                       94
+root@3532236a873b:/workspace#

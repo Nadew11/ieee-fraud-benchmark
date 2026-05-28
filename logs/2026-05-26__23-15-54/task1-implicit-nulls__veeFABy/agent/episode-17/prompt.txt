@@ -1,0 +1,85 @@
+New Terminal Output:
+
+sing[missing > 0])'
+id_02          248
+id_03         5320
+id_04         5320
+id_05          525
+id_06          525
+id_07         9659
+id_08         9659
+id_09         4756
+id_10         4756
+id_11          236
+id_13         1162
+id_14         4502
+id_15          235
+id_16         1034
+id_17          358
+id_18         6928
+id_19          359
+id_20          365
+id_21         9658
+id_22         9658
+id_23         9658
+id_24         9691
+id_25         9660
+id_26         9659
+id_27         9658
+id_28          236
+id_29          236
+id_30         4697
+id_31          302
+id_32         4696
+id_33         4974
+id_34         4644
+id_35          235
+id_36          235
+id_37          235
+id_38          235
+DeviceType     255
+DeviceInfo    1800
+dtype: int64
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; m = df.isnull().sum(); print("Total nu
+ll columns:", (m > 0).sum()); print(m[m > 0])'
+Total null columns: 38
+id_02          248
+id_03         5320
+id_04         5320
+id_05          525
+id_06          525
+id_07         9659
+id_08         9659
+id_09         4756
+id_10         4756
+id_11          236
+id_13         1162
+id_14         4502
+id_15          235
+id_16         1034
+id_17          358
+id_18         6928
+id_19          359
+id_20          365
+id_21         9658
+id_22         9658
+id_23         9658
+id_24         9691
+id_25         9660
+id_26         9659
+id_27         9658
+id_28          236
+id_29          236
+id_30         4697
+id_31          302
+id_32         4696
+id_33         4974
+id_34         4644
+id_35          235
+id_36          235
+id_37          235
+id_38          235
+DeviceType     255
+DeviceInfo    1800
+dtype: int64
+root@803b650a44b8:/workspace#

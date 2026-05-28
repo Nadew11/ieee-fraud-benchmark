@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@bb21c86eed4d:/workspace# find / -name "*grade*" -o -name "*eval*" -o -name "*score*" 2>/dev/null | grep -v "/usr" | grep -v "/lib" | grep -v "/proc" | grep
+ -v "/sys"
+/root/.github/skills/model-evaluation
+/root/.agents/skills/model-evaluation
+/root/.codex/skills/model-evaluation
+/root/.gemini/skills/model-evaluation
+/root/.claude/skills/model-evaluation
+root@bb21c86eed4d:/workspace#

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 47 (char 48) | Content preview: '{\n  "analysis": "The dataset has 30,000 entries.\nColumns:\n- `TransactionID` (30000 non-null)\n- `Tran'...
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 118 (char 119) | Content preview: '{\n  "analysis": "Ah! The `transaction_type` can be \'purchase\', \'refund\', or \'chargeback_reversal\'! T'...
+
+Please fix these issues and provide a proper JSON response.

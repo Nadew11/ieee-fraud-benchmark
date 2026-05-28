@@ -1,0 +1,41 @@
+Current Terminal Screen:
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+/workspace/test_fees.py:8: UserWarning: Boolean Series key will be reindexed to match DataFrame index.
+  sub = fx[fx.currency == c][fx.date <= d]
+Merchant categories count in df: merchant_category
+retail           2512
+digital_goods    2075
+travel           1248
+crypto           1044
+gambling          907
+atm               671
+Name: count, dtype: int64
+root@b9e5a18b679d:/workspace#

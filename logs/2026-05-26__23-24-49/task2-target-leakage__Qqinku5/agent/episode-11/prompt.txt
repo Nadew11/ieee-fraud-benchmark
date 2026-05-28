@@ -1,0 +1,22 @@
+New Terminal Output:
+
+root@bb21c86eed4d:/workspace# python3 -c "
+> import pandas as pd
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> df = pd.read_csv('/data/train_transaction.csv')
+> X = df.drop(columns=['isFraud', 'TransactionID', 'chargeback_amount', 'fraud_score', 'days_to_chargeback'])
+> y = df['isFraud']
+> for c in X.select_dtypes(include=['object']).columns:
+>     X[c] = X[c].astype('category')
+>
+> X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+> model = xgb.XGBClassifier(n_estimators=100, enable_categorical=True, random_state=42)
+> model.fit(X_train, y_train)
+> probs = model.predict_proba(X_val)[:, 1]
+> print('AUC without target-leak columns:', roc_auc_score(y_val, probs))
+> "
+AUC without target-leak columns: 0.8928753047945652
+root@bb21c86eed4d:/workspace#

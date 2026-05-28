@@ -1,0 +1,58 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# python3 -c "import pandas as pd; print('Pandas imported successfully')"
+Pandas imported successfully
+root@27e59b3c4e79:/workspace# cat << 'EOF' > inspect_data.py
+> import pandas as pd
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+>
+> # Let's map test columns from - to _ so they match
+> test_cols_mapped = [c.replace('-', '_') for c in test.columns]
+> test.columns = test_cols_mapped
+>
+> print("Are mapped columns identical (excluding isFraud)?", set(train.columns) - {'isFraud'} == set(test.columns))
+> print("Train cols not in test:", set(train.columns) - set(test.columns))
+> print("Test cols not in train:", set(test.columns) - set(train.columns))
+>
+> # Let's look at numerical vs categorical
+> cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+> print("Categorical columns:", cat_cols)
+>
+> for col in cat_cols:
+>     if col in test.columns:
+>         train_unique = set(train[col].dropna().unique())
+>         test_unique = set(test[col].dropna().unique())
+>         diff_train_test = train_unique - test_unique
+>         diff_test_train = test_unique - train_unique
+>         if diff_train_test or diff_test_train:
+>             print(f"Column {col} has mismatch:")
+>             print(f"  In train but not test: {list(diff_train_test)[:5]}")
+>             print(f"  In test but not train: {list(diff_test_train)[:5]}")
+>
+> EOF
+root@27e59b3c4e79:/workspace# python3 inspect_data.py
+Are mapped columns identical (excluding isFraud)? True
+Train cols not in test: {'isFraud'}
+Test cols not in train: set()
+Categorical columns: ['id_12', 'id_15', 'id_16', 'id_23', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'De
+viceType', 'DeviceInfo']
+Column id_27 has mismatch:
+  In train but not test: ['NotFound']
+  In test but not train: []
+Column id_30 has mismatch:
+  In train but not test: ['Mac OS X 10_12_5', 'Android 5.0', 'Mac OS X 10.10', 'Android 6.0', 'Android 5.0.2']
+  In test but not train: ['other', 'Windows']
+Column id_31 has mismatch:
+  In train but not test: ['samsung browser 4.0', 'mobile safari uiwebview', 'firefox 47.0', 'chrome 46.0 for android', 'opera']
+  In test but not train: ['icedragon', 'samsung browser 3.3', 'google search application 48.0', 'Cherry', 'firefox 55.0']
+Column id_33 has mismatch:
+  In train but not test: ['1344x840', '1600x899', '1280x960', '2049x1536', '5760x3240']
+  In test but not train: ['3600x2250', '3843x2163', '1440x803', '1680x945', '3839x2160']
+Column id_34 has mismatch:
+  In train but not test: []
+  In test but not train: ['match_status:-1']
+Column DeviceInfo has mismatch:
+  In train but not test: ['K88 Build/MMB29M', 'SM-G955U1 Build/R16NW', 'LG-H910 Build/NRD90M', 'XT1254 Build/MCG24.251-5-5', '5056A Build/MMB29M']
+  In test but not train: ['SAMSUNG-SM-G920A Build/MMB29K', 'Moto Z2 Play Build/NPSS26.118-19-6', 'S471', 'SM-G935V', 'SAMSUNG SM-G900M Build/LRX21T']
+

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 98 (char 99) | Content preview: '{\n  "analysis": "Wait, both are 0?! Why are there no `-999.0` in `id_01` or `\'unknown\'` in `id_12`?\n'...
+
+Please fix these issues and provide a proper JSON response.

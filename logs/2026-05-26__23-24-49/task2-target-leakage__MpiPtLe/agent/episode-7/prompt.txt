@@ -1,0 +1,106 @@
+New Terminal Output:
+
+root@d8276d655354:/workspace# cat << 'EOF' > train.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # Load data
+> df = pd.read_csv('/data/train_transaction.csv')
+> print("Loaded shape:", df.shape)
+>
+> # Separate features and target
+> X = df.drop(columns=['isFraud'])
+> y = df['isFraud']
+>
+> # Keep track of TransactionID for predictions
+> trans_id = X['TransactionID']
+> # Drop TransactionID from features as it's an identifier
+> X = X.drop(columns=['TransactionID'])
+>
+> # Let's identify categorical columns
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+> print("Categorical columns:", cat_cols)
+>
+> # For categorical columns, let's fillna with 'Missing' and convert to category type
+> for col in cat_cols:
+>     X[col] = X[col].fillna('Missing').astype('category')
+>
+> # For numerical columns, XGBoost handles missing values natively, but let's be sure.
+> # If we convert categories to codes or use XGBoost's enable_categorical=True:
+> # Let's use enable_categorical=True since modern XGBoost supports categorical features.
+> # Alternatively, we can use label encoding or one-hot encoding.
+> # Let's write a robust script that encodes categorical features using label encoding to avoid any environment compatibility issues.
+> from sklearn.preprocessing import LabelEncoder
+> label_encoders = {}
+> for col in cat_cols:
+>     le = LabelEncoder()
+>     X[col] = le.fit_transform(X[col].astype(str))
+>
+> # Split 80/20
+> # The prompt says: "Use an 80/20 train/validation split."
+> # Let's use a fixed random state for reproducibility.
+> X_train, X_val, y_train, y_val, idx_train, idx_val = train_test_split(
+>     X, y, trans_id, test_size=0.20, random_state=42, stratify=y
+> )
+>
+> print("Train shape:", X_train.shape)
+> print("Val shape:", X_val.shape)
+>
+> # Train XGBoost Classifier
+> clf = xgb.XGBClassifier(
+>     n_estimators=500,
+>     learning_rate=0.05,
+>     max_depth=6,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     eval_metric='auc'
+> )
+>
+> clf.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=50)
+>
+> # Predict
+> val_preds = clf.predict_proba(X_val)[:, 1]
+>
+> # Calculate AUC
+> auc_score = roc_auc_score(y_val, val_preds)
+> print("Validation AUC:", auc_score)
+>
+> # Save predictions
+> predictions_df = pd.DataFrame({
+>     'TransactionID': idx_val,
+>     'fraud_prob': val_preds
+> })
+> predictions_df.to_csv('/output/predictions.csv', index=False)
+> print("Saved predictions to /output/predictions.csv")
+>
+> # Save AUC to /output/auc.txt
+> with open('/output/auc.txt', 'w') as f:
+>     f.write(f"{auc_score:.6f}")
+> print("Saved AUC to /output/auc.txt")
+>
+> EOF
+root@d8276d655354:/workspace# python3 train.py
+Loaded shape: (15000, 58)
+Categorical columns: ['ProductCD', 'card4', 'card6', 'P_emaildomain', 'R_emaildomain', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9']
+Train shape: (12000, 56)
+Val shape: (3000, 56)
+[0]     validation_0-auc:1.00000
+[50]    validation_0-auc:1.00000
+[100]   validation_0-auc:1.00000
+[150]   validation_0-auc:1.00000
+[200]   validation_0-auc:1.00000
+[250]   validation_0-auc:1.00000
+[300]   validation_0-auc:1.00000
+[350]   validation_0-auc:1.00000
+[400]   validation_0-auc:1.00000
+[450]   validation_0-auc:1.00000
+[499]   validation_0-auc:1.00000
+Validation AUC: 1.0
+Saved predictions to /output/predictions.csv
+Saved AUC to /output/auc.txt
+root@d8276d655354:/workspace#

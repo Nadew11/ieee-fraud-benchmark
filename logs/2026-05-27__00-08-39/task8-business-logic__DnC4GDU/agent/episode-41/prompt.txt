@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# python3 test_original_order.py
+Size: 263
+Gross Sum: 30212.56
+Fee Sum: 1021.5800000000002
+Gross Sum (keeplast): 30218.52
+Fee Sum (keeplast): 1021.8200000000002
+root@cf0db7aa8136:/workspace#
+root@cf0db7aa8136:/workspace#

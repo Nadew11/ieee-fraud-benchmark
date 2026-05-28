@@ -1,0 +1,47 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# python3 analyze_constrained.py
+Number of thresholds satisfying capacity: 3572
+
+Best Constrained Threshold:
+threshold               6.440000e-01
+tp                      1.120000e+02
+fp                      1.290000e+02
+fn                      8.100000e+01
+tn                      4.743000e+03
+flagged                 2.410000e+02
+q_flagged               1.332280e+05
+daily_alerts            1.480312e+03
+q_investigation_cost    4.662981e+06
+q_fraud_loss            1.880671e+08
+q_total_cost            1.927301e+08
+Name: 6440, dtype: float64
+
+Baseline (No Model deployed, t=1.0) metrics:
+threshold               1.000000e+00
+tp                      0.000000e+00
+fp                      0.000000e+00
+fn                      1.930000e+02
+tn                      4.872000e+03
+flagged                 0.000000e+00
+q_flagged               0.000000e+00
+daily_alerts            0.000000e+00
+q_investigation_cost    0.000000e+00
+q_fraud_loss            4.481106e+08
+q_total_cost            4.481106e+08
+Name: 10000, dtype: float64
+
+Junior Analyst's proposed threshold (0.5) metrics:
+threshold               5.000000e-01
+tp                      1.440000e+02
+fp                      5.540000e+02
+fn                      4.900000e+01
+tn                      4.318000e+03
+flagged                 6.980000e+02
+q_flagged               3.858638e+05
+daily_alerts            4.287375e+03
+q_investigation_cost    1.350523e+07
+q_fraud_loss            1.137690e+08
+q_total_cost            1.272742e+08
+Name: 5000, dtype: float64
+root@831ed0f33a44:/workspace#

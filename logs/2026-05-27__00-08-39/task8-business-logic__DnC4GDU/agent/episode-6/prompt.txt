@@ -1,0 +1,31 @@
+New Terminal Output:
+
+}root@cf0db7aa8136:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print(df.info()); print(df['settlement_status'].uniq
+ue()); print(df['transaction_type'].unique()); print(df['isFraud'].unique())"
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 8457 entries, 0 to 8456
+Data columns (total 15 columns):
+ #   Column             Non-Null Count  Dtype
+---  ------             --------------  -----
+ 0   TransactionID      8457 non-null   int64
+ 1   isFraud            8457 non-null   int64
+ 2   TransactionAmt     8457 non-null   float64
+ 3   ProductCD          8457 non-null   object
+ 4   card4              8440 non-null   object
+ 5   card6              8441 non-null   object
+ 6   addr1              7492 non-null   float64
+ 7   addr2              7492 non-null   float64
+ 8   transaction_date   8457 non-null   object
+ 9   timestamp          8457 non-null   object
+ 10  currency           8457 non-null   object
+ 11  country_code       8457 non-null   object
+ 12  merchant_category  8457 non-null   object
+ 13  settlement_status  8457 non-null   object
+ 14  transaction_type   8457 non-null   object
+dtypes: float64(3), int64(2), object(10)
+memory usage: 991.2+ KB
+None
+['settled' 'declined' 'pending']
+['purchase' 'chargeback_reversal' 'refund']
+[0 1]
+root@cf0db7aa8136:/workspace#

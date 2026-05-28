@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@d8276d655354:/workspace# head -n 5 /output/predictions.csv
+TransactionID,fraud_prob
+3476394,0.01803385
+3053569,0.0056095524
+3353921,0.0023596552
+3516024,0.003446759
+root@d8276d655354:/workspace# cat /output/auc.txt
+0.899604root@d8276d655354:/workspace#

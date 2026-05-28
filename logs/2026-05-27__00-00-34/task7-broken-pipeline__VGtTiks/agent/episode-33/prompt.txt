@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 114 (char 115) | Content preview: '{\n  "analysis": "Wait! Let\'s examine the values of `V1` to `V5`. They look like continuous random fl'...
+
+Please fix these issues and provide a proper JSON response.

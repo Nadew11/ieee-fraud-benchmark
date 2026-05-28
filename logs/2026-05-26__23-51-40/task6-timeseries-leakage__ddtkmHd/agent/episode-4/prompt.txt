@@ -1,0 +1,24 @@
+New Terminal Output:
+
+python3 -c "import lightgbm; print('lgb ok')" 2>/dev/null || python3 -c "import xgboost; print('xgb ok')" 2>/dev/null || echo "neither lgb nor xgb"
+pandas & sklearn ok
+root@f9cb0064b676:/workspace# python3 -c "import lightgbm; print('lgb ok')" 2>/dev/null || python3 -c "import xgboost; print('xgb ok')" 2>/dev/null || echo "nei
+ther lgb nor xgb"
+xgb ok
+
+root@f9cb0064b676:/workspace#
+root@f9cb0064b676:/workspace#
+
+
+
+
+
+
+
+
+
+
+
+
+
+

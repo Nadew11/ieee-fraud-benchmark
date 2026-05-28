@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# python3 -c "import pandas as pd; tx=pd.read_csv('/data/transactions.csv'); ident=pd.read_csv('/data/identity.csv'); print('tx uniq
+ue TransIDs:', tx['TransactionID'].nunique(), 'len:', len(tx)); print('ident unique TransIDs:', ident['TransactionID'].nunique(), 'len:', len(ident))"
+tx unique TransIDs: 10000 len: 10000
+ident unique TransIDs: 2461 len: 2953
+root@10499a3d6cec:/workspace#

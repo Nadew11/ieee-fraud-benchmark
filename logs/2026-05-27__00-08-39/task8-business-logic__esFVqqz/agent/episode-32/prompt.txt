@@ -1,0 +1,33 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > check_fx.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+>
+> trans_cd = set(zip(df.currency, df.transaction_date))
+> fx_cd = set(zip(fx.currency, fx.date))
+>
+> missing = trans_cd - fx_cd
+> print("Missing direct matches:", len(missing))
+> for c, d in sorted(list(missing))[:15]:
+>     print(f"{c} on {d}")
+> EOF
+root@b9e5a18b679d:/workspace# python3 check_fx.py
+Missing direct matches: 223
+ETB on 2023-09-08
+ETB on 2023-09-14
+ETB on 2023-10-01
+ETB on 2023-10-07
+ETB on 2023-10-08
+ETB on 2023-10-09
+ETB on 2023-10-14
+ETB on 2023-10-15
+ETB on 2023-10-21
+ETB on 2023-10-22
+ETB on 2023-10-28
+ETB on 2023-10-29
+ETB on 2023-11-04
+ETB on 2023-11-05
+ETB on 2023-11-11
+root@b9e5a18b679d:/workspace#

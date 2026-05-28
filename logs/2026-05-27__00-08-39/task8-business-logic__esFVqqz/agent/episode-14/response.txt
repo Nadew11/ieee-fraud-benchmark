@@ -1,0 +1,12 @@
+{
+  "analysis": "Ah! The `transaction_type` can be 'purchase', 'refund', or 'chargeback_reversal'! This explains a lot!
+Let's see: 'Net fraud loss is defined as: gross fraud amount minus recoveries (refunds, chargebacks reversed) minus processing fees on fraud transactions.'
+Wait, does it mean that 'gross fraud' is the sum of fraud purchase transactions, and 'recoveries' is the sum of refund and chargeback_reversal transactions that are marked as fraud (or are they separate)? Or does it apply to all fraud transactions? Let's check how the columns are populated. Let's see the unique combinations of `isFraud` and `transaction_type`.",
+  "plan": "Check the count of combinations of `isFraud` and `transaction_type` for settled transactions (excluding declined).",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df=pd.read_csv('/data/transactions.csv'); print(df.groupby(['isFraud', 'transaction_type', 'settlement_status']).size())\"\n",
+      "duration": 1.0
+    }
+  ]
+}

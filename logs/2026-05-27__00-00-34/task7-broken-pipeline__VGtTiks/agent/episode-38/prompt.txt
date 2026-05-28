@@ -1,0 +1,17 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_overlap.py
+> import pandas as pd
+> df = pd.read_csv('/data/train_transaction.csv').sort_values('TransactionDT').reset_index(drop=True)
+> split_idx = int(len(df) * 0.8)
+> train_df = df.iloc[:split_idx]
+> val_df = df.iloc[split_idx:]
+>
+> train_fraud_cards = set(train_df[train_df['isFraud'] == 1]['card1'])
+> val_fraud_df = val_df[val_df['isFraud'] == 1]
+> overlap = val_fraud_df['card1'].isin(train_fraud_cards).mean()
+> print(f'Fraction of validation fraud cases with card1 in training fraud cases: {overlap:.4f}')
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_overlap.py
+Fraction of validation fraud cases with card1 in training fraud cases: 0.0868
+root@0d5e255b62ea:/workspace#

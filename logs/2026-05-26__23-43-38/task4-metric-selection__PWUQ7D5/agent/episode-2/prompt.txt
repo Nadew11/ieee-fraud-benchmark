@@ -1,0 +1,63 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat /data/cost_assumptions.txt
+Fraud Operations - Cost Parameters (Q1 2026)
+
+Average loss per undetected fraud case:     $4,200
+Cost per manual investigation (per alert):  $35
+Daily review team capacity:                 1,500 alerts/day
+Quarterly transaction volume:               2,800,000
+
+Notes:
+  - Investigation cost includes analyst time ($28/hr avg) plus tooling overhead.
+  - Review capacity assumes current team of 12 analysts, 8-hour shifts.
+  - Parameters validated by Finance in Q4 2025 budget review.
+root@a7f99ad36897:/workspace# cat /data/dataset_info.txt
+Dataset: Fraud Detection Model - Holdout Evaluation Export
+Source: IEEE-CIS transaction scoring pipeline v4.2.1
+Export date: 2026-05-01
+
+Overall Statistics (as exported):
+  Columns: TransactionID, y_true, y_pred_prob, scored_at, batch_id
+  Model: XGBoost v2.0.3, trained on Q1-Q3 2025 data
+  Scoring period: January 15 - April 30, 2026
+
+Note: This export was generated from the raw scoring pipeline output
+and has not been pre-processed or filtered. The export contains all
+scored records from the evaluation period.
+
+Fraud labels (y_true) are finalized after chargeback window closure
+(45 days). Labels in this export are considered final.root@a7f99ad36897:/workspace# cat /data/draft_evaluation.txt
+DRAFT - Model Performance Evaluation
+Prepared by: Alex Chen (Junior Data Analyst)
+Date: 2026-05-15
+Status: Pending review
+
+Executive Summary:
+The XGBoost fraud detection model was evaluated against 5,650 held-out
+transactions. The model demonstrates strong performance across key metrics.
+
+Performance Metrics:
+  Accuracy:  88.3%
+  AUC-ROC:   0.9182
+
+The model correctly classifies 88.3% of all transactions and achieves
+an AUC of 0.9182, which exceeds our deployment threshold of 0.80.
+
+Confusion Matrix (threshold = 0.5):
+  True Positives:      194
+  False Positives:     604
+  False Negatives:      57
+  True Negatives:    4,795
+
+Recommendation:
+Based on the strong AUC of 0.9182 and accuracy of 88.3%,
+this model meets our performance targets and is recommended for production
+deployment. No further tuning is required.
+
+Methodology:
+  - Loaded predictions export (5,650 rows)
+  - Computed AUC-ROC using sklearn.metrics.roc_auc_score
+  - Applied threshold of 0.5 for binary classification metrics
+  - Compared against deployment targets (AUC > 0.80, Accuracy > 95%)
+root@a7f99ad36897:/workspace#

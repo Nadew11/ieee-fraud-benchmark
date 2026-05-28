@@ -1,0 +1,10 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# ls -la /setup
+total 300
+drwxr-xr-x 1 root root   4096 May 27 03:29 .
+drwxr-xr-x 1 root root   4096 May 27 04:48 ..
+-rw-rw-rw- 1 root root   3532 May 26 19:26 generate_data.py
+-rw-rw-rw- 1 root root 119145 May 26 19:21 source_identity.csv
+-rw-rw-rw- 1 root root 169641 May 26 19:21 source_transaction.csv
+root@7e0b471406a5:/workspace#

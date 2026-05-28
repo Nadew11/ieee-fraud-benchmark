@@ -1,0 +1,99 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat << 'EOF' > run_experiments.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # Load and sort
+> df = pd.read_csv('/data/transactions.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> # --- Feature Engineering ---
+>
+> # Cyclical/Temporal features
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+> df['day_of_week'] = (df['TransactionDT'] // 86400) % 7
+>
+> # Historical features per card1
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(999999999)
+> df['card1_cum_amt_mean'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(0)
+> df['card1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_cum_amt_mean'] + 1e-5)
+>
+> # Historical features per card1 + addr1
+> df['card1_addr1'] = df['card1'].astype(str) + '_' + df['addr1'].astype(str)
+> df['card1_addr1_cum_count'] = df.groupby('card1_addr1').cumcount()
+> df['card1_addr1_time_diff'] = df.groupby('card1_addr1')['TransactionDT'].diff().fillna(999999999)
+> df['card1_addr1_cum_amt_mean'] = df.groupby('card1_addr1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(0)
+> df['card1_addr1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_addr1_cum_amt_mean'] + 1e-5)
+>
+> # Target encoding/frequency encoding of high cardinality features
+> # Note: To prevent leakage, frequency of card1/addr1 can be calculated up to the transaction
+> df['card1_freq'] = df.groupby('card1')['TransactionDT'].transform('count')
+> df['addr1_freq'] = df.groupby('addr1')['TransactionDT'].transform('count')
+>
+> # Let's drop strings
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+> features_to_drop = ['TransactionID', 'TransactionDT', 'isFraud', 'card1_addr1']
+> features = [c for c in df.columns if c not in features_to_drop]
+>
+> # Train/Test Split
+> split_idx = int(len(df) * 0.8)
+> train_df = df.iloc[:split_idx]
+> test_df = df.iloc[split_idx:]
+>
+> X_train = train_df[features]
+> y_train = train_df['isFraud']
+> X_test = test_df[features]
+> y_test = test_df['isFraud']
+>
+> # Let's perform a hyperparameter grid search
+> print("Features:", features)
+> print("Number of features:", len(features))
+>
+> for max_depth in [4, 6, 8]:
+>     for lr in [0.03, 0.05, 0.1]:
+>         for subsample in [0.8, 1.0]:
+>             model = xgb.XGBClassifier(
+>                 n_estimators=150,
+>                 max_depth=max_depth,
+>                 learning_rate=lr,
+>                 subsample=subsample,
+>                 colsample_bytree=0.8,
+>                 random_state=42,
+>                 eval_metric='auc'
+>             )
+>             model.fit(X_train, y_train)
+>             preds_train = model.predict_proba(X_train)[:, 1]
+>             preds_test = model.predict_proba(X_test)[:, 1]
+>
+>             auc_train = roc_auc_score(y_train, preds_train)
+>             auc_test = roc_auc_score(y_test, preds_test)
+>             print(f"depth={max_depth}, lr={lr}, sub={subsample} -> Train AUC: {auc_train:.5f}, Test AUC: {auc_test:.5f}")
+> EOF
+root@9da0ecea1a80:/workspace# python3 run_experiments.py
+Features: ['TransactionAmt', 'card1', 'addr1', 'C1', 'C2', 'hour', 'day_of_week', 'card1_cum_count', 'card1_time_diff', 'card1_cum_amt_mean', 'card1_amt_ratio_t
+o_mean', 'card1_addr1_cum_count', 'card1_addr1_time_diff', 'card1_addr1_cum_amt_mean', 'card1_addr1_amt_ratio_to_mean', 'card1_freq', 'addr1_freq', 'ProductCD_H
+', 'ProductCD_R', 'ProductCD_S', 'ProductCD_W']
+Number of features: 21
+depth=4, lr=0.03, sub=0.8 -> Train AUC: 0.87495, Test AUC: 0.86169
+depth=4, lr=0.03, sub=1.0 -> Train AUC: 0.87141, Test AUC: 0.86467
+depth=4, lr=0.05, sub=0.8 -> Train AUC: 0.89045, Test AUC: 0.85867
+depth=4, lr=0.05, sub=1.0 -> Train AUC: 0.87990, Test AUC: 0.86011
+depth=4, lr=0.1, sub=0.8 -> Train AUC: 0.93072, Test AUC: 0.84875
+depth=4, lr=0.1, sub=1.0 -> Train AUC: 0.91509, Test AUC: 0.85461
+depth=6, lr=0.03, sub=0.8 -> Train AUC: 0.88911, Test AUC: 0.85932
+depth=6, lr=0.03, sub=1.0 -> Train AUC: 0.88605, Test AUC: 0.86003
+depth=6, lr=0.05, sub=0.8 -> Train AUC: 0.92321, Test AUC: 0.85697
+depth=6, lr=0.05, sub=1.0 -> Train AUC: 0.90184, Test AUC: 0.85389
+depth=6, lr=0.1, sub=0.8 -> Train AUC: 0.98042, Test AUC: 0.83668
+depth=6, lr=0.1, sub=1.0 -> Train AUC: 0.96672, Test AUC: 0.83929
+depth=8, lr=0.03, sub=0.8 -> Train AUC: 0.92466, Test AUC: 0.85359
+depth=8, lr=0.03, sub=1.0 -> Train AUC: 0.92270, Test AUC: 0.85183
+depth=8, lr=0.05, sub=0.8 -> Train AUC: 0.96347, Test AUC: 0.84587
+depth=8, lr=0.05, sub=1.0 -> Train AUC: 0.93804, Test AUC: 0.84636
+depth=8, lr=0.1, sub=0.8 -> Train AUC: 0.99773, Test AUC: 0.83728
+depth=8, lr=0.1, sub=1.0 -> Train AUC: 0.99410, Test AUC: 0.83597
+root@9da0ecea1a80:/workspace#

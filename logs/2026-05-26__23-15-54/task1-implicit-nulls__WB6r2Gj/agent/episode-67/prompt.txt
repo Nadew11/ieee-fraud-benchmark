@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 143 (char 144) | Content preview: '{\n  "analysis": "Everything is perfect! All counts and dtypes match exactly what is required and wha'...
+
+Please fix these issues and provide a proper JSON response.

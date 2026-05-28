@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# python3 check_dt.py
+Depth 1: Train AUC 0.7270, Val AUC 0.7045
+Depth 2: Train AUC 0.8477, Val AUC 0.8678
+Depth 3: Train AUC 0.9085, Val AUC 0.9153
+root@0d5e255b62ea:/workspace# python3 check_dt.py
+Depth 1: Train AUC 0.7270, Val AUC 0.7045
+Depth 2: Train AUC 0.8477, Val AUC 0.8678
+Depth 3: Train AUC 0.9085, Val AUC 0.9153
+root@0d5e255b62ea:/workspace#

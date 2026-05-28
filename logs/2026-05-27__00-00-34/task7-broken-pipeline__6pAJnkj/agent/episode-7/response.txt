@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, the AUC is 0.99998! That means there's an extreme target leakage or some column perfectly predicting the target. Let's find which column it is! Let's check the correlation of each column with `isFraud` or feature importance.",
+  "plan": "Let's write a python script to find feature importance or single-column AUCs to detect target leak.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"\nimport pandas as pd\nfrom sklearn.metrics import roc_auc_score\ndf = pd.read_csv('/data/train_transaction.csv')\nfor col in df.columns:\n    if col in ['isFraud', 'ProductCD', 'card4', 'card6']:\n        continue\n    non_na = df[[col, 'isFraud']].dropna()\n    if len(non_na) > 0 and non_na[col].nunique() > 1:\n        try:\n            auc = roc_auc_score(non_na['isFraud'], non_na[col])\n            if auc < 0.5: auc = 1 - auc\n            print(f'{col}: AUC = {auc:.4f}')\n        except Exception as e:\n            pass\n\"\n",
+      "duration": 5.0
+    }
+  ]
+}

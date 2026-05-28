@@ -1,0 +1,15 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print(df['TransactionDT'].describe(percentiles=[0.5,
+0.7, 0.8, 0.9]))"
+count    3.000000e+04
+mean     7.929995e+06
+std      4.533476e+06
+min      8.641300e+04
+50%      7.937265e+06
+70%      1.106806e+07
+80%      1.260528e+07
+90%      1.422490e+07
+max      1.581084e+07
+Name: TransactionDT, dtype: float64
+root@81a3fc64145d:/workspace#

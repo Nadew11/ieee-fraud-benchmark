@@ -1,0 +1,41 @@
+New Terminal Output:
+
+LR Val AUC: 0.9975448049218542
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_cat_corr.py
+> import pandas as pd
+> df = pd.read_csv('/data/train_transaction.csv')
+> cat_cols = ['ProductCD', 'card4', 'card6']
+> df_encoded = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+> corrs = df_encoded.corr()['isFraud'].sort_values()
+> print(corrs)
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_cat_corr.py
+ProductCD_W        -0.152652
+card4_discover     -0.005340
+card6_debit        -0.005078
+C3                 -0.002079
+card4_visa         -0.001207
+C6                 -0.001093
+V3                 -0.000007
+TransactionDT       0.003508
+TransactionID       0.004487
+card4_mastercard    0.006503
+V4                  0.024299
+ProductCD_R         0.031300
+ProductCD_S         0.042523
+ProductCD_H         0.107753
+V2                  0.116617
+V1                  0.143571
+V5                  0.181428
+card1               0.266239
+C4                  0.282279
+C5                  0.283404
+TransactionAmt      0.284797
+C2                  0.309878
+card2               0.314113
+C1                  0.349979
+addr1               0.356763
+dist1               0.358565
+isFraud             1.000000
+Name: isFraud, dtype: float64
+root@0d5e255b62ea:/workspace#

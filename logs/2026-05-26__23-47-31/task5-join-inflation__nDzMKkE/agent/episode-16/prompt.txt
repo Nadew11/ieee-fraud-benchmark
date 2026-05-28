@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Expecting ',' delimiter: line 2 column 1263 (char 1264) | Content preview: '{\n  "analysis": "This output looks very clean and logical. Let\'s make sure that overall total fraud '...
+
+Please fix these issues and provide a proper JSON response.

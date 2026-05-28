@@ -1,0 +1,11 @@
+New Terminal Output:
+
+]; print(df_settled.groupby(['transaction_type', 'isFraud']).size())"
+transaction_type     isFraud
+chargeback_reversal  1             9
+purchase             0          7557
+                     1           278
+refund               1            33
+dtype: int64
+root@cf0db7aa8136:/workspace#
+root@cf0db7aa8136:/workspace#

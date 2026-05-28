@@ -1,0 +1,60 @@
+New Terminal Output:
+
+C=1.0    | Train AUC: 0.82216 | Holdout AUC: 0.51759
+root@27e59b3c4e79:/workspace#
+root@27e59b3c4e79:/workspace# cat << 'EOF' > test_xgb_preprocessed.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from xgboost import XGBClassifier
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.impute import SimpleImputer
+> from sklearn.pipeline import Pipeline
+> from sklearn.compose import ColumnTransformer
+> from sklearn.preprocessing import OneHotEncoder
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> X = train.drop(columns=['TransactionID', 'isFraud'])
+> y = train['isFraud']
+>
+> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+>
+> preprocessor = ColumnTransformer(
+>     transformers=[
+>         ('num', Pipeline([
+>             ('imputer', SimpleImputer(strategy='median')),
+>             ('scaler', StandardScaler())
+>         ]), num_cols),
+>         ('cat', Pipeline([
+>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+>         ]), cat_cols)
+>     ]
+> )
+>
+> X_train, X_holdout, y_train, y_holdout = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> X_train_pre = preprocessor.fit_transform(X_train)
+> X_hold_pre = preprocessor.transform(X_holdout)
+>
+> xgb = XGBClassifier(
+>     random_state=42,
+>     eval_metric='logloss',
+>     max_depth=3,
+>     learning_rate=0.01,
+>     n_estimators=100,
+>     subsample=0.6,
+>     colsample_bytree=0.6
+> )
+> xgb.fit(X_train_pre, y_train)
+>
+> preds_train = xgb.predict_proba(X_train_pre)[:, 1]
+> preds_holdout = xgb.predict_proba(X_hold_pre)[:, 1]
+> print(f"XGB on preprocessed | Train AUC: {roc_auc_score(y_train, preds_train):.5f} | Holdout AUC: {roc_auc_score(y_holdout, preds_holdout):.5f}")
+> EOF
+root@27e59b3c4e79:/workspace# python3 test_xgb_preprocessed.py
+

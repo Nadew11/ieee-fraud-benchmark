@@ -1,0 +1,14 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat << 'EOF' > print_importance.py
+> import pandas as pd
+> import numpy as np
+> from run_baseline import model, features
+>
+> importances = pd.Series(model.feature_importances_, index=features).sort_values(ascending=False)
+> print("Feature Importances:")
+> print(importances)
+> EOF
+root@9da0ecea1a80:/workspace# python3 print_importance.py
+Engineering historical features...
+

@@ -1,0 +1,99 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > search_recoveries.py
+> import pandas as pd
+> import itertools
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> rates_dict = {}
+> for idx, row in fx.iterrows():
+>     rates_dict[(row['currency'], row['date'])] = row['rate_to_usd']
+>
+> def get_rate(currency, date_str):
+>     if currency == 'USD':
+>         return 1.0
+>     if (currency, date_str) in rates_dict:
+>         return rates_dict[(currency, date_str)]
+>     currency_rates = fx[fx['currency'] == currency]
+>     prior_rates = currency_rates[currency_rates['date'] <= date_str]
+>     if len(prior_rates) == 0:
+>         return currency_rates.sort_values('date').iloc[0]['rate_to_usd']
+>     return prior_rates.sort_values('date', ascending=False).iloc[0]['rate_to_usd']
+>
+> df['fx_rate'] = df.apply(lambda r: get_rate(r['currency'], r['transaction_date']), axis=1)
+> df['amt_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> df_clean = df.drop_duplicates(subset=['TransactionID'], keep='first')
+> df_clean_no_declined = df_clean[df_clean.settlement_status != 'declined'].copy()
+>
+> fraud = df_clean_no_declined[df_clean_no_declined.isFraud == 1]
+> recoveries = fraud[fraud.transaction_type.isin(['refund', 'chargeback_reversal'])]
+>
+> print("Recoveries found (total =", recoveries['amt_usd'].sum(), "):")
+> for idx, r in recoveries.iterrows():
+>     print(f"{r['TransactionID']} | {r['transaction_type']} | {r['TransactionAmt']} {r['currency']} | {r['amt_usd']} USD | status: {r['settlement_status']}")
+>
+> rec_list = list(recoveries.itertuples())
+> target = 2435.89
+> print("Searching for subsets...")
+> for r_size in range(1, len(rec_list) + 1):
+>     found = False
+>     for comb in itertools.combinations(rec_list, r_size):
+>         s = sum(x.amt_usd for x in comb)
+>         if abs(s - target) < 2.0:
+>             print(f"Subset of size {r_size} sums to {s}: {[x.TransactionID for x in comb]}")
+>             if abs(s - target) < 1.0:
+>                 found = True
+>     if found:
+>         print("Found subset matching target!")
+>         break
+> EOF
+root@b9e5a18b679d:/workspace# python3 search_recoveries.py
+Recoveries found (total = 3298.9711221 ):
+10251371 | chargeback_reversal | 199.24 USD | 199.24 USD | status: settled
+8535564 | refund | 15.45 NGN | 0.01979145 USD | status: settled
+10007209 | chargeback_reversal | 93.59 USD | 93.59 USD | status: settled
+8072152 | refund | 82.89 USD | 82.89 USD | status: settled
+8427466 | refund | 166.39 USD | 166.39 USD | status: settled
+8363256 | refund | 12.38 ETB | 0.22139154 USD | status: settled
+8103312 | refund | 70.5 USD | 70.5 USD | status: settled
+8007209 | refund | 82.34 USD | 82.34 USD | status: settled
+8210490 | refund | 98.21 EUR | 107.87150695999999 USD | status: settled
+8466335 | refund | 69.35 ETB | 1.2453872999999998 USD | status: settled
+8118278 | refund | 66.76 GBP | 81.81531464000001 USD | status: settled
+10294415 | chargeback_reversal | 101.06 EUR | 111.12769826 USD | status: settled
+8056345 | refund | 384.56 USD | 384.56 USD | status: settled
+8251371 | refund | 152.68 USD | 152.68 USD | status: settled
+10143187 | chargeback_reversal | 28.39 ETB | 0.50815261 USD | status: settled
+8112671 | refund | 36.22 ETB | 0.65790008 USD | status: settled
+8409730 | refund | 12.33 USD | 12.33 USD | status: settled
+8564632 | refund | 26.97 USD | 26.97 USD | status: settled
+10118278 | chargeback_reversal | 97.79 GBP | 121.13354869 USD | status: settled
+8143187 | refund | 20.32 ETB | 0.36722304000000006 USD | status: settled
+10160991 | chargeback_reversal | 76.88 NGN | 0.0976376 USD | status: settled
+8177459 | refund | 28.89 USD | 28.89 USD | status: settled
+8134964 | refund | 250.34 USD | 250.34 USD | status: settled
+8007017 | refund | 31.87 GBP | 39.758940450000004 USD | status: settled
+8294415 | refund | 69.81 EUR | 74.45836866 USD | status: settled
+8287375 | refund | 67.56 USD | 67.56 USD | status: settled
+8390091 | refund | 39.73 EUR | 43.638478479999996 USD | status: settled
+8303307 | refund | 48.79 EUR | 52.312052519999995 USD | status: settled
+8388943 | refund | 31.6 ETB | 0.5739824 USD | status: settled
+8504585 | refund | 162.03 USD | 162.03 USD | status: settled
+8160991 | refund | 72.55 NGN | 0.0909777 USD | status: settled
+8368974 | refund | 216.58 ETB | 3.9118679600000004 USD | status: settled
+8405217 | refund | 46.27 USD | 46.27 USD | status: settled
+8524453 | refund | 283.14 USD | 283.14 USD | status: settled
+8561700 | refund | 78.92 ETB | 1.42434816 USD | status: settled
+8183801 | refund | 44.07 ETB | 0.81450174 USD | status: settled
+8563749 | refund | 131.4 EUR | 140.4086526 USD | status: settled
+10535564 | chargeback_reversal | 19.77 NGN | 0.02502882 USD | status: settled
+10563749 | chargeback_reversal | 246.94 EUR | 263.38274684 USD | status: settled
+8326432 | refund | 39.85 USD | 39.85 USD | status: settled
+8186368 | refund | 29.56 USD | 29.56 USD | status: settled
+10390091 | chargeback_reversal | 67.35 EUR | 73.97562359999999 USD | status: settled
+Searching for subsets...
+

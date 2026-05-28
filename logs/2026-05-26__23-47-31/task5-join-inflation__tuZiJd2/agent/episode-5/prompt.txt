@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# python3 -c "
+> import pandas as pd
+> tx = pd.read_csv('/data/transactions.csv')
+> print('Total fraud amt in tx:', tx[tx['isFraud'] == 1]['TransactionAmt'].sum())
+> "
+Total fraud amt in tx: 49056.519
+root@7e0b471406a5:/workspace#

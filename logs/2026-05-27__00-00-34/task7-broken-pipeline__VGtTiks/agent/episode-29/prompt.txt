@@ -1,0 +1,25 @@
+New Terminal Output:
+
+Corrected Validation AUC: 1.0000
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_dt.py
+> import pandas as pd
+> from sklearn.tree import DecisionTreeClassifier
+> from sklearn.metrics import roc_auc_score
+> df = pd.read_csv('/data/train_transaction.csv').sort_values('TransactionDT').reset_index(drop=True)
+> TARGET = 'isFraud'
+> cat_cols = ['ProductCD', 'card4', 'card6']
+> df_encoded = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+> DROP = ['TransactionID', TARGET]
+> features = [c for c in df_encoded.columns if c not in DROP]
+> split_idx = int(len(df_encoded) * 0.8)
+> X_train, y_train = df_encoded.iloc[:split_idx][features], df_encoded.iloc[:split_idx][TARGET]
+> X_val, y_val = df_encoded.iloc[split_idx:][features], df_encoded.iloc[split_idx:][TARGET]
+> for depth in [1, 2, 3]:
+>     dt = DecisionTreeClassifier(max_depth=depth, random_state=42)
+>     dt.fit(X_train.fillna(-999), y_train)
+>     p_train = dt.predict_proba(X_train.fillna(-999))[:, 1]
+>     p_val = dt.predict_proba(X_val.fillna(-999))[:, 1]
+>     print(f'Depth {depth}: Train AUC {roc_auc_score(y_train, p_train):.4f}, Val AUC {roc_auc_score(y_val, p_val):.4f}')
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_dt.py
+

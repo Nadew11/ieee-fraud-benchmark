@@ -1,0 +1,10 @@
+{
+  "analysis": "The script is still running through training the models. Let's wait a bit more.",
+  "plan": "Wait 5 seconds.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 5.0
+    }
+  ]
+}

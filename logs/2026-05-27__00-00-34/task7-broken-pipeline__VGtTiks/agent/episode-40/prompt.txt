@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 49 (char 50) | Content preview: '{\n  "analysis": "Wait, look at this decision tree!\n`C1 <= 9.50`\n  `addr1 <= 449.50`\n    `C2 <= 5.50`'...
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 148 (char 149) | Content preview: '{\n  "analysis": "Wait, let\'s look closely at `/setup/generate_data.py`. Why did the counts of `-999.'...
+
+Please fix these issues and provide a proper JSON response.

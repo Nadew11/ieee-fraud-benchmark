@@ -1,0 +1,41 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# cat << 'EOF' > /output/bug_report.txt
+> BUG REPORT
+> ==========
+>
+> We identified several major bugs and areas of improvement in the original fraud detection pipeline. Here is a description of each bug, why it is wrong, and ho
+w we fixed it:
+>
+> 1. Bug: Data Leakage via StandardScaler
+>    - Why it's wrong: The pipeline applies standard scaling (`scaler.fit_transform(X)`) to the entire dataset before splitting it into training and validation
+sets via `train_test_split`. This leaks statistics (mean and variance) from the validation set into the training phase.
+>    - How we fixed it: We removed StandardScaler entirely from the pipeline because tree-based models like XGBoost are invariant to monotonic transformations a
+nd do not require feature scaling. If scaling were required, we would split the data first, call `.fit_transform()` on the training set, and then call `.transfo
+rm()` on the validation set.
+>
+> 2. Bug: Standard Scaling of Imputed Sentinel Values (-999)
+>    - Why it's wrong: The pipeline fills missing values with `-999` before scaling. Scaling transforms the `-999` sentinel to an arbitrary float (e.g., `-12.5`
+), depending on the distribution of each feature. This distorts feature distributions and ruins the semantic consistency of the sentinel across features, making
+ it harder for the model to use missingness as a cue. Additionally, XGBoost natively handles NaNs far more efficiently than arbitrary constant imputation.
+>    - How we fixed it: We kept missing values as `NaN` and let XGBoost natively determine the best split direction for missing data.
+>
+> 3. Bug: Important Categorical Features Completely Dropped
+>    - Why it's wrong: Categorical columns like `ProductCD`, `card4`, and `card6` were excluded from the model. These variables are highly valuable for identify
+ing fraud patterns.
+>    - How we fixed it: We encoded these categorical columns using `LabelEncoder` and kept them in the features list.
+>
+> 4. Bug: Inappropriate Evaluation Metric for Binary Classification
+>    - Why it's wrong: The `XGBClassifier` was initialized with `eval_metric="rmse"`. Root Mean Squared Error (RMSE) is a regression metric and is inappropriate
+ for evaluating a binary classification model.
+>    - How we fixed it: We updated the evaluation metric to `"auc"` (or `"logloss"`), which is suitable for binary classification and matches the validation eva
+luation metric.
+>
+> 5. Bug: Random Train-Test Split on Temporal/Chronological Data
+>    - Why it's wrong: Transaction data contains a chronological timestamp (`TransactionDT`). Using a random train-test split causes temporal leakage, where fut
+ure transaction data is used to train the model to predict past transactions. This results in overly optimistic validation scores and fails to simulate real-wor
+ld deployment.
+>    - How we fixed it: We sorted the transactions chronologically by `TransactionDT` and performed a temporal split, allocating the first 80% for training and
+the last 20% for validation.
+> EOF
+root@e9645eb65f5b:/workspace#

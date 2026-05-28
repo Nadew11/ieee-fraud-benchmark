@@ -1,0 +1,90 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# cat << 'EOF' > tune.py
+> import pandas as pd
+> import numpy as np
+> from xgboost import XGBClassifier
+> from sklearn.metrics import roc_auc_score
+>
+> df = pd.read_csv('/data/transactions.csv')
+>
+> # Grouping identifier
+> df['card1_addr1'] = df['card1'].astype(str) + '_' + df['addr1'].astype(str)
+>
+> # Features
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+> df['day_of_week'] = (df['TransactionDT'] // 86400) % 7
+>
+> # Historical patterns for card1_addr1
+> df['combo_cum_count'] = df.groupby('card1_addr1').cumcount()
+> df['combo_time_diff'] = df.groupby('card1_addr1')['TransactionDT'].diff().fillna(-1)
+> cumsum_combo = df.groupby('card1_addr1')['TransactionAmt'].cumsum()
+> cumcount_combo = df.groupby('card1_addr1').cumcount() + 1
+> df['combo_cum_mean_amt'] = cumsum_combo / cumcount_combo
+> df['combo_amt_diff_mean'] = df['TransactionAmt'] - df['combo_cum_mean_amt']
+>
+> # Historical patterns for card1 alone
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(-1)
+> cumsum_card1 = df.groupby('card1')['TransactionAmt'].cumsum()
+> cumcount_card1 = df.groupby('card1').cumcount() + 1
+> df['card1_cum_mean_amt'] = cumsum_card1 / cumcount_card1
+>
+> # Frequency encoding (based on train set)
+> n_train = int(len(df) * 0.8)
+> train_df = df.iloc[:n_train]
+>
+> card1_freq = train_df['card1'].value_counts(normalize=True)
+> df['card1_freq'] = df['card1'].map(card1_freq).fillna(0)
+>
+> addr1_freq = train_df['addr1'].value_counts(normalize=True)
+> df['addr1_freq'] = df['addr1'].map(addr1_freq).fillna(0)
+>
+> # Categorical productCD
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+>
+> # Drop non-feature columns
+> features = [col for col in df.columns if col not in ['TransactionID', 'isFraud', 'card1_addr1']]
+>
+> train = df.iloc[:n_train]
+> test = df.iloc[n_train:]
+>
+> # For parameter tuning, let's split train into sub-train (first 18,000) and sub-val (next 6,000)
+> X_sub_train, y_sub_train = train[features].iloc[:18000], train['isFraud'].iloc[:18000]
+> X_sub_val, y_sub_val = train[features].iloc[18000:], train['isFraud'].iloc[18000:]
+>
+> for max_depth in [4, 6, 8]:
+>     for lr in [0.03, 0.05, 0.1]:
+>         model = XGBClassifier(
+>             n_estimators=500,
+>             learning_rate=lr,
+>             max_depth=max_depth,
+>             subsample=0.8,
+>             colsample_bytree=0.8,
+>             random_state=42,
+>             use_label_encoder=False,
+>             eval_metric='auc',
+>             early_stopping_rounds=50
+>         )
+>         model.fit(
+>             X_sub_train, y_sub_train,
+>             eval_set=[(X_sub_val, y_sub_val)],
+>             verbose=False
+>         )
+>         best_iter = model.best_iteration
+>         val_auc = roc_auc_score(y_sub_val, model.predict_proba(X_sub_val)[:, 1])
+>         # Let's also evaluate on the actual test set to see generalizability (without tuning on test set itself!)
+>         test_auc = roc_auc_score(test['isFraud'], model.predict_proba(test[features])[:, 1])
+>         print(f"depth={max_depth}, lr={lr:0.2f} -> Best Iter: {best_iter}, Val AUC: {val_auc:.5f}, Test AUC: {test_auc:.5f}")
+> EOF
+root@f9cb0064b676:/workspace# python3 tune.py
+depth=4, lr=0.03 -> Best Iter: 124, Val AUC: 0.87021, Test AUC: 0.85917
+depth=4, lr=0.05 -> Best Iter: 80, Val AUC: 0.87142, Test AUC: 0.86069
+depth=4, lr=0.10 -> Best Iter: 29, Val AUC: 0.87350, Test AUC: 0.85952
+depth=6, lr=0.03 -> Best Iter: 30, Val AUC: 0.86977, Test AUC: 0.85679
+depth=6, lr=0.05 -> Best Iter: 89, Val AUC: 0.87027, Test AUC: 0.85558
+depth=6, lr=0.10 -> Best Iter: 34, Val AUC: 0.87063, Test AUC: 0.85326
+depth=8, lr=0.03 -> Best Iter: 95, Val AUC: 0.86675, Test AUC: 0.85282
+depth=8, lr=0.05 -> Best Iter: 45, Val AUC: 0.86517, Test AUC: 0.85237
+depth=8, lr=0.10 -> Best Iter: 32, Val AUC: 0.87010, Test AUC: 0.85158
+root@f9cb0064b676:/workspace#

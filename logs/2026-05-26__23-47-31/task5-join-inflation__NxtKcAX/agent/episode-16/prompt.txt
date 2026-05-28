@@ -1,0 +1,14 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# rm -f /workspace/test.py
+root@3532236a873b:/workspace# ls -l /output
+total 8
+-rw-r--r-- 1 root root 96 May 27 04:49 fraud_by_device.csv
+-rw-r--r-- 1 root root 10 May 27 04:49 total_fraud.txt
+root@3532236a873b:/workspace# cat /output/total_fraud.txt
+49056.519
+root@3532236a873b:/workspace# cat /output/fraud_by_device.csv
+DeviceType,total_fraud_amount,fraud_transaction_count
+desktop,11283.189,138
+mobile,10890.288,94
+root@3532236a873b:/workspace#

@@ -1,0 +1,16 @@
+Methodology Note - Fraud Detection Model with Engineered Features
+===============================================================
+
+1. Feature Engineering Approach:
+   To capture historical patterns in transaction behavior without introducing target leakage, we engineered cumulative and difference-based features using vectorized cumulative operations:
+   - combo_cum_count, combo_time_diff, combo_cum_mean_amt, combo_amt_diff_mean: Cumulative patterns based on unique card1 + addr1 combination to uniquely identify clients.
+   - card1_cum_count, card1_time_diff, card1_cum_mean_amt: Cumulative patterns grouped by card1 alone.
+   - card1_freq, addr1_freq: Frequency encoding mapped from training distribution for high-cardinality categorical IDs.
+   - hour, day_of_week: Temporal cyclic patterns derived from TransactionDT.
+
+2. Evaluation Strategy:
+   We used a temporal train/test split of 80% (first 24,000 samples) and 20% (last 6,000 samples). To select model complexity and prevent overfitting, we performed cross-validation with early stopping using a sub-validation set (the final 6,000 samples of the training portion).
+
+3. Hyperparameter Tuning and Final Training:
+   The tuning process identified that a lower-complexity XGBoost model (max_depth=4, learning_rate=0.05) substantially outperforms high-capacity models by preventing overfitting to the temporal distribution shift.
+   We trained the final model on the full 80% training set using these parameters with 120 estimators, yielding a final Test AUC of 0.85897.

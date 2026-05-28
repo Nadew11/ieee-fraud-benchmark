@@ -1,0 +1,33 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# python3 --version && python3 -c "import pandas; import openpyxl; print('Pandas and openpyxl are installed')"
+Python 3.11.15
+head -n 5 /data/*.csv
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 114 (char 115) | Content preview: '{\n  "analysis": "Ah! The AUC of the corrected pipeline on the validation set is `0.999997` (or pract'...
+
+Please fix these issues and provide a proper JSON response.

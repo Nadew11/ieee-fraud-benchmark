@@ -1,0 +1,10 @@
+{
+  "analysis": "Let's check the unique values of some fields in `transactions.csv` such as `settlement_status`, `transaction_type`, `isFraud` and see what dates are in Q4 2023.",
+  "plan": "Write a python script to inspect unique values of transaction_type, settlement_status, and check their counts or value distribution.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print('isFraud:', df.isFraud.value_counts()); print('settlement_status:', df.settlement_status.value_counts()); print('transaction_type:', df.transaction_type.value_counts())\"\n",
+      "duration": 1.0
+    }
+  ]
+}

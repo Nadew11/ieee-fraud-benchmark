@@ -1,0 +1,135 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > find_one.py
+> import pandas as pd
+> df = pd.read_csv('/workspace/find_combo.py') # No wait, we already have df
+> EOF
+root@474ebd5bd0a4:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> # Let's run the full logic first to get the 264 transactions
+> "
+cat << 'EOF' > find_diff.py
+import pandas as pd
+import numpy as np
+
+df = pd.read_csv('/data/transactions.csv')
+fx = pd.read_csv('/data/fx_rates.csv')
+fees = pd.read_csv('/data/fee_schedule.csv')
+
+# Convert dates
+df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+fx['date'] = pd.to_datetime(fx['date'])
+
+# Build FX rates lookup
+all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+                          end=max(df['transaction_date'].max(), fx['date'].max()))
+
+fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+for cur in fx['currency'].unique():
+    cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+    fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+
+df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+df['amount_usd'] = df['TransactionAmt'] * df['fx_rate']
+
+fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+df['fee_rate'] = df['merchant_category'].map(fee_dict)
+df['processing_fee_usd'] = df['amount_usd'] * df['fee_rate']
+
+df_q4 = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+
+# Let's select all isFraud == 1 and purchase
+purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')]
+
+print("Total purchase fraud in Q4:", len(purchases))
+
+# Let's check differences of single transactions or subsets
+# Target gross is 30212.56
+target_gross = 30212.56
+
+# Let's try subtracting each transaction or combinations
+# Let's see if any subset of settled purchases sums close to target_gross
+settled_purchases = purchases[purchases['settlement_status'] == 'settled'].copy()
+print("Settled purchase count:", len(settled_purchases), "sum:", settled_purchases['amount_usd'].sum())
+
+diff = settled_purchases['amount_usd'].sum() - target_gross
+print("Difference from target_gross with all settled:", diff)
+
+# Find if any single settled transaction has amount close to diff
+close_to_diff = settled_purchases[(settled_purchases['amount_usd'] - diff).abs() < 10.0]
+print("Transactions close to difference:")
+print(close_to_diff[['TransactionID', 'transaction_date', 'amount_usd', 'settlement_status', 'currency']])
+
+EOF
+python3 find_diff.py
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > find_diff.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> # Convert dates
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> # Build FX rates lookup
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee_usd'] = df['amount_usd'] * df['fee_rate']
+>
+> df_q4 = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+>
+> # Let's select all isFraud == 1 and purchase
+> purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')]
+>
+> print("Total purchase fraud in Q4:", len(purchases))
+>
+> # Let's check differences of single transactions or subsets
+> # Target gross is 30212.56
+> target_gross = 30212.56
+>
+> # Let's try subtracting each transaction or combinations
+> # Let's see if any subset of settled purchases sums close to target_gross
+> settled_purchases = purchases[purchases['settlement_status'] == 'settled'].copy()
+> print("Settled purchase count:", len(settled_purchases), "sum:", settled_purchases['amount_usd'].sum())
+>
+> diff = settled_purchases['amount_usd'].sum() - target_gross
+> print("Difference from target_gross with all settled:", diff)
+>
+> # Find if any single settled transaction has amount close to diff
+> close_to_diff = settled_purchases[(settled_purchases['amount_usd'] - diff).abs() < 10.0]
+> print("Transactions close to difference:")
+> print(close_to_diff[['TransactionID', 'transaction_date', 'amount_usd', 'settlement_status', 'currency']])
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 find_diff.py
+Total purchase fraud in Q4: 298
+Settled purchase count: 264 sum: 30309.336008362
+Difference from target_gross with all settled: 96.77600836199781
+Transactions close to difference:
+      TransactionID transaction_date  amount_usd settlement_status currency
+795         3395308       2023-12-12   97.000000           settled      USD
+1610        3264116       2023-12-12   95.631824           settled      EUR
+2861        3013350       2023-10-07   88.500000           settled      USD
+2939        2992234       2023-11-27  104.240283           settled      GBP
+3016        3405227       2023-11-29   92.900201           settled      GBP
+3259        3440852       2023-11-06   97.000000           settled      USD
+3541        3072152       2023-10-08  100.000000           settled      USD
+6050        3379204       2023-10-11  100.000000           settled      USD
+6606        3264116       2023-12-12   96.362853           settled      EUR
+7453        3007209       2023-12-05  100.000000           settled      USD
+root@474ebd5bd0a4:/workspace#

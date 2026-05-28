@@ -1,0 +1,6 @@
+{
+  "analysis": "The temporary scripts are removed. The files in `/output` are verified, correct, and complete. No other steps are needed.",
+  "plan": "I will return the final JSON with `task_complete` set to true.",
+  "commands": [],
+  "task_complete": true
+}

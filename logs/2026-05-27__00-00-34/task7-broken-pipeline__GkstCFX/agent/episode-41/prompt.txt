@@ -1,0 +1,26 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# cat /output/auc.txt
+1.0000
+root@549b54a67146:/workspace# head -n 20 /output/bug_report.txt
+================================================================================
+                      FRAUD DETECTION PIPELINE BUG REPORT
+================================================================================
+
+During the audit of the original fraud detection pipeline (/data/pipeline.py),
+several severe bugs and sub-optimal design choices were identified. Below is the
+detailed report of each bug, why it is wrong, and how it was resolved in the
+corrected pipeline (/workspace/pipeline.py).
+
+--------------------------------------------------------------------------------
+1. Data Leakage via StandardScaler (Preprocessing Leakage)
+--------------------------------------------------------------------------------
+- **Bug**: The pipeline called `scaler.fit_transform(X)` on the entire dataset
+  before performing the train-test split via `train_test_split`.
+- **Why it is wrong**: This is a classic data leakage bug. Fitting a scaler on the
+  entire dataset leaks statistical parameters (mean and standard deviation) from the
+  validation set into the training set. This leads to overly optimistic validation
+  metrics that will not generalize to unseen test/production data.
+- **How it was fixed**: Since XGBoost is a tree-based ensemble method, it is completely
+  scale-invariant and does not require feature scaling. Feature scaling is redundant
+root@549b54a67146:/workspace#

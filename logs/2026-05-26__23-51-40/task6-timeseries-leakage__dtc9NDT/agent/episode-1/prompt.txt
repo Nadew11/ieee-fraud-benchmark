@@ -1,0 +1,41 @@
+New Terminal Output:
+root@81a3fc64145d:/workspace# ls -lh /data
+total 1.4M
+-rw-rw-rw- 1 root root 1.4M May 26 21:27 transactions.csv
+root@81a3fc64145d:/workspace# pip list | grep -E 'pandas|scikit-learn|lightgbm|xgboost|catboost'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

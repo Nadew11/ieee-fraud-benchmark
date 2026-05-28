@@ -1,0 +1,45 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# cat << 'EOF' > explore.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> print(df.info())
+> print(df.head())
+> print('isFraud mean:', df['isFraud'].mean())
+> print('card1 unique:', df['card1'].nunique())
+> print('ProductCD unique:', df['ProductCD'].unique())
+> print('addr1 null:', df['addr1'].isnull().sum())
+> print('C1 range:', df['C1'].min(), df['C1'].max())
+> print('C2 range:', df['C2'].min(), df['C2'].max())
+> EOF
+root@f9cb0064b676:/workspace# python3 explore.py
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 30000 entries, 0 to 29999
+Data columns (total 9 columns):
+ #   Column          Non-Null Count  Dtype
+---  ------          --------------  -----
+ 0   TransactionID   30000 non-null  int64
+ 1   TransactionDT   30000 non-null  int64
+ 2   isFraud         30000 non-null  int64
+ 3   TransactionAmt  30000 non-null  float64
+ 4   card1           30000 non-null  int64
+ 5   ProductCD       30000 non-null  object
+ 6   addr1           30000 non-null  float64
+ 7   C1              30000 non-null  float64
+ 8   C2              30000 non-null  float64
+dtypes: float64(4), int64(4), object(1)
+memory usage: 2.1+ MB
+None
+   TransactionID  TransactionDT  isFraud  TransactionAmt  card1 ProductCD  addr1    C1   C2
+0        2987000          86413        0          127.90   6734         C  139.0  10.0  6.0
+1        2987001          86607        0           96.23   3337         C  143.0  10.0  5.0
+2        2987002          87074        0           60.98   1322         W  399.0   3.0  4.0
+3        2987003          88364        0           66.88  10576         S  430.0   5.0  2.0
+4        2987004          89510        0           35.29   1358         W  212.0   3.0  6.0
+isFraud mean: 0.0456
+card1 unique: 14086
+ProductCD unique: ['C' 'W' 'S' 'H' 'R']
+addr1 null: 0
+C1 range: 0.0 11.0
+C2 range: 0.0 6.0
+root@f9cb0064b676:/workspace#

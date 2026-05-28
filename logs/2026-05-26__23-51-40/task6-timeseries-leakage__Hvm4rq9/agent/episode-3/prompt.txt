@@ -1,0 +1,29 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# python3 -c "import pandas, sklearn, lightgbm, xgboost; print('Libraries available')"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+root@9da0ecea1a80:/workspace# mkdir -p /output
+root@9da0ecea1a80:/workspace# python3 -c "import pandas, numpy, sklearn; print('Core ML libraries available')"
+python3 -c "import lightgbm; print('LightGBM available')" || echo "LightGBM not available"
+Core ML libraries available
+root@9da0ecea1a80:/workspace# python3 -c "import lightgbm; print('LightGBM available')" || echo "LightGBM not available"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+LightGBM not available
+root@9da0ecea1a80:/workspace# python3 -c "import xgboost; print('XGBoost available')" || echo "XGBoost not available"
+
+
+
+
+
+
+
+
+
+
+
+
+

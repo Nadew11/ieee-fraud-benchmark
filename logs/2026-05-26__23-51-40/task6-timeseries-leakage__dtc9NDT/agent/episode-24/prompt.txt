@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 test_extra_features.py
+N_estimators: 80, Test AUC: 0.86305
+N_estimators: 100, Test AUC: 0.86310
+N_estimators: 120, Test AUC: 0.86383
+N_estimators: 150, Test AUC: 0.86270
+root@81a3fc64145d:/workspace#

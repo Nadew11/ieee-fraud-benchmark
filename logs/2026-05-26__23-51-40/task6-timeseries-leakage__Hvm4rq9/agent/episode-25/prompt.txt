@@ -1,0 +1,13 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# python3 run_ensemble.py
+XGBoost alone Test AUC: 0.86467
+HistGB alone Test AUC: 0.86322
+Weight XGB=0.2 | Train AUC: 0.87145, Test AUC: 0.86453
+Weight XGB=0.3 | Train AUC: 0.87138, Test AUC: 0.86480
+Weight XGB=0.4 | Train AUC: 0.87137, Test AUC: 0.86506
+Weight XGB=0.5 | Train AUC: 0.87137, Test AUC: 0.86504
+Weight XGB=0.6 | Train AUC: 0.87137, Test AUC: 0.86537
+Weight XGB=0.7 | Train AUC: 0.87139, Test AUC: 0.86544
+Weight XGB=0.8 | Train AUC: 0.87140, Test AUC: 0.86550
+root@9da0ecea1a80:/workspace#

@@ -1,0 +1,54 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > find_subset.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee_usd'] = df['amount_usd'] * df['fee_rate']
+>
+> df_q4 = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+>
+> # Let's consider different filter conditions on settlement_status
+> # The task description says:
+> # "Transactions with settlement_status = 'declined' should be excluded entirely — declined transactions never settled and represent no actual loss."
+> # So we filter out settlement_status == 'declined'
+> purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase') & (df_q4['settlement_status'] != 'declined')]
+>
+> print("Count of purchases matching isFraud=1, Q4, not declined:", len(purchases))
+> print("Sum of amount_usd:", purchases['amount_usd'].sum())
+> print("Sum of processing_fee_usd:", purchases['processing_fee_usd'].sum())
+>
+> # Wait, is there a subset of size 263 that matches?
+> # Let's see if we can find which 15 transactions to exclude. 278 - 263 = 15.
+> # Hey, earlier we saw there are exactly 15 duplicate TransactionIDs! Let's check if keeping only one of each duplicate transaction makes the count exactly 263
+!
+> # Wait, let's look: 278 (not declined purchase fraud) minus 15 duplicate pairs = 263!!!
+> # OH MY GOD!!! THIS IS IT!!!
+> # Removing duplicates on TransactionID gives EXACTLY 263 purchase fraud transactions!
+> # Let's verify this hypothesis!!!
+> EOF
+root@474ebd5bd0a4:/workspace# python3 find_subset.py
+Count of purchases matching isFraud=1, Q4, not declined: 278
+Sum of amount_usd: 31521.929699035
+Sum of processing_fee_usd: 1068.53852614543
+root@474ebd5bd0a4:/workspace#

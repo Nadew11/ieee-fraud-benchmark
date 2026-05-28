@@ -1,0 +1,57 @@
+New Terminal Output:
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/train_identity.csv', nrows=5)
+> print(df.info())
+> print(df.head())
+> "
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 41 columns):
+ #   Column         Non-Null Count  Dtype
+---  ------         --------------  -----
+ 0   TransactionID  5 non-null      float64
+ 1   id_01          5 non-null      float64
+ 2   id_02          4 non-null      float64
+ 3   id_03          4 non-null      float64
+ 4   id_04          4 non-null      float64
+ 5   id_05          4 non-null      float64
+ 6   id_06          4 non-null      float64
+ 7   id_07          0 non-null      float64
+ 8   id_08          0 non-null      float64
+ 9   id_09          4 non-null      float64
+ 10  id_10          4 non-null      float64
+ 11  id_11          4 non-null      float64
+ 12  id_12          5 non-null      object
+ 13  id_13          4 non-null      float64
+ 14  id_14          3 non-null      float64
+ 15  id_15          4 non-null      object
+ 16  id_16          4 non-null      object
+ 17  id_17          4 non-null      float64
+ 18  id_18          2 non-null      float64
+ 19  id_19          4 non-null      float64
+ 20  id_20          4 non-null      float64
+ 21  id_21          0 non-null      float64
+ 22  id_22          0 non-null      float64
+ 23  id_23          0 non-null      float64
+ 24  id_24          0 non-null      float64
+ 25  id_25          0 non-null      float64
+ 26  id_26          0 non-null      float64
+ 27  id_27          0 non-null      float64
+ 28  id_28          4 non-null      object
+ 29  id_29          4 non-null      object
+ 30  id_30          3 non-null      object
+ 31  id_31          4 non-null      object
+ 32  id_32          3 non-null      float64
+ 33  id_33          3 non-null      object
+ 34  id_34          3 non-null      object
+ 35  id_35          4 non-null      object
+ 36  id_36          4 non-null      object
+ 37  id_37          4 non-null      object
+ 38  id_38          4 non-null      object
+ 39  DeviceType     4 non-null      object
+ 40  DeviceInfo     2 non-null      object
+dtypes: float64(26), object(15)
+memory usage: 1.7+ KB
+None
+

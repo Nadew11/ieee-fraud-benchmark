@@ -1,0 +1,13 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# python3 -c "
+> import pandas as pd
+> id_df = pd.read_csv('/data/identity.csv')
+> # For each TransactionID, find number of unique DeviceType values
+> counts = id_df.groupby('TransactionID')['DeviceType'].nunique(dropna=False)
+> print('Max unique DeviceType per ID:', counts.max())
+> print('Number of IDs with >1 unique DeviceType:', (counts > 1).sum())
+> "
+Max unique DeviceType per ID: 1
+Number of IDs with >1 unique DeviceType: 0
+root@7e0b471406a5:/workspace#

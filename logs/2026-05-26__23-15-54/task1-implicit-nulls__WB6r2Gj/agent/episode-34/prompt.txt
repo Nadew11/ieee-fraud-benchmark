@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_identity.csv'); print('Number of empty strings in id_15:', (df['id_
+15'] == '').sum()); print('Number of NaNs in id_15:', df['id_15'].isna().sum())"
+Number of empty strings in id_15: 0
+Number of NaNs in id_15: 251
+root@cc7b6f7834c9:/workspace#

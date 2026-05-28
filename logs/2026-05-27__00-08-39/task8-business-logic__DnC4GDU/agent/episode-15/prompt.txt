@@ -1,0 +1,72 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_logic.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+> region = pd.read_csv('/data/region_map.csv')
+>
+> # Filter to Q4 2023
+> df = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+>
+> # Exclude declined
+> df = df[df['settlement_status'] != 'declined']
+>
+> # Convert dates
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+> df_merged['amt_usd'] = df_merged['TransactionAmt'] * df_merged['rate_to_usd']
+>
+> # Let's merge fee rates
+> # fee has merchant_category and fee_rate
+> # Let's inspect unique merchant categories and their fees
+> print(fee)
+>
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> print("Missing fee categories:", df_merged['fee_rate'].isna().sum())
+> # Let's see what categories are missing fee rates (if any). Let's print unique categories with missing fee rates
+> if df_merged['fee_rate'].isna().sum() > 0:
+>     print(df_merged[df_merged['fee_rate'].isna()]['merchant_category'].unique())
+>
+> # Let's write a test function to try definitions
+> # We'll calculate gross fraud amount
+> # Is it purchase transactions that are fraud? Or all transactions with isFraud == 1?
+> # Let's see how many fraud purchase transactions we have
+> print("Fraud transactions by type:")
+> print(df_merged[df_merged['isFraud'] == 1].groupby('transaction_type').size())
+>
+> # Let's compute processing fee. Is processing fee = amt_usd * fee_rate? Let's check.
+> # Wait, is processing fee only computed for fraud purchase transactions or all fraud transactions or all transactions?
+> # The prompt says: "Processing fees are computed per-transaction using the rates in fee_schedule.csv matched on merchant_category. Apply the fee rate to the U
+SD-converted transaction amount."
+> # And "Net fraud loss is defined as: gross fraud amount minus recoveries (refunds, chargebacks reversed) minus processing fees on fraud transactions."
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_logic.py
+  merchant_category  fee_rate
+0            retail     0.025
+1            travel     0.030
+2     digital_goods     0.035
+3          gambling     0.045
+4            crypto     0.050
+5               atm     0.020
+Missing fee categories: 0
+Fraud transactions by type:
+transaction_type
+chargeback_reversal      9
+purchase               278
+refund                  33
+dtype: int64
+root@cf0db7aa8136:/workspace#

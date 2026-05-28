@@ -1,0 +1,100 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# cat << 'EOF' > feature_selection.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.impute import SimpleImputer
+> from sklearn.preprocessing import OrdinalEncoder
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> y = train['isFraud']
+> X = train.drop(columns=['isFraud', 'TransactionID'])
+>
+> X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+>
+> feature_aucs = []
+>
+> for col in X.columns:
+>     # Prepare feature
+>     if X[col].dtype == 'O' or X[col].dtype == 'object':
+>         # Categorical: we can try ordinal encoding
+>         oe = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=-1)
+>         # Fill na with 'missing'
+>         tr_col = X_tr[col].astype(str).fillna('missing').values.reshape(-1, 1)
+>         val_col = X_val[col].astype(str).fillna('missing').values.reshape(-1, 1)
+>         tr_encoded = oe.fit_transform(tr_col).flatten()
+>         val_encoded = oe.transform(val_col).flatten()
+>     else:
+>         # Numeric: impute median
+>         imp = SimpleImputer(strategy='median')
+>         tr_encoded = imp.fit_transform(X_tr[[col]]).flatten()
+>         val_encoded = imp.transform(X_val[[col]]).flatten()
+>
+>     # Calculate individual AUC
+>     try:
+>         # Try direct and inverted to see correlation direction
+>         auc_direct = roc_auc_score(y_val, val_encoded)
+>         auc_inverted = roc_auc_score(y_val, -val_encoded)
+>         auc = max(auc_direct, auc_inverted)
+>         # Train AUC to compare
+>         tr_auc_direct = roc_auc_score(y_tr, tr_encoded)
+>         tr_auc_inverted = roc_auc_score(y_tr, -tr_encoded)
+>         tr_auc = max(tr_auc_direct, tr_auc_inverted)
+>
+>         feature_aucs.append({
+>             'feature': col,
+>             'train_auc': tr_auc,
+>             'val_auc': auc,
+>             'direction': 'direct' if auc_direct >= auc_inverted else 'inverted'
+>         })
+>     except Exception as e:
+>         pass
+>
+> df_auc = pd.DataFrame(feature_aucs).sort_values(by='val_auc', ascending=False)
+> print(df_auc.to_string(index=False))
+> EOF
+root@8b9ff8325d75:/workspace# python3 feature_selection.py
+   feature  train_auc  val_auc direction
+     id_05   0.506606 0.553122    direct
+     id_37   0.515220 0.551192  inverted
+     id_02   0.522869 0.530179  inverted
+     id_32   0.506389 0.526102    direct
+     id_20   0.513233 0.523813    direct
+     id_16   0.504038 0.522860    direct
+DeviceType   0.524612 0.522360    direct
+     id_23   0.507728 0.520065    direct
+     id_27   0.507692 0.520065    direct
+     id_15   0.508472 0.519559    direct
+     id_34   0.509174 0.519394  inverted
+     id_06   0.503879 0.517335    direct
+     id_17   0.516332 0.516040    direct
+     id_19   0.515635 0.515628    direct
+     id_09   0.501525 0.515510    direct
+     id_12   0.502108 0.515181  inverted
+DeviceInfo   0.516432 0.513345    direct
+     id_33   0.525882 0.511068  inverted
+     id_03   0.500848 0.509685    direct
+     id_38   0.533965 0.509179  inverted
+     id_29   0.511999 0.508361    direct
+     id_11   0.506123 0.507743    direct
+     id_24   0.503707 0.507120  inverted
+     id_13   0.515666 0.506855  inverted
+     id_35   0.511346 0.506355  inverted
+     id_01   0.515421 0.505613  inverted
+     id_28   0.507414 0.505343    direct
+     id_30   0.512084 0.504590    direct
+     id_21   0.502882 0.504207  inverted
+     id_08   0.504537 0.502913    direct
+     id_07   0.500203 0.502265    direct
+     id_04   0.502346 0.502265    direct
+     id_36   0.500428 0.501818  inverted
+     id_22   0.501456 0.501618  inverted
+     id_10   0.504519 0.501612  inverted
+     id_18   0.519440 0.501430    direct
+     id_25   0.507513 0.501294  inverted
+     id_14   0.509548 0.500759  inverted
+     id_31   0.506800 0.500612    direct
+     id_26   0.500556 0.500000    direct
+root@8b9ff8325d75:/workspace#

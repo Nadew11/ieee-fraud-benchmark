@@ -1,0 +1,111 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# cat << 'EOF' > train.py
+> import pandas as pd
+> import numpy as np
+> from xgboost import XGBClassifier
+> from sklearn.metrics import roc_auc_score
+> import os
+>
+> # Load dataset
+> df = pd.read_csv('/data/transactions.csv')
+>
+> # Feature engineering
+> # 1. Temporal features
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+> df['day_of_week'] = (df['TransactionDT'] // 86400) % 7
+>
+> # 2. Historical patterns for card1
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(-1)
+> cumsum_card1 = df.groupby('card1')['TransactionAmt'].cumsum()
+> cumcount_card1 = df.groupby('card1').cumcount() + 1
+> df['card1_cum_mean_amt'] = cumsum_card1 / cumcount_card1
+> df['card1_amt_diff_mean'] = df['TransactionAmt'] - df['card1_cum_mean_amt']
+> df['card1_amt_ratio_mean'] = df['TransactionAmt'] / (df['card1_cum_mean_amt'] + 1e-5)
+>
+> # 3. Historical patterns for addr1
+> df['addr1_cum_count'] = df.groupby('addr1').cumcount()
+> df['addr1_time_diff'] = df.groupby('addr1')['TransactionDT'].diff().fillna(-1)
+> cumsum_addr1 = df.groupby('addr1')['TransactionAmt'].cumsum()
+> cumcount_addr1 = df.groupby('addr1').cumcount() + 1
+> df['addr1_cum_mean_amt'] = cumsum_addr1 / cumcount_addr1
+>
+> # 4. ProductCD one-hot encoding
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+>
+> # Drop columns not used as features
+> # TransactionID and TransactionDT are not direct predictors, but we can keep TransactionDT if useful.
+> # We will drop TransactionID.
+> features = [col for col in df.columns if col not in ['TransactionID', 'isFraud']]
+>
+> # Split into train and test temporally
+> n_train = int(len(df) * 0.8)
+> train = df.iloc[:n_train]
+> test = df.iloc[n_train:]
+>
+> X_train, y_train = train[features], train['isFraud']
+> X_test, y_test = test[features], test['isFraud']
+>
+> print("Features used:", list(X_train.columns))
+>
+> # Train Model
+> model = XGBClassifier(
+>     n_estimators=200,
+>     learning_rate=0.05,
+>     max_depth=6,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     eval_metric='auc'
+> )
+>
+> model.fit(X_train, y_train)
+>
+> # Predict probabilities
+> y_pred_train = model.predict_proba(X_train)[:, 1]
+> y_pred_test = model.predict_proba(X_test)[:, 1]
+>
+> train_auc = roc_auc_score(y_train, y_pred_train)
+> test_auc = roc_auc_score(y_test, y_pred_test)
+>
+> print(f"Train AUC: {train_auc:.5f}")
+> print(f"Test AUC: {test_auc:.5f}")
+>
+> # Save outputs
+> os.makedirs('/output', exist_ok=True)
+> with open('/output/auc.txt', 'w') as f:
+>     f.write(f"{test_auc:.6f}\n")
+>
+> # Write methodology note
+> with open('/output/methodology.txt', 'w') as f:
+>     f.write("Methodology Note - Fraud Detection Model with Engineered Features\n")
+>     f.write("===============================================================\n\n")
+>     f.write("1. Feature Engineering Approach:\n")
+>     f.write("   To capture historical patterns in transaction behavior without introducing target leakage, ")
+>     f.write("we engineered cumulative and difference-based features using vectorized cumulative operations:\n")
+>     f.write("   - card1_cum_count: Cumulative transaction count for each card1.\n")
+>     f.write("   - card1_time_diff: Time (seconds) since the previous transaction for the same card1 (filled with -1 for the first transaction).\n")
+>     f.write("   - card1_cum_mean_amt: Cumulative mean transaction amount for each card1.\n")
+>     f.write("   - card1_amt_diff_mean: Deviation of current TransactionAmt from the card1 cumulative mean.\n")
+>     f.write("   - card1_amt_ratio_mean: Ratio of current TransactionAmt to the card1 cumulative mean.\n")
+>     f.write("   - addr1_cum_count, addr1_time_diff, addr1_cum_mean_amt: Analogous cumulative features for the billing region addr1.\n")
+>     f.write("   - hour, day_of_week: Extracted temporal cyclic indicators from TransactionDT to reflect intra-day and intra-week patterns.\n\n")
+>     f.write("2. Evaluation Strategy:\n")
+>     f.write("   We used a time-based split of 80% train / 20% test to properly evaluate the model's ability ")
+>     f.write("to predict future unseen transactions, mimicking realistic production deployment scenarios. ")
+>     f.write("Since the transactions are already ordered chronologically by TransactionDT, the split preserves the chronological sequence.\n\n")
+>     f.write("3. Modeling Details:\n")
+>     f.write("   An XGBoost classifier was trained on the engineered feature set. AUC is monitored and reported on the test set.\n")
+>
+> print("Saved outputs successfully.")
+> EOF
+root@f9cb0064b676:/workspace# python3 train.py
+Features used: ['TransactionDT', 'TransactionAmt', 'card1', 'addr1', 'C1', 'C2', 'hour', 'day_of_week', 'card1_cum_count', 'card1_time_diff', 'card1_cum_mean_am
+t', 'card1_amt_diff_mean', 'card1_amt_ratio_mean', 'addr1_cum_count', 'addr1_time_diff', 'addr1_cum_mean_amt', 'ProductCD_H', 'ProductCD_R', 'ProductCD_S', 'Pro
+ductCD_W']
+Train AUC: 0.96786
+Test AUC: 0.83915
+Saved outputs successfully.
+root@f9cb0064b676:/workspace#

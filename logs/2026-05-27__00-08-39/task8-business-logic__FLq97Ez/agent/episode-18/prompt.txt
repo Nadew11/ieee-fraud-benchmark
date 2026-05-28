@@ -1,0 +1,39 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > test_dedup.py
+> import pandas as pd
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+>
+> # Convert dates
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> # Build FX rates lookup
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> # Let's test different dedup strategies
+> # Strategy A: Dedup the entire df first on TransactionID, keeping first or last
+> for keep_strat in ['first', 'last']:
+>     df_dedup = df.drop_duplicates(subset=['TransactionID'], keep=keep_strat)
+>     df_q4 = df_dedup[(df_dedup['transaction_date'] >= '2023-10-01') & (df_dedup['transaction_date'] <= '2023-12-31')]
+>
+>     # Settled purchase fraud
+>     purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase') & (df_q4['settlement_status'] == 'settled')]
+>     print(f"Keep: {keep_strat} -> count: {len(purchases)}, sum: {purchases['amount_usd'].sum():.2f}")
+>
+> # Let's check other status_filter combinations or sorting before dedup?
+> EOF
+root@474ebd5bd0a4:/workspace# python3 test_dedup.py
+Keep: first -> count: 249, sum: 29000.06
+Keep: last -> count: 249, sum: 29006.02
+root@474ebd5bd0a4:/workspace#

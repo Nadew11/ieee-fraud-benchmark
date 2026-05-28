@@ -1,0 +1,25 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "
+> import pandas as pd, numpy as np
+> from sklearn.preprocessing import StandardScaler
+> import xgboost as xgb
+> from sklearn.metrics import roc_auc_score
+> df = pd.read_csv('/data/train_transaction.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+> features = [c for c in df.columns if c not in ['TransactionID', 'isFraud', 'ProductCD', 'card4', 'card6']]
+> X = df[features].fillna(-999).values
+> y = df['isFraud'].values
+> scaler = StandardScaler()
+> X = scaler.fit_transform(X)
+> split_idx = int(len(df) * 0.8)
+> X_train, X_val = X[:split_idx], X[split_idx:]
+> y_train, y_val = y[:split_idx], y[split_idx:]
+> model = xgb.XGBClassifier(objective='binary:logistic', eval_metric='rmse', n_estimators=300, max_depth=6, learning_rate=0.05, subsample=0.8, colsample_bytree=
+0.8, random_state=42, use_label_encoder=False, verbosity=0)
+> model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
+> probs = model.predict_proba(X_val)[:, 1]
+> print('AUC:', roc_auc_score(y_val, probs))
+> "
+AUC: 0.9999947891155044
+root@549b54a67146:/workspace#

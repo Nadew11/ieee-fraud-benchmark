@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 50 (char 51) | Content preview: '{\n  "analysis": "Everything is correctly formatted:\n1. `/output/auc.txt` contains a single float: `0'...
+
+Please fix these issues and provide a proper JSON response.

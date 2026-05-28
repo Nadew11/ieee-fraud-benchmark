@@ -1,0 +1,90 @@
+New Terminal Output:
+
+RF max_depth=4 -> Train AUC: 0.7834, Val AUC: 0.4645
+root@8b9ff8325d75:/workspace# cat << 'EOF' > experiment.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.preprocessing import OneHotEncoder, StandardScaler, OrdinalEncoder
+> from sklearn.compose import ColumnTransformer
+> from sklearn.pipeline import Pipeline
+> from sklearn.impute import SimpleImputer
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.ensemble import HistGradientBoostingClassifier, RandomForestClassifier, ExtraTreesClassifier
+> from xgboost import XGBClassifier
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> y = train['isFraud']
+> X = train.drop(columns=['isFraud', 'TransactionID'])
+>
+> # Let's inspect the percentage of missing values per column
+> missing_pct = X.isnull().mean()
+> # Try keeping columns with less than 80% missing values
+> cols_to_keep = missing_pct[missing_pct < 0.8].index.tolist()
+> print(f"Keeping {len(cols_to_keep)} columns out of {X.shape[1]}")
+>
+> X_filtered = X[cols_to_keep]
+>
+> # Categorical vs numeric
+> num_cols = X_filtered.select_dtypes(include=[np.number]).columns.tolist()
+> cat_cols = X_filtered.select_dtypes(exclude=[np.number]).columns.tolist()
+> print("Numeric columns:", len(num_cols))
+> print("Categorical columns:", len(cat_cols))
+>
+> # Split
+> X_tr, X_val, y_tr, y_val = train_test_split(X_filtered, y, test_size=0.2, random_state=42, stratify=y)
+>
+> # Pipeline for Logistic Regression with OneHot Encoding
+> num_transformer = Pipeline(steps=[
+>     ('imputer', SimpleImputer(strategy='median')),
+>     ('scaler', StandardScaler())
+> ])
+> cat_transformer = Pipeline(steps=[
+>     ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+>     ('onehot', OneHotEncoder(handle_unknown='ignore', max_categories=50))
+> ])
+> preprocessor = ColumnTransformer(transformers=[
+>     ('num', num_transformer, num_cols),
+>     ('cat', cat_transformer, cat_cols)
+> ])
+>
+> # Let's try Logistic Regression
+> lr_pipeline = Pipeline(steps=[('preprocessor', preprocessor),
+>                              ('classifier', LogisticRegression(C=0.01, max_iter=1000, random_state=42))])
+> lr_pipeline.fit(X_tr, y_tr)
+> print("LR C=0.01 Train AUC:", roc_auc_score(y_tr, lr_pipeline.predict_proba(X_tr)[:, 1]))
+> print("LR C=0.01 Val AUC:", roc_auc_score(y_val, lr_pipeline.predict_proba(X_val)[:, 1]))
+>
+> lr_pipeline2 = Pipeline(steps=[('preprocessor', preprocessor),
+>                              ('classifier', LogisticRegression(C=1.0, max_iter=1000, random_state=42))])
+> lr_pipeline2.fit(X_tr, y_tr)
+> print("LR C=1.0 Train AUC:", roc_auc_score(y_tr, lr_pipeline2.predict_proba(X_tr)[:, 1]))
+> print("LR C=1.0 Val AUC:", roc_auc_score(y_val, lr_pipeline2.predict_proba(X_val)[:, 1]))
+>
+> # Try XGBoost on Ordinal Encoded
+> X_oe = X_filtered.copy()
+> for col in cat_cols:
+>     X_oe[col] = X_oe[col].astype(str).fillna('missing')
+> oe = OrdinalEncoder(handle_unknown='use_encoded_value', unknown_value=-1)
+> X_oe[cat_cols] = oe.fit_transform(X_oe[cat_cols])
+> X_tr_oe, X_val_oe, y_tr_oe, y_val_oe = train_test_split(X_oe, y, test_size=0.2, random_state=42, stratify=y)
+>
+> xgb = XGBClassifier(n_estimators=50, max_depth=3, learning_rate=0.05, random_state=42, eval_metric='logloss')
+> xgb.fit(X_tr_oe, y_tr_oe)
+> print("XGB max_depth=3 lr=0.05 Train AUC:", roc_auc_score(y_tr_oe, xgb.predict_proba(X_tr_oe)[:, 1]))
+> print("XGB max_depth=3 lr=0.05 Val AUC:", roc_auc_score(y_val_oe, xgb.predict_proba(X_val_oe)[:, 1]))
+>
+> xgb2 = XGBClassifier(n_estimators=100, max_depth=2, learning_rate=0.01, random_state=42, eval_metric='logloss')
+> xgb2.fit(X_tr_oe, y_tr_oe)
+> print("XGB max_depth=2 lr=0.01 Train AUC:", roc_auc_score(y_tr_oe, xgb2.predict_proba(X_tr_oe)[:, 1]))
+> print("XGB max_depth=2 lr=0.01 Val AUC:", roc_auc_score(y_val_oe, xgb2.predict_proba(X_val_oe)[:, 1]))
+>
+> EOF
+root@8b9ff8325d75:/workspace# python3 experiment.py
+Keeping 31 columns out of 40
+Numeric columns: 16
+Categorical columns: 15
+LR C=0.01 Train AUC: 0.6067906583660785
+LR C=0.01 Val AUC: 0.5441482789055604
+

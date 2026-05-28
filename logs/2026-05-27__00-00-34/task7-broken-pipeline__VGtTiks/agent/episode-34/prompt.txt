@@ -1,0 +1,33 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_lr.py
+> import pandas as pd
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.metrics import roc_auc_score
+> from sklearn.preprocessing import StandardScaler
+>
+> df = pd.read_csv('/data/train_transaction.csv').sort_values('TransactionDT').reset_index(drop=True)
+> TARGET = 'isFraud'
+> cat_cols = ['ProductCD', 'card4', 'card6']
+> df_encoded = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+> DROP = ['TransactionID', TARGET]
+> features = [c for c in df_encoded.columns if c not in DROP]
+> split_idx = int(len(df_encoded) * 0.8)
+>
+> X_train = df_encoded.iloc[:split_idx][features].fillna(0)
+> y_train = df_encoded.iloc[:split_idx][TARGET]
+> X_val = df_encoded.iloc[split_idx:][features].fillna(0)
+> y_val = df_encoded.iloc[split_idx:][TARGET]
+>
+> scaler = StandardScaler()
+> X_train_sc = scaler.fit_transform(X_train)
+> X_val_sc = scaler.transform(X_val)
+>
+> lr = LogisticRegression(max_iter=1000, random_state=42)
+> lr.fit(X_train_sc, y_train)
+> p_val = lr.predict_proba(X_val_sc)[:, 1]
+> print('LR Val AUC:', roc_auc_score(y_val, p_val))
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_lr.py
+LR Val AUC: 0.9975448049218542
+

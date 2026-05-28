@@ -1,0 +1,22 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df['ProductCD'].value_counts()); print(df[
+'card4'].value_counts()); print(df['card6'].value_counts())"
+ProductCD
+W    13298
+H     5242
+C     3117
+S     2044
+R     1299
+Name: count, dtype: int64
+card4
+discover            6318
+visa                6242
+mastercard          6238
+american express    6202
+Name: count, dtype: int64
+card6
+debit     12507
+credit    12493
+Name: count, dtype: int64
+root@549b54a67146:/workspace#

@@ -1,0 +1,10 @@
+{
+  "analysis": "We need to clean a fraud identity dataset located at `/data/train_identity.csv` and save it to `/output/cleaned.csv`. Let's first inspect the file's columns, size, and missing values using Python.",
+  "plan": "I will create a quick inspection script in Python to see the structure of `/data/train_identity.csv` and output some summary information.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"\nimport pandas as pd\ndf = pd.read_csv('/data/train_identity.csv', nrows=5)\nprint(df.info())\nprint(df.head())\n\"\n",
+      "duration": 2.0
+    }
+  ]
+}

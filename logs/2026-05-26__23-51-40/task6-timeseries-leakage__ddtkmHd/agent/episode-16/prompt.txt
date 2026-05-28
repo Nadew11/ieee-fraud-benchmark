@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@f9cb0064b676:/workspace# python3 test_combo.py
+Test AUC with combo features: 0.83953
+root@f9cb0064b676:/workspace#

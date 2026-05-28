@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 633 (char 634) | Content preview: '{\n  "analysis": "Both `xgboost` and `HistGradientBoostingClassifier` are available! This is excellen'...
+
+Please fix these issues and provide a proper JSON response.

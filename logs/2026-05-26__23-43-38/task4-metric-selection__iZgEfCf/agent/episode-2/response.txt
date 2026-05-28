@@ -1,0 +1,14 @@
+{
+  "analysis": "I need to check `/data/predictions.csv` and analyze its size, format, and content.",
+  "plan": "I will run `head -n 20 /data/predictions.csv` and count the lines using `wc -l /data/predictions.csv`. I want to verify if the junior analyst's claim about 5,650 rows matches the actual predictions file.",
+  "commands": [
+    {
+      "keystrokes": "wc -l /data/predictions.csv\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "head -n 20 /data/predictions.csv\n",
+      "duration": 0.5
+    }
+  ]
+}

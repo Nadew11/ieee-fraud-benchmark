@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "import pandas as pd, numpy as np, xgboost as xgb; from sklearn.metrics import roc_auc_score; df = pd.read_csv('/data/t
+rain_transaction.csv').sort_values('TransactionDT').reset_index(drop=True); df = pd.get_dummies(df, columns=['ProductCD', 'card4', 'card6'], drop_first=True); f
+eatures = [c for c in df.columns if c not in ['TransactionID', 'isFraud', 'TransactionDT']]; split_idx = int(len(df) * 0.8); train_df = df.iloc[:split_idx]; val
+_df = df.iloc[split_idx:]; X_train, y_train = train_df[features].fillna(-999).values, train_df['isFraud'].values; X_val, y_val = val_df[features].fillna(-999).v
+alues, val_df['isFraud'].values; model = xgb.XGBClassifier(objective='binary:logistic', eval_metric='logloss', n_estimators=300, max_depth=6, learning_rate=0.05
+, subsample=0.8, colsample_bytree=0.8, random_state=42); model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False); probs = model.predict_proba(X_va
+l)[:, 1]; print('Chronological Split AUC:', roc_auc_score(y_val, probs))"
+Chronological Split AUC: 0.9999930521540059
+root@e9645eb65f5b:/workspace#

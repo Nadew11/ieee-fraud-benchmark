@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df_train = pd.read_csv('/data/train_identity.csv')
+> df_source = pd.read_csv('/setup/source_identity.csv')
+> print('Train shape:', df_train.shape)
+> print('Source shape:', df_source.shape)
+> "
+Train shape: (10500, 41)
+Source shape: (12000, 41)
+root@666a44d996ad:/workspace#

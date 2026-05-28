@@ -1,0 +1,14 @@
+{
+  "analysis": "We need to train a binary classifier on `/data/train_transaction.csv` to predict `isFraud`, using an 80/20 train/val split. We must output predictions on the validation set to `/output/predictions.csv` and the AUC to `/output/auc.txt`. Let's first inspect the data structure and look at the first few rows.",
+  "plan": "1. Check files in /data\n2. View the head of `/data/train_transaction.csv` to understand columns, features, and missing values.\n3. Write a Python script to load data, handle missing values, split 80/20 (ideally stratified or simple train_test_split), train a model (e.g., LightGBM, XGBoost, or RandomForest), evaluate ROC-AUC, save predictions, and save the AUC score.\n4. Run the script and verify output.",
+  "commands": [
+    {
+      "keystrokes": "ls -l /data\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "head -n 5 /data/train_transaction.csv\n",
+      "duration": 0.5
+    }
+  ]
+}

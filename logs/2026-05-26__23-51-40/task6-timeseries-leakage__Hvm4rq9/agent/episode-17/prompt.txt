@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 6 column 35 (char 1431) | Content preview: '{\n  "analysis": "The validation set is relatively small (10% is 3,000 rows), which can introduce som'...
+
+Please fix these issues and provide a proper JSON response.

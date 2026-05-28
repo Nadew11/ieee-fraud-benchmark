@@ -1,0 +1,69 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# cat << 'EOF' > print_details.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score, accuracy_score, confusion_matrix
+>
+> # Load and clean
+> df = pd.read_csv('/data/predictions.csv')
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+> start_date = pd.to_datetime('2026-01-15 00:00:00')
+> end_date = pd.to_datetime('2026-04-30 23:59:59')
+> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)].copy()
+>
+> print(f"--- DATASET SIZES ---")
+> print(f"Raw dataset: {len(df)} rows")
+> print(f"Cleaned dataset (scoring period only): {len(clean_df)} rows")
+> print(f"Excluded (out-of-period): {len(df) - len(clean_df)} rows")
+>
+> # Baseline (No deployment)
+> tp_b, fp_b, fn_b, tn_b = 0, 0, 193, 4872
+>
+> # Threshold 0.5 (Uncleaned)
+> y_true_raw = df['y_true']
+> y_pred_prob_raw = df['y_pred_prob']
+> y_pred_05_raw = (y_pred_prob_raw >= 0.5).astype(int)
+> auc_raw = roc_auc_score(y_true_raw, y_pred_prob_raw)
+> acc_raw = accuracy_score(y_true_raw, y_pred_05_raw)
+> tn_raw, fp_raw, fn_raw, tp_raw = confusion_matrix(y_true_raw, y_pred_05_raw).ravel()
+>
+> print(f"\n--- ANALYST UNCLEANED METRICS (Threshold 0.5) ---")
+> print(f"AUC-ROC: {auc_raw:.6f} (reported: 0.9182)")
+> print(f"Accuracy: {acc_raw*100:.2f}% (reported: 88.3%)")
+> print(f"TP: {tp_raw}, FP: {fp_raw}, FN: {fn_raw}, TN: {tn_raw}")
+>
+> # Threshold 0.5 (Cleaned)
+> y_true_clean = clean_df['y_true']
+> y_pred_prob_clean = clean_df['y_pred_prob']
+> y_pred_05_clean = (y_pred_prob_clean >= 0.5).astype(int)
+> auc_clean = roc_auc_score(y_true_clean, y_pred_prob_clean)
+> acc_clean = accuracy_score(y_true_clean, y_pred_05_clean)
+> tn_clean, fp_clean, fn_clean, tp_clean = confusion_matrix(y_true_clean, y_pred_05_clean).ravel()
+>
+> print(f"\n--- CLEANED METRICS (Threshold 0.5) ---")
+> print(f"AUC-ROC: {auc_clean:.6f}")
+> print(f"Accuracy: {acc_clean*100:.2f}%")
+> print(f"TP: {tp_clean}, FP: {fp_clean}, FN: {fn_clean}, TN: {tn_clean}")
+>
+> # Optimal Constrained Threshold (0.644 or similar)
+> # Let's verify if there is a slightly different optimal threshold or if 0.644 is indeed the one
+> # Let's print out a range of thresholds around 0.644
+> print(f"\n--- DETAILED LOOK AROUND 0.644 ---")
+> for t in [0.64, 0.641, 0.642, 0.643, 0.644, 0.645, 0.65, 0.66]:
+>     flagged = clean_df['y_pred_prob'] >= t
+>     fc = flagged.sum()
+>     tp = ((flagged) & (clean_df['y_true'] == 1)).sum()
+>     fp = ((flagged) & (clean_df['y_true'] == 0)).sum()
+>     fn = ((~flagged) & (clean_df['y_true'] == 1)).sum()
+>     tn = ((~flagged) & (clean_df['y_true'] == 0)).sum()
+>
+>     q_flagged = fc * (2800000 / len(clean_df))
+>     daily_alerts = q_flagged / 90.0
+>     q_cost = q_flagged * 35.0 + fn * (2800000 / len(clean_df)) * 4200.0
+>
+>     print(f"t={t:.3f}: flagged={fc}, tp={tp}, fp={fp}, fn={fn}, daily={daily_alerts:.1f}, cost=${q_cost:,.2f}")
+>
+> EOF
+root@831ed0f33a44:/workspace# python3 print_details.py
+

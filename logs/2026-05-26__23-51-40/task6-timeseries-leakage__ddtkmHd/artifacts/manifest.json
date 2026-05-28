@@ -1,0 +1,20 @@
+[
+  {
+    "source": "/logs/artifacts",
+    "destination": "artifacts",
+    "type": "directory",
+    "status": "empty"
+  },
+  {
+    "source": "/output/auc.txt",
+    "destination": "artifacts/auc.txt",
+    "type": "file",
+    "status": "ok"
+  },
+  {
+    "source": "/output/methodology.txt",
+    "destination": "artifacts/methodology.txt",
+    "type": "file",
+    "status": "ok"
+  }
+]

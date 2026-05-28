@@ -1,0 +1,18 @@
+{
+  "analysis": "We need to check the files in `/data` to see what columns they have and their shapes.",
+  "plan": "I will run `ls -la /data` and take a quick look at the first few rows of the training and testing files.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /data\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "head -n 5 /data/train_identity.csv\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "head -n 5 /data/test_identity.csv\n",
+      "duration": 0.5
+    }
+  ]
+}

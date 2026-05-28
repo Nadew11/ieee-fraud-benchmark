@@ -1,0 +1,50 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# cat << 'EOF' > tune_lr.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.impute import SimpleImputer
+> from sklearn.pipeline import Pipeline
+> from sklearn.compose import ColumnTransformer
+> from sklearn.preprocessing import OneHotEncoder
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> X = train.drop(columns=['TransactionID', 'isFraud'])
+> y = train['isFraud']
+>
+> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+>
+> preprocessor = ColumnTransformer(
+>     transformers=[
+>         ('num', Pipeline([
+>             ('imputer', SimpleImputer(strategy='median')),
+>             ('scaler', StandardScaler())
+>         ]), num_cols),
+>         ('cat', Pipeline([
+>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+>         ]), cat_cols)
+>     ]
+> )
+>
+> X_train, X_holdout, y_train, y_holdout = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> for C_val in [0.0001, 0.001, 0.01, 0.05, 0.1, 0.5, 1.0]:
+>     lr_pipeline = Pipeline([
+>         ('preprocessor', preprocessor),
+>         ('lr', LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000, C=C_val))
+>     ])
+>     lr_pipeline.fit(X_train, y_train)
+>     preds_train = lr_pipeline.predict_proba(X_train)[:, 1]
+>     preds_holdout = lr_pipeline.predict_proba(X_holdout)[:, 1]
+>     print(f"C={C_val:<6} | Train AUC: {roc_auc_score(y_train, preds_train):.5f} | Holdout AUC: {roc_auc_score(y_holdout, preds_holdout):.5f}")
+> EOF
+root@27e59b3c4e79:/workspace# python3 tune_lr.py
+

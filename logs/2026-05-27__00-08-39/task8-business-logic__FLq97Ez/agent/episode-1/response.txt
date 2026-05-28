@@ -1,0 +1,14 @@
+{
+  "analysis": "The files under `/data` are:\n- `fee_schedule.csv`\n- `fx_rates.csv`\n- `ground_truth.json` (interesting, contains ground truth, let's look at this too)\n- `region_map.csv`\n- `transactions.csv`\n\nLet's print the head/contents of each to understand the schemas.",
+  "plan": "Print the first few lines of each file to understand the columns and data formats.",
+  "commands": [
+    {
+      "keystrokes": "head -n 5 /data/fee_schedule.csv /data/region_map.csv /data/ground_truth.json\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "head -n 5 /data/fx_rates.csv /data/transactions.csv\n",
+      "duration": 0.5
+    }
+  ]
+}

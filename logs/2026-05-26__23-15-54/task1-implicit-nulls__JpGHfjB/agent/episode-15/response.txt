@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's hit Enter to run grep or see why they were concatenated. Ah, we got extra text warning earlier. Let's make sure our JSON is perfect. Let's look at the result of grep.",
+  "plan": "Send a newline to terminate the command and see the output.",
+  "commands": [
+    {
+      "keystrokes": "\n",
+      "duration": 0.5
+    }
+  ]
+}

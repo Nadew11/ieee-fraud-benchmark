@@ -1,0 +1,82 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# cat << 'EOF' > test_different_models.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.ensemble import HistGradientBoostingClassifier
+> from xgboost import XGBClassifier
+> from sklearn.preprocessing import LabelEncoder
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> test.columns = [c.replace('-', '_') for c in test.columns]
+>
+> # Let's preserve NaNs correctly instead of converting to 'nan' string
+> # Or map missing to an actual value, or let XGBoost handle them
+> cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+>
+> # For categorical features, let's keep NaN as NaN and use pd.Categorical
+> # or label encode while keeping NaNs as -1
+> for col in cat_cols:
+>     train[col] = train[col].astype(str).replace('nan', np.nan)
+>     test[col] = test[col].astype(str).replace('nan', np.nan)
+>
+>     # Combine to fit label encoder, but keep NaN as -1
+>     non_null_train = train[col].dropna()
+>     non_null_test = test[col].dropna()
+>     all_vals = pd.concat([non_null_train, non_null_test], axis=0).unique()
+>
+>     le = LabelEncoder()
+>     le.fit(all_vals)
+>
+>     # Map only non-null
+>     train.loc[train[col].notnull(), col] = le.transform(train.loc[train[col].notnull(), col])
+>     test.loc[test[col].notnull(), col] = le.transform(test.loc[test[col].notnull(), col])
+>
+>     train[col] = train[col].astype(float)
+>     test[col] = test[col].astype(float)
+>
+> # Split train into 80% train and 20% holdout
+> X = train.drop(columns=['TransactionID', 'isFraud'])
+> y = train['isFraud']
+>
+> X_train, X_holdout, y_train, y_holdout = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> # Let's test standard XGBoost classifier
+> xgb = XGBClassifier(random_state=42, eval_metric='logloss', max_depth=4, learning_rate=0.05, n_estimators=100)
+> xgb.fit(X_train, y_train)
+> preds_train_xgb = xgb.predict_proba(X_train)[:, 1]
+> preds_holdout_xgb = xgb.predict_proba(X_holdout)[:, 1]
+> print("XGBoost - Train AUC:", roc_auc_score(y_train, preds_train_xgb))
+> print("XGBoost - Holdout AUC:", roc_auc_score(y_holdout, preds_holdout_xgb))
+>
+> # Let's test HistGradientBoosting with some regularization
+> hgb = HistGradientBoostingClassifier(random_state=42, max_depth=3, learning_rate=0.05, max_iter=100)
+> hgb.fit(X_train, y_train)
+> preds_train_hgb = hgb.predict_proba(X_train)[:, 1]
+> preds_holdout_hgb = hgb.predict_proba(X_holdout)[:, 1]
+> print("HistGB - Train AUC:", roc_auc_score(y_train, preds_train_hgb))
+> print("HistGB - Holdout AUC:", roc_auc_score(y_holdout, preds_holdout_hgb))
+>
+> # Let's check a simple Random Forest
+> from sklearn.ensemble import RandomForestClassifier
+> from sklearn.impute import SimpleImputer
+> from sklearn.pipeline import Pipeline
+> rf_pipeline = Pipeline([
+>     ('imputer', SimpleImputer(strategy='median')),
+>     ('rf', RandomForestClassifier(random_state=42, max_depth=5, n_estimators=100, class_weight='balanced'))
+> ])
+> rf_pipeline.fit(X_train, y_train)
+> preds_train_rf = rf_pipeline.predict_proba(X_train)[:, 1]
+> preds_holdout_rf = rf_pipeline.predict_proba(X_holdout)[:, 1]
+> print("RF - Train AUC:", roc_auc_score(y_train, preds_train_rf))
+> print("RF - Holdout AUC:", roc_auc_score(y_holdout, preds_holdout_rf))
+> EOF
+root@27e59b3c4e79:/workspace# python3 test_different_models.py
+XGBoost - Train AUC: 0.8458226307013907
+XGBoost - Holdout AUC: 0.5081082671373933
+

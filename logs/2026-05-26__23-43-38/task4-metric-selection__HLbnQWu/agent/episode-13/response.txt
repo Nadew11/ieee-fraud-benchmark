@@ -1,0 +1,10 @@
+{
+  "analysis": "The `python3 analyze_constrained.py` script is running. Let's wait a bit more.",
+  "plan": "Wait 1 second for the script to finish and output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 1.0
+    }
+  ]
+}

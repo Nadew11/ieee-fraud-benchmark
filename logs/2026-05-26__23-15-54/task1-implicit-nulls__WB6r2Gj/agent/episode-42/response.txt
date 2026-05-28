@@ -1,0 +1,13 @@
+{
+  "analysis": "Wait, why were the counts of `-999` and `unknown` zero in the 'Before clean' section?
+Ah! Let's check:
+In `df = pd.read_csv('/data/train_identity.csv', keep_default_na=False)`, is the value in `id_01` stored as string `'-999.0'` or some other string?
+Let's print the unique values of `df['id_01']` and `df['id_12']` to see why the counts are 0.",
+  "plan": "I will run a python script to check the unique values of `id_01` and `id_12` when read with `keep_default_na=False`.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_identity.csv', keep_default_na=False); print(df['id_01'].unique()[:20]); print(df['id_12'].unique())\"\n",
+      "duration": 5.0
+    }
+  ]
+}

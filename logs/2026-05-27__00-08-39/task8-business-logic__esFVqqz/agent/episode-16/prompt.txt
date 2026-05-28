@@ -1,0 +1,15 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# python3 -c "import pandas as pd; df=pd.read_csv('/data/transactions.csv'); print(df.groupby(['isFraud', 'transaction_type', 'settl
+ement_status']).size())"
+isFraud  transaction_type     settlement_status
+0        purchase             declined              560
+                              pending               394
+                              settled              7163
+1        chargeback_reversal  settled                 9
+         purchase             declined               20
+                              pending                14
+                              settled               264
+         refund               settled                33
+dtype: int64
+root@b9e5a18b679d:/workspace#

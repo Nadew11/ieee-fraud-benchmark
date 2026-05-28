@@ -1,0 +1,15 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df['TransactionDT'].is_monotonic_increasin
+g); print(df['TransactionDT'].describe())"
+False
+count    2.500000e+04
+mean     7.990012e+06
+std      4.540870e+06
+min      8.660800e+04
+25%      4.079741e+06
+50%      7.995345e+06
+75%      1.191440e+07
+max      1.581045e+07
+Name: TransactionDT, dtype: float64
+root@0d5e255b62ea:/workspace#

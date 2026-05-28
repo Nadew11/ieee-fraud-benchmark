@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# cat /data/ground_truth.json
+{"clean_row_count": 10000, "sentinel_999_count": 0, "sentinel_unknown_count": 0, "sentinel_empty_count": 0, "transaction_id_dtype": "int"}root@666a44d996ad:/wor
+kspace#

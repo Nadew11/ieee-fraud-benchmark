@@ -1,0 +1,22 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat /data/ground_truth.json
+{
+  "q4_net_fraud_total_usd": 26755.09,
+  "q4_gross_fraud_total_usd": 30212.56,
+  "total_processing_fees": 1021.58,
+  "total_recoveries": 2435.89,
+  "fraud_purchase_count": 263,
+  "tolerance_pct": 2.0,
+  "expected_regions": [
+    "Africa",
+    "Europe",
+    "North America",
+    "Other"
+  ],
+  "expected_months": [
+    "2023-10",
+    "2023-11",
+    "2023-12"
+  ]
+}root@cf0db7aa8136:/workspace#

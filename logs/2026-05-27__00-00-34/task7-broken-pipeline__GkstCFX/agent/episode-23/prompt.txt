@@ -1,0 +1,43 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "
+> import pandas as pd, numpy as np
+> from sklearn.model_selection import StratifiedKFold
+> import xgboost as xgb
+> from sklearn.metrics import roc_auc_score
+> from sklearn.preprocessing import StandardScaler
+>
+> df = pd.read_csv('/data/train_transaction.csv')
+> features = [c for c in df.columns if c not in ['TransactionID', 'isFraud', 'ProductCD', 'card4', 'card6']]
+>
+> def run_experiment(use_scaling, fill_val):
+>     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+>     aucs = []
+>     for train_idx, val_idx in skf.split(df, df['isFraud']):
+>         df_train, df_val = df.iloc[train_idx], df.iloc[val_idx]
+>         X_train = df_train[features]
+>         X_val = df_val[features]
+>         if fill_val is not None:
+>             X_train = X_train.fillna(fill_val)
+>             X_val = X_val.fillna(fill_val)
+>         y_train = df_train['isFraud'].values
+>         y_val = df_val['isFraud'].values
+>
+>         if use_scaling:
+>             scaler = StandardScaler()
+>             X_train = scaler.fit_transform(X_train)
+>             X_val = scaler.transform(X_val)
+>
+>         model = xgb.XGBClassifier(objective='binary:logistic', eval_metric='logloss', n_estimators=100, max_depth=6, learning_rate=0.05, random_state=42, use_
+label_encoder=False, verbosity=0)
+>         model.fit(X_train, y_train)
+>         probs = model.predict_proba(X_val)[:, 1]
+>         aucs.append(roc_auc_score(y_val, probs))
+>     print(f'Scaling={use_scaling}, Fill={fill_val} -> CV AUC: {np.mean(aucs):.4f}')
+>
+> run_experiment(True, -999)
+> run_experiment(False, None)
+> "
+Scaling=True, Fill=-999 -> CV AUC: 1.0000
+Scaling=False, Fill=None -> CV AUC: 1.0000
+root@549b54a67146:/workspace#

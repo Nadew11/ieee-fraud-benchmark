@@ -1,0 +1,10 @@
+{
+  "analysis": "There is a `/setup/source_identity.csv`? Oh, let's look at `/setup` directory! Maybe there are some scripts or test cases there.",
+  "plan": "I will list the contents of `/setup`.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /setup\n",
+      "duration": 1.0
+    }
+  ]
+}

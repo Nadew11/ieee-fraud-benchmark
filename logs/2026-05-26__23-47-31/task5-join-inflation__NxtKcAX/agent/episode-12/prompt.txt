@@ -1,0 +1,4 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# find / -name "*test*" -o -name "*eval*" 2>/dev/null | grep -v "/usr" | grep -v "/lib" | grep -v "/proc" | grep -v "/sys"
+

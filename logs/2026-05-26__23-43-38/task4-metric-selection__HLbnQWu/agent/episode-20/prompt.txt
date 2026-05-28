@@ -1,0 +1,115 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# cat << 'EOF' > make_audit_findings.py
+> # Let's write the audit findings text programmatically to avoid syntax or JSON issues
+> with open('/output/audit_findings.txt', 'w') as f:
+>     f.write("AUDIT FINDINGS: FRAUD MODEL EVALUATION DRAFT REPORT\n")
+>     f.write("==================================================\n")
+>     f.write("Audited by: Senior AI Consultant / Lead Fraud Analyst\n")
+>     f.write("Date: May 27, 2026\n")
+>     f.write("Subject: Technical and Operational Audit of Draft Evaluation Report by Alex Chen (Junior Analyst)\n\n")
+>     f.write("This document contains detailed findings from our technical audit of the draft fraud model evaluation report. The audit revealed multiple critica
+l errors, misleading claims, and major analytical gaps. Deploying the model under the draft's assumptions would have overwhelmed Fraud Operations and led to sub
+-optimal financial results.\n\n")
+>     f.write("Below are the 6 primary findings, including explanations of what is wrong, why it matters, and the corrected interpretations.\n\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("FINDING 1: Data Pipeline Failure (Out-of-Period Data and Duplicate Leakage)\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("* Claim in Draft:\n")
+>     f.write("  \"The XGBoost fraud detection model was evaluated against 5,650 held-out transactions.\"\n")
+>     f.write("* What is Wrong:\n")
+>     f.write("  The evaluation dataset export was not pre-processed or filtered. It contains 585 records from May (May 1 to May 11, 2026) which fall outside th
+e designated scoring period of January 15 - April 30, 2026 specified in dataset_info.txt.\n")
+>     f.write("  Crucially, 500 of these 585 records are exact duplicates (by TransactionID) of transactions already present within the correct scoring period.
+The analyst failed to perform basic deduplication and date filtering.\n")
+>     f.write("* Why it Matters:\n")
+>     f.write("  Including duplicate and out-of-period records inflates the evaluation dataset size by 11.5% and distorts all performance metrics. When properly
+ cleaned, the true holdout dataset contains exactly 5,065 unique transactions and 0 duplicates.\n\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("FINDING 2: Inflated and Incorrect Performance Metrics\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("* Claim in Draft:\n")
+>     f.write("  \"Accuracy: 88.3%\", \"AUC-ROC: 0.9182\", \"Confusion Matrix (threshold = 0.5): True Positives: 194, False Positives: 604, False Negatives: 57,
+ True Negatives: 4,795\"\n")
+>     f.write("* What is Wrong:\n")
+>     f.write("  These metrics were computed on the raw, uncleaned dataset of 5,650 rows (which included duplicate/leaked rows). On the corrected scoring period
+ dataset (5,065 unique rows), the performance metrics are lower:\n")
+>     f.write("  - Correct AUC-ROC: 0.905062 (reported as 0.9182, an inflation of ~0.013)\n")
+>     f.write("  - Correct Accuracy at 0.5: 88.0948% (reported as 88.30%)\n")
+>     f.write("  - Correct Confusion Matrix at 0.5:\n")
+>     f.write("    * True Positives (TP): 144 (reported as 194, an inflation of 50)\n")
+>     f.write("    * False Positives (FP): 554 (reported as 604, an inflation of 50)\n")
+>     f.write("    * False Negatives (FN): 49 (reported as 57)\n")
+>     f.write("    * True Negatives (TN): 4,318 (reported as 4,795)\n")
+>     f.write("* Why it Matters:\n")
+>     f.write("  The model's actual ranking performance (AUC-ROC) is 0.9051 rather than the inflated 0.9182. Furthermore, at a threshold of 0.5, the model detec
+ts 50 fewer true fraud cases (144 vs. 194) in the holdout set, meaning the detection capability was significantly overstated.\n\n")
+> EOF
+root@831ed0f33a44:/workspace# cat << 'EOF' >> make_audit_findings.py
+> with open('/output/audit_findings.txt', 'a') as f:
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("FINDING 3: Contradictory Performance Claim and Missed Accuracy Target\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("* Claim in Draft:\n")
+>     f.write("  \"Based on the strong AUC of 0.9182 and accuracy of 88.3%, this model meets our performance targets and is recommended for production deploymen
+t.\"\n")
+>     f.write("  And in Methodology: \"Compared against deployment targets (AUC > 0.80, Accuracy > 95%)\"\n")
+>     f.write("* What is Wrong:\n")
+>     f.write("  The analyst recommends deployment claiming that the model \"meets our performance targets\". However, the model's reported accuracy is 88.3% (c
+orrected to 88.09%), which is significantly BELOW the sta
+[... output limited to 10000 bytes; 69 interior bytes omitted ...]
+s primary performance targets is a major oversight. It compromises risk management
+standards and indicates a lack of attention to detail.\n\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("FINDING 4: Misleading Metric Selection (The Accuracy Paradox)\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("* Claim in Draft:\n")
+>     f.write("  Focusing on \"Accuracy: 88.3%\" as a primary metric for model evaluation and justifying deployment based on it.\n")
+>     f.write("* What is Wrong:\n")
+>     f.write("  In highly imbalanced datasets like fraud detection, accuracy is an inappropriate and misleading metric. In the corrected dataset, there are 4,8
+72 non-fraud transactions and only 193 fraud transactions. A useless \"predict-always-zero\" model would achieve an accuracy of 96.19% (which actually meets the
+ 95% accuracy target).\n")
+>     f.write("  This fraud model has a lower accuracy (88.09%) at threshold 0.5 because it flags 554 false positives. The analyst failed to highlight this \"ac
+curacy paradox\" or report class-imbalanced metrics such as Precision (20.6%), Recall (74.6%), or F1-Score (32.3%).\n")
+>     f.write("* Why it Matters:\n")
+>     f.write("  Relying on accuracy can lead to deploying models that are operationally unusable (due to high false positives) or rejecting high-value models b
+ecause they appear to \"fail\" a naive accuracy threshold.\n\n")
+> EOF
+root@831ed0f33a44:/workspace# cat << 'EOF' >> make_audit_findings.py
+> with open('/output/audit_findings.txt', 'a') as f:
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("FINDING 5: Omission of Operational Capacity Constraints\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("* Claim in Draft:\n")
+>     f.write("  Recommends deploying the model with a threshold of 0.5 \"as-is\" and claiming \"no further tuning is required\".\n")
+>     f.write("* What is Wrong:\n")
+>     f.write("  At a threshold of 0.5, the model flags 698 of 5,065 holdout transactions (13.78%). Extrapolated to our quarterly production volume of 2,800,000
+ transactions, this would generate 385,864 alerts per quarter, which translates to 4,287 alerts per day (assuming 90 days per quarter).\n")
+>     f.write("  However, the Fraud Operations team has a strict daily review capacity of only 1,500 alerts per day (12 analysts, 8-hour shifts). The draft reco
+mmendation completely ignores this operational reality.\n")
+>     f.write("* Why it Matters:\n")
+>     f.write("  Deploying the model at threshold 0.5 would generate 4,287 daily alerts, exceeding our team's capacity by 2.85x. This would overwhelm the operat
+ions team, cause massive backlogs, lead to severe analyst burnout, and leave thousands of fraud alerts unreviewed, creating a critical security gap.\n\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("FINDING 6: Absence of Financial Modeling and Threshold Optimization\n")
+>     f.write("--------------------------------------------------------------------------------\n")
+>     f.write("* Claim in Draft:\n")
+>     f.write("  \"No further tuning is required. ... recommended for production deployment.\"\n")
+>     f.write("* What is Wrong:\n")
+>     f.write("  The analyst failed to conduct any cost-benefit analysis or threshold optimization using the cost parameters provided by Finance ($4,200 loss pe
+r undetected fraud, $35 cost per manual investigation).\n")
+>     f.write("  They did not realize that threshold 0.5 is not only operationally impossible, but also financially sub-optimal.\n")
+>     f.write("* Why it Matters:\n")
+>     f.write("  Tuning the threshold is necessary to balance investigation costs and undetected fraud losses.\n")
+>     f.write("  - At threshold 0.5, the projected quarterly cost is $127.27M ($13.51M investigation + $113.77M fraud loss).\n")
+>     f.write("  - While an unconstrained cost-minimizing threshold exists at 0.29 (cost of $63.60M), it is operationally impossible as it generates 14,293 aler
+ts/day.\n")
+>     f.write("  - By performing a constrained optimization, we can find a threshold that satisfies the daily review capacity of 1,500 alerts while minimizing c
+ost. This occurs at t = 0.644, generating 1,480.3 alerts/day and minimizing the quarterly cost to $192.73M ($4.66M investigation + $188.07M fraud loss).\n")
+>     f.write("  This represents a net quarterly savings of $255.38M compared to doing nothing (baseline cost of $448.11M), while remaining fully within operati
+onal capacity.\n")
+> print("Successfully appended everything to make_audit_findings.py")
+> EOF
+root@831ed0f33a44:/workspace# python3 make_audit_findings.py
+Successfully appended everything to make_audit_findings.py
+root@831ed0f33a44:/workspace#

@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# python3 -c "import sklearn, openpyxl; print('sklearn and openpyxl are installed')"
+python3 -c "import lightgbm; print('lightgbm is installed')" || true
+python3 -c "import xgboost; print('xgboost is installed')" || true
+

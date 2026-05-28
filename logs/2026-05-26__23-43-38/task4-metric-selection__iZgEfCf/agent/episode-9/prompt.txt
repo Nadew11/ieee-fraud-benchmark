@@ -1,0 +1,42 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# cat << 'EOF' > evaluate_filters.py
+> import pandas as pd
+> from sklearn.metrics import confusion_matrix, accuracy_score, roc_auc_score
+>
+> df = pd.read_csv('/data/predictions.csv')
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+>
+> def show_metrics(data, desc):
+>     print(f"=== {desc} ===")
+>     print(f"Count: {len(data)}")
+>     print(f"Class balance: {data['y_true'].value_counts().to_dict()}")
+>     y_pred = (data['y_pred_prob'] >= 0.5).astype(int)
+>     tn, fp, fn, tp = confusion_matrix(data['y_true'], y_pred).ravel()
+>     acc = accuracy_score(data['y_true'], y_pred)
+>     auc = roc_auc_score(data['y_true'], data['y_pred_prob'])
+>     print(f"TN: {tn}, FP: {fp}, FN: {fn}, TP: {tp}")
+>     print(f"Accuracy: {acc:.4f}, AUC: {auc:.4f}")
+>     # Precision, Recall, F1
+>     precision = tp / (tp + fp) if (tp + fp) > 0 else 0
+>     recall = tp / (tp + fn) if (tp + fn) > 0 else 0
+>     f1 = 2 * precision * recall / (precision + recall) if (precision + recall) > 0 else 0
+>     print(f"Precision: {precision:.4f}, Recall: {recall:.4f}, F1: {f1:.4f}")
+>
+> show_metrics(df, "Raw Data (As-Is)")
+>
+> # Filter 1: Exclude batch 99
+> df_no_b99 = df[df['batch_id'] != 99]
+> show_metrics(df_no_b99, "Exclude Batch 99")
+>
+> # Filter 2: Date <= April 30
+> df_date = df[df['scored_at'] <= '2026-04-30 23:59:59']
+> show_metrics(df_date, "Date <= April 30")
+>
+> # Filter 3: Exclude Batch 99 AND Date <= April 30
+> df_both = df[(df['batch_id'] != 99) & (df['scored_at'] <= '2026-04-30 23:59:59')]
+> show_metrics(df_both, "Exclude Batch 99 AND Date <= April 30")
+>
+> EOF
+root@58fc9c5bb0bf:/workspace# python3 evaluate_filters.py
+

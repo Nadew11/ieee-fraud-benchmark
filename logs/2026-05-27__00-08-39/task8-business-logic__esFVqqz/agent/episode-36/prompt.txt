@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print('Duplicate transaction IDs:', df.TransactionID.
+duplicated().sum())"
+Duplicate transaction IDs: 400
+root@b9e5a18b679d:/workspace#

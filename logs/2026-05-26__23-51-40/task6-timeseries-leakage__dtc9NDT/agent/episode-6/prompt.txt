@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 385 (char 386) | Content preview: '{\n  "analysis": "The transactions are relatively uniformly distributed across the 182-day period. Sp'...
+
+Please fix these issues and provide a proper JSON response.

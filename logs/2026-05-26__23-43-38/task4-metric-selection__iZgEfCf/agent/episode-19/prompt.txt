@@ -1,0 +1,129 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# cat << 'EOF' > /output/audit_findings.txt
+> AUDIT FINDINGS REPORT: EVALUATION OF FRAUD DETECTION MODEL
+> Date: May 27, 2026
+---------> Auditor: Lead AI & Financial Analyst
+>
+> We have performed a comprehensive audit of the draft model performance evaluation prepared by the junior analyst. Our review identified several critical analy
+tical errors, misleading claims, and missing operational checks. This report details our findings, explains why they matter, and corrects the metrics.
+>
+> --------------------------------------------------------------------------------
+> FINDING 1: Inclusion of Automated Test / QA Data (Batch 99) in Performance Metrics
+> --------------------------------------------------------------------------------
+,000 transactions. Pro> - Claim in Draft: "The XGBoost fraud detection model was evaluated against 5,650 held-out transactions... Accuracy: 88.3%, AUC-ROC: 0.91
+82."
+> - Correction & Fact: The raw predictions export contains 150 records from Batch 99 (TransactionID prefix '9000') with an artificial ~50% fraud rate (73 positi
+ve, 77 negative) where the model achieved exactly 100% accuracy and an AUC-ROC of 1.0000.
+> - Why it matters: Batch 99 represents QA integration testing or synthetic scripts with a deterministic structure, not real production transactions. Including
+this batch heavily inflates the reported AUC-ROC from 0.8861 (clean data) to 0.9182. This gives the false impression that the model is significantly more accura
+te at distinguishing fraud than it actually is, leading to overconfidence in production performance.
+>
+> --------------------------------------------------------------------------------
+> FINDING 2: Inclusion of Out-of-Period Data
+> --------------------------------------------------------------------------------
+> - Claim in Draft: "Scoring period: January 15 - April 30, 2026" (implied in the methodology as using all 5,650 rows).
+> - Correction & Fact: The dataset contains 585 records with a 'scored_at' date after April 30, 2026 (ranging from May 1 to May 11). This includes 500 real tran
+sactions (prefix '300x') and 85 QA transactions (Batch 99). These records fall completely outside the specified quarterly holdout window.
+> - Why it matters: To maintain rigorous quarterly business reviews, evaluation windows must be strictly bounded. The inclusion of post-period records represent
+s a pipeline export error that distorts the actual quarterly statistics and violates the defined scope.
+>
+> --------------------------------------------------------------------------------
+> FINDING 3: Mathematical & Logical Blunder on Performance Targets
+> --------------------------------------------------------------------------------
+> - Claim in Draft: "Based on the strong AUC of 0.9182 and accuracy of 88.3%, this model meets our performance targets... Targets (AUC > 0.80, Accuracy > 95%)"
+> - Correction & Fact: The analyst claimed the model met all performance targets, but the model's reported accuracy of 88.3% is far below the stated deployment
+target of 95%.
+> - Why it matters: This is an egregious logical error in a business-critical deployment document. It demonstrates a lack of basic verification that could have
+easily been flagged during a superficial review.
+>
+> --------------------------------------------------------------------------------
+> FINDING 4: Inappropriate Use of Accuracy for Highly Imbalanced Fraud Data
+> --------------------------------------------------------------------------------
+> - Claim in Draft: Using "Accuracy: 88.3%" and a target of "Accuracy > 95%" as primary evaluation metrics.
+> - Correction & Fact: In a realistic fraud dataset where the clean fraud prevalence is only 3.24% (162 out of 5,000), a naive baseline model that classifies al
+l transactions as non-fraud (predicts 0 for everything) would achieve an accuracy of 96.76%. This naive model easily beats the 95% accuracy target but catches $
+0 in fraud and is completely useless.
+> - Why it matters: Evaluating a fraud model on overall accuracy is highly misleading. It penalizes model alerts (which create false positives but are necessary
+ to catch true fraud). The team must instead prioritize AUC-ROC, Precision, Recall, and F-1 Score to assess discriminative power and operational efficiency.
+>
+> --------------------------------------------------------------------------------
+> FINDING 5: Complete Neglect of Operational Capacity and Financial Impact
+> --------------------------------------------------------------------------------
+> - Claim in Draft: "Applied threshold of 0.5... is recommended for production deployment. No further tuning is required."
+> - Correction & Fact: The draft completely ignores the operational capacity of the fraud review team (1,500 alerts/day) and the financial consequences of the c
+hosen threshold. At the 0.5 threshold, the clean model would generate 667 alerts over 5,000 transactions. Projected to the quarterly volume of 2,800,000, this c
+reates 373,520 alerts, or ~4,150 alerts per day (using 90 days per quarter). This is 2.7x higher than the team's capacity of 1,500 alerts/day, which would compl
+etely overwhelm operations and cause thousands of alerts to go unreviewed, leaking millions in fraud.
+> - Why it matters: Models cannot be deployed in a vacuum. A threshold of 0.5 is operationally infeasible and financially suboptimal. The threshold must be tune
+d specifically to align with review capacity and minimize total quarterly business cost.
+> EOF
+root@58fc9c5bb0bf:/workspace# cat << 'EOF' > /output/recommendation.txt
+> DEPLOYMENT RECOMMENDATION: FRAUD DETECTION XGBOOST MODEL
+> Date: May 27, 2026
+> To: Fraud Operations Team & Finance Director
+> From: Lead Analyst
+>
+> SUMMARY RECOMMENDATION
+> We recommend deploying the XGBoost model to production, but with a CRITICAL TUNING adjustment. The model must NOT be deployed at the analyst's draft threshold
+ of 0.5. Instead, we recommend deploying the model at a classification threshold of 0.63. This threshold aligns the model's alert rate perfectly with the fraud
+operations team's review capacity while saving the company $190.61M per quarter compared to the baseline of doing nothing.
+>
+> --------------------------------------------------------------------------------
+> OPERATIONAL ANALYSIS & CAPACITY ALIGNMENT
+> --------------------------------------------------------------------------------
+> - Daily Review Capacity: 1,500 alerts/day (12 analysts, 8-hour shifts)
+> - Recommended Threshold: 0.63
+> - Performance on Clean Holdout Set (5,000 records, 162 fraud cases):
+>   - True Positives (TP): 83
+>   - False Positives (FP): 152
+>   - False Negatives (FN): 79
+>   - True Negatives (TN): 4,686
+>   - Alert Rate in Holdout: 4.70% (235 alerts out of 5,000 transactions)
+>
+> - Projections for Quarterly Volume (2,800,000 transactions):
+>   - Projected Quarterly Alerts: 131,600 alerts (235 / 5,000 * 2,800,000)
+>   - Projected Daily Alerts: 1,462.22 alerts/day (assuming a standard 90-day quarter) or 1,446.15 alerts/day (assuming a 91-day Q1).
+>
+> - Capacity Fit: This fits beautifully within the team's capacity of 1,500 alerts/day, utilizing 96.4% to 97.5% of our daily operational bandwidth. This provid
+es a safe buffer of 38 to 54 alerts/day for unexpected volume spikes, ensuring that every generated alert is manually reviewed.
+>
+> --------------------------------------------------------------------------------
+> FINANCIAL IMPACT EVALUATION
+> --------------------------------------------------------------------------------
+> We compared the expected financial impact of the recommended threshold against two baselines:
+> 1. Baseline Scenario: No Model Deployed (Do Nothing)
+>    - All fraud goes undetected.
+>    - Clean fraud rate: 3.24% (162 fraud cases in 5,000 transactions)
+>    - Projected Quarterly Fraud Cases: 90,720 cases (162 / 5,000 * 2,800,000)
+>    - Cost of Undetected Fraud: $381,024,000 (90,720 * $4,200)
+>    - Manual Investigation Cost: $0
+>    - Total Baseline Quarterly Cost: $381,024,000
+>
+> 2. Draft Scenario: Model at 0.5 Threshold (Infeasible)
+>    - Holdout Alerts: 667 (113 TP + 554 FP)
+>    - Projected Daily Alerts: ~4,150 alerts/day (2.7x over-capacity)
+>    - If the team were theoretically sized to handle this, the cost would be:
+>      - Projected Quarterly Fraud Loss (FN): 27,440 cases * $4,200 = $115,248,000
+>      - Projected Quarterly Review Cost: 373,520 alerts * $35 = $13,073,200
+>      - Total Cost: $128,321,200
+>    - WARNING: Because this exceeds review capacity, 63.8% of alerts would go unreviewed. Realistically, undetected fraud would balloon, and the true cost woul
+d be much higher.
+>
+> 3. Recommended Scenario: Model at 0.63 Threshold
+>    - Projected Quarterly Fraud Loss (FN): 44,240 cases * $4,200 = $185,808,000
+>    - Projected Quarterly Review Cost: 131,600 alerts * $35 = $4,606,000
+>    - Total Quarterly Cost: $190,414,000
+>
+> - EXPECTED QUARTERLY SAVINGS:
+>   - By deploying at the 0.63 threshold, we reduce total quarterly fraud-associated costs from $381,024,000 to $190,414,000, representing a net savings of $190
+,610,000 (a 50.03% cost reduction) per quarter.
+>
+> --------------------------------------------------------------------------------
+> CONCLUSION & DEPLOYMENT STRATEGY
+> --------------------------------------------------------------------------------
+> The model has strong predictive capabilities (clean AUC-ROC of 0.8861) and should definitely be deployed. However, to prevent swamping the fraud operations te
+am and leaking millions in unreviewed alerts, the engineering team must set the production classification threshold to exactly 0.63. We recommend monitoring dai
+ly alert volumes post-deployment to ensure they remain within the 1,500 daily limit as transaction volume fluctuates.
+> EOF
+root@58fc9c5bb0bf:/workspace#

@@ -1,0 +1,41 @@
+New Terminal Output:
+root@58fc9c5bb0bf:/workspace# ls -la /data
+total 240
+drwxr-xr-x 1 root root   4096 May 27 03:27 .
+drwxr-xr-x 1 root root   4096 May 27 04:44 ..
+-rw-rw-rw- 1 root root    483 May 26 21:58 cost_assumptions.txt
+-rw-rw-rw- 1 root root    640 May 26 22:48 dataset_info.txt
+-rw-rw-rw- 1 root root   1070 May 26 21:58 draft_evaluation.txt
+-rw-rw-rw- 1 root root 224175 May 26 22:50 predictions.csv
+root@58fc9c5bb0bf:/workspace#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

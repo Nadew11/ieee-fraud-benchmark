@@ -1,0 +1,17 @@
+Previous response had warnings:
+WARNINGS: - Command 1 should end with newline when followed by another command. Otherwise the two commands will be concatenated together on the same line.
+
+New Terminal Output:
+
+python3 sum_rec_types.py
+
+^CTraceback (most recent call last):
+  File "/workspace/search_recoveries.py", line 42, in <module>
+    s = sum(x.amt_usd for x in comb)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+python3 sum_rec_types.py
+
+root@b9e5a18b679d:/workspace# python3 sum_rec_types.py
+python3: can't open file '/workspace/sum_rec_types.py': [Errno 2] No such file or directory
+root@b9e5a18b679d:/workspace#

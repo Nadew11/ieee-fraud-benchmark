@@ -1,0 +1,21 @@
+New Terminal Output:
+
+root@d8276d655354:/workspace# python3 -c "import xgboost; print('xgboost OK')"
+xgboost OK
+root@d8276d655354:/workspace# python3 -c "import xgboost; print('xgboost OK')"
+python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv', nrows=5); print(df.columns.tolist())"
+xgboost OK
+root@d8276d655354:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv', nrows=5); print(df.columns.tolist())"
+
+
+
+
+
+
+
+
+
+
+
+
+

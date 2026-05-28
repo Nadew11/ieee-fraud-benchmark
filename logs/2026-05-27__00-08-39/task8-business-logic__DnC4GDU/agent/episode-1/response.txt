@@ -1,0 +1,14 @@
+{
+  "analysis": "We have several CSV files in `/data`: `fee_schedule.csv`, `fx_rates.csv`, `ground_truth.json` (interesting!), `region_map.csv`, and `transactions.csv`. Let's see what tools and libraries are installed, and inspect the CSV files.",
+  "plan": "Inspect CSV columns and see if python/pandas/openpyxl are installed.",
+  "commands": [
+    {
+      "keystrokes": "python3 --version && python3 -c \"import pandas; import openpyxl; print('Pandas and openpyxl are installed')\"\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "head -n 5 /data/*.csv\n",
+      "duration": 0.5
+    }
+  ]
+}

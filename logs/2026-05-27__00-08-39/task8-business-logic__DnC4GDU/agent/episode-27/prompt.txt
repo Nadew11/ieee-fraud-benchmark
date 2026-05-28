@@ -1,0 +1,129 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > find_exact_rounded_subset.py
+> import pandas as pd
+> import numpy as np
+> import pulp
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+>
+> # Prepare data
+> df = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+> df = df[df['settlement_status'] != 'declined']
+>
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+> df_merged['amt_usd'] = (df_merged['TransactionAmt'] * df_merged['rate_to_usd']).round(2)
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> df_merged['processing_fee'] = (df_merged['amt_usd'] * df_merged['fee_rate']).round(2)
+>
+> frauds = df_merged[(df_merged['isFraud'] == 1) & (df_merged['transaction_type'] == 'purchase')]
+>
+> prob = pulp.LpProblem("SubsetSum", pulp.LpMinimize)
+> x = [pulp.LpVariable(f"x_{i}", cat='Binary') for i in range(len(frauds))]
+> prob += pulp.lpSum(x) == 263
+>
+> amts = frauds['amt_usd'].values
+> fees = frauds['processing_fee'].values
+> ids = frauds['TransactionID'].values
+>
+> gross_diff = pulp.lpSum([x[i] * amts[i] for i in range(len(frauds))]) - 30212.56
+> fee_diff = pulp.lpSum([x[i] * fees[i] for i in range(len(frauds))]) - 1021.58
+>
+> # We want exact match
+> prob += gross_diff == 0
+> prob += fee_diff == 0
+>
+> status = prob.solve()
+> print("Status:", pulp.LpStatus[status])
+> if pulp.LpStatus[status] == 'Optimal':
+>     indices = [i for i in range(len(frauds)) if pulp.value(x[i]) > 0.5]
+>     selected = frauds.iloc[indices]
+>     print("Match Found!")
+>     print("Selected size:", len(selected))
+>     print("Gross Sum:", selected['amt_usd'].sum())
+>     print("Fee Sum:", selected['processing_fee'].sum())
+>     selected[['TransactionID']].to_csv('selected_exact_ids.csv', index=False)
+> else:
+>     print("No exact match with rounded!")
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 find_exact_rounded_subset.py
+Welcome to the CBC MILP Solver
+Version: 2.10.10
+Build Date: Sep 26 2023
+
+command line - /usr/local/lib/python3.11/site-packages/pulp/apis/../solverdir/cbc/linux/arm64/cbc /tmp/4c137cbdec104323910c8e199c1af3a3-pulp.mps -timeMode elaps
+ed -solve -printingOptions all -solution /tmp/4c137cbdec104323910c8e199c1af3a3-pulp.sol (default strategy 1)
+At line 2 NAME          MODEL
+At line 3 ROWS
+At line 8 COLUMNS
+At line 1382 RHS
+At line 1386 BOUNDS
+At line 1666 ENDATA
+Problem MODEL has 3 rows, 279 columns and 816 elements
+Coin0008I MODEL read with 0 errors
+Option for timeMode changed from cpu to elapsed
+Continuous objective value is 0 - 0.00 seconds
+Cgl0004I processed model has 3 rows, 247 columns (247 integer (226 of which binary)) and 732 elements
+Cbc0038I Initial state - 3 integers unsatisfied sum - 0.764159
+Cbc0038I Pass   1: suminf.    1.00000 (3) obj. 0 iterations 3
+Cbc0038I Solution found of 0
+Cbc0038I Branch and bound needed to clear up 3 general integers
+Cbc0038I Mini branch and bound could not fix general integers
+Cbc0038I No solution found this major pass
+Cbc0038I Before mini branch and bound, 242 integers at bound fixed and 0 continuous
+Cbc0038I Mini branch and bound did not improve solution (0.01 seconds)
+Cbc0038I After 0.01 seconds - Feasibility pump exiting - took 0.00 seconds
+Cbc0031I 13 added rows had average density of 187.15385
+Cbc0013I At root node, 13 cuts changed objective from 0 to 0 in 100 passes
+Cbc0014I Cut generator 0 (Probing) - 1 row cuts average 2.0 elements, 0 column cuts (0 active)  in 0.045 seconds - new frequency is -100
+Cbc0014I Cut generator 1 (Gomory) - 660 row cuts average 245.8 elements, 0 column cuts (0 active)  in 0.097 seconds - new frequency is -100
+Cbc0014I Cut generator 2 (Knapsack) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.002 seconds - new frequency is -100
+Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.001 seconds - new frequency is -100
+Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 29 row cuts average 96.1 elements, 0 column cuts (0 active)  in 0.033 seconds - new frequency is -100
+Cbc0014I Cut generator 5 (FlowCover) - 5 row cuts average 85.4 elements, 0 column cuts (0 active)  in 0.016 seconds - new frequency is -100
+Cbc0014I Cut generator 6 (TwoMirCuts) - 59 row cuts average 210.8 elements, 0 column cuts (0 active)  in 0.004 seconds - new frequency is -100
+Cbc0010I After 0 nodes, 1 on tree, 1e+50 best solution, best possible 0 (1.06 seconds)
+Cbc0016I Integer solution of 0 found by strong branching after 3775 iterations and 533 nodes (1.66 seconds)
+Cbc0001I Search completed - best objective 0, took 117358 iterations and 36472 nodes (1.66 seconds)
+Cbc0032I Strong branching done 2106 times (5473 iterations), fathomed 119 nodes and fixed 395 variables
+Cbc0041I Maximum depth 91, 0 variables fixed on reduced cost (complete fathoming 34 times, 35939 nodes taking 113583 iterations)
+Cuts at root node changed objective from 0 to 0
+Probing was tried 100 times and created 1 cuts of which 0 were active after adding rounds of cuts (0.045 seconds)
+Gomory was tried 100 times and created 660 cuts of which 0 were active after adding rounds of cuts (0.097 seconds)
+Knapsack was tried 100 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
+Clique was tried 100 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
+MixedIntegerRounding2 was tried 100 times and created 29 cuts of which 0 were active after adding rounds of cuts (0.033 seconds)
+FlowCover was tried 100 times and created 5 cuts of which 0 were active after adding rounds of cuts (0.016 seconds)
+TwoMirCuts was tried 100 times and created 59 cuts of which 0 were active after adding rounds of cuts (0.004 seconds)
+ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found
+
+Objective value:                0.00000000
+Enumerated nodes:               36472
+Total iterations:               117358
+Time (CPU seconds):             1.02
+Time (Wallclock seconds):       1.66
+
+Option for printingOptions changed from normal to all
+Total time (CPU seconds):       1.03   (Wallclock seconds):       1.67
+
+Status: Optimal
+Match Found!
+Selected size: 263
+Gross Sum: 30212.56
+Fee Sum: 1021.5799999999999
+

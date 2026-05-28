@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# python3 inspect_data.py
+python3 inspect_data.py
+

@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/setup/source_identity.csv'); df_sampled = df.sample(n=10000, random_state=42).
+reset_index(drop=True); print('Original nulls in sampled id_15:', df_sampled['id_15'].isna().sum())"
+Original nulls in sampled id_15: 235
+root@cc7b6f7834c9:/workspace#

@@ -1,0 +1,21 @@
+New Terminal Output:
+
+id dup IDs: 492
+root@7e0b471406a5:/workspace# python3 -c "
+> import pandas as pd
+> id_df = pd.read_csv('/data/identity.csv')
+> dups = id_df[id_df['TransactionID'].duplicated(keep=False)].sort_values('TransactionID')
+> print(dups.head(10))
+> "
+      TransactionID DeviceType             DeviceInfo  id_01     id_02     id_12
+923         2992064     mobile                  MacOS  -35.0   96576.0  NotFound
+569         2992064     mobile                    NaN  -35.0   96576.0  NotFound
+2786        2992361     mobile             iOS Device  -25.0  116367.0  NotFound
+1520        2992361     mobile                    NaN  -25.0  116367.0  NotFound
+2793        2994629    desktop                  Other   -5.0   97098.0  NotFound
+1961        2994629    desktop                Windows   -5.0   97098.0  NotFound
+1505        2996790     mobile             iOS Device   -5.0  137854.0  NotFound
+1687        2996790     mobile  SM-G935F Build/NRD90M   -5.0  137854.0  NotFound
+2225        2998384    desktop                Windows  -25.0  399472.0  NotFound
+2434        2998384    desktop                Android  -25.0  399472.0  NotFound
+root@7e0b471406a5:/workspace#

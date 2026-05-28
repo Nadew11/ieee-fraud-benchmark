@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 -c "import openpyxl; print('openpyxl available')"
+openpyxl available
+root@474ebd5bd0a4:/workspace# python3 -c "import xlsxwriter; print('xlsxwriter available')"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'xlsxwriter'
+root@474ebd5bd0a4:/workspace#

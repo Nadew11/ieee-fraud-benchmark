@@ -1,0 +1,37 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "
+> import pandas as pd
+> from sklearn.metrics import roc_auc_score
+> df = pd.read_csv('/data/train_transaction.csv')
+> for col in df.columns:
+>     if col in ['isFraud', 'ProductCD', 'card4', 'card6']:
+>         continue
+>     non_na = df[[col, 'isFraud']].dropna()
+>     if len(non_na) > 0 and non_na[col].nunique() > 1:
+>         try:
+>             auc = roc_auc_score(non_na['isFraud'], non_na[col])
+>             if auc < 0.5: auc = 1 - auc
+>             print(f'{col}: AUC = {auc:.4f}')
+>         except Exception as e:
+>             pass
+> "
+TransactionID: AUC = 0.5059
+TransactionDT: AUC = 0.5045
+TransactionAmt: AUC = 0.7772
+card1: AUC = 0.8265
+card2: AUC = 0.8837
+addr1: AUC = 0.8934
+dist1: AUC = 0.8946
+C1: AUC = 0.8728
+C2: AUC = 0.8535
+C3: AUC = 0.5024
+C4: AUC = 0.8411
+C5: AUC = 0.8323
+C6: AUC = 0.5015
+V1: AUC = 0.6501
+V2: AUC = 0.6213
+V3: AUC = 0.5002
+V4: AUC = 0.5337
+V5: AUC = 0.7039
+root@e9645eb65f5b:/workspace#

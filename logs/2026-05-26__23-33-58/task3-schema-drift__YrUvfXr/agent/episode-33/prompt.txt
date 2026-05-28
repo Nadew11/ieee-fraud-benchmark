@@ -1,0 +1,149 @@
+Previous response had warnings:
+WARNINGS: - Command 1 should end with newline when followed by another command. Otherwise the two commands will be concatenated together on the same line.
+
+New Terminal Output:
+
+Features ['id_05', 'id_37']: CV AUC = 0.5312 +/- 0.0203
+Features ['id_05', 'id_37', 'id_02']: CV AUC = 0.5232 +/- 0.0223
+^CTraceback (most recent call last):
+  File "/workspace/cross_val.py", line 48, in <module>
+    mean_auc, std_auc = eval_features(cand, c)
+                        ^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/cross_val.py", line 27, in eval_features
+    pipe.fit(X_tr, y_tr)
+  File "/usr/local/lib/python3.11/site-packages/sklearn/base.py", line 1351, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/pipeline.py", line 475, in fit
+    self._final_estimator.fit(Xt, y, **last_step_params["fit"])
+  File "/usr/local/lib/python3.11/site-packages/sklearn/base.py", line 1351, in wrapper
+    return fit_method(estimator, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py", line 1296, in fit
+    fold_coefs_ = Parallel(n_jobs=self.n_jobs, verbose=self.verbose, prefer=prefer)(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/parallel.py", line 67, in __call__
+    return super().__call__(iterable_with_config)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/joblib/parallel.py", line 1986, in __call__
+    return output if self.return_generator else list(output)
+                                                ^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/joblib/parallel.py", line 1914, in _get_sequential_output
+    res = func(*args, **kwargs)
+          ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/parallel.py", line 129, in __call__
+    return self.function(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/sklearn/linear_model/_logistic.py", line 455, in _logistic_regression_path
+    opt_res = optimize.minimize(
+              ^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/scipy/optimize/_minimize.py", line 784, in minimize
+    res = _minimize_lbfgsb(fun, x0, args, jac, bounds,
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/scipy/optimize/_lbfgsb_py.py", line 461, in _minimize_lbfgsb
+cat << 'EOF' > find_best_combo.py
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.pipeline import make_pipeline
+from sklearn.impute import SimpleImputer
+
+train = pd.read_csv('/data/train_identity.csv')
+y = train['isFraud']
+X = train.drop(columns=['isFraud', 'TransactionID'])
+
+# Let's map categorical to codes
+cat_cols = [c for c in X.columns if X[c].dtype == 'O' or X[c].dtype == 'object']
+for col in cat_cols:
+    X[col] = X[col].astype('category').cat.codes
+
+# Split
+X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+
+# We want a model with holdout AUC > 0.55.
+# Let's try combining the most predictive features
+
+# Let's check a logistic regression with a subset of features
+features_sets = [
+    ['id_05', 'id_37'],
+    ['id_05', 'id_37', 'id_02'],
+    ['id_05', 'id_37', 'DeviceType'],
+    ['id_05', 'id_37', 'id_20', 'id_02'],
+    ['id_05', 'id_37', 'id_02', 'DeviceType'],
+    ['id_05', 'id_37', 'id_32', 'id_20', 'DeviceType'],
+]
+
+for features in features_sets:
+    for C in [0.01, 0.1, 1.0, 10.0]:
+        pipe = make_pipeline(SimpleImputer(strategy='median'), StandardScaler(), LogisticRegression(C=C, random_state=42))
+        pipe.fit(X_tr[features], y_tr)
+        preds_tr = pipe.predict_proba(X_tr[features])[:, 1]
+        preds_val = pipe.predict_proba(X_val[features])[:, 1]
+        val_auc = roc_auc_score(y_val, preds_val)
+        tr_auc = roc_auc_score(y_tr, preds_tr)
+        if val_auc > 0.55:
+            print(f"SUCCESS: Features={features}, C={C} -> Train={tr_auc:.4f}, Val={val_auc:.4f}")
+        else:
+            print(f"FAIL: Features={features}, C={C} -> Train={tr_auc:.4f}, Val={val_auc:.4f}")
+
+EOF
+python3 find_best_combo.py
+    _lbfgsb.setulb(m, x, low_bnd, upper_bnd, nbd, f, g, factr, pgtol, wa,
+KeyboardInterrupt
+
+root@8b9ff8325d75:/workspace# cat << 'EOF' > find_best_combo.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.ensemble import HistGradientBoostingClassifier
+> from sklearn.pipeline import make_pipeline
+> from sklearn.impute import SimpleImputer
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> y = train['isFraud']
+> X = train.drop(columns=['isFraud', 'TransactionID'])
+>
+> # Let's map categorical to codes
+> cat_cols = [c for c in X.columns if X[c].dtype == 'O' or X[c].dtype == 'object']
+> for col in cat_cols:
+>     X[col] = X[col].astype('category').cat.codes
+>
+> # Split
+> X_tr, X_val, y_tr, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+>
+> # We want a model with holdout AUC > 0.55.
+> # Let's try combining the most predictive features
+>
+> # Let's check a logistic regression with a subset of features
+> features_sets = [
+>     ['id_05', 'id_37'],
+>     ['id_05', 'id_37', 'id_02'],
+>     ['id_05', 'id_37', 'DeviceType'],
+>     ['id_05', 'id_37', 'id_20', 'id_02'],
+>     ['id_05', 'id_37', 'id_02', 'DeviceType'],
+>     ['id_05', 'id_37', 'id_32', 'id_20', 'DeviceType'],
+> ]
+>
+> for features in features_sets:
+>     for C in [0.01, 0.1, 1.0, 10.0]:
+>         pipe = make_pipeline(SimpleImputer(strategy='median'), StandardScaler(), LogisticRegression(C=C, random_state=42))
+>         pipe.fit(X_tr[features], y_tr)
+>         preds_tr = pipe.predict_proba(X_tr[features])[:, 1]
+>         preds_val = pipe.predict_proba(X_val[features])[:, 1]
+>         val_auc = roc_auc_score(y_val, preds_val)
+>         tr_auc = roc_auc_score(y_tr, preds_tr)
+>         if val_auc > 0.55:
+>             print(f"SUCCESS: Features={features}, C={C} -> Train={tr_auc:.4f}, Val={val_auc:.4f}")
+>         else:
+>             print(f"FAIL: Features={features}, C={C} -> Train={tr_auc:.4f}, Val={val_auc:.4f}")
+>
+> EOF
+root@8b9ff8325d75:/workspace# python3 find_best_combo.py
+

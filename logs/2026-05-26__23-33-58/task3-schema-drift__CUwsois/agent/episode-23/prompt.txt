@@ -1,0 +1,5 @@
+New Terminal Output:
+
+C=0.05   | Train AUC: 0.73367 | Holdout AUC: 0.55195
+C=0.1    | Train AUC: 0.76341 | Holdout AUC: 0.54244
+

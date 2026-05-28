@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; print(df["id_11"].dropna().unique()[:1
+5])'
+[100.          93.55000305  95.08000183  92.86000061  94.19999695
+  95.34999847  95.69999695  95.16000366  97.80000305  91.02999878
+  97.12000275  94.29000092  97.84999847  95.65000153  96.23000336]
+root@803b650a44b8:/workspace#

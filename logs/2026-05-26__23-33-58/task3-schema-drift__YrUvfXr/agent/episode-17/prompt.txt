@@ -1,0 +1,40 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# cat << 'EOF' > check_corr.py
+> import pandas as pd
+> import numpy as np
+> train = pd.read_csv('/data/train_identity.csv')
+>
+> # Let's check correlations of numeric features with isFraud
+> corrs = train.select_dtypes(include=[np.number]).corr()['isFraud'].sort_values()
+> print("Numeric correlations with isFraud:\n", corrs)
+> EOF
+root@8b9ff8325d75:/workspace# python3 check_corr.py
+Numeric correlations with isFraud:
+ id_25           -0.105130
+id_08           -0.095851
+id_24           -0.039209
+id_22           -0.035699
+id_07           -0.027670
+id_10           -0.016532
+id_13           -0.009381
+id_01           -0.008815
+id_19           -0.005502
+id_06           -0.003812
+id_11           -0.002126
+id_26           -0.002108
+id_14            0.000933
+id_32            0.003823
+id_03            0.007421
+id_20            0.010163
+id_17            0.012786
+id_05            0.013625
+id_02            0.014260
+id_09            0.014319
+id_04            0.016831
+id_18            0.019914
+TransactionID    0.029693
+id_21            0.124062
+isFraud          1.000000
+Name: isFraud, dtype: float64
+root@8b9ff8325d75:/workspace#

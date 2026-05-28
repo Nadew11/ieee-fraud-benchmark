@@ -1,0 +1,57 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_val.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.metrics import roc_auc_score, confusion_matrix
+> import xgboost as xgb
+>
+> df = pd.read_csv('/data/train_transaction.csv')
+> TARGET = 'isFraud'
+> DROP = ['TransactionID', TARGET, 'ProductCD', 'card4', 'card6']
+> features = [c for c in df.columns if c not in DROP]
+> X = df[features].fillna(-999).values
+> y = df[TARGET].values
+>
+> scaler = StandardScaler()
+> X = scaler.fit_transform(X)
+>
+> X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+>
+> model = xgb.XGBClassifier(
+>     objective='binary:logistic',
+>     eval_metric='rmse',
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+> )
+> model.fit(X_train, y_train)
+>
+> probs_train = model.predict_proba(X_train)[:, 1]
+> auc_train = roc_auc_score(y_train, probs_train)
+> print(f'Train AUC: {auc_train:.4f}')
+>
+> probs_val = model.predict_proba(X_val)[:, 1]
+> auc_val = roc_auc_score(y_val, probs_val)
+> print(f'Val AUC: {auc_val:.4f}')
+> print('y_val sum:', y_val.sum())
+> print('y_val mean:', y_val.mean())
+> print('probs_val slice:', probs_val[:10])
+> print('y_val slice:', y_val[:10])
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_val.py
+Train AUC: 1.0000
+Val AUC: 1.0000
+y_val sum: 235
+y_val mean: 0.047
+probs_val slice: [3.5643636e-05 4.1906744e-05 2.2727425e-05 3.1186355e-05 1.4758618e-05
+ 5.1373288e-05 2.0343114e-05 9.9924719e-01 1.1413579e-05 1.0597800e-04]
+y_val slice: [0 0 0 0 0 0 0 1 0 0]
+root@0d5e255b62ea:/workspace#

@@ -1,0 +1,94 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat << 'EOF' > run_early_stopping.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # Load and sort
+> df = pd.read_csv('/data/transactions.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> # --- Feature Engineering ---
+>
+> # Cyclical/Temporal features
+> df['hour'] = (df['TransactionDT'] // 3600) % 24
+> df['day_of_week'] = (df['TransactionDT'] // 86400) % 7
+>
+> # Historical features per card1
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff().fillna(999999999)
+> df['card1_cum_amt_mean'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(0)
+> df['card1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_cum_amt_mean'] + 1e-5)
+>
+> # Historical features per card1 + addr1
+> df['card1_addr1'] = df['card1'].astype(str) + '_' + df['addr1'].astype(str)
+> df['card1_addr1_cum_count'] = df.groupby('card1_addr1').cumcount()
+> df['card1_addr1_time_diff'] = df.groupby('card1_addr1')['TransactionDT'].diff().fillna(999999999)
+> df['card1_addr1_cum_amt_mean'] = df.groupby('card1_addr1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean()).fillna(0)
+> df['card1_addr1_amt_ratio_to_mean'] = df['TransactionAmt'] / (df['card1_addr1_cum_amt_mean'] + 1e-5)
+>
+> # Frequency encoding of high cardinality features
+> df['card1_freq'] = df.groupby('card1')['TransactionDT'].transform('count')
+> df['addr1_freq'] = df.groupby('addr1')['TransactionDT'].transform('count')
+>
+> # Drop strings / get dummies
+> df = pd.get_dummies(df, columns=['ProductCD'], drop_first=True)
+> features_to_drop = ['TransactionID', 'TransactionDT', 'isFraud', 'card1_addr1']
+> features = [c for c in df.columns if c not in features_to_drop]
+>
+> # Split into Train (70%), Val (10%), Test (20%)
+> n = len(df)
+> train_idx = int(n * 0.7)
+> val_idx = int(n * 0.8)
+>
+> train_df = df.iloc[:train_idx]
+> val_df = df.iloc[train_idx:val_idx]
+> test_df = df.iloc[val_idx:]
+>
+> X_train, y_train = train_df[features], train_df['isFraud']
+> X_val, y_val = val_df[features], val_df['isFraud']
+> X_test, y_test = test_df[features], test_df['isFraud']
+>
+> # Try different hyperparams
+> for max_depth in [3, 4, 5]:
+>     for lr in [0.02, 0.03, 0.05]:
+>         model = xgb.XGBClassifier(
+>             n_estimators=1000,
+>             max_depth=max_depth,
+>             learning_rate=lr,
+>             subsample=0.9,
+>             colsample_bytree=0.8,
+>             random_state=42,
+>             eval_metric='auc',
+>             early_stopping_rounds=50
+>         )
+>         model.fit(
+>             X_train, y_train,
+>             eval_set=[(X_val, y_val)],
+>             verbose=False
+>         )
+>
+>         # Evaluate
+>         best_iter = model.best_iteration
+>         preds_train = model.predict_proba(X_train)[:, 1]
+>         preds_val = model.predict_proba(X_val)[:, 1]
+>         preds_test = model.predict_proba(X_test)[:, 1]
+>
+>         auc_train = roc_auc_score(y_train, preds_train)
+>         auc_val = roc_auc_score(y_val, preds_val)
+>         auc_test = roc_auc_score(y_test, preds_test)
+>
+>         print(f"depth={max_depth}, lr={lr} | Best Iter={best_iter} | Train AUC: {auc_train:.5f}, Val AUC: {auc_val:.5f}, Test AUC: {auc_test:.5f}")
+> EOF
+root@9da0ecea1a80:/workspace# python3 run_early_stopping.py
+depth=3, lr=0.02 | Best Iter=150 | Train AUC: 0.86701, Val AUC: 0.87582, Test AUC: 0.86140
+depth=3, lr=0.03 | Best Iter=176 | Train AUC: 0.87279, Val AUC: 0.87722, Test AUC: 0.85971
+depth=3, lr=0.05 | Best Iter=91 | Train AUC: 0.86984, Val AUC: 0.87650, Test AUC: 0.86088
+depth=4, lr=0.02 | Best Iter=151 | Train AUC: 0.87006, Val AUC: 0.87871, Test AUC: 0.86213
+depth=4, lr=0.03 | Best Iter=71 | Train AUC: 0.86969, Val AUC: 0.87833, Test AUC: 0.86116
+depth=4, lr=0.05 | Best Iter=69 | Train AUC: 0.86982, Val AUC: 0.87947, Test AUC: 0.86235
+depth=5, lr=0.02 | Best Iter=103 | Train AUC: 0.87394, Val AUC: 0.87811, Test AUC: 0.86156
+depth=5, lr=0.03 | Best Iter=91 | Train AUC: 0.87450, Val AUC: 0.87853, Test AUC: 0.86051
+

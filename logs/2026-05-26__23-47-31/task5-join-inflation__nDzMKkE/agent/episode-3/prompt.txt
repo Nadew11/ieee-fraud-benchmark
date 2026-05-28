@@ -1,0 +1,35 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# cat << 'EOF' > process.py
+> import pandas as pd
+>
+> tx = pd.read_csv('/data/transactions.csv')
+> print("Total fraud transactions:", tx[tx['isFraud'] == 1].shape[0])
+> print("Total fraud amount in transactions.csv:", tx[tx['isFraud'] == 1]['TransactionAmt'].sum())
+>
+> ident = pd.read_csv('/data/identity.csv')
+> print("Identity shape:", ident.shape)
+> print("Transaction shape:", tx.shape)
+>
+> # Let's merge them
+> merged = pd.merge(tx, ident, on='TransactionID', how='left')
+> print("Merged shape:", merged.shape)
+>
+> # Fraud by DeviceType (including NaN if any)
+> print(merged[merged['isFraud'] == 1].groupby('DeviceType', dropna=False).agg(
+>     total_fraud_amount=('TransactionAmt', 'sum'),
+>     fraud_transaction_count=('TransactionID', 'count')
+> ))
+> EOF
+root@10499a3d6cec:/workspace# python3 process.py
+Total fraud transactions: 351
+Total fraud amount in transactions.csv: 49056.519
+Identity shape: (2953, 6)
+Transaction shape: (10000, 3)
+Merged shape: (10492, 8)
+            total_fraud_amount  fraud_transaction_count
+DeviceType
+desktop              11283.189                      138
+mobile               10890.288                       94
+NaN                  29634.877                      153
+root@10499a3d6cec:/workspace#

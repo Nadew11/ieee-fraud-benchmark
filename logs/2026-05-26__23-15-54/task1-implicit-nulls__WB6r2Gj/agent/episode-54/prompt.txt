@@ -1,0 +1,12 @@
+New Terminal Output:
+
+kspace# head -n 5 /setup/source_identity.csv
+TransactionID,id_01,id_02,id_03,id_04,id_05,id_06,id_07,id_08,id_09,id_10,id_11,id_12,id_13,id_14,id_15,id_16,id_17,id_18,id_19,id_20,id_21,id_22,id_23,id_24,id
+_25,id_26,id_27,id_28,id_29,id_30,id_31,id_32,id_33,id_34,id_35,id_36,id_37,id_38,DeviceType,DeviceInfo
+3095550,-5.0,52720.0,0.0,0.0,0.0,0.0,,,0.0,0.0,100.0,NotFound,52.0,-300.0,Found,Found,166.0,,312.0,597.0,,,,,,,,Found,Found,Windows 10,chrome 63.0,24.0,2560x144
+0,match_status:2,T,F,T,F,desktop,Windows
+3549342,-10.0,1106.0,0.0,0.0,,,,,0.0,0.0,100.0,Found,27.0,,Found,Found,,,,,,,,,,,,Found,Found,,,,,match_status:2,T,F,T,F,desktop,
+3105576,-20.0,214795.0,,,0.0,0.0,,,,,100.0,NotFound,52.0,,New,NotFound,225.0,15.0,427.0,541.0,,,,,,,,New,NotFound,,chrome 62.0,,,,F,F,T,T,desktop,
+3005391,-5.0,42350.0,0.0,0.0,0.0,0.0,,,0.0,0.0,100.0,NotFound,52.0,-300.0,Found,Found,166.0,,410.0,597.0,,,,,,,,Found,Found,Windows 10,edge 15.0,24.0,1280x768,m
+atch_status:2,T,F,T,T,desktop,Windows
+root@cc7b6f7834c9:/workspace#

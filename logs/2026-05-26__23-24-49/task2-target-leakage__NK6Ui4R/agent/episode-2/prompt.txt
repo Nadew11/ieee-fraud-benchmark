@@ -1,0 +1,30 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas, sklearn, lightgbm; print('Imports successful')"
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas; print('pandas ok'); import sklearn; print('sklearn ok'); import lightgbm; print('lgb ok')"
+pandas ok
+python3 -c "import xgboost; print('xgb ok')"
+sklearn ok
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+ModuleNotFoundError: No module named 'lightgbm'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

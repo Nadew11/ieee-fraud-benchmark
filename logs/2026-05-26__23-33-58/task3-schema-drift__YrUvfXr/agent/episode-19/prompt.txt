@@ -1,0 +1,7 @@
+New Terminal Output:
+
+HGB max_depth=None lr=0.05 -> Train AUC: 0.9861, Val AUC: 0.4908
+HGB max_depth=None lr=0.1 -> Train AUC: 0.9968, Val AUC: 0.4640
+Logistic Regression (num only) -> Train AUC: 0.5601, Val AUC: 0.5341
+RF max_depth=4 -> Train AUC: 0.7834, Val AUC: 0.4645
+

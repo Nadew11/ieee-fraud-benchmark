@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 10 column 35 (char 601) | Content preview: '{\n  "analysis": "The python3 import check didn\'t produce any output yet, or it may have failed. Let\''...
+
+Please fix these issues and provide a proper JSON response.

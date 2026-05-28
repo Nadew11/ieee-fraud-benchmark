@@ -1,0 +1,20 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); row64 = df.iloc[64]; row10007 = df.iloc[10007]; dif
+f = row64 != row10007; print(pd.concat([row64[diff], row10007[diff]], axis=1))'
+         64            10007
+id_02  98682.0  98685.373824
+id_03      NaN           NaN
+id_04      NaN           NaN
+id_07      NaN           NaN
+id_08      NaN           NaN
+id_09      NaN           NaN
+id_10      NaN           NaN
+id_21      NaN           NaN
+id_22      NaN           NaN
+id_23      NaN           NaN
+id_24      NaN           NaN
+id_25      NaN           NaN
+id_26      NaN           NaN
+id_27      NaN           NaN
+root@803b650a44b8:/workspace#

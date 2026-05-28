@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 produce_results.py
+Final Test AUC: 0.864838
+Outputs successfully saved to /output/
+root@81a3fc64145d:/workspace#

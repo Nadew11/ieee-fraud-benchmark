@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat /data/fee_schedule.csv
+merchant_category,fee_rate
+retail,0.025
+travel,0.03
+digital_goods,0.035
+gambling,0.045
+crypto,0.05
+atm,0.02
+root@b9e5a18b679d:/workspace#

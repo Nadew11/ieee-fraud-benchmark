@@ -1,0 +1,10 @@
+{
+  "analysis": "Ah! In the output, the junior engineer printed:\n`Validation AUC: 1.0000` but then: `Note: AUC seems low — unclear why model isn't learning better`. Wait, why does the note say 'AUC seems low' if AUC is 1.0000? Oh! Wait, did they hardcode something or did they make a mistake? No, wait! Why is the validation AUC 1.0000? Is there a data leakage in the features? Let's check the features. Let's see if there is some column that leaks the target. Let's write a python script to check feature importances of the model or print the correlation of features with `isFraud`.",
+  "plan": "I will run a python command to compute the correlation of all columns with `isFraud` to identify potential target leakage.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.corr()['isFraud'].sort_values())\"\n",
+      "duration": 3.0
+    }
+  ]
+}

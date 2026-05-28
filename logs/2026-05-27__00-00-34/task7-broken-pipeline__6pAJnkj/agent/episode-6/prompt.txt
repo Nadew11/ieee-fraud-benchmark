@@ -1,0 +1,6 @@
+New Terminal Output:
+
+> "
+TransactionDT range: 86608 15810453
+isFraud mean: 0.05012
+root@e9645eb65f5b:/workspace#

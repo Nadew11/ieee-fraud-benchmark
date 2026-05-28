@@ -1,0 +1,35 @@
+New Terminal Output:
+
+Name: count, dtype: int64
+root@9da0ecea1a80:/workspace# cat << 'EOF' > test_shift_expanding.py
+> import pandas as pd
+> import numpy as np
+>
+> data = pd.DataFrame({
+>     'card1': [1, 1, 1, 2, 2],
+>     'TransactionDT': [100, 200, 300, 150, 250],
+>     'TransactionAmt': [10.0, 20.0, 30.0, 50.0, 100.0]
+> })
+>
+> # Sort
+> data = data.sort_values('TransactionDT').reset_index(drop=True)
+>
+> # Cumulative count of previous transactions
+> data['card1_cum_count'] = data.groupby('card1').cumcount()
+>
+> # Time diff to previous transaction
+> data['card1_time_diff'] = data.groupby('card1')['TransactionDT'].diff()
+>
+> # Cumulative mean of previous transactions' amt
+> data['card1_cum_amt_mean'] = data.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean())
+>
+> print(data)
+> EOF
+root@9da0ecea1a80:/workspace# python3 test_shift_expanding.py
+   card1  TransactionDT  TransactionAmt  card1_cum_count  card1_time_diff  card1_cum_amt_mean
+0      1            100            10.0                0              NaN                 NaN
+1      2            150            50.0                0              NaN                 NaN
+2      1            200            20.0                1            100.0                10.0
+3      2            250           100.0                1            100.0                50.0
+4      1            300            30.0                2            100.0                15.0
+root@9da0ecea1a80:/workspace#

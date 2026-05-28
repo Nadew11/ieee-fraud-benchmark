@@ -1,0 +1,32 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# cat << 'EOF' > inspect_data.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import confusion_matrix, accuracy_score, roc_auc_score
+>
+> df = pd.read_csv('/data/predictions.csv')
+> print("Columns:", df.columns.tolist())
+> print("Shape:", df.shape)
+> print("True class distribution:")
+> print(df['y_true'].value_counts())
+>
+> # Confusion matrix at 0.5
+> df['y_pred'] = (df['y_pred_prob'] >= 0.5).astype(int)
+> tn, fp, fn, tp = confusion_matrix(df['y_true'], df['y_pred']).ravel()
+> print(f"TN: {tn}, FP: {fp}, FN: {fn}, TP: {tp}")
+> print(f"Accuracy: {accuracy_score(df['y_true'], df['y_pred']):.4f}")
+> print(f"AUC-ROC: {roc_auc_score(df['y_true'], df['y_pred_prob']):.4f}")
+>
+> # Check dates
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+> print("Min date:", df['scored_at'].min())
+> print("Max date:", df['scored_at'].max())
+>
+> # Look for dates after April 30, 2026
+> out_of_period = df[df['scored_at'] > '2026-04-30 23:59:59']
+> print("Records outside January 15 - April 30, 2026:", len(out_of_period))
+> print(out_of_period.head(10))
+> EOF
+root@58fc9c5bb0bf:/workspace# python3 inspect_data.py
+

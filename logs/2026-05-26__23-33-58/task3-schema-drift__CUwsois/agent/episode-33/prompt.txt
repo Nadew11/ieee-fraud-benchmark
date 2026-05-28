@@ -1,0 +1,165 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# cat << 'EOF' > generate_report.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.impute import SimpleImputer
+> from sklearn.pipeline import Pipeline
+> from sklearn.compose import ColumnTransformer
+> from sklearn.preprocessing import OneHotEncoder
+> import openpyxl
+>
+> # 1. Load data
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+>
+> # Calculate total rows
+> total_train_rows = len(train)
+> total_test_rows = len(test)
+>
+> # Map test columns from - to _ so they match
+> test_cols_original = list(test.columns)
+> test.columns = [c.replace('-', '_') for c in test.columns]
+>
+> # Count shared features (both columns share TransactionID and 40 features, so 41 columns total)
+> shared_features = list(set(train.columns).intersection(set(test.columns)))
+> shared_feature_count = len(shared_features)
+> print("Shared feature count:", shared_feature_count)
+>
+> # Separate features and target
+> X = train.drop(columns=['TransactionID', 'isFraud'])
+> y = train['isFraud']
+>
+> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+>
+> # Create a preprocessing pipeline
+> preprocessor = ColumnTransformer(
+>     transformers=[
+ equal target distribution in>         ('num', Pipeline([
+>             ('imputer', SimpleImputer(strategy='median')),
+>             ('scaler', StandardScaler())
+>         ]), num_cols),
+  ws_dq.cell(row=idx, column=1, value=int(issue['issue_number']))
+    ws_dq.cell(ro>         ('cat', Pipeline([
+str(>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+ri>         ]), cat_cols)
+>     ]
+/outpu> )
+>
+> # Split train into 80% train and 20% holdout for AUC verification
+y
+> X_train, X_holdout, y_train, y_holdout = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> # We will use Logistic Regression with C=0.01
+> model = Pipeline([
+>     ('preprocessor', preprocessor),
+>     ('lr', LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000, C=0.01))
+> ])
+>
+> # Fit on X_train
+> model.fit(X_train, y_train)
+>
+> # Evaluate on X_holdout
+> preds_holdout = model.predict_proba(X_holdout)[:, 1]
+> holdout_auc = float(roc_auc_score(y_holdout, preds_holdout))
+> print("Holdout AUC:", holdout_auc)
+>
+> # Generate predictions for every row in test set
+> test_features = test.drop(columns=['TransactionID'])
+> test_preds = model.predict_proba(test_features)[:, 1]
+>
+> predictions_df = pd.DataFrame({
+>     'TransactionID': test['TransactionID'].astype(int),
+>     'fraud_prob': test_preds.astype(float)
+> })
+>
+> # Create openpyxl workbook
+> wb = openpyxl.Workbook()
+>
+> # 2. Setup Predictions sheet
+> ws_pred = wb.active
+> ws_pred.title = "Predictions"
+>
+> # Write header
+> ws_pred.append(['TransactionID', 'fraud_prob'])
+> # Write predictions data
+> for r in predictions_df.itertuples(index=False):
+>     ws_pred.append([int(r.TransactionID), float(r.fraud_prob)])
+>
+> # 3. Setup Data Quality Report sheet
+> ws_dq = wb.create_sheet(title="Data Quality Report")
+>
+> # A1 = total_train_rows, B1 = numeric count
+> ws_dq['A1'] = 'total_train_rows'
+> ws_dq['B1'] = int(total_train_rows)
+>
+> # A2 = total_test_rows, B2 = numeric count
+> ws_dq['A2'] = 'total_test_rows'
+> ws_dq['B2'] = int(total_test_rows)
+>
+> # A3 = shared_feature_count, B3 = numeric count
+> ws_dq['A3'] = 'shared_feature_count'
+> ws_dq['B3'] = int(shared_feature_count)
+>
+> # A4 = model_auc_on_train_holdout, B4 = numeric AUC value
+> ws_dq['A4'] = 'model_auc_on_train_holdout'
+> ws_dq['B4'] = float(holdout_auc)
+>
+> # Row 6 header = issue_number, description, resolution
+> ws_dq['A6'] = 'issue_number'
+> ws_dq['B6'] = 'description'
+> ws_dq['C6'] = 'resolution'
+>
+> # Starting at row 7, document issues
+> issues = [
+>     {
+>         'issue_number': 1,
+>         'description': "Column naming mismatch between source systems: System A (train) uses underscore separators (e.g., id_01) while System B (test) uses hy
+phen separators (e.g., id-01).",
+>         'resolution': "Standardized the column names of System B (test) by replacing all hyphens with underscores, aligning them perfectly with System A's nam
+ing schema to enable consistent pipeline ingestion."
+>     },
+>     {
+>         'issue_number': 2,
+>         'description': "High rate of missing values (NaNs) across features: There are 12 columns in train and 13 columns in test with missingness rates exceed
+ing 50%.",
+>         'resolution': "Applied robust imputation strategies in the preprocessing pipeline: used median values for numerical columns and introduced a dedicated
+ 'missing' string category for categorical columns."
+>     },
+>     {
+>         'issue_number': 3,
+>         'description': "Inconsistent categorical levels (Out of Vocabulary values) in test features: Columns like id_30, id_31, id_33, id_34, and DeviceInfo c
+ontain unique categories in test not seen in train.",
+>         'resolution': "Configured scikit-learn OneHotEncoder with the 'handle_unknown=ignore' parameter to ensure the model pipeline processes unseen categori
+cal values gracefully without causing errors or failures."
+>     },
+>     {
+>         'issue_number': 4,
+>         'description': "Severe target class imbalance: The 'isFraud' target variable contains only 274 fraud cases (3.42%) out of 8,000 observations in the tr
+aining dataset.",
+>         'resolution': "Employed class-weighted loss adjustment ('class_weight=balanced') in Logistic Regression, and applied stratified splitting during holdo
+ut evaluation to ensure equal target distribution in splits."
+>     }
+> ]
+>
+> for idx, issue in enumerate(issues, start=7):
+>     ws_dq.cell(row=idx, column=1, value=int(issue['issue_number']))
+>     ws_dq.cell(row=idx, column=2, value=str(issue['description']))
+>     ws_dq.cell(row=idx, column=3, value=str(issue['resolution']))
+>
+> # Save to file
+> wb.save('/output/fraud_risk.xlsx')
+> print("Saved workbook to /output/fraud_risk.xlsx successfully!")
+>
+> EOF
+root@27e59b3c4e79:/workspace# python3 generate_report.py
+Shared feature count: 41
+

@@ -1,0 +1,11 @@
+Fraud Operations - Cost Parameters (Q1 2026)
+
+Average loss per undetected fraud case:     $4,200
+Cost per manual investigation (per alert):  $35
+Daily review team capacity:                 1,500 alerts/day
+Quarterly transaction volume:               2,800,000
+
+Notes:
+  - Investigation cost includes analyst time ($28/hr avg) plus tooling overhead.
+  - Review capacity assumes current team of 12 analysts, 8-hour shifts.
+  - Parameters validated by Finance in Q4 2025 budget review.

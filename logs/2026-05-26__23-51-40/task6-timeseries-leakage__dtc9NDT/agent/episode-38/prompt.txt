@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 236 (char 237) | Content preview: '{\n  "analysis": "The C1/C2 interaction features did not provide a major boost (the best was 0.86470,'...
+
+Please fix these issues and provide a proper JSON response.

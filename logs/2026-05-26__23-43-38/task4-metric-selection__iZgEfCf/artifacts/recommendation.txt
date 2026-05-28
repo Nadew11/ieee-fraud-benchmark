@@ -1,0 +1,59 @@
+DEPLOYMENT RECOMMENDATION: FRAUD DETECTION XGBOOST MODEL
+Date: May 27, 2026
+To: Fraud Operations Team & Finance Director
+From: Lead Analyst
+
+SUMMARY RECOMMENDATION
+We recommend deploying the XGBoost model to production, but with a CRITICAL TUNING adjustment. The model must NOT be deployed at the analyst's draft threshold of 0.5. Instead, we recommend deploying the model at a classification threshold of 0.63. This threshold aligns the model's alert rate perfectly with the fraud operations team's review capacity while saving the company $190.61M per quarter compared to the baseline of doing nothing.
+
+--------------------------------------------------------------------------------
+OPERATIONAL ANALYSIS & CAPACITY ALIGNMENT
+--------------------------------------------------------------------------------
+- Daily Review Capacity: 1,500 alerts/day (12 analysts, 8-hour shifts)
+- Recommended Threshold: 0.63
+- Performance on Clean Holdout Set (5,000 records, 162 fraud cases):
+  - True Positives (TP): 83
+  - False Positives (FP): 152
+  - False Negatives (FN): 79
+  - True Negatives (TN): 4,686
+  - Alert Rate in Holdout: 4.70% (235 alerts out of 5,000 transactions)
+  
+- Projections for Quarterly Volume (2,800,000 transactions):
+  - Projected Quarterly Alerts: 131,600 alerts (235 / 5,000 * 2,800,000)
+  - Projected Daily Alerts: 1,462.22 alerts/day (assuming a standard 90-day quarter) or 1,446.15 alerts/day (assuming a 91-day Q1). 
+  
+- Capacity Fit: This fits beautifully within the team's capacity of 1,500 alerts/day, utilizing 96.4% to 97.5% of our daily operational bandwidth. This provides a safe buffer of 38 to 54 alerts/day for unexpected volume spikes, ensuring that every generated alert is manually reviewed.
+
+--------------------------------------------------------------------------------
+FINANCIAL IMPACT EVALUATION
+--------------------------------------------------------------------------------
+We compared the expected financial impact of the recommended threshold against two baselines:
+1. Baseline Scenario: No Model Deployed (Do Nothing)
+   - All fraud goes undetected. 
+   - Clean fraud rate: 3.24% (162 fraud cases in 5,000 transactions)
+   - Projected Quarterly Fraud Cases: 90,720 cases (162 / 5,000 * 2,800,000)
+   - Cost of Undetected Fraud: $381,024,000 (90,720 * $4,200)
+   - Manual Investigation Cost: $0
+   - Total Baseline Quarterly Cost: $381,024,000
+
+2. Draft Scenario: Model at 0.5 Threshold (Infeasible)
+   - Holdout Alerts: 667 (113 TP + 554 FP)
+   - Projected Daily Alerts: ~4,150 alerts/day (2.7x over-capacity)
+   - If the team were theoretically sized to handle this, the cost would be:
+     - Projected Quarterly Fraud Loss (FN): 27,440 cases * $4,200 = $115,248,000
+     - Projected Quarterly Review Cost: 373,520 alerts * $35 = $13,073,200
+     - Total Cost: $128,321,200
+   - WARNING: Because this exceeds review capacity, 63.8% of alerts would go unreviewed. Realistically, undetected fraud would balloon, and the true cost would be much higher.
+
+3. Recommended Scenario: Model at 0.63 Threshold
+   - Projected Quarterly Fraud Loss (FN): 44,240 cases * $4,200 = $185,808,000
+   - Projected Quarterly Review Cost: 131,600 alerts * $35 = $4,606,000
+   - Total Quarterly Cost: $190,414,000
+
+- EXPECTED QUARTERLY SAVINGS: 
+  - By deploying at the 0.63 threshold, we reduce total quarterly fraud-associated costs from $381,024,000 to $190,414,000, representing a net savings of $190,610,000 (a 50.03% cost reduction) per quarter.
+
+--------------------------------------------------------------------------------
+CONCLUSION & DEPLOYMENT STRATEGY
+--------------------------------------------------------------------------------
+The model has strong predictive capabilities (clean AUC-ROC of 0.8861) and should definitely be deployed. However, to prevent swamping the fraud operations team and leaking millions in unreviewed alerts, the engineering team must set the production classification threshold to exactly 0.63. We recommend monitoring daily alert volumes post-deployment to ensure they remain within the 1,500 daily limit as transaction volume fluctuates.

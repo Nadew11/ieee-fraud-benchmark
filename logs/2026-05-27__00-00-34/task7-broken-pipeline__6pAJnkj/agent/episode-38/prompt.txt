@@ -1,0 +1,60 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# cat << 'EOF' > /workspace/corrected_pipeline.py
+> #!/usr/bin/env python3
+> import pandas as pd
+> import numpy as np
+> from sklearn.preprocessing import LabelEncoder
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+> import warnings
+> warnings.filterwarnings("ignore")
+>
+> df = pd.read_csv("/data/train_transaction.csv")
+> df = df.sort_values("TransactionDT").reset_index(drop=True)
+>
+> cat_cols = ["ProductCD", "card4", "card6"]
+> for col in cat_cols:
+>     le = LabelEncoder()
+>     df[col] = le.fit_transform(df[col].astype(str))
+>
+> TARGET = "isFraud"
+> DROP = ["TransactionID", TARGET, "TransactionDT"]
+> features = [c for c in df.columns if c not in DROP]
+>
+> split_idx = int(len(df) * 0.8)
+> train_df = df.iloc[:split_idx]
+> val_df = df.iloc[split_idx:]
+>
+> X_train, y_train = train_df[features].values, train_df[TARGET].values
+> X_val, y_val = val_df[features].values, val_df[TARGET].values
+>
+> model = xgb.XGBClassifier(
+>     objective="binary:logistic",
+>     eval_metric="auc",
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+> )
+> model.fit(
+>     X_train, y_train,
+>     eval_set=[(X_val, y_val)],
+>     verbose=False,
+> )
+>
+> probs = model.predict_proba(X_val)[:, 1]
+> auc = roc_auc_score(y_val, probs)
+> print(f"Validation AUC: {auc:.6f}")
+>
+> with open("/output/auc.txt", "w") as f:
+>     f.write(f"{auc:.6f}\n")
+> EOF
+root@e9645eb65f5b:/workspace# chmod +x /workspace/corrected_pipeline.py
+root@e9645eb65f5b:/workspace# /workspace/corrected_pipeline.py
+Validation AUC: 0.999997
+root@e9645eb65f5b:/workspace#

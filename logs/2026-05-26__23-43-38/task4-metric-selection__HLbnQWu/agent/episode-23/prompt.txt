@@ -1,0 +1,43 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# ls -la /output
+total 28
+drwxr-xr-x 1 root root 4096 May 27 04:47 .
+drwxr-xr-x 1 root root 4096 May 27 04:44 ..
+-rw-r--r-- 1 root root 8034 May 27 04:46 audit_findings.txt
+-rw-r--r-- 1 root root  463 May 27 04:46 metrics.json
+-rw-r--r-- 1 root root 6304 May 27 04:47 recommendation.txt
+root@831ed0f33a44:/workspace# head -n 15 /output/recommendation.txt
+DEPLOYMENT RECOMMENDATION & OPERATIONAL ANALYSIS
+================================================
+Prepared for: Fraud Operations Team & Quarterly Business Review
+Prepared by: Lead Fraud Analyst / Senior AI Consultant
+Date: May 27, 2026
+Subject: Deployment and Threshold Recommendation for XGBoost Fraud Detection Model
+
+EXECUTIVE SUMMARY
+-----------------
+Following a comprehensive audit of the junior analyst's draft report and rigorous financial modeling of the XGBoost fraud detection model (v4.2.1), we recommend
+ DEPLOYING the model, but with a TUNED classification threshold of 0.644.
+
+Deploying the model as-is at the draft's proposed 0.5 threshold is strongly rejected due to severe operational overload. Rejecting the model entirely is also re
+jected as it would cost the business $448.11 million per quarter. Deploying the model at our recommended 0.644 threshold will generate a net quarterly savings o
+f $255.38 million (a 57% cost reduction) compared to the baseline, while remaining strictly within the Fraud Operations team's review capacity.
+
+--------------------------------------------------------------------------------
+1. DEPLOYMENT DECISION: TUNED DEPLOYMENT
+root@831ed0f33a44:/workspace# cat /output/metrics.json
+{
+  "auc_roc": 0.905062,
+  "precision_at_0.5": 0.206304,
+  "recall_at_0.5": 0.746114,
+  "f1_score_at_0.5": 0.323232,
+  "accuracy_at_0.5": 0.880948,
+  "precision_at_recommended_threshold_0.644": 0.46473,
+  "recall_at_recommended_threshold_0.644": 0.580311,
+  "f1_score_at_recommended_threshold_0.644": 0.516129,
+  "accuracy_at_recommended_threshold_0.644": 0.958539,
+  "holdout_dataset_size": 5065,
+  "holdout_fraud_cases": 193,
+  "holdout_non_fraud_cases": 4872
+}root@831ed0f33a44:/workspace#

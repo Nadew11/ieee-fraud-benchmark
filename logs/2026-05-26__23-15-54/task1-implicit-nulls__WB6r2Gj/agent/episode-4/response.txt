@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's see why the duplicates are there. Let's look at all index numbers of duplicated records.",
+  "plan": "Let's check the indices of duplicates. If they are from index 10000 onwards, it's highly likely they are synthetic noise rows appended at the end of the file. Let's inspect.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_identity.csv'); dups = df[df['TransactionID'].duplicated(keep=False)]; print(dups.index.min(), dups.index.max(), dups.shape)\"\n",
+      "duration": 5.0
+    }
+  ]
+}

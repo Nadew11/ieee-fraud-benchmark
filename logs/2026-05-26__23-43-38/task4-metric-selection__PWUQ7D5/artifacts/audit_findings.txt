@@ -1,0 +1,28 @@
+AUDIT FINDINGS AND REPORT EVALUATION
+=======================================
+
+We have completed a comprehensive audit of the junior analyst's draft evaluation of the XGBoost fraud detection model (v4.2.1). Below, we outline four critical errors, misleading claims, and missing analyses in the draft report, explaining why each matters and how they must be corrected.
+
+1. Inclusion of Out-of-Bounds Data and Duplicate Records (Data Quality Issue)
+----------------------------------------------------------------------------
+- Finding: The analyst used the raw predictions export of 5,650 records without any pre-processing, validation, or filtering. 
+- Analysis: The official holdout scoring period was specified as January 15 - April 30, 2026. However, the predictions file contained 585 records scored between May 1 and May 11, 2026. Within these 585 records, 500 records were exact duplicates of TransactionIDs that had already been scored earlier (in the official scoring window), but they had different predictions, batch IDs, and timestamps. This indicates a major upstream scoring pipeline duplication bug. 
+- Why it matters: This data spill and duplication artificially inflated the model's apparent performance. When evaluated on the entire 5,650 rows, the model achieved an AUC-ROC of 0.9182. However, when the out-of-bounds and duplicate May data are removed to restrict the analysis to the official evaluation window (5,065 unique records), the actual AUC-ROC is 0.9051. Relying on unvetted data led to overestimating the model's performance and masked a technical system issue that needs engineering attention.
+
+2. Conceptual Misunderstanding of Performance Metrics (Misleading Accuracy Claim)
+-----------------------------------------------------------------------------------
+- Finding: The analyst evaluated and praised the model's accuracy (reported as 88.3%). 
+- Analysis: In fraud detection, the positive class is highly imbalanced. Within the corrected, official evaluation window, the actual fraud rate is only 3.81% (193 fraud cases out of 5,065 total transactions). A trivial baseline classifier that predicts 'no fraud' for every transaction would achieve an accuracy of 96.19%. The model's actual accuracy (88.1% on the corrected dataset) is worse than this baseline.
+- Why it matters: Using accuracy as a key performance indicator in highly imbalanced datasets is a critical conceptual error. It gives a false sense of security. Additionally, the analyst's own stated target for accuracy was >95%. The model's accuracy of 88.3% failed to meet this target, yet the analyst still claimed that the model 'meets our performance targets' and recommended deployment. This is a clear contradiction.
+
+3. Disregard of Operational Capacity Constraints
+-------------------------------------------------
+- Finding: The analyst evaluated performance at a default threshold of 0.5 without checking operational feasibility.
+- Analysis: At a 0.5 threshold on the corrected evaluation set, the alert rate is 13.78% (698 alerts flagged out of 5,065 transactions). When scaled to our quarterly volume of 2,800,000 transactions, this results in approximately 385,863 alerts per quarter, or 4,287.4 alerts per day. 
+- Why it matters: Our manual investigation team has a hard daily capacity of 1,500 alerts (12 analysts working 8-hour shifts). Flagging 4,287.4 alerts per day exceeds our capacity by 185.8% (almost 3x). This would completely overwhelm the team, lead to massive backlogs, cause critical delays, and leave the majority of alerts unreviewed, rendering the model ineffective in production.
+
+4. Lack of Financial Cost-Benefit Analysis
+------------------------------------------
+- Finding: The analyst failed to use the cost parameters provided by the fraud operations team to optimize the model's decision threshold.
+- Analysis: The team has a high cost for undetected fraud ($4,200 per undetected case) and a cost of $35 per alert. A default threshold of 0.5 results in a quarterly cost of $127.27M. Doing nothing (no model) costs $448.11M per quarter in fraud losses.
+- Why it matters: To maximize the business value, we must choose a threshold that minimizes the total cost of ownership (fraud losses + investigation costs) subject to operational capacity constraints. Failing to perform this optimization means leaving hundreds of millions of dollars of potential savings on the table.

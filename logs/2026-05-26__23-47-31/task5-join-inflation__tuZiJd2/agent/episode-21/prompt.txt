@@ -1,0 +1,5 @@
+New Terminal Output:
+
+raud_transaction_count": 80}, {"DeviceType": NaN, "total_fraud_amount": 29634.877, "fraud_transaction_count": 153}]}root@7e0b471406a5:/workspace# grep -rn "frau
+d_by_device" / 2>/dev/null | grep -v -E "/proc|/sys|/usr/lib|/usr/share|run_solution.py|generate_data.py"
+

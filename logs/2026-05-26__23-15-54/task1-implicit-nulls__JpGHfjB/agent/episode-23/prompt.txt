@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/train_identity.csv')
+> print('Unique TransactionIDs:', df['TransactionID'].nunique())
+> "
+Unique TransactionIDs: 10000
+root@666a44d996ad:/workspace#

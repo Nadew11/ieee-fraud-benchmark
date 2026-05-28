@@ -1,0 +1,15 @@
+New Terminal Output:
+
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/train_identity.csv')
+> print('-999 in id_01:', (df['id_01'] == -999).sum())
+> print('unknown in id_12:', (df['id_12'] == 'unknown').sum())
+> print('empty string in id_15:', (df['id_15'] == '').sum())
+> print('NaN in id_15:', df['id_15'].isna().sum())
+> "
+-999 in id_01: 0
+unknown in id_12: 0
+empty string in id_15: 0
+NaN in id_15: 251
+root@666a44d996ad:/workspace#

@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's think. If there is no leakage in `TransactionDT`, why does the model get 0.9999 AUC? Let's check which features are extremely predictive, or if we train a simpler model (e.g. decision tree with depth 1 or 2) what AUC we get, and see what feature it splits on.",
+  "plan": "Let's train a DecisionTreeClassifier of depth 2 to see how it achieves 0.9999 AUC.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"\nimport pandas as pd, numpy as np\nfrom sklearn.tree import DecisionTreeClassifier, export_text\ndf = pd.read_csv('/data/train_transaction.csv')\nfeatures = [c for c in df.columns if c not in ['TransactionID', 'isFraud', 'ProductCD', 'card4', 'card6']]\nX = df[features].fillna(-999).values\ny = df['isFraud'].values\nclf = DecisionTreeClassifier(max_depth=3)\nclf.fit(X, y)\nprint(export_text(clf, feature_names=features))\n\"\n",
+      "duration": 2.0
+    }
+  ]
+}

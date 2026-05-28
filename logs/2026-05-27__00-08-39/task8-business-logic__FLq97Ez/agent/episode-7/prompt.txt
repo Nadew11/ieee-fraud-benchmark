@@ -1,0 +1,17 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> df_q4 = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+> print('Q4 total rows:', len(df_q4))
+> print('Q4 isFraud == 1 count:', (df_q4['isFraud'] == 1).sum())
+> print('Q4 isFraud == 1 and purchase count:', ((df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')).sum())
+> print('Q4 isFraud == 1 and purchase and not declined:', ((df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase') & (df_q4['settlement_status'] !=
+'declined')).sum())
+> "
+Q4 total rows: 8442
+Q4 isFraud == 1 count: 340
+Q4 isFraud == 1 and purchase count: 298
+Q4 isFraud == 1 and purchase and not declined: 278
+root@474ebd5bd0a4:/workspace#

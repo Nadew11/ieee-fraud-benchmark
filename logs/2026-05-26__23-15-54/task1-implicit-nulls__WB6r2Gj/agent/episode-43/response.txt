@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, why were the counts of -999 and unknown zero in the 'Before clean' section? Let's check the unique values of id_01 and id_12 when read with keep_default_na=False.",
+  "plan": "I will run a python script to check the unique values of `id_01` and `id_12` when read with `keep_default_na=False`.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_identity.csv', keep_default_na=False); print(df['id_01'].unique()[:20]); print(df['id_12'].unique())\"\n",
+      "duration": 5.0
+    }
+  ]
+}

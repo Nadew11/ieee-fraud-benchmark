@@ -1,0 +1,44 @@
+Previous response had warnings:
+WARNINGS: - Extra text detected after JSON object
+
+Current Terminal Screen:
+total 1916
+drwxr-xr-x 1 root root    4096 May 27 03:20 .
+drwxr-xr-x 1 root root    4096 May 27 04:17 ..
+-rw-r--r-- 1 root root 1950924 May 27 03:20 train_identity.csv
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/train_identity.csv')
+> print('-999 in id_01:', (df['id_01'] == -999).sum())
+> print('unknown in id_12:', (df['id_12'] == 'unknown').sum())
+> print('empty string in id_15:', (df['id_15'] == '').sum())
+> print('NaN in id_15:', df['id_15'].isna().sum())
+> "
+-999 in id_01: 0
+unknown in id_12: 0
+empty string in id_15: 0
+NaN in id_15: 251
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/train_identity.csv')
+> print('id_01 unique:', df['id_01'].unique())
+> print('id_12 unique:', df['id_12'].unique())
+> print('id_15 unique:', df['id_15'].unique())
+> "
+id_01 unique: [  -5.  -15.    0.  -20.  -40.  -10.  -25.  -60.  -85. -100.  -35.  -50.
+  -45.  -80.  -30.  -90.  -11.  -55.  -95.  -65.  -75.  -82.   -9.  -70.
+  -16.  -21.  -23.  -96.  -18.   -6.  -26.  -32.]
+id_12 unique: ['NotFound' 'Found']
+id_15 unique: ['Found' nan 'New' 'Unknown']
+root@666a44d996ad:/workspace# python3 -c "
+> import pandas as pd
+> df_train = pd.read_csv('/data/train_identity.csv')
+> df_source = pd.read_csv('/setup/source_identity.csv')
+> print('Train shape:', df_train.shape)
+> print('Source shape:', df_source.shape)
+> "
+Train shape: (10500, 41)
+Source shape: (12000, 41)
+root@666a44d996ad:/workspace# grep -o "-999" /data/train_identity.csv | head -n 10
+grep -o "unknown" /data/train_identity.csv | head -n 10
+

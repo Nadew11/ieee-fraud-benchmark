@@ -1,0 +1,64 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > test_rounding.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+>
+> # Let's test different rounding strategies!
+> # Strategy 1: Round amount_usd to 2 decimal places first, then fee_usd is calculated and rounded to 2 decimal places.
+> # Strategy 2: Do not round amount_usd, but round fee_usd to 2 decimal places.
+> # Strategy 3: Round both to 2 decimal places.
+> # Let's see!
+>
+> for round_amt in [False, True]:
+>     for round_fee in [False, True]:
+>         df_c = df.copy()
+>         if round_amt:
+>             df_c['amount_usd'] = (df_c['TransactionAmt'] * df_c['fx_rate']).round(2)
+>         else:
+>             df_c['amount_usd'] = df_c['TransactionAmt'] * df_c['fx_rate']
+>
+>         fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+>         df_c['fee_rate'] = df_c['merchant_category'].map(fee_dict)
+>
+>         if round_fee:
+>             df_c['processing_fee_usd'] = (df_c['amount_usd'] * df_c['fee_rate']).round(2)
+>         else:
+>             df_c['processing_fee_usd'] = df_c['amount_usd'] * df_c['fee_rate']
+>
+>         # Now, drop duplicates using 'first'
+>         df_dedup = df_c.drop_duplicates(subset=['TransactionID'], keep='first')
+>         df_q4 = df_dedup[(df_dedup['transaction_date'] >= '2023-10-01') & (df_dedup['transaction_date'] <= '2023-12-31')]
+>         df_q4 = df_q4[df_q4['settlement_status'] != 'declined']
+>
+>         purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')]
+>
+>         print(f"round_amt: {round_amt}, round_fee: {round_fee} -> "
+>               f"count: {len(purchases)}, "
+>               f"gross_sum: {purchases['amount_usd'].sum():.4f}, "
+>               f"fees_sum: {purchases['processing_fee_usd'].sum():.4f}")
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 test_rounding.py
+round_amt: False, round_fee: False -> count: 263, gross_sum: 30212.6579, fees_sum: 1021.4958
+round_amt: False, round_fee: True -> count: 263, gross_sum: 30212.6579, fees_sum: 1021.5900
+round_amt: True, round_fee: False -> count: 263, gross_sum: 30212.5600, fees_sum: 1021.4931
+round_amt: True, round_fee: True -> count: 263, gross_sum: 30212.5600, fees_sum: 1021.5800
+root@474ebd5bd0a4:/workspace#

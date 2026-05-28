@@ -1,0 +1,60 @@
+Previous response had warnings:
+WARNINGS: - Command 1 should end with newline when followed by another command. Otherwise the two commands will be concatenated together on the same line.
+
+New Terminal Output:
+
+python3 pipeline_test.py
+AUC excluding chargeback leaks: 1.0
+AUC excluding chargeback leaks & fraud_score: 0.8890221799168091
+AUC with ALL features: 1.0
+root@f6fdec80eb9d:/workspace# python3 pipeline_test.py
+^CTraceback (most recent call last):
+  File "/workspace/pipeline_test.py", line 3, in <module>
+    from sklearn.model_selection import train_test_split
+  File "/usr/local/lib/python3.11/site-packages/sklearn/__init__.py", line 87, in <module>
+    from .base import clone
+  File "/usr/local/lib/python3.11/site-packages/sklearn/base.py", line 19, in <module>
+    from .utils import _IS_32BIT
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/__init__.py", line 22, in <module>
+    from ._estimator_html_repr import estimator_html_repr
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/_estimator_html_repr.py", line 10, in <module>
+    from .fixes import parse_version
+  File "/usr/local/lib/python3.11/site-packages/sklearn/utils/fixes.py", line 17, in <module>
+    import scipy.stats
+  File "/usr/local/lib/python3.11/site-packages/scipy/stats/__init__.py", line 626, in <module>
+    from ._stats_py import *
+  File "/usr/local/lib/python3.11/site-packages/scipy/stats/_stats_py.py", line 2771, in <module>
+    @xp_capabilities()
+     ^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/scipy/_lib/_array_api.py", line 810, in decorator
+    note = _make_capabilities_note(f.__name__, sphinx_capabilities)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/site-packages/scipy/_lib/_array_api.py", line 754, in _make_capabilities_note
+    return textwrap.dedent(note)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/textwrap.py", line 466, in dedent
+    text = re.sub(r'(?m)^' + margin, '', text)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.11/re/__init__.py", line 185, in sub
+    return _compile(pattern, flags).sub(repl, string, count)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt
+
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.select_dtypes(include=['object']).nuniq
+ue())"
+ProductCD         5
+card4             4
+card6             3
+P_emaildomain    57
+R_emaildomain    50
+M1                1
+M2                2
+M3                2
+M4                3
+M5                2
+M6                2
+M7                2
+M8                2
+M9                2
+dtype: int64
+root@f6fdec80eb9d:/workspace#

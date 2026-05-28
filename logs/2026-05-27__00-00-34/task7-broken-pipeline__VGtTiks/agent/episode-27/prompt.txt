@@ -1,0 +1,58 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > test_pipeline.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> # Load data
+> df = pd.read_csv("/data/train_transaction.csv")
+> # Sort by TransactionDT to ensure chronological order
+> df = df.sort_values("TransactionDT").reset_index(drop=True)
+>
+> TARGET = "isFraud"
+>
+> # Keep categorical columns and encode them
+> cat_cols = ["ProductCD", "card4", "card6"]
+> df_encoded = pd.get_dummies(df, columns=cat_cols, drop_first=True)
+>
+> DROP = ["TransactionID", TARGET]
+> features = [c for c in df_encoded.columns if c not in DROP]
+>
+> # Split into train and validation (temporal split 80/20)
+> split_idx = int(len(df_encoded) * 0.8)
+> train_df = df_encoded.iloc[:split_idx]
+> val_df = df_encoded.iloc[split_idx:]
+>
+> X_train = train_df[features]
+> y_train = train_df[TARGET]
+> X_val = val_df[features]
+> y_val = val_df[TARGET]
+>
+> # Train XGBoost with proper evaluation metric
+> model = xgb.XGBClassifier(
+>     objective="binary:logistic",
+>     eval_metric="auc",
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+> )
+> model.fit(
+>     X_train, y_train,
+>     eval_set=[(X_val, y_val)],
+>     verbose=False,
+> )
+>
+> probs = model.predict_proba(X_val)[:, 1]
+> auc   = roc_auc_score(y_val, probs)
+> print(f"Corrected Validation AUC: {auc:.4f}")
+> EOF
+root@0d5e255b62ea:/workspace# python3 test_pipeline.py
+Corrected Validation AUC: 1.0000
+

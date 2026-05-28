@@ -1,0 +1,11 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print(df.groupby(['transaction_type', 'isFraud']).siz
+e())"
+transaction_type     isFraud
+chargeback_reversal  1             9
+purchase             0          8117
+                     1           298
+refund               1            33
+dtype: int64
+root@cf0db7aa8136:/workspace#

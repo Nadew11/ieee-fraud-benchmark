@@ -1,0 +1,63 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_logic.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+> region = pd.read_csv('/data/region_map.csv')
+>
+> # Filter to Q4 2023
+> df = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+>
+> # Exclude declined
+> df = df[df['settlement_status'] != 'declined']
+>
+> # Convert dates
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+> df_merged['amt_usd'] = df_merged['TransactionAmt'] * df_merged['rate_to_usd']
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> df_merged['processing_fee'] = df_merged['amt_usd'] * df_merged['fee_rate']
+>
+> # Ground truth numbers:
+> # q4_net_fraud_total_usd: 26755.09
+> # q4_gross_fraud_total_usd: 30212.56
+> # total_processing_fees: 1021.58
+> # total_recoveries: 2435.89
+> # fraud_purchase_count: 263
+>
+> print("Ground Truths:")
+> print("net fraud: 26755.09, gross: 30212.56, fees: 1021.58, recoveries: 2435.89, purchase count: 263\n")
+>
+> # Let's see if we can match fraud_purchase_count first
+> # Is it possible some transactions are excluded or have different statuses?
+> # What if we only consider settlement_status == 'settled'?
+> for status_filter in ['all_except_declined', 'settled_only']:
+>     if status_filter == 'all_except_declined':
+>         sub_df = df_merged
+>     else:
+>         sub_df = df_merged[df_merged['settlement_status'] == 'settled']
+>
+>     purchase_count = len(sub_df[(sub_df['isFraud'] == 1) & (sub_df['transaction_type'] == 'purchase')])
+>     print(f"{status_filter}: fraud_purchase_count = {purchase_count}")
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_logic.py
+Ground Truths:
+net fraud: 26755.09, gross: 30212.56, fees: 1021.58, recoveries: 2435.89, purchase count: 263
+
+all_except_declined: fraud_purchase_count = 278
+settled_only: fraud_purchase_count = 264
+root@cf0db7aa8136:/workspace#

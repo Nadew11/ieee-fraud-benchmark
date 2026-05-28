@@ -1,0 +1,10 @@
+{
+  "analysis": "No such files found. What about files modified recently, or files in `/etc` or `/var` or `/opt`?",
+  "plan": "I will list the parent directory `/` or see if there is any `/tests` or similar directory.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /\n",
+      "duration": 0.5
+    }
+  ]
+}

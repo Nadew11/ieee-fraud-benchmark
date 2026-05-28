@@ -1,0 +1,10 @@
+{
+  "analysis": "USD is not in FX rates, because USD to USD rate is always 1.0.\nLet's write a python function to get the rate for any currency on any date. The rule: \"Where no exact date match exists, use the most recent prior rate.\"\nWait, if the date is before any rate in `fx_rates.csv` for that currency, what do we do? Let's check the date range of fx rates for each currency vs transaction date range.",
+  "plan": "Write a python script to check date ranges of transactions and FX rates, and implement a forward-fill/most recent prior rate matching logic, then calculate currency conversions.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' >> search_filters.py\n# Check fx rate min/max dates for each currency\nfor cur in ['GBP', 'ETB', 'NGN', 'EUR']:\n    cur_fx = fx[fx['currency'] == cur]\n    print(f\"{cur}: min_date={cur_fx['date'].min()}, max_date={cur_fx['date'].max()}, count={len(cur_fx)}\")\nEOF\npython3 search_filters.py\n",
+      "duration": 1.0
+    }
+  ]
+}

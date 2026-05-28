@@ -1,0 +1,40 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > test_analyst.py
+> import csv
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     rows = [r for r in reader]
+>
+> # Calculate confusion matrix for threshold = 0.5
+> tp, fp, fn, tn = 0, 0, 0, 0
+> for r in rows:
+>     y_true = int(r[1])
+>     y_prob = float(r[2])
+>     y_pred = 1 if y_prob >= 0.5 else 0
+>     if y_true == 1 and y_pred == 1:
+>         tp += 1
+>     elif y_true == 0 and y_pred == 1:
+>         fp += 1
+>     elif y_true == 1 and y_pred == 0:
+>         fn += 1
+>     elif y_true == 0 and y_pred == 0:
+>         tn += 1
+>
+> print(f"TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}")
+> print("Accuracy:", (tp + tn) / len(rows))
+>
+> # Let's import roc_auc_score to verify AUC on the full dataset
+> # Using standard sklearn
+> from sklearn.metrics import roc_auc_score
+> y_true_all = [int(r[1]) for r in rows]
+> y_prob_all = [float(r[2]) for r in rows]
+> print("AUC:", roc_auc_score(y_true_all, y_prob_all))
+> EOF
+root@a7f99ad36897:/workspace# python3 test_analyst.py
+TP: 194, FP: 604, FN: 57, TN: 4795
+Accuracy: 0.8830088495575221
+AUC: 0.918213421549955
+root@a7f99ad36897:/workspace#

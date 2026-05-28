@@ -1,0 +1,47 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_logic.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+> region = pd.read_csv('/data/region_map.csv')
+>
+> # Filter to Q4 2023
+> df = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+>
+> # Convert dates to datetime objects
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+>
+> # Sort fx by date
+> fx = fx.sort_values('date_dt')
+>
+> # Let's prepare a dataframe of dates and currencies
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> # We can use pd.merge_asof to match
+> df = df.sort_values('transaction_date_dt')
+>
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+>
+> # Let's verify if there are any missing rates in Q4
+> missing_rates = df_merged[df_merged['rate_to_usd'].isna()]
+> print("Missing rates count in Q4:", len(missing_rates))
+> if len(missing_rates) > 0:
+>     print(missing_rates[['transaction_date', 'currency']].drop_duplicates())
+>
+> # Calculate TransactionAmt in USD
+> df_merged['amt_usd'] = df_merged['TransactionAmt'] * df_merged['rate_to_usd']
+>
+> print("Total Q4 rows:", len(df_merged))
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_logic.py
+Missing rates count in Q4: 0
+Total Q4 rows: 8442
+root@cf0db7aa8136:/workspace#

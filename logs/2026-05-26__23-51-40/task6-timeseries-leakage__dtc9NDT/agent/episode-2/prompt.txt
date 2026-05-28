@@ -1,0 +1,39 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# pip list | grep -E 'pandas|scikit-learn|lightgbm|xgboost|catboost'
+pandas          2.1.4
+scikit-learn    1.4.0
+xgboost         2.0.3
+
+[notice] A new release of pip is available: 24.0 -> 26.1.1
+[notice] To update, run: pip install --upgrade pip
+root@81a3fc64145d:/workspace# python3 -V
+Python 3.11.15
+root@81a3fc64145d:/workspace# python3 -c "import pandas, sklearn; print('pandas:', pandas.__version__, 'sklearn:', sklearn.__version__)"
+mkdir -p /output
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

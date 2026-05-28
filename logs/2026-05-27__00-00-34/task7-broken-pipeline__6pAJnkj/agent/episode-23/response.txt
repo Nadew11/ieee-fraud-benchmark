@@ -1,0 +1,10 @@
+{
+  "analysis": "I need to ensure no raw control characters are present. Let's run a script to print the target distribution of 'isFraud'.",
+  "plan": "Print the counts of the 'isFraud' column.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df['isFraud'].value_counts())\"\n",
+      "duration": 2.0
+    }
+  ]
+}

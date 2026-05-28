@@ -1,0 +1,19 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print('isFraud:', df.isFraud.value_counts()); print('
+settlement_status:', df.settlement_status.value_counts()); print('transaction_type:', df.transaction_type.value_counts())"
+isFraud: isFraud
+0    8117
+1     340
+Name: count, dtype: int64
+settlement_status: settlement_status
+settled     7469
+declined     580
+pending      408
+Name: count, dtype: int64
+transaction_type: transaction_type
+purchase               8415
+refund                   33
+chargeback_reversal       9
+Name: count, dtype: int64
+root@474ebd5bd0a4:/workspace#

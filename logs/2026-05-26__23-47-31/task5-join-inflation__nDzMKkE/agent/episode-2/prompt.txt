@@ -1,0 +1,36 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# python3 -c "import pandas; print(pandas.__version__)" || python3 --version
+2.1.4
+root@10499a3d6cec:/workspace#
+root@10499a3d6cec:/workspace# mkdir -p /output
+root@10499a3d6cec:/workspace# head -n 5 /data/transactions.csv
+TransactionID,isFraud,TransactionAmt
+3457624,0,724.0
+3552820,0,108.5
+3271083,0,47.95
+3226689,0,100.599
+root@10499a3d6cec:/workspace# head -n 5 /data/identity.csv
+TransactionID,DeviceType,DeviceInfo,id_01,id_02,id_12
+3333227,mobile,LG-H542 Build/MRA58K,-20.0,143436.0,NotFound
+3200402,desktop,Windows,-5.0,61345.0,NotFound
+3023988,desktop,Windows,-10.0,1622.0,Found
+3077553,desktop,Windows,-10.0,236974.0,NotFound
+root@10499a3d6cec:/workspace# python3 -c "import pandas; print('pandas is available')" 2>/dev/null || echo "no pandas"
+pandas is available
+root@10499a3d6cec:/workspace#
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

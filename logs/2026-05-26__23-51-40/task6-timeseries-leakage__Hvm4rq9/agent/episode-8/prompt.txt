@@ -1,0 +1,20 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat << 'EOF' > test_perf.py
+> import pandas as pd
+> import numpy as np
+> import time
+>
+> t0 = time.time()
+> df = pd.read_csv('/data/transactions.csv')
+> df = df.sort_values('TransactionDT').reset_index(drop=True)
+>
+> df['card1_cum_count'] = df.groupby('card1').cumcount()
+> df['card1_time_diff'] = df.groupby('card1')['TransactionDT'].diff()
+> df['card1_cum_amt_mean'] = df.groupby('card1')['TransactionAmt'].transform(lambda x: x.shift().expanding().mean())
+>
+> print("Done in {:.2f}s".format(time.time() - t0))
+> print(df[['card1', 'TransactionDT', 'TransactionAmt', 'card1_cum_count', 'card1_time_diff', 'card1_cum_amt_mean']].head(10))
+> EOF
+root@9da0ecea1a80:/workspace# python3 test_perf.py
+

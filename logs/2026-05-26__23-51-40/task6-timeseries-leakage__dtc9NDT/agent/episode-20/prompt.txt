@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 77 (char 78) | Content preview: '{\n  "analysis": "The maximum test AUC achieved is 0.86306 with 120 estimators.\nLet\'s see if we can d'...
+
+Please fix these issues and provide a proper JSON response.

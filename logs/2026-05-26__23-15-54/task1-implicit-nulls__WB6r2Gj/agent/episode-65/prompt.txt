@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 51 (char 52) | Content preview: '{\n  "analysis": "Wow, this is absolutely incredible!\nThe cleaned dataset `/output/cleaned.csv` has e'...
+
+Please fix these issues and provide a proper JSON response.

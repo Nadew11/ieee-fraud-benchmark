@@ -1,0 +1,41 @@
+New Terminal Output:
+root@f6fdec80eb9d:/workspace# head -n 5 /data/train_transaction.csv
+TransactionID,isFraud,TransactionDT,TransactionAmt,ProductCD,card1,card2,card3,card4,card5,card6,addr1,addr2,dist1,dist2,P_emaildomain,R_emaildomain,C1,C2,C3,C4
+,C5,C6,C7,C8,C9,C10,C11,C12,C13,C14,D1,D2,D3,D4,D5,D6,D7,D8,D9,D10,D11,D12,D13,D14,D15,M1,M2,M3,M4,M5,M6,M7,M8,M9,chargeback_amount,fraud_score,days_to_chargeba
+ck
+3539620,0,14597586,107.95,W,7648,357.0,150.0,visa,226.0,debit,184.0,87.0,857.0,,gmail.com,,3.0,1.0,0.0,0.0,1.0,1.0,0.0,0.0,2.0,0.0,1.0,0.0,16.0,3.0,0.0,,,434.0,
+27.0,,,,,531.0,49.0,,,,602.0,T,F,F,,,T,F,F,F,0.0,0.0871,303.0
+3076706,0,1881836,100.0,R,18366,111.0,150.0,visa,226.0,debit,299.0,87.0,,2420.0,gmail.com,gmail.com,2.0,1.0,0.0,1.0,0.0,1.0,0.0,2.0,0.0,2.0,1.0,0.0,2.0,2.0,0.0,
+,,,,,,42.75,0.75,0.0,,,,,,,,,,,,,,,0.0,0.0885,149.0
+3259930,0,6629582,117.0,W,17055,393.0,150.0,mastercard,117.0,debit,325.0,87.0,5.0,,aol.com,,1.0,1.0,0.0,0.0,0.0,1.0,0.0,0.0,2.0,0.0,2.0,0.0,48.0,1.0,555.0,539.0
+,2.0,14.0,2.0,,,,,555.0,503.0,,,,14.0,T,T,F,M1,F,T,F,F,T,0.0,0.08,178.0
+3545212,0,14769374,80.17,C,15178,277.0,144.0,mastercard,224.0,credit,,,,,gmail.com,gmail.com,1.0,1.0,0.0,1.0,0.0,1.0,1.0,1.0,0.0,1.0,1.0,1.0,0.0,0.0,0.0,,,0.0,,
+0.0,,0.9166659712791444,0.9166659712791444,0.0,,0.0,0.0,0.0,0.0,,,,M2,,,,,,0.0,0.0676,305.0
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas, sklearn, lightgbm; print('Imports successful')"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

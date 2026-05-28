@@ -1,0 +1,18 @@
+New Terminal Output:
+
+root@d8276d655354:/workspace# cat << 'EOF' > inspect_features.py
+> import pandas as pd
+> df = pd.read_csv('/data/train_transaction.csv')
+> print(df['TransactionDT'].describe())
+> EOF
+root@d8276d655354:/workspace# python3 inspect_features.py
+count    1.500000e+04
+mean     7.323742e+06
+std      4.600125e+06
+min      8.640000e+04
+25%      3.021365e+06
+50%      7.244897e+06
+75%      1.112461e+07
+max      1.581109e+07
+Name: TransactionDT, dtype: float64
+root@d8276d655354:/workspace#

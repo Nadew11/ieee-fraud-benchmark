@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 316 (char 317) | Content preview: '{\n  "analysis": "Yes, \'JP\' is not in `region_map.csv`. It should be mapped to \'Other\'. If any countr'...
+
+Please fix these issues and provide a proper JSON response.

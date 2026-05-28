@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.groupby('isFraud')[['card1', 'card2', '
+addr1', 'dist1', 'C1', 'C2', 'C4', 'C5']].mean())"
+                card1       card2       addr1        dist1        C1        C2        C4        C5
+isFraud
+0         7996.026109  300.138677  275.391740  1731.856673  4.501640  2.509969  3.485038  1.496541
+1        13052.747805  472.838926  451.998222  3487.850331  9.434667  5.039474  6.560932  2.987578
+root@e9645eb65f5b:/workspace#

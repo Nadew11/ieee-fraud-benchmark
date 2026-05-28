@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 99 (char 100) | Content preview: '{\n  "analysis": "The test AUC improved to 0.86383 using 120 estimators with the additional features.'...
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,18 @@
+# Methodology Note: Fraud Detection with Engineered Features
+
+## 1. Feature Engineering Approach
+To build a high-performing fraud classifier while strictly preventing future data leakage, we engineered several historical and velocity-based features. Crucially, all historical aggregation calculations used shift() operations so that transaction data from the present moment is not used to calculate historical statistics (avoiding lookahead bias).
+
+Key engineered features include:
+- **Time Velocity Features**: `dt_diff_card1` and `dt_diff_card1_addr1` measure the elapsed time since the previous transaction for a given card/region combo, helping flag rapid-fire bursts of suspicious activity.
+- **Cumulative Transaction Counts**: Track the evolving frequency of a cardholder's transactions over the 6-month period.
+- **Cumulative Transaction Amount Statistics**: Cumulative mean, standard deviation, and relative transaction amount ratio (e.g., current transaction amount vs historical mean transaction amount for the card).
+- **Cumulative Fraud Rates (Target Encoding)**: Running historical ratio of fraud for a given card or cardholder location, using a shift operator to ensure no target leakage.
+- **Cyclical Time Feature**: Estimating the hour of the day from the elapsed seconds to capture temporal patterns in fraud activity.
+
+## 2. Evaluation Strategy
+We used a strict chronological/temporal split to mirror production deployment:
+- **Training set**: The first 80% of chronological transactions (spanning approximately the first 145 days).
+- **Test set**: The final 20% of chronological transactions (representing the subsequent ~37 days of future transactions).
+
+An XGBoost classifier with regularized depth, column subsampling, and low learning rate was trained on the training split and evaluated on the test set.

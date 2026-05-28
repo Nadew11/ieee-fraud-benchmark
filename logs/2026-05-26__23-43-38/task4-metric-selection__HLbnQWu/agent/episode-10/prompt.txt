@@ -1,0 +1,112 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# cat << 'EOF' > analyze_financials.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_curve
+>
+> # Load and clean dataset
+> df = pd.read_csv('/data/predictions.csv')
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+> start_date = pd.to_datetime('2026-01-15 00:00:00')
+> end_date = pd.to_datetime('2026-04-30 23:59:59')
+> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)].copy()
+>
+:> # Parameters from cost_assumptions.txt
+> loss_per_undetected = 4200.0
+> cost_per_investigation = 35.0
+> daily_review_capacity = 1500  # alerts/day
+> quarterly_volume = 2800000
+>
+> # The clean_df represents the holdout set. How many days are in this evaluation period?
+> min_date = clean_df['scored_at'].min()
+> max_date = clean_df['scored_at'].max()
+> num_days = (max_date - min_date).total_seconds() / (24 * 3600)
+> print(f"Evaluation period: {min_date} to {max_date} ({num_days:.2f} days)")
+>
+> # Let's count how many days of data we actually have
+> unique_days = clean_df['scored_at'].dt.date.nunique()
+> print(f"Unique days in dataset: {unique_days}")
+>
+> # Let's calculate costs for different thresholds
+> # A threshold 't' means: if y_pred_prob >= t, we flag/alert (Positive), else we pass (Negative).
+> # If y_true == 1 and we don't flag (Negative, which is FN), we lose $4,200.
+> # If we flag (Positive, which is TP + FP), we spend $35 to investigate.
+> # Let's verify: does a TP still cost $35 to investigate, and do we save the $4,200 loss? Yes, manual investigation prevents the fraud loss, but costs $35. Und
+etected fraud (FN) costs $4200. FPs cost $35.
+> # Let's write down the cost formulas:
+> # Total cost on holdout set = (TP + FP) * 35.0 + FN * 4200.0
+> # Let's evaluate this cost for all thresholds from 0.0 to 1.0
+>
+> thresholds = np.linspace(0.0, 1.0, 1001)
+> results = []
+>
+> for t in thresholds:
+>     # Flagged transactions
+>     flagged = clean_df['y_pred_prob'] >= t
+>     tp = ((flagged) & (clean_df['y_true'] == 1)).sum()
+>     fp = ((flagged) & (clean_df['y_true'] == 0)).sum()
+>     fn = ((~flagged) & (clean_df['y_true'] == 1)).sum()
+>     tn = ((~flagged) & (clean_df['y_true'] == 0)).sum()
+>
+>     # Holdout metrics
+>     holdout_size = len(clean_df)
+>     flagged_count = flagged.sum()
+>
+>     # Extrapolate to quarterly volume
+>     # Ratio of quarterly volume to holdout size
+>     extrap_ratio = quarterly_volume / holdout_size
+>
+>     # Quarterly estimates
+>     q_flagged = flagged_count * extrap_ratio
+>     q_tp = tp * extrap_ratio
+>     # Daily flagged
+>     # Assuming 90 days per quarter? Let's check.
+>     # Let's write the daily alert rate. Is it q_flagged / 90?
+>     # Or let's see: how many daily alerts based on the actual holdout daily density?
+>     # Let's check how many days are in a quarter. Usually 90, 91, or 92 days. Let's see if we should use 90 days, 91 days, or based on holdout dataset's daily
+ average.
+>     # Let's print both.
+>     daily_alerts_by_holdout = flagged_count / (num_days)
+>     daily_alerts_by_quarter = q_flagged / 90.0  # standard quarter is 90 days, or we can use the holdout day density
+>
+>     # Quarterly costs
+>     q_investigation_cost = q_flagged * cost_per_investigation
+>     q_fraud_loss = fn * extrap_ratio * loss_per_undetected
+>     q_total_cost = q_investigation_cost + q_fraud_loss
+>
+>     results.append({
+>         'threshold': t,
+>         'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+>         'flagged': flagged_count,
+>         'q_flagged': q_flagged,
+>         'daily_alerts_by_holdout': daily_alerts_by_holdout,
+>         'daily_alerts_by_quarter': daily_alerts_by_quarter,
+>         'q_investigation_cost': q_investigation_cost,
+>         'q_fraud_loss': q_fraud_loss,
+>         'q_total_cost': q_total_cost
+>     })
+>
+> res_df = pd.DataFrame(results)
+> best_row = res_df.loc[res_df['q_total_cost'].idxmin()]
+> print("\nBest Threshold based on Total Quarterly Cost (unconstrained):")
+> print(best_row)
+>
+> # Let's look at threshold 0.5 for comparison
+> row_05 = res_df.iloc[(res_df['threshold'] - 0.5).abs().idxmin()]
+> print("\nMetrics at threshold 0.5:")
+> print(row_05)
+>
+> # Let's look at what threshold we need to fit within daily review capacity of 1,500 alerts/day
+> # Wait, is the daily review capacity 1,500 alerts/day?
+> # Let's check what the daily alert rate is at different thresholds and find the best threshold that satisfies daily_alerts <= 1500.
+> # Is 'daily_alerts' calculated as q_flagged / 90, or holdout flagged / num_days?
+> # Let's see. The holdout period is from Jan 15 to Apr 30, which is:
+> # Jan 15-31: 17 days
+> # Feb: 28 days (or 29? 2026 is not a leap year. 2024 is, so 2026 has 28 days)
+> # Mar: 31 days
+> # Apr: 30 days
+> # Total holdout days: 17 + 28 + 31 + 30 = 106 days. Let's verify the exact days of the dataset.
+> EOF
+root@831ed0f33a44:/workspace# python3 analyze_financials.py
+

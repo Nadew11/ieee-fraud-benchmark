@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# python3 inspect_b99.py
+python3: can't open file '/workspace/inspect_b99.py': [Errno 2] No such file or directory
+root@58fc9c5bb0bf:/workspace#

@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# find / -name "*fraud*" -o -name "*identity*" -o -name "*clean*" 2>/dev/null | grep -v "/proc" | grep -v "/sys"
+/usr/local/lib/python3.11/site-packages/setuptools/_distutils/command/clean.py
+/usr/local/lib/python3.11/site-packages/scipy/optimize/tests/test__linprog_clean_inputs.py
+/usr/local/lib/python3.11/site-packages/scipy/optimize/tests/__pycache__/test__linprog_clean_inputs.cpython-311.pyc
+/usr/local/lib/python3.11/distutils/command/clean.py
+/usr/bin/py3clean
+/etc/apt/apt.conf.d/docker-clean
+/data/train_identity.csv
+/setup/source_identity.csv
+root@cc7b6f7834c9:/workspace#

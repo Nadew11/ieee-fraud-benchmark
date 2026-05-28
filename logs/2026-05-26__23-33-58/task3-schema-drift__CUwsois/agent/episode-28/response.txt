@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait for `test_xgb_preprocessed.py` to finish execution.",
+  "plan": "Wait for command output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "analysis": "The input files are located in `/data/` and there is an empty `/output/` directory where the deliverables should be placed.",
+  "plan": "I will inspect the text files in `/data` first to understand the assumptions, technical details, and the draft evaluation.",
+  "commands": [
+    {
+      "keystrokes": "cat /data/cost_assumptions.txt\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "cat /data/dataset_info.txt\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "cat /data/draft_evaluation.txt\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "head -n 10 /data/predictions.csv\n",
+      "duration": 0.5
+    }
+  ]
+}

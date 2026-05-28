@@ -1,0 +1,13 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat /data/region_map.csv
+country_code,region
+US,North America
+CA,North America
+ET,Africa
+DE,Europe
+FR,Europe
+GB,Europe
+NG,Africa
+KE,Africa
+root@b9e5a18b679d:/workspace#

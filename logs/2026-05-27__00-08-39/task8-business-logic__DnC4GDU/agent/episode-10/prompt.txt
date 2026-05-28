@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); df = df[(df['transaction_date'] >= '2023-10-01') & (d
+f['transaction_date'] <= '2023-12-31')]; df_settled = df[df['settlement_status'] != 'declined']; print(df_settled.groupby(['transaction_type', 'isFraud']).size(
+))"
+transaction_type     isFraud
+chargeback_reversal  1             9
+purchase             0          7543
+                     1           278
+refund               1            33
+dtype: int64
+root@cf0db7aa8136:/workspace#

@@ -1,0 +1,15 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# python3 -c "import pandas as pd; df=pd.read_csv('/data/transactions.csv'); print('types:', df.transaction_type.value_counts()); pr
+int('status:', df.settlement_status.value_counts())"
+types: transaction_type
+purchase               8415
+refund                   33
+chargeback_reversal       9
+Name: count, dtype: int64
+status: settlement_status
+settled     7469
+declined     580
+pending      408
+Name: count, dtype: int64
+root@b9e5a18b679d:/workspace#

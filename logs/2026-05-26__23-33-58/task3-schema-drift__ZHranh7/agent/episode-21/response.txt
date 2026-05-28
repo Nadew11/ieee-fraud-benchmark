@@ -1,0 +1,10 @@
+{
+  "analysis": "The commands were pasted, but since a `C-c` (with literal string \"C-c\" rather than keystroke block or Ctrl+C) was printed, it got executed in a slightly messy way. Let's make sure we run python3 test_simple_models.py cleanly.",
+  "plan": "I will send a newline to trigger execution of the commands.",
+  "commands": [
+    {
+      "keystrokes": "\n",
+      "duration": 5.0
+    }
+  ]
+}

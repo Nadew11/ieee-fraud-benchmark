@@ -1,0 +1,14 @@
+{
+  "analysis": "These are SKILL.md documentation files, which aren't tests. Let's look at the `/etc` or maybe git history of `/workspace` or `/`.",
+  "plan": "Let's check if there is a git repo in `/workspace` or if there are any other files/folders in `/`.",
+  "commands": [
+    {
+      "keystrokes": "git status\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "ls -la /\n",
+      "duration": 1.0
+    }
+  ]
+}

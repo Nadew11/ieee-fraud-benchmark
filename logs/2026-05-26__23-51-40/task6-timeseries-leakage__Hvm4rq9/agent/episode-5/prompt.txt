@@ -1,0 +1,40 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat << 'EOF' > inspect_data.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> print("Shape:", df.shape)
+> print("Columns:", df.columns.tolist())
+> print("Missing values:\n", df.isnull().sum())
+> print("isFraud value counts:\n", df['isFraud'].value_counts(dropna=False))
+> print("TransactionDT range:", df['TransactionDT'].min(), df['TransactionDT'].max())
+> print("ProductCD unique values:", df['ProductCD'].unique())
+> print("card1 unique count:", df['card1'].nunique())
+> print("addr1 unique count:", df['addr1'].nunique())
+> EOF
+root@9da0ecea1a80:/workspace# python3 inspect_data.py
+Shape: (30000, 9)
+Columns: ['TransactionID', 'TransactionDT', 'isFraud', 'TransactionAmt', 'card1', 'ProductCD', 'addr1', 'C1', 'C2']
+Missing values:
+ TransactionID     0
+TransactionDT     0
+isFraud           0
+TransactionAmt    0
+card1             0
+ProductCD         0
+addr1             0
+C1                0
+C2                0
+dtype: int64
+isFraud value counts:
+ isFraud
+0    28632
+1     1368
+Name: count, dtype: int64
+TransactionDT range: 86413 15810838
+ProductCD unique values: ['C' 'W' 'S' 'H' 'R']
+card1 unique count: 14086
+addr1 unique count: 400
+root@9da0ecea1a80:/workspace#

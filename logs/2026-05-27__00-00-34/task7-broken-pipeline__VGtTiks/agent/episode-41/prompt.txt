@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); pred = ((df['C1'] > 9.5) | (df['addr1'] > 449.5)
+ | (df['C2'] > 5.5) | (df['card2'] > 499.5)); print('Mismatches:', (df['isFraud'] != pred.astype(int)).sum())"
+Mismatches: 138
+root@0d5e255b62ea:/workspace#

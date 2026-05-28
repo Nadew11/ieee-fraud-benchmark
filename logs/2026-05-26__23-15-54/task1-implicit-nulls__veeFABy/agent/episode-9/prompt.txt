@@ -1,0 +1,47 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); d = df[df.duplicated(subset=["TransactionID"], keep
+=False)].sort_values("TransactionID"); d1 = d.groupby("TransactionID").first(); d2 = d.groupby("TransactionID").last(); diffs = (d1 != d2) & ~d1.isna() & ~d2.is
+na(); print(diffs.any())'
+id_01         False
+id_02          True
+id_03         False
+id_04         False
+id_05         False
+id_06         False
+id_07         False
+id_08         False
+id_09         False
+id_10         False
+id_11         False
+id_12         False
+id_13         False
+id_14         False
+id_15         False
+id_16         False
+id_17         False
+id_18         False
+id_19         False
+id_20         False
+id_21         False
+id_22         False
+id_23         False
+id_24         False
+id_25         False
+id_26         False
+id_27         False
+id_28         False
+id_29         False
+id_30         False
+id_31         False
+id_32         False
+id_33         False
+id_34         False
+id_35         False
+id_36         False
+id_37         False
+id_38         False
+DeviceType    False
+DeviceInfo    False
+dtype: bool
+root@803b650a44b8:/workspace#

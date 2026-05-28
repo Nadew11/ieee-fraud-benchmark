@@ -1,0 +1,29 @@
+New Terminal Output:
+
+root@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; num_cols = df.select_dtypes(include=["
+number"]).columns; [print(col, "has floats:", (df[col].dropna() % 1 != 0).any()) for col in num_cols]'
+TransactionID has floats: False
+id_01 has floats: False
+id_02 has floats: False
+id_03 has floats: False
+id_04 has floats: False
+id_05 has floats: False
+id_06 has floats: False
+id_07 has floats: False
+id_08 has floats: False
+id_09 has floats: False
+id_10 has floats: False
+id_11 has floats: True
+id_13 has floats: False
+id_14 has floats: False
+id_17 has floats: False
+id_18 has floats: False
+id_19 has floats: False
+id_20 has floats: False
+id_21 has floats: False
+id_22 has floats: False
+id_24 has floats: False
+id_25 has floats: False
+id_26 has floats: False
+id_32 has floats: False
+root@803b650a44b8:/workspace#

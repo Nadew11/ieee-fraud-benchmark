@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# python3 -c "import pandas as pd; df=pd.read_csv('/data/transactions.csv'); fraud=df[df.isFraud==1]; print('Fraud with duplicate tr
+ansaction IDs:', fraud.TransactionID.duplicated().sum())"
+Fraud with duplicate transaction IDs: 16
+

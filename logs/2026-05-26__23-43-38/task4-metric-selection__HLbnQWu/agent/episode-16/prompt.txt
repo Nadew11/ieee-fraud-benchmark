@@ -1,0 +1,28 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# python3 print_details.py
+--- DATASET SIZES ---
+Raw dataset: 5650 rows
+Cleaned dataset (scoring period only): 5065 rows
+Excluded (out-of-period): 585 rows
+
+--- ANALYST UNCLEANED METRICS (Threshold 0.5) ---
+AUC-ROC: 0.918213 (reported: 0.9182)
+Accuracy: 88.30% (reported: 88.3%)
+TP: 194, FP: 604, FN: 57, TN: 4795
+
+--- CLEANED METRICS (Threshold 0.5) ---
+AUC-ROC: 0.905062
+Accuracy: 88.09%
+TP: 144, FP: 554, FN: 49, TN: 4318
+
+--- DETAILED LOOK AROUND 0.644 ---
+t=0.640: flagged=250, tp=112, fp=138, fn=81, daily=1535.6, cost=$192,904,244.82
+t=0.641: flagged=248, tp=112, fp=136, fn=81, daily=1523.3, cost=$192,865,547.88
+t=0.642: flagged=247, tp=112, fp=135, fn=81, daily=1517.2, cost=$192,846,199.41
+t=0.643: flagged=244, tp=112, fp=132, fn=81, daily=1498.7, cost=$192,788,154.00
+t=0.644: flagged=241, tp=112, fp=129, fn=81, daily=1480.3, cost=$192,730,108.59
+t=0.645: flagged=240, tp=111, fp=129, fn=82, daily=1474.2, cost=$195,032,576.51
+t=0.650: flagged=227, tp=109, fp=118, fn=84, daily=1394.3, cost=$199,424,679.17
+t=0.660: flagged=211, tp=107, fp=104, fn=86, daily=1296.0, cost=$203,758,736.43
+root@831ed0f33a44:/workspace#

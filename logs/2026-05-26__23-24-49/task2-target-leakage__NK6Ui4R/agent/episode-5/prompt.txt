@@ -1,0 +1,91 @@
+New Terminal Output:
+
+root@f6fdec80eb9d:/workspace# python3 -c "from sklearn.ensemble import HistGradientBoostingClassifier; print('HistGB ok')"
+HistGB ok
+root@f6fdec80eb9d:/workspace# pip list
+Package         Version
+--------------- -----------
+joblib          1.5.3
+numpy           1.26.3
+pandas          2.1.4
+pip             24.0
+python-dateutil 2.9.0.post0
+pytz            2026.2
+scikit-learn    1.4.0
+scipy           1.16.3
+setuptools      79.0.1
+six             1.17.0
+threadpoolctl   3.6.0
+tzdata          2026.2
+wheel           0.45.1
+xgboost         2.0.3
+
+[notice] A new release of pip is available: 24.0 -> 26.1.1
+[notice] To update, run: pip install --upgrade pip
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv', nrows=5); print(df.dtypes.to_string())"
+TransactionID           int64
+isFraud                 int64
+TransactionDT           int64
+TransactionAmt        float64
+ProductCD              object
+card1                   int64
+card2                 float64
+card3                 float64
+card4                  object
+card5                 float64
+card6                  object
+addr1                 float64
+addr2                 float64
+dist1                 float64
+dist2                 float64
+P_emaildomain          object
+R_emaildomain          object
+C1                    float64
+C2                    float64
+C3                    float64
+C4                    float64
+C5                    float64
+C6                    float64
+C7                    float64
+C8                    float64
+C9                    float64
+C10                   float64
+C11                   float64
+C12                   float64
+C13                   float64
+C14                   float64
+D1                    float64
+D2                    float64
+D3                    float64
+D4                    float64
+D5                    float64
+D6                    float64
+D7                    float64
+D8                    float64
+D9                    float64
+D10                   float64
+D11                   float64
+D12                   float64
+D13                   float64
+D14                   float64
+D15                   float64
+M1                     object
+M2                     object
+M3                     object
+M4                     object
+M5                     object
+M6                     object
+M7                     object
+M8                     object
+M9                     object
+chargeback_amount     float64
+fraud_score           float64
+days_to_chargeback    float64
+root@f6fdec80eb9d:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.shape); print(df['isFraud'].value_count
+s())"
+(15000, 58)
+isFraud
+0    14469
+1      531
+Name: count, dtype: int64
+root@f6fdec80eb9d:/workspace#

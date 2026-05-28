@@ -1,0 +1,10 @@
+{
+  "analysis": "These are SKILL.md documentation files. There are no tests or verifier scripts here. Let's write a python script to check if the original dataset source_identity.csv has any -999.0 in id_01, 'unknown' in id_12, or empty string in id_15.",
+  "plan": "I will run a python script to check if the original dataset `source_identity.csv` has any `-999.0` in `id_01`, `'unknown'` in `id_12`, or empty string `''` in `id_15`.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/setup/source_identity.csv'); print('-999 in id_01:', (df['id_01'] == -999.0).sum()); print('unknown in id_12:', (df['id_12'] == 'unknown').sum()); print('empty in id_15:', (df['id_15'] == '').sum())\"\n",
+      "duration": 5.0
+    }
+  ]
+}

@@ -1,0 +1,25 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); numeric_cols = df.select_dtypes(include='number'
+).columns; corr = df[numeric_cols].corr()['isFraud'].sort_values(ascending=False); print(corr)"
+isFraud           1.000000
+dist1             0.358565
+addr1             0.356763
+C1                0.349979
+card2             0.314113
+C2                0.309878
+TransactionAmt    0.284797
+C5                0.283404
+C4                0.282279
+card1             0.266239
+V5                0.181428
+V1                0.143571
+V2                0.116617
+V4                0.024299
+TransactionID     0.004487
+TransactionDT     0.003508
+V3               -0.000007
+C6               -0.001093
+C3               -0.002079
+Name: isFraud, dtype: float64
+root@549b54a67146:/workspace#

@@ -1,0 +1,14 @@
+{
+  "analysis": "Test AUC is 0.86054 and Train AUC is 0.87806! That is very high and indicates a well-regularized, excellent model with strong generalization! Let's check feature importance to see which of our engineered historical features are contributing most, and explore if we can engineer more powerful features.",
+  "plan": "Write and run a script to print out feature importances.",
+  "commands": [
+    {
+      "keystrokes": "cat << 'EOF' > print_importance.py\nimport pandas as pd\nimport numpy as np\nfrom run_baseline import model, features\n\nimportances = pd.Series(model.feature_importances_, index=features).sort_values(ascending=False)\nprint(\"Feature Importances:\")\nprint(importances)\nEOF\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "python3 print_importance.py\n",
+      "duration": 5.0
+    }
+  ]
+}

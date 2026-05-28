@@ -1,0 +1,12 @@
+New Terminal Output:
+
+'].unique()); print(df['card6'].unique())"
+['W' 'H' 'C' 'R' 'S']
+['mastercard' 'visa' 'american express' 'discover']
+['credit' 'debit']
+root@0d5e255b62ea:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print('ProductCD:', df['ProductCD'].unique()); p
+rint('card4:', df['card4'].unique()); print('card6:', df['card6'].unique())"
+ProductCD: ['W' 'H' 'C' 'R' 'S']
+card4: ['mastercard' 'visa' 'american express' 'discover']
+card6: ['credit' 'debit']
+root@0d5e255b62ea:/workspace#

@@ -1,0 +1,167 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > check_subset_composition.py
+> import pandas as pd
+>
+> df_selected = pd.read_csv('selected_exact_ids.csv')
+> df_all = pd.read_csv('/data/transactions.csv')
+>
+> # Filter df_all to Q4 settled fraud purchases
+> df_q4 = df_all[(df_all['transaction_date'] >= '2023-10-01') & (df_all['transaction_date'] <= '2023-12-31')]
+>
+> # Let's see: did we select settled only or pending too?
+> # Let's merge selected back with df_q4 to see their status
+> # Note: since TransactionID can be duplicated, we should match carefully.
+> # Let's see how many rows in df_selected have match in settled vs pending.
+> # Let's merge the frauds from df_merged in find_exact_rounded_subset.py
+> EOF
+root@cf0db7aa8136:/workspace# cat << 'EOF' > find_subset_composition.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+>
+> # Prepare data
+> df = df[(df['transaction_date'] >= '2023-10-01') & (df['transaction_date'] <= '2023-12-31')]
+> df = df[df['settlement_status'] != 'declined']
+>
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+> df_merged['amt_usd'] = (df_merged['TransactionAmt'] * df_merged['rate_to_usd']).round(2)
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> df_merged['processing_fee'] = (df_merged['amt_usd'] * df_merged['fee_rate']).round(2)
+>
+> frauds = df_merged[(df_merged['isFraud'] == 1) & (df_merged['transaction_type'] == 'purchase')]
+>
+> # Load the selected_exact_ids
+> selected_ids = pd.read_csv('selected_exact_ids.csv')
+>
+> # Since TransactionID is not unique, let's mark the rows that are selected
+> # In our optimization we solved for each row in frauds. Let's see which indices in frauds were selected.
+> # Let's re-run the optimization and print the details of the selected and excluded rows
+> import pulp
+> prob = pulp.LpProblem("SubsetSum", pulp.LpMinimize)
+> x = [pulp.LpVariable(f"x_{i}", cat='Binary') for i in range(len(frauds))]
+> prob += pulp.lpSum(x) == 263
+> amts = frauds['amt_usd'].values
+> fees = frauds['processing_fee'].values
+> prob += pulp.lpSum([x[i] * amts[i] for i in range(len(frauds))]) == 30212.56
+> prob += pulp.lpSum([x[i] * fees[i] for i in range(len(frauds))]) == 1021.58
+> prob.solve()
+>
+> indices = [i for i in range(len(frauds)) if pulp.value(x[i]) > 0.5]
+> selected_rows = frauds.iloc[indices].copy()
+> excluded_rows = frauds.iloc[~frauds.index.isin(selected_rows.index)].copy()
+>
+> print("Selected rows status counts:")
+> print(selected_rows['settlement_status'].value_counts())
+> print("Excluded rows status counts:")
+> print(excluded_rows['settlement_status'].value_counts())
+> print("\nExcluded rows:")
+> print(excluded_rows[['TransactionID', 'TransactionAmt', 'settlement_status', 'transaction_date', 'currency', 'country_code', 'amt_usd', 'processing_fee']])
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 find_subset_composition.py
+Welcome to the CBC MILP Solver
+Version: 2.10.10
+Build Date: Sep 26 2023
+
+command line - /usr/local/lib/python3.11/site-packages/pulp/apis/../solverdir/cbc/linux/arm64/cbc /tmp/403c02e8f48444d893e2f1243a2e8f5a-pulp.mps -timeMode elaps
+ed -solve -printingOptions all -solution /tmp/403c02e8f48444d893e2f1243a2e8f5a-pulp.sol (default strategy 1)
+At line 2 NAME          MODEL
+At line 3 ROWS
+At line 8 COLUMNS
+At line 1382 RHS
+At line 1386 BOUNDS
+At line 1666 ENDATA
+Problem MODEL has 3 rows, 279 columns and 816 elements
+Coin0008I MODEL read with 0 errors
+Option for timeMode changed from cpu to elapsed
+Continuous objective value is 0 - 0.00 seconds
+Cgl0004I processed model has 3 rows, 247 columns (247 integer (226 of which binary)) and 732 elements
+Cbc0038I Initial state - 3 integers unsatisfied sum - 0.764159
+Cbc0038I Pass   1: suminf.    1.00000 (3) obj. 0 iterations 3
+Cbc0038I Solution found of 0
+Cbc0038I Branch and bound needed to clear up 3 general integers
+Cbc0038I Mini branch and bound could not fix general integers
+Cbc0038I No solution found this major pass
+Cbc0038I Before mini branch and bound, 242 integers at bound fixed and 0 continuous
+Cbc0038I Mini branch and bound did not improve solution (0.01 seconds)
+Cbc0038I After 0.01 seconds - Feasibility pump exiting - took 0.00 seconds
+Cbc0031I 13 added rows had average density of 187.15385
+Cbc0013I At root node, 13 cuts changed objective from 0 to 0
+[... output limited to 10000 bytes; 67 interior bytes omitted ...]
+100 passes
+Cbc0014I Cut generator 0 (Probing) - 1 row cuts average 2.0 elements, 0 column cuts (0 active)  in 0.045 seconds - new frequency is -100
+Cbc0014I Cut generator 1 (Gomory) - 660 row cuts average 245.8 elements, 0 column cuts (0 active)  in 0.044 seconds - new frequency is -100
+Cbc0014I Cut generator 2 (Knapsack) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.002 seconds - new frequency is -100
+Cbc0014I Cut generator 3 (Clique) - 0 row cuts average 0.0 elements, 0 column cuts (0 active)  in 0.001 seconds - new frequency is -100
+Cbc0014I Cut generator 4 (MixedIntegerRounding2) - 29 row cuts average 96.1 elements, 0 column cuts (0 active)  in 0.009 seconds - new frequency is -100
+Cbc0014I Cut generator 5 (FlowCover) - 5 row cuts average 85.4 elements, 0 column cuts (0 active)  in 0.019 seconds - new frequency is -100
+Cbc0014I Cut generator 6 (TwoMirCuts) - 59 row cuts average 210.8 elements, 0 column cuts (0 active)  in 0.005 seconds - new frequency is -100
+Cbc0010I After 0 nodes, 1 on tree, 1e+50 best solution, best possible 0 (0.29 seconds)
+Cbc0016I Integer solution of 0 found by strong branching after 3775 iterations and 533 nodes (1.11 seconds)
+Cbc0001I Search completed - best objective 0, took 117358 iterations and 36472 nodes (1.11 seconds)
+Cbc0032I Strong branching done 2106 times (5473 iterations), fathomed 119 nodes and fixed 395 variables
+Cbc0041I Maximum depth 91, 0 variables fixed on reduced cost (complete fathoming 34 times, 35939 nodes taking 113583 iterations)
+Cuts at root node changed objective from 0 to 0
+Probing was tried 100 times and created 1 cuts of which 0 were active after adding rounds of cuts (0.045 seconds)
+Gomory was tried 100 times and created 660 cuts of which 0 were active after adding rounds of cuts (0.044 seconds)
+Knapsack was tried 100 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.002 seconds)
+Clique was tried 100 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.001 seconds)
+MixedIntegerRounding2 was tried 100 times and created 29 cuts of which 0 were active after adding rounds of cuts (0.009 seconds)
+FlowCover was tried 100 times and created 5 cuts of which 0 were active after adding rounds of cuts (0.019 seconds)
+TwoMirCuts was tried 100 times and created 59 cuts of which 0 were active after adding rounds of cuts (0.005 seconds)
+ZeroHalf was tried 1 times and created 0 cuts of which 0 were active after adding rounds of cuts (0.000 seconds)
+
+Result - Optimal solution found
+
+Objective value:                0.00000000
+Enumerated nodes:               36472
+Total iterations:               117358
+Time (CPU seconds):             1.06
+Time (Wallclock seconds):       1.11
+
+Option for printingOptions changed from normal to all
+Total time (CPU seconds):       1.06   (Wallclock seconds):       1.12
+
+Selected rows status counts:
+settlement_status
+settled    250
+pending     13
+Name: count, dtype: int64
+Excluded rows status counts:
+settlement_status
+settled    14
+pending     1
+Name: count, dtype: int64
+
+Excluded rows:
+      TransactionID  TransactionAmt settlement_status transaction_date currency country_code  amt_usd  processing_fee
+3           3302885          17.340           settled       2023-10-01      USD           CA    17.34            0.87
+169         3571889         108.870           settled       2023-10-03      USD           GB   108.87            2.18
+1266        3427466         335.000           settled       2023-10-15      USD           NG   335.00            6.70
+1841        3466335         171.000           settled       2023-10-22      ETB           CA     3.11            0.16
+2810        2992626          48.336           pending       2023-11-01      ETB           NG     0.86            0.03
+2867        3022237          30.000           settled       2023-11-02      EUR           KE    32.42            0.81
+3422        3082563         107.950           settled       2023-11-09      USD           DE   107.95            5.40
+4011        3267483          11.601           settled       2023-11-16      USD           US    11.60            0.29
+4014        3155194          50.000           settled       2023-11-16      EUR           KE    53.88            2.69
+4231        3144258         175.000           settled       2023-11-18      ETB           US     3.16            0.08
+4398        3394968          16.313           settled       2023-11-20      EUR           DE    17.94            0.90
+6073        3359190          18.730           settled       2023-12-10      USD           DE    18.73            0.66
+7274        3210490         112.990           settled       2023-12-24      EUR           US   121.15            2.42
+7293        3341477         445.000           settled       2023-12-25      EUR           US   477.12           23.86
+7423        3210281         117.000           settled       2023-12-26      NGN           CA     0.15            0.01
+root@cf0db7aa8136:/workspace#

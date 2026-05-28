@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@10499a3d6cec:/workspace# ls -la /workspace
+total 12
+drwxr-xr-x 1 root root 4096 May 27 04:48 .
+drwxr-xr-x 1 root root 4096 May 27 04:48 ..
+-rw-r--r-- 1 root root  698 May 27 04:48 process.py
+root@10499a3d6cec:/workspace#

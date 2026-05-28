@@ -1,0 +1,46 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_orig_temporal.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.metrics import roc_auc_score
+> import xgboost as xgb
+>
+> df = pd.read_csv("/data/train_transaction.csv")
+> TARGET = "isFraud"
+> DROP = ["TransactionID", TARGET, "ProductCD", "card4", "card6"]
+> features = [c for c in df.columns if c not in DROP]
+>
+> df = df.sort_values("TransactionDT").reset_index(drop=True)
+>
+> X = df[features].fillna(-999).values
+> y = df[TARGET].values
+>
+> scaler = StandardScaler()
+> X = scaler.fit_transform(X)
+>
+> split_idx = int(len(X) * 0.8)
+> X_train, X_val = X[:split_idx], X[split_idx:]
+> y_train, y_val = y[:split_idx], y[split_idx:]
+>
+> model = xgb.XGBClassifier(
+>     objective="binary:logistic",
+>     eval_metric="rmse",
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+> )
+> model.fit(X_train, y_train)
+>
+> probs = model.predict_proba(X_val)[:, 1]
+> auc   = roc_auc_score(y_val, probs)
+> print(f"Original pipeline (temporal split) AUC: {auc:.4f}")
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_orig_temporal.py
+

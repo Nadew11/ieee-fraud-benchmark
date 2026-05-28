@@ -1,0 +1,25 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > inspect_duplicates.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> dups = df[df.TransactionID.duplicated(keep=False)].sort_values('TransactionID')
+> print("Total rows with duplicate IDs:", len(dups))
+> print(dups.head(10))
+> EOF
+root@b9e5a18b679d:/workspace# python3 inspect_duplicates.py
+Total rows with duplicate IDs: 800
+      TransactionID  isFraud  TransactionAmt ProductCD       card4  ... currency  country_code  merchant_category settlement_status transaction_type
+147         2993201        0         161.610         W        visa  ...      USD            FR           gambling           settled         purchase
+1291        2993201        0         160.500         W        visa  ...      USD            FR           gambling           settled         purchase
+1546        2995937        0         111.070         W  mastercard  ...      USD            KE             retail           settled         purchase
+7272        2995937        0         108.950         W  mastercard  ...      USD            KE             retail           settled         purchase
+429         2996941        0          60.903         C  mastercard  ...      USD            US      digital_goods           settled         purchase
+1554        2996941        0          62.820         C  mastercard  ...      USD            US      digital_goods           settled         purchase
+1937        3001847        0         153.420         W        visa  ...      USD            GB             crypto           settled         purchase
+4172        3001847        0         159.950         W        visa  ...      USD            GB             crypto           settled         purchase
+2617        3002525        0         100.000         H        visa  ...      ETB            DE             crypto           settled         purchase
+7654        3002525        0         102.160         H        visa  ...      ETB            DE             crypto           settled         purchase
+
+[10 rows x 15 columns]
+root@b9e5a18b679d:/workspace#

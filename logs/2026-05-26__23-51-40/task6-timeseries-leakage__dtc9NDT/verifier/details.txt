@@ -1,0 +1,9 @@
+=== Task 6 Verifier — Wed May 27 05:00:23 UTC 2026 ===
+PASS [1/5] auc.txt = 0.8648
+PASS [2/5] AUC 0.8648 <= 0.88 (not obviously leaked)
+PASS [3/5] methodology.txt references temporal concepts: ['temporal', 'chronological', 'historical', 'future']
+PASS [4/5] Methodology describes temporal split correctly
+PASS [5/5] AUC 0.8648 above floor 0.62 — model trained
+
+SCORE: 5/5 — reward: 1.0
+=== Final reward: 1.0 ===

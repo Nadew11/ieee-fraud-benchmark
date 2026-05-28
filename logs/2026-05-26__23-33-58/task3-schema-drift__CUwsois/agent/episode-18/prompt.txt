@@ -1,0 +1,100 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# cat << 'EOF' > test_robust_models.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.impute import SimpleImputer
+> from sklearn.pipeline import Pipeline
+> from sklearn.compose import ColumnTransformer
+> from sklearn.preprocessing import OneHotEncoder
+> from xgboost import XGBClassifier
+> from sklearn.ensemble import HistGradientBoostingClassifier
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> test.columns = [c.replace('-', '_') for c in test.columns]
+>
+> # Separate features
+> X = train.drop(columns=['TransactionID', 'isFraud'])
+> y = train['isFraud']
+>
+> num_cols = X.select_dtypes(include=['int64', 'float64']).columns.tolist()
+> cat_cols = X.select_dtypes(include=['object']).columns.tolist()
+>
+> # Create a preprocessing pipeline
+> preprocessor = ColumnTransformer(
+>     transformers=[
+>         ('num', Pipeline([
+>             ('imputer', SimpleImputer(strategy='median')),
+>             ('scaler', StandardScaler())
+>         ]), num_cols),
+>         ('cat', Pipeline([
+>             ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+>             ('ohe', OneHotEncoder(handle_unknown='ignore'))
+>         ]), cat_cols)
+>     ]
+> )
+>
+> X_train, X_holdout, y_train, y_holdout = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> # 1. Logistic Regression
+> lr_pipeline = Pipeline([
+>     ('preprocessor', preprocessor),
+>     ('lr', LogisticRegression(random_state=42, class_weight='balanced', max_iter=1000, C=0.01))
+> ])
+> lr_pipeline.fit(X_train, y_train)
+> preds_train_lr = lr_pipeline.predict_proba(X_train)[:, 1]
+> preds_holdout_lr = lr_pipeline.predict_proba(X_holdout)[:, 1]
+> print("LR - Train AUC:", roc_auc_score(y_train, preds_train_lr))
+> print("LR - Holdout AUC:", roc_auc_score(y_holdout, preds_holdout_lr))
+>
+> # 2. Tuned XGBoost with regularized parameters
+> # Let's use a simpler pipeline for tree models
+> # For tree models, let's label-encode categories first or keep them ordinal
+> X_tree = X.copy()
+> for col in cat_cols:
+>     X_tree[col] = pd.factorize(X_tree[col])[0]
+>
+> X_train_t, X_hold_t, y_train_t, y_hold_t = train_test_split(
+>     X_tree, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> xgb = XGBClassifier(
+>     random_state=42,
+>     eval_metric='logloss',
+>     max_depth=2,
+>     learning_rate=0.01,
+>     n_estimators=150,
+>     subsample=0.7,
+>     colsample_bytree=0.7,
+>     scale_pos_weight=20
+> )
+> xgb.fit(X_train_t, y_train_t)
+> preds_train_xgb = xgb.predict_proba(X_train_t)[:, 1]
+> preds_hold_xgb = xgb.predict_proba(X_hold_t)[:, 1]
+> print("Tuned XGB - Train AUC:", roc_auc_score(y_train_t, preds_train_xgb))
+> print("Tuned XGB - Holdout AUC:", roc_auc_score(y_hold_t, preds_hold_xgb))
+>
+> # 3. Tuned HistGB
+> hgb = HistGradientBoostingClassifier(
+>     random_state=42,
+>     max_depth=2,
+>     learning_rate=0.01,
+>     max_iter=150,
+>     min_samples_leaf=50
+> )
+> hgb.fit(X_train_t, y_train_t)
+> preds_train_hgb = hgb.predict_proba(X_train_t)[:, 1]
+> preds_hold_hgb = hgb.predict_proba(X_hold_t)[:, 1]
+> print("Tuned HistGB - Train AUC:", roc_auc_score(y_train_t, preds_train_hgb))
+> print("Tuned HistGB - Holdout AUC:", roc_auc_score(y_hold_t, preds_hold_hgb))
+>
+> EOF
+root@27e59b3c4e79:/workspace# python3 test_robust_models.py
+

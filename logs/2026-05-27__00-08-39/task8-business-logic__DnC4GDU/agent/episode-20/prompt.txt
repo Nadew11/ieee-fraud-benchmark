@@ -1,0 +1,76 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > find_matching_subset.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+>
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+> df_merged['amt_usd'] = df_merged['TransactionAmt'] * df_merged['rate_to_usd']
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> df_merged['processing_fee'] = df_merged['amt_usd'] * df_merged['fee_rate']
+>
+> # Let's see if we can find any subset of fraud purchases that has size 263 and sum equal to 30212.56 and fee sum 1021.58
+> purchases = df_merged[(df_merged['isFraud'] == 1) & (df_merged['transaction_type'] == 'purchase')]
+>
+> # Let's check settled first
+> settled_purchases = purchases[purchases['settlement_status'] == 'settled']
+> print("Total settled purchases:", len(settled_purchases))
+>
+> # What if we include pending?
+> pending_purchases = purchases[purchases['settlement_status'] == 'pending']
+> print("Total pending purchases:", len(pending_purchases))
+>
+> # Let's check if there are any other columns, or maybe isFraud is not 1 for some purchases that are considered fraud?
+> # Let's list all fraud purchases and find which ones are in the ground truth.
+> # Wait, could the target be matched by some filter on region or card type?
+> # Let's write a search over all single-row exclusions from settled_purchases + pending_purchases to see if any has sum close to target
+> all_non_declined_purchases = purchases[purchases['settlement_status'] != 'declined']
+> print("Total non-declined purchases:", len(all_non_declined_purchases))
+>
+> # Let's see: if we exclude some transactions, can we match the targets?
+> # Let's print the sum of all settled purchases
+> print("Settled purchases sum:", settled_purchases['amt_usd'].sum(), "fee sum:", settled_purchases['processing_fee'].sum())
+>
+> # Let's write a python search over all subsets of settled_purchases or non-declined purchases
+> # Since there are 264 settled purchases, and we want 263, we can just exclude 1 transaction from settled_purchases
+> print("\nSearching for 1-row exclusion from settled_purchases:")
+> for idx, row in settled_purchases.iterrows():
+>     gross = settled_purchases['amt_usd'].sum() - row['amt_usd']
+>     fee_sum = settled_purchases['processing_fee'].sum() - row['processing_fee']
+>     if abs(gross - 30212.56) < 10.0:
+>         print(f"Excluding {row['TransactionID']}: Gross: {gross:.2f}, Fee: {fee_sum:.2f}, Row Amt: {row['amt_usd']:.2f}, Row Fee: {row['processing_fee']:.2f}"
+)
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 find_matching_subset.py
+Total settled purchases: 264
+Total pending purchases: 14
+Total non-declined purchases: 278
+Settled purchases sum: 30309.336008362 fee sum: 1025.1263457099749
+
+Searching for 1-row exclusion from settled_purchases:
+Excluding 3013350: Gross: 30220.84, Fee: 1022.47, Row Amt: 88.50, Row Fee: 2.65
+Excluding 3072152: Gross: 30209.34, Fee: 1022.63, Row Amt: 100.00, Row Fee: 2.50
+Excluding 3379204: Gross: 30209.34, Fee: 1020.13, Row Amt: 100.00, Row Fee: 5.00
+Excluding 3440852: Gross: 30212.34, Fee: 1022.70, Row Amt: 97.00, Row Fee: 2.43
+Excluding 2992234: Gross: 30205.10, Fee: 1022.52, Row Amt: 104.24, Row Fee: 2.61
+Excluding 3405227: Gross: 30216.44, Fee: 1022.80, Row Amt: 92.90, Row Fee: 2.32
+Excluding 3007209: Gross: 30209.34, Fee: 1022.63, Row Amt: 100.00, Row Fee: 2.50
+Excluding 3264116: Gross: 30213.70, Fee: 1022.26, Row Amt: 95.63, Row Fee: 2.87
+Excluding 3264116: Gross: 30212.97, Fee: 1022.24, Row Amt: 96.36, Row Fee: 2.89
+Excluding 3395308: Gross: 30212.34, Fee: 1023.19, Row Amt: 97.00, Row Fee: 1.94
+root@cf0db7aa8136:/workspace#

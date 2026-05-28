@@ -1,0 +1,26 @@
+New Terminal Output:
+
+root@58fc9c5bb0bf:/workspace# cat << 'EOF' > inspect_b99.py
+> import pandas as pd
+> from sklearn.metrics import confusion_matrix, accuracy_score, roc_auc_score
+>
+> df = pd.read_csv('/data/predictions.csv')
+> df_b99 = df[df['batch_id'] == 99]
+>
+> print("Batch 99 performance:")
+> print("Count:", len(df_b99))
+> print("Class balance:", df_b99['y_true'].value_counts().to_dict())
+> y_pred_b99 = (df_b99['y_pred_prob'] >= 0.5).astype(int)
+> tn, fp, fn, tp = confusion_matrix(df_b99['y_true'], y_pred_b99).ravel()
+> print(f"TN: {tn}, FP: {fp}, FN: {fn}, TP: {tp}")
+> print(f"Accuracy: {accuracy_score(df_b99['y_true'], y_pred_b99):.4f}")
+> print(f"AUC-ROC: {roc_auc_score(df_b99['y_true'], df_b99['y_pred_prob']):.4f}")
+> EOF
+root@58fc9c5bb0bf:/workspace# python3 inspect_b99.py
+Batch 99 performance:
+Count: 150
+Class balance: {0: 77, 1: 73}
+TN: 77, FP: 0, FN: 0, TP: 73
+Accuracy: 1.0000
+AUC-ROC: 1.0000
+root@58fc9c5bb0bf:/workspace#

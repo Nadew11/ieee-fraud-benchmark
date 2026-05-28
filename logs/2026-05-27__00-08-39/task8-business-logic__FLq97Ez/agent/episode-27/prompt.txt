@@ -1,0 +1,90 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > test_sheets.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+> regions = pd.read_csv('/data/region_map.csv')
+>
+> # Datetime conversion
+> df['transaction_date'] = pd.to_datetime(df['transaction_date'])
+> fx['date'] = pd.to_datetime(fx['date'])
+>
+> # FX conversion
+> all_dates = pd.date_range(start=min(df['transaction_date'].min(), fx['date'].min()),
+>                           end=max(df['transaction_date'].max(), fx['date'].max()))
+>
+> fx_lookup = {'USD': pd.Series(1.0, index=all_dates)}
+> for cur in fx['currency'].unique():
+>     cur_rates = fx[fx['currency'] == cur].set_index('date')['rate_to_usd'].sort_index()
+>     fx_lookup[cur] = cur_rates.reindex(all_dates).ffill()
+>
+> df['fx_rate'] = df.apply(lambda r: fx_lookup[r['currency']].loc[r['transaction_date']], axis=1)
+> df['amount_usd'] = (df['TransactionAmt'] * df['fx_rate']).round(2)
+>
+> fee_dict = fees.set_index('merchant_category')['fee_rate'].to_dict()
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee_usd'] = (df['amount_usd'] * df['fee_rate']).round(2)
+>
+> region_dict = regions.set_index('country_code')['region'].to_dict()
+> df['region'] = df['country_code'].map(region_dict).fillna('Other')
+>
+> # Drop duplicates on TransactionID keeping 'first'
+> df_dedup = df.drop_duplicates(subset=['TransactionID'], keep='first')
+>
+> # Q4 subset and not declined
+> df_q4 = df_dedup[(df_dedup['transaction_date'] >= '2023-10-01') & (df_dedup['transaction_date'] <= '2023-12-31')]
+> df_q4 = df_q4[df_q4['settlement_status'] != 'declined']
+>
+> # Let's verify our definitions
+> # gross_fraud_usd: isFraud == 1 and transaction_type == 'purchase'
+> # processing_fees: processing fee on gross fraud transactions
+> # recoveries: isFraud == 1 and transaction_type == 'refund'
+> # net_fraud_usd: gross_fraud_usd - recoveries - processing_fees
+> # fraud_transaction_count: count of gross fraud transactions (isFraud == 1 and transaction_type == 'purchase')
+> # avg_ticket_usd: gross_fraud_usd / fraud_transaction_count
+>
+> # Let's add 'month' column 'YYYY-MM'
+> df_q4['month'] = df_q4['transaction_date'].dt.strftime('%Y-%m')
+>
+> # Let's filter fraud transactions in Q4
+> # purchases: isFraud == 1 and purchase
+> # refunds: isFraud == 1 and refund
+> purchases = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'purchase')]
+> refunds = df_q4[(df_q4['isFraud'] == 1) & (df_q4['transaction_type'] == 'refund')]
+>
+> # Let's check by month and region
+> monthly_gross = purchases.groupby(['month', 'region'])['amount_usd'].sum().reset_index(name='gross_fraud_usd')
+> monthly_fees = purchases.groupby(['month', 'region'])['processing_fee_usd'].sum().reset_index(name='processing_fees')
+> monthly_count = purchases.groupby(['month', 'region']).size().reset_index(name='fraud_transaction_count')
+> monthly_avg = purchases.groupby(['month', 'region'])['amount_usd'].mean().reset_index(name='avg_ticket_usd')
+>
+> # Wait, recoveries (refunds) is subtracted to get net fraud. Let's see if there are refunds in each month/region
+> monthly_recoveries = refunds.groupby(['month', 'region'])['amount_usd'].sum().reset_index(name='recoveries_usd')
+>
+> # Merge them all
+> # Since we want a table with all month/region combinations, let's create a template of all expected months and regions
+> months = ['2023-10', '2023-11', '2023-12']
+> all_regions = ['Africa', 'Europe', 'North America', 'Other']
+> import itertools
+> combos = pd.DataFrame(list(itertools.product(months, all_regions)), columns=['month', 'region'])
+>
+> summary = combos.merge(monthly_gross, on=['month', 'region'], how='left') \
+>                 .merge(monthly_recoveries, on=['month', 'region'], how='left') \
+>                 .merge(monthly_fees, on=['month', 'region'], how='left') \
+>                 .merge(monthly_count, on=['month', 'region'], how='left') \
+>                 .merge(monthly_avg, on=['month', 'region'], how='left')
+>
+> summary = summary.fillna(0)
+> # Wait, is avg_ticket_usd 0 if count is 0? Yes, or we can compute it
+> summary['net_fraud_usd'] = summary['gross_fraud_usd'] - summary['recoveries_usd'] - summary['processing_fees']
+>
+> # Let's print out the summary table
+> print(summary[['month', 'region', 'gross_fraud_usd', 'net_fraud_usd', 'processing_fees', 'fraud_transaction_count', 'avg_ticket_usd']])
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 test_sheets.py
+

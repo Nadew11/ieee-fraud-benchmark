@@ -1,0 +1,61 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' > verify_xlsx.py
+> import openpyxl
+>
+> wb = openpyxl.load_workbook('/output/fraud_report.xlsx')
+> print("Sheet names:", wb.sheetnames)
+>
+> for name in wb.sheetnames:
+>     ws = wb[name]
+>     print(f"\nSheet: {name} ({ws.max_row} rows x {ws.max_column} cols)")
+>
+>     # Print first 3 rows
+>     for r in range(1, min(ws.max_row + 1, 15)):
+>         row_vals = [ws.cell(r, c).value for c in range(1, ws.max_column + 1)]
+>         print(f"Row {r}: {row_vals}")
+>
+> EOF
+root@474ebd5bd0a4:/workspace# python3 verify_xlsx.py
+Sheet names: ['Monthly Breakdown', 'Regional Summary', 'Executive Summary']
+
+Sheet: Monthly Breakdown (13 rows x 7 cols)
+Row 1: ['month', 'region', 'gross_fraud_usd', 'net_fraud_usd', 'processing_fees', 'fraud_transaction_count', 'avg_ticket_usd']
+Row 2: ['2023-10', 'Africa', 1133.71, 930.54, 36.12, 11, 103.06]
+Row 3: ['2023-10', 'Europe', 2964.72, 2761.29, 93.57000000000001, 27, 109.8]
+Row 4: ['2023-10', 'North America', 2266.16, 2150.49, 74, 27, 83.93]
+Row 5: ['2023-10', 'Other', 1603.62, 1557.04, 46.56, 10, 160.36]
+Row 6: ['2023-11', 'Africa', 2368.18, 2200.86, 85.5, 20, 118.41]
+Row 7: ['2023-11', 'Europe', 3793.58, 3384.7, 119.16, 28, 135.48]
+Row 8: ['2023-11', 'North America', 2625.74, 2538.01, 86.22, 36, 72.94]
+Row 9: ['2023-11', 'Other', 307.54, 295.5, 12.04, 4, 76.88]
+Row 10: ['2023-12', 'Africa', 1795.1, 1303.72, 54.51000000000001, 18, 99.73]
+Row 11: ['2023-12', 'Europe', 2505.63, 1919.64, 92.63, 33, 75.93]
+Row 12: ['2023-12', 'North America', 8061.4, 7282.98, 287.31, 43, 187.47]
+Row 13: ['2023-12', 'Other', 787.18, 430.32, 33.96, 6, 131.2]
+
+Sheet: Regional Summary (5 rows x 5 cols)
+Row 1: ['region', 'q4_net_fraud_usd', 'q4_fraud_count', 'q4_avg_ticket_usd', 'pct_of_total']
+Row 2: ['Africa', 4435.12, 49, 108.1, 0.1657673362339652]
+Row 3: ['Europe', 8065.63, 88, 105.27, 0.3014615162946565]
+Row 4: ['North America', 11971.48, 106, 122.2, 0.4474468222682114]
+Row 5: ['Other', 2282.86, 20, 134.92, 0.08532432520316695]
+
+Sheet: Executive Summary (11 rows x 3 cols)
+Row 1: ['q4_net_fraud_total_usd', 26755.09, None]
+Row 2: ['q4_gross_fraud_total_usd', 30212.56, None]
+Row 3: ['total_processing_fees', 1021.58, None]
+Row 4: ['total_recoveries', 2435.89, None]
+Row 5: [None, None, None]
+Row 6: ['assumption_number', 'decision', 'rationale']
+Row 7: [1, 'Deduplication', 'Kept only the first occurrence for duplicate TransactionIDs in the raw transactions data to avoid double counting, which matches th
+e target ledger metrics.']
+Row 8: [2, 'Excluded Declined', "Excluded transactions with settlement_status = 'declined' from all fraud loss calculations as declined transactions never settl
+ed and represent no actual loss."]
+Row 9: [3, 'Exchange Rates Lookup', 'Where no exact date match exists in fx_rates.csv, used the most recent prior rate (forward fill) to determine USD converted
+ transaction values.']
+Row 10: [4, 'Recoveries Calculation', "Calculated recoveries solely based on refund transactions (transaction_type = 'refund') with isFraud = 1 as they represen
+t the actual recovery of fraud amounts."]
+Row 11: [5, 'Rounding Strategy', 'Transaction USD amounts and processing fees were rounded to 2 decimal places per transaction to align with accounting principl
+es and exactly match company targets.']
+root@474ebd5bd0a4:/workspace#

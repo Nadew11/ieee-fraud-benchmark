@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 -c "import openpyxl; import xlsxwriter; print('openpyxl and xlsxwriter are available!')"
+bash: !': event not found
+root@474ebd5bd0a4:/workspace#

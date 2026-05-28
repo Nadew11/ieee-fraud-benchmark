@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 50 (char 51) | Content preview: '{\n  "analysis": "The script completed successfully!\nLet\'s review the output:\n- `Shared feature count'...
+
+Please fix these issues and provide a proper JSON response.

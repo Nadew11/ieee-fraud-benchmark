@@ -1,0 +1,8 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# ls -la /workspace
+total 12
+drwxr-xr-x 1 root root 4096 May 27 05:01 .
+drwxr-xr-x 1 root root 4096 May 27 05:01 ..
+-rw-r--r-- 1 root root 1625 May 27 05:01 pipeline.py
+root@549b54a67146:/workspace#

@@ -1,0 +1,4 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# find / -name "*fraud*" -o -name "*device*" 2>/dev/null | grep -v -E "/proc|/sys|/usr/lib|/usr/share"
+

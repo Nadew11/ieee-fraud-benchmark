@@ -1,0 +1,95 @@
+New Terminal Output:
+
+ > 0])"
+card2              238
+card3               47
+card4               47
+card5              108
+card6               48
+addr1             1610
+addr2             1610
+dist1             8817
+dist2            14014
+P_emaildomain     2414
+R_emaildomain    11558
+D1                  34
+D2                7073
+D3                6656
+D4                4354
+D5                7902
+D6               13216
+D7               14062
+D8               13095
+D9               13095
+D10               1980
+D11               7030
+D12              13422
+D13              13488
+D14              13466
+D15               2295
+M1                6810
+M2                6810
+M3                6810
+M4                7125
+M5                8809
+M6                4264
+M7                8789
+M8                8788
+M9                8788
+dtype: int64
+root@f6fdec80eb9d:/workspace# cat << 'EOF' > pipeline_test.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.compose import ColumnTransformer
+> from sklearn.pipeline import Pipeline
+> from sklearn.impute import SimpleImputer
+> from sklearn.preprocessing import OneHotEncoder
+> from sklearn.ensemble import HistGradientBoostingClassifier
+> from sklearn.metrics import roc_auc_score
+>
+> # Load
+> df = pd.read_csv('/data/train_transaction.csv')
+> target = 'isFraud'
+>
+> # 80/20 train/val split
+> train_df, val_df = train_test_split(df, test_size=0.2, random_state=42, stratify=df[target])
+>
+> # Identify column types
+> cat_cols = df.select_dtypes(include=['object']).columns.tolist()
+>
+> def run_pipeline(exclude_cols):
+>     features = [c for c in df.columns if c not in ['TransactionID', target] + exclude_cols]
+>
+>     num_features = [c for c in features if c not in cat_cols]
+>     cat_features = [c for c in features if c in cat_cols]
+>
+>     # Preprocessing
+>     num_transformer = SimpleImputer(strategy='median')
+>     cat_transformer = Pipeline(steps=[
+>         ('imputer', SimpleImputer(strategy='constant', fill_value='missing')),
+>         ('onehot', OneHotEncoder(handle_unknown='ignore', sparse_output=False))
+>     ])
+>
+>     preprocessor = ColumnTransformer(transformers=[
+>         ('num', num_transformer, num_features),
+>         ('cat', cat_transformer, cat_features)
+>     ])
+>
+>     # Pipeline
+>     model = Pipeline(steps=[
+>         ('preprocessor', preprocessor),
+>         ('classifier', HistGradientBoostingClassifier(random_state=42))
+>     ])
+>
+>     model.fit(train_df[features], train_df[target])
+>     preds = model.predict_proba(val_df[features])[:, 1]
+>     auc = roc_auc_score(val_df[target], preds)
+>     return auc
+>
+> print("AUC excluding chargeback leaks:", run_pipeline(['chargeback_amount', 'days_to_chargeback']))
+> print("AUC excluding chargeback leaks & fraud_score:", run_pipeline(['chargeback_amount', 'days_to_chargeback', 'fraud_score']))
+> print("AUC with ALL features:", run_pipeline([]))
+> EOF
+root@f6fdec80eb9d:/workspace# python3 pipeline_test.py
+

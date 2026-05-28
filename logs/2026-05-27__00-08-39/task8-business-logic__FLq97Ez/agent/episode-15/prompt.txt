@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print(df[df['TransactionID'] == 3264116])"
+      TransactionID  isFraud  TransactionAmt ProductCD card4  ... currency  country_code  merchant_category settlement_status transaction_type
+1610        3264116        1           86.34         W  visa  ...      EUR            KE             travel           settled         purchase
+6606        3264116        1           87.00         W  visa  ...      EUR            KE             travel           settled         purchase
+
+[2 rows x 15 columns]
+root@474ebd5bd0a4:/workspace#

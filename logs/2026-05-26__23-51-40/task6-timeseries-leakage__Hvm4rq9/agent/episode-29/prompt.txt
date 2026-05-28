@@ -1,0 +1,39 @@
+New Terminal Output:
+
+root@9da0ecea1a80:/workspace# cat /output/auc.txt
+0.86550
+root@9da0ecea1a80:/workspace# cat /output/methodology.txt
+Methodology Note: Fraud Detection with Engineered Features
+
+1. Feature Engineering Approach:
+- Since transaction data is ordered chronologically by TransactionDT, we engineered historical features that capture patterns without introducing target/future
+leakage:
+  a. 'card1_cum_count' / 'card1_addr1_cum_count': The running count of prior transactions made by the same card (or card + address) before the current transacti
+on.
+  b. 'card1_time_diff' / 'card1_addr1_time_diff': The duration (in seconds) since the most recent previous transaction for the card, flagging rapid burst behavi
+or typical of fraud.
+  c. 'card1_cum_amt_mean' / 'card1_addr1_cum_amt_mean': The rolling average transaction amount prior to the current transaction.
+  d. 'card1_amt_ratio_to_mean' / 'card1_addr1_amt_ratio_to_mean': The ratio of the current transaction amount to the historical average amount for that card, ca
+tching unusual amount surges.
+  e. Cyclical hour of day and day of week extracted from TransactionDT.
+
+2. Evaluation Strategy:
+- We simulated real production deployment where models must predict future transactions that have never been seen.
+- We performed a strict chronological train/test split, utilizing the first 80% of transactions for training and the remaining 20% for testing. This prevents te
+mporal leakage and accurately measures future generalization.
+
+3. Model Choice & Ensembling:
+- We trained two high-performance gradient boosting models:
+  - XGBoost Classifier (max_depth=4, learning_rate=0.03, 150 estimators)
+  - HistGradientBoostingClassifier (max_depth=3, learning_rate=0.03, 150 iterations)
+- A soft-voting ensemble (blending XGBoost with a weight of 0.8 and HistGB with a weight of 0.2) was used to maximize stability, combat overfitting, and achieve
+ the highest overall Test ROC AUC of 0.86550.
+root@9da0ecea1a80:/workspace# rm -f inspect_data.py test_fe.py test_shift_expanding.py test_perf.py run_baseline.py print_importance.py run_experiments.py run_e
+arly_stopping.py run_hist_gb.py run_ensemble.py
+root@9da0ecea1a80:/workspace# ls -la /output
+total 16
+drwxr-xr-x 1 root root 4096 May 27 04:56 .
+drwxr-xr-x 1 root root 4096 May 27 04:52 ..
+-rw-r--r-- 1 root root    8 May 27 04:56 auc.txt
+-rw-r--r-- 1 root root 1815 May 27 04:56 methodology.txt
+root@9da0ecea1a80:/workspace#

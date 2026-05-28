@@ -1,0 +1,57 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > check_imp.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.preprocessing import StandardScaler
+> import xgboost as xgb
+>
+> df = pd.read_csv('/data/train_transaction.csv')
+> TARGET = 'isFraud'
+> DROP = ['TransactionID', TARGET, 'ProductCD', 'card4', 'card6']
+> features = [c for c in df.columns if c not in DROP]
+> X = df[features].fillna(-999).values
+> y = df[TARGET].values
+>
+> scaler = StandardScaler()
+> X = scaler.fit_transform(X)
+>
+> X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+>
+> model = xgb.XGBClassifier(
+>     objective='binary:logistic',
+>     eval_metric='rmse',
+>     n_estimators=300,
+>     max_depth=6,
+>     learning_rate=0.05,
+>     subsample=0.8,
+>     colsample_bytree=0.8,
+>     random_state=42,
+>     use_label_encoder=False,
+>     verbosity=0,
+> )
+> model.fit(X_train, y_train)
+> importances = model.feature_importances_
+> for f, imp in sorted(zip(features, importances), key=lambda x: x[1], reverse=True):
+>     print(f'{f}: {imp:.4f}')
+> EOF
+root@0d5e255b62ea:/workspace# python3 check_imp.py
+C1: 0.2556
+addr1: 0.1789
+C2: 0.1379
+card2: 0.0928
+V5: 0.0554
+C5: 0.0547
+C4: 0.0495
+card1: 0.0493
+dist1: 0.0438
+V1: 0.0370
+V2: 0.0311
+TransactionAmt: 0.0090
+V3: 0.0013
+V4: 0.0012
+TransactionDT: 0.0010
+C6: 0.0010
+C3: 0.0004
+root@0d5e255b62ea:/workspace#

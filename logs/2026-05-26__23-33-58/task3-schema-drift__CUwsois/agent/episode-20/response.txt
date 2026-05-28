@@ -1,0 +1,10 @@
+{
+  "analysis": "Let's wait for `tune_lr.py` to finish execution.",
+  "plan": "Wait for command output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

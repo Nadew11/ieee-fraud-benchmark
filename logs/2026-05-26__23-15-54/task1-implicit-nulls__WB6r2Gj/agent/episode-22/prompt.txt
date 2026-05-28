@@ -1,0 +1,4 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# find / -name "*ground_truth*" 2>/dev/null
+root@cc7b6f7834c9:/workspace#

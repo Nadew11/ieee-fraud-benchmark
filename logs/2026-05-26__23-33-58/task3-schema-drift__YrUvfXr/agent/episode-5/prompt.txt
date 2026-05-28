@@ -1,0 +1,46 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# python3 -c "import pandas as pd; print(pd.__version__)"
+2.1.4
+root@8b9ff8325d75:/workspace#
+root@8b9ff8325d75:/workspace# cat << 'EOF' > inspect_details.py
+> import pandas as pd
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+>
+> # Rename test columns to match train column names (replace '-' with '_')
+> test = test.rename(columns=lambda x: x.replace('-', '_'))
+>
+> # Let's verify common columns now
+> common_cols = list(set(train.columns).intersection(set(test.columns)))
+> print("Common cols:", len(common_cols), sorted(common_cols))
+>
+> # Let's check missing values in both
+> print("Train missing rows percent:", train.isnull().mean().round(3).to_dict())
+> print("Test missing rows percent:", test.isnull().mean().round(3).to_dict())
+>
+> # Let's check the types of these columns
+> print("Train col types:", train.dtypes.to_dict())
+> EOF
+root@8b9ff8325d75:/workspace# python3 inspect_details.py
+Common cols: 41 ['DeviceInfo', 'DeviceType', 'TransactionID', 'id_01', 'id_02', 'id_03', 'id_04', 'id_05', 'id_06', 'id_07', 'id_08', 'id_09', 'id_10', 'id_11',
+ 'id_12', 'id_13', 'id_14', 'id_15', 'id_16', 'id_17', 'id_18', 'id_19', 'id_20', 'id_21', 'id_22', 'id_23', 'id_24', 'id_25', 'id_26', 'id_27', 'id_28', 'id_29
+', 'id_30', 'id_31', 'id_32', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38']
+Train missing rows percent: {'TransactionID': 0.0, 'id_01': 0.0, 'id_02': 0.024, 'id_03': 0.531, 'id_04': 0.531, 'id_05': 0.053, 'id_06': 0.053, 'id_07': 0.966,
+ 'id_08': 0.966, 'id_09': 0.473, 'id_10': 0.473, 'id_11': 0.024, 'id_12': 0.0, 'id_13': 0.117, 'id_14': 0.449, 'id_15': 0.023, 'id_16': 0.102, 'id_17': 0.035, '
+id_18': 0.696, 'id_19': 0.035, 'id_20': 0.036, 'id_21': 0.966, 'id_22': 0.966, 'id_23': 0.966, 'id_24': 0.969, 'id_25': 0.966, 'id_26': 0.966, 'id_27': 0.966, '
+id_28': 0.024, 'id_29': 0.024, 'id_30': 0.469, 'id_31': 0.03, 'id_32': 0.469, 'id_33': 0.497, 'id_34': 0.463, 'id_35': 0.023, 'id_36': 0.023, 'id_37': 0.023, 'i
+d_38': 0.023, 'DeviceType': 0.025, 'DeviceInfo': 0.178, 'isFraud': 0.0}
+Test missing rows percent: {'TransactionID': 0.0, 'id_01': 0.0, 'id_02': 0.018, 'id_03': 0.554, 'id_04': 0.554, 'id_05': 0.049, 'id_06': 0.049, 'id_07': 0.972,
+'id_08': 0.972, 'id_09': 0.492, 'id_10': 0.492, 'id_11': 0.018, 'id_12': 0.0, 'id_13': 0.12, 'id_14': 0.464, 'id_15': 0.018, 'id_16': 0.106, 'id_17': 0.03, 'id_
+18': 0.686, 'id_19': 0.03, 'id_20': 0.03, 'id_21': 0.972, 'id_22': 0.972, 'id_23': 0.972, 'id_24': 0.972, 'id_25': 0.972, 'id_26': 0.972, 'id_27': 0.972, 'id_28
+': 0.018, 'id_29': 0.018, 'id_30': 0.48, 'id_31': 0.021, 'id_32': 0.48, 'id_33': 0.507, 'id_34': 0.478, 'id_35': 0.018, 'id_36': 0.018, 'id_37': 0.018, 'id_38':
+ 0.018, 'DeviceType': 0.019, 'DeviceInfo': 0.178}
+Train col types: {'TransactionID': dtype('int64'), 'id_01': dtype('float64'), 'id_02': dtype('float64'), 'id_03': dtype('float64'), 'id_04': dtype('float64'), '
+id_05': dtype('float64'), 'id_06': dtype('float64'), 'id_07': dtype('float64'), 'id_08': dtype('float64'), 'id_09': dtype('float64'), 'id_10': dtype('float64'),
+ 'id_11': dtype('float64'), 'id_12': dtype('O'), 'id_13': dtype('float64'), 'id_14': dtype('float64'), 'id_15': dtype('O'), 'id_16': dtype('O'), 'id_17': dtype(
+'float64'), 'id_18': dtype('float64'), 'id_19': dtype('float64'), 'id_20': dtype('float64'), 'id_21': dtype('float64'), 'id_22': dtype('float64'), 'id_23': dtyp
+e('O'), 'id_24': dtype('float64'), 'id_25': dtype('float64'), 'id_26': dtype('float64'), 'id_27': dtype('O'), 'id_28': dtype('O'), 'id_29': dtype('O'), 'id_30':
+ dtype('O'), 'id_31': dtype('O'), 'id_32': dtype('float64'), 'id_33': dtype('O'), 'id_34': dtype('O'), 'id_35': dtype('O'), 'id_36': dtype('O'), 'id_37': dtype(
+'O'), 'id_38': dtype('O'), 'DeviceType': dtype('O'), 'DeviceInfo': dtype('O'), 'isFraud': dtype('int64')}
+root@8b9ff8325d75:/workspace#

@@ -1,0 +1,73 @@
+DEPLOYMENT RECOMMENDATION & OPERATIONAL ANALYSIS
+================================================
+Prepared for: Fraud Operations Team & Quarterly Business Review
+Prepared by: Lead Fraud Analyst / Senior AI Consultant
+Date: May 27, 2026
+Subject: Deployment and Threshold Recommendation for XGBoost Fraud Detection Model
+
+EXECUTIVE SUMMARY
+-----------------
+Following a comprehensive audit of the junior analyst's draft report and rigorous financial modeling of the XGBoost fraud detection model (v4.2.1), we recommend DEPLOYING the model, but with a TUNED classification threshold of 0.644. 
+
+Deploying the model as-is at the draft's proposed 0.5 threshold is strongly rejected due to severe operational overload. Rejecting the model entirely is also rejected as it would cost the business $448.11 million per quarter. Deploying the model at our recommended 0.644 threshold will generate a net quarterly savings of $255.38 million (a 57% cost reduction) compared to the baseline, while remaining strictly within the Fraud Operations team's review capacity.
+
+--------------------------------------------------------------------------------
+1. DEPLOYMENT DECISION: TUNED DEPLOYMENT
+--------------------------------------------------------------------------------
+* Decision: Deploy the XGBoost model ONLY after tuning the classification threshold to 0.644.
+* Why not "As-is" (0.50 threshold)? 
+  At a 0.50 threshold, the model would generate 4,287 alerts per day. This exceeds the review team's capacity of 1,500 alerts/day by 2.85x, making it operationally impossible and financially sub-optimal.
+* Why not "Reject"? 
+  Rejecting the model means relying on the current baseline (no model), resulting in a projected 106,693 undetected fraud cases per quarter, translating to $448.11 million in quarterly fraud losses. The model provides exceptional value that must be leveraged.
+
+--------------------------------------------------------------------------------
+2. RECOMMENDED THRESHOLD: 0.644
+--------------------------------------------------------------------------------
+We recommend a classification threshold of 0.644. 
+* Why this specific threshold? 
+  This is the mathematically optimal threshold that minimizes the company's total quarterly cost under the team's operational constraint of 1,500 reviews per day. 
+  At 0.644, the model flags 241 transactions in the holdout evaluation set (a 4.758% alert rate). This generates exactly 1,480.3 alerts per day, which perfectly fills 98.7% of the team's daily capacity, ensuring maximum utilization without causing a backlog or analyst burnout.
+  At this threshold, the model achieves:
+  - Accuracy: 95.85% (exceeding the corporate target of > 95%)
+  - Precision: 46.47% (meaning nearly 1 out of every 2 alerts represents real fraud, preventing analyst fatigue)
+  - Recall: 58.03% (capturing 58% of all fraud cases)
+  - F1-Score: 0.5161
+
+--------------------------------------------------------------------------------
+3. EXPECTED FINANCIAL IMPACT (PER QUARTER)
+--------------------------------------------------------------------------------
+Based on the financial parameters ($4,200 loss per undetected fraud case, $35 cost per manual investigation) and a quarterly transaction volume of 2,800,000, here is the projected quarterly cost comparison:
+
+Metric                       Baseline (No Model)    Tuned Model (t=0.644)    Proposed Draft (t=0.50)
+------------------------------------------------------------------------------------------------
+Threshold                    N/A                    0.644                    0.500
+Flagged/Alert Rate           0.0%                   4.758%                   13.781%
+Quarterly Alerts             0                      133,228                  385,864
+Daily Alerts (Avg)           0                      1,480.3                  4,287.4
+------------------------------------------------------------------------------------------------
+Investigation Cost           $0.00                  $4,662,981.24            $13,505,231.98
+Undetected Fraud Losses      $448,110,562.69        $188,067,118.73          $113,769,042.45
+================================================================================================
+TOTAL QUARTERLY COST         $448,110,562.69        $192,730,099.97          $127,274,274.43
+================================================================================================
+NET SAVINGS VS. BASELINE     N/A                    $255,380,462.72          $320,836,288.26
+
+* Note on Draft's Financials: Although a 0.5 threshold appears to save more money on paper ($320.84M in savings), it is a fantasy. Because the daily alerts (4,287) far exceed capacity (1,500), 2,787 alerts would go unreviewed daily. This would cause undetected fraud to skyrocket, completely erasing those theoretical savings and creating operational chaos.
+
+--------------------------------------------------------------------------------
+4. OPERATIONAL IMPACT & FEASIBILITY
+--------------------------------------------------------------------------------
+* Recommended Daily Workload: 1,480.3 alerts per day.
+* Fits Within Capacity? YES. It fits tightly within our current review capacity of 1,500 alerts/day.
+* Operational Review:
+  - The current team consists of 12 analysts working 8-hour shifts (96 labor hours per day).
+  - At 1,480.3 alerts per day, each analyst will handle an average of 123.4 alerts per 8-hour shift, or approximately 15.4 alerts per hour.
+  - This allows an average of 3.89 minutes per investigation, which is highly feasible and aligns with industry standards for manual transaction review.
+  - If the transaction volume fluctuates and exceeds 1,500 alerts on peak days, the team can temporarily queue low-risk alerts (probabilities close to the 0.644 threshold) or implement automated micro-rules.
+
+CONCLUSION & NEXT STEPS
+------------------------
+1. Authorize deployment of the XGBoost v4.2.1 model to production immediately.
+2. Configure the production decision engine with a classification threshold of 0.644.
+3. Implement real-time monitoring of daily alert volumes and queue size to ensure they remain aligned with the 1,500/day capacity.
+4. Retrain the model on Q4 2025 and Q1 2026 data before the next Q3 review to improve recall and reduce false positives further.

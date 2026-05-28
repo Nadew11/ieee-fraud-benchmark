@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 118 (char 119) | Content preview: '{\n  "analysis": "Wow, this is a major finding! There are 800 rows representing 400 transaction IDs t'...
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 101 (char 102) | Content preview: '{\n  "analysis": "Wait, why were the counts of `-999` and `unknown` zero in the \'Before clean\' sectio'...
+
+Please fix these issues and provide a proper JSON response.

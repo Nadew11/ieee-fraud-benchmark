@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 6 column 35 (char 799) | Content preview: '{\n  "analysis": "Wait, `is_monotonic_increasing` is `False`. Is the dataset sorted by something else'...
+
+Please fix these issues and provide a proper JSON response.

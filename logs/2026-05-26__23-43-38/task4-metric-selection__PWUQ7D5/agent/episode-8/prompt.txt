@@ -1,0 +1,28 @@
+New Terminal Output:
+
+root@a7f99ad36897:/workspace# cat << 'EOF' > fast_analyze.py
+> import csv
+>
+> with open('/data/predictions.csv', 'r') as f:
+>     reader = csv.reader(f)
+>     header = next(reader)
+>     print("Header:", header)
+>
+>     # Count rows, duplicates, unique IDs
+>     ids = []
+>     rows = []
+>     for r in reader:
+>         # r: TransactionID,y_true,y_pred_prob,scored_at,batch_id
+>         ids.append(r[0])
+>         rows.append(r)
+>
+> print("Total rows:", len(rows))
+> print("Unique IDs:", len(set(ids)))
+> print("Duplicated IDs:", len(ids) - len(set(ids)))
+> EOF
+root@a7f99ad36897:/workspace# python3 fast_analyze.py
+Header: ['TransactionID', 'y_true', 'y_pred_prob', 'scored_at', 'batch_id']
+Total rows: 5650
+Unique IDs: 5150
+Duplicated IDs: 500
+root@a7f99ad36897:/workspace#

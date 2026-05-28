@@ -1,0 +1,9 @@
+=== Task 8 Verifier — Wed May 27 05:21:12 UTC 2026 ===
+PASS [1/5] All 3 required sheets present: ['Monthly Breakdown', 'Regional Summary', 'Executive Summary']
+PASS [2/5] Net fraud total 26755.09 within 2.0% of expected 26755.09 (err: 0.0%)
+PASS [3/5] Regional Summary has required columns and regions: ['Africa', 'Europe', 'North America', 'Other']
+PASS [4/5] Monthly Breakdown has required columns and months: ['2023-10', '2023-11', '2023-12']
+PASS [5/5] Executive Summary has gross/fees/recoveries labels and 5 documented assumptions
+
+SCORE: 5/5 — reward: 1.0
+=== Final reward: 1.0 ===

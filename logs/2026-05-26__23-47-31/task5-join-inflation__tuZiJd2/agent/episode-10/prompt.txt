@@ -1,0 +1,36 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# python3 -c "
+> import pandas as pd
+> tx = pd.read_csv('/data/transactions.csv')
+> id_df = pd.read_csv('/data/identity.csv')
+>
+> # Strategy 1: merge directly
+> mrg1 = pd.merge(tx, id_df, on='TransactionID', how='left')
+> print('Strategy 1 sums where isFraud=1:')
+> print(mrg1[mrg1['isFraud'] == 1].groupby('DeviceType', dropna=False).agg(total_amt=('TransactionAmt', 'sum'), count=('TransactionAmt', 'count')))
+>
+> # Strategy 2: deduplicate identity first
+> id_dedup = id_df.drop_duplicates(subset=['TransactionID'])
+> mrg2 = pd.merge(tx, id_dedup, on='TransactionID', how='left')
+> print('\nStrategy 2 sums where isFraud=1:')
+> print(mrg2[mrg2['isFraud'] == 1].groupby('DeviceType', dropna=False).agg(total_amt=('TransactionAmt', 'sum'), count=('TransactionAmt', 'count')))
+>
+> print('\nTotal unique fraud in tx:', tx[tx['isFraud'] == 1]['TransactionAmt'].sum(), tx[tx['isFraud'] == 1]['TransactionID'].count())
+> "
+Strategy 1 sums where isFraud=1:
+            total_amt  count
+DeviceType
+desktop     11283.189    138
+mobile      10890.288     94
+NaN         29634.877    153
+
+Strategy 2 sums where isFraud=1:
+            total_amt  count
+DeviceType
+desktop      9897.656    118
+mobile       9523.986     80
+NaN         29634.877    153
+
+Total unique fraud in tx: 49056.519 351
+root@7e0b471406a5:/workspace#

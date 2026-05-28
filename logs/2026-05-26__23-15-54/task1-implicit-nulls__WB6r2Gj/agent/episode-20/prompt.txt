@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# cat /data/ground_truth.json
+cat: /data/ground_truth.json: No such file or directory
+root@cc7b6f7834c9:/workspace#

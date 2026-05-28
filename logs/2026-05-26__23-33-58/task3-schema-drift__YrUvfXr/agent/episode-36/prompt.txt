@@ -1,0 +1,11 @@
+Previous response had warnings:
+WARNINGS: - Extra text detected after JSON object
+
+New Terminal Output:
+
+FAIL: Features=['id_05', 'id_37', 'id_02'], C=0.01 -> Train=0.5386, Val=0.5066
+FAIL: Features=['id_05', 'id_37', 'id_02'], C=0.1 -> Train=0.5385, Val=0.5079
+FAIL: Features=['id_05', 'id_37', 'id_02'], C=1.0 -> Train=0.5385, Val=0.5078
+FAIL: Features=['id_05', 'id_37', 'id_02'], C=10.0 -> Train=0.5385, Val=0.5078
+SUCCESS: Features=['id_05', 'id_37', 'DeviceType'], C=0.01 -> Train=0.5322, Val=0.5784
+

@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait slightly longer for the imports and model fitting of run_baseline to finish.",
+  "plan": "Wait 5 seconds for python script.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 5.0
+    }
+  ]
+}

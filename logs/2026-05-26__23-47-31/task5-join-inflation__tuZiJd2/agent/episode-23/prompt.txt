@@ -1,0 +1,39 @@
+New Terminal Output:
+
+d_by_device" / 2>/dev/null | grep -v -E "/proc|/sys|/usr/lib|/usr/share|run_solution.py|generate_data.py"
+cat << 'EOF' > solution.py
+import pandas as pd
+
+tx = pd.read_csv('/data/transactions.csv')
+ident = pd.read_csv('/data/identity.csv')
+
+# Deduplicate on TransactionID
+ident_clean = ident.drop_duplicates(subset=['TransactionID'])
+
+# Join
+merged = tx.merge(ident_clean, on='TransactionID', how='left')
+
+# Groupby with dropna=False
+fraud_by_device = (
+    merged[merged['isFraud'] == 1]
+    .groupby('DeviceType', dropna=False)
+    .agg(
+        total_fraud_amount=('TransactionAmt', 'sum'),
+        fraud_transaction_count=('TransactionID', 'count')
+    )
+    .reset_index()
+)
+
+# Save to csv
+fraud_by_device.to_csv('/output/fraud_by_device.csv', index=False)
+
+# Overall total fraud
+total_fraud = merged[merged['isFraud'] == 1]['TransactionAmt'].sum()
+
+with open('/output/total_fraud.txt', 'w') as f:
+    f.write(f"{total_fraud:.2f}\n")
+
+print("Saved successfully!")
+EOF
+python3 solution.py
+

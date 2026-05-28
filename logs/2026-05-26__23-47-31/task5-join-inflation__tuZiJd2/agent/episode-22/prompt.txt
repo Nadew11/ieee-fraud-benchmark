@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Expecting ',' delimiter: line 2 column 3862 (char 3863) | Content preview: '{\n  "analysis": "No results returned. This suggests there is no existing grading script on the machi'...
+
+Please fix these issues and provide a proper JSON response.

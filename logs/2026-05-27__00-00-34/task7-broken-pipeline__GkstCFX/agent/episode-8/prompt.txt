@@ -1,0 +1,31 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "
+> import pandas as pd, numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.preprocessing import StandardScaler
+> import xgboost as xgb
+> from sklearn.metrics import roc_auc_score
+> df = pd.read_csv('/data/train_transaction.csv')
+> features = [c for c in df.columns if c not in ['TransactionID', 'isFraud', 'ProductCD', 'card4', 'card6']]
+> X = df[features].fillna(-999).values
+> y = df['isFraud'].values
+> scaler = StandardScaler()
+> X = scaler.fit_transform(X)
+> X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
+> model = xgb.XGBClassifier(objective='binary:logistic', eval_metric='rmse', n_estimators=300, max_depth=6, learning_rate=0.05, subsample=0.8, colsample_bytree=
+0.8, random_state=42, use_label_encoder=False, verbosity=0)
+> model.fit(X_train, y_train, eval_set=[(X_val, y_val)], verbose=False)
+> probs = model.predict_proba(X_val)[:, 1]
+> print('AUC:', roc_auc_score(y_val, probs))
+> print('First 20 actual:', y_val[:20])
+> print('First 20 probs:', probs[:20])
+> "
+AUC: 0.9999874974883347
+First 20 actual: [0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0]
+First 20 probs: [3.56436358e-05 4.19067437e-05 2.27274249e-05 3.11863550e-05
+ 1.47586179e-05 5.13732884e-05 2.03431136e-05 9.99247193e-01
+ 1.14135792e-05 1.05977997e-04 1.96196797e-05 7.94029984e-05
+ 1.46392977e-05 1.44439211e-04 1.54631562e-05 9.99917984e-01
+ 6.22220396e-05 2.66923998e-05 1.21068761e-05 1.25099605e-05]
+root@549b54a67146:/workspace#

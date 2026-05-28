@@ -1,0 +1,14 @@
+=== Task 4 Verifier — Wed May 27 04:47:16 UTC 2026 ===
+Ground truth: clean_auc=0.8871, dirty_auc=0.9182, clean_count=5000, dirty_count=5650, calibration_rows=150, duplicate_rows=500
+PASS [1/9] All 3 output files exist (audit=5325, rec=4110 chars)
+PASS [2/9] metrics.json has 9 valid metrics: ['auc_roc', 'accuracy_at_0.5', 'precision_at_0.5', 'recall_at_0.5', 'f1_score_at_0.5', 'accuracy_at_0.63', 'precision_at_0.63', 'recall_at_0.63', 'f1_score_at_0.63']
+PASS [3/9] AUC 'auc_roc'=0.8861 matches clean ground truth (expected ~0.8871)
+FAIL [4/9] Agent found 1/2 data issues. Missing: duplicates
+PASS [5/9] Audit correctly identifies accuracy as misleading
+PASS [6/9] Recommendation pushes back on deploy-as-is
+PASS [7/9] Financial impact analysis present (19 dollar amounts)
+PASS [8/9] Agent reports correct cleaned dataset size (~5000)
+PASS [9/9] Non-default threshold recommended (['0.5', '0.63', '0.63']) with justification
+
+SCORE: 8/9 = 0.0
+=== Final reward: 0.0 ===

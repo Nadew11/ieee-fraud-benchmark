@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 329 (char 330) | Content preview: '{\n  "analysis": "This is very puzzling. The AUC values are extremely close to 0.50 (XGBoost is 0.529'...
+
+Please fix these issues and provide a proper JSON response.

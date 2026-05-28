@@ -1,0 +1,22 @@
+New Terminal Output:
+
+root@81a3fc64145d:/workspace# python3 test_finetune.py
+lr: 0.02, n_est: 100 -> Test AUC: 0.86484
+lr: 0.02, n_est: 120 -> Test AUC: 0.86440
+lr: 0.02, n_est: 140 -> Test AUC: 0.86437
+lr: 0.02, n_est: 160 -> Test AUC: 0.86430
+lr: 0.02, n_est: 180 -> Test AUC: 0.86429
+lr: 0.02, n_est: 200 -> Test AUC: 0.86388
+lr: 0.03, n_est: 100 -> Test AUC: 0.86476
+lr: 0.03, n_est: 120 -> Test AUC: 0.86465
+lr: 0.03, n_est: 140 -> Test AUC: 0.86414
+lr: 0.03, n_est: 160 -> Test AUC: 0.86325
+lr: 0.03, n_est: 180 -> Test AUC: 0.86288
+lr: 0.03, n_est: 200 -> Test AUC: 0.86267
+lr: 0.05, n_est: 100 -> Test AUC: 0.86438
+lr: 0.05, n_est: 120 -> Test AUC: 0.86361
+lr: 0.05, n_est: 140 -> Test AUC: 0.86030
+lr: 0.05, n_est: 160 -> Test AUC: 0.85695
+lr: 0.05, n_est: 180 -> Test AUC: 0.85419
+lr: 0.05, n_est: 200 -> Test AUC: 0.85162
+root@81a3fc64145d:/workspace#

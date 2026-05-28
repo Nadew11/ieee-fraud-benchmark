@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 134 (char 135) | Content preview: '{\n  "analysis": "Excellent, pandas, sklearn, and xgboost are installed, while lightgbm is not. We ca'...
+
+Please fix these issues and provide a proper JSON response.

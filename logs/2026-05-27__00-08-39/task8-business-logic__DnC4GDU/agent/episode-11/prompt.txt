@@ -1,0 +1,13 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); print(df.groupby(['settlement_status', 'isFraud']).si
+ze())"
+settlement_status  isFraud
+declined           0           560
+                   1            20
+pending            0           394
+                   1            14
+settled            0          7163
+                   1           306
+dtype: int64
+root@cf0db7aa8136:/workspace#

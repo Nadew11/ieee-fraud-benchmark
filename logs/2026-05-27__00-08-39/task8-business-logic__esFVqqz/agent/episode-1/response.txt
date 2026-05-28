@@ -1,0 +1,14 @@
+{
+  "analysis": "There are several CSV files under `/data`. Let's print out the first few lines of each file to understand their columns and contents.",
+  "plan": "I will run `head` on `fee_schedule.csv`, `fx_rates.csv`, `region_map.csv`, and `transactions.csv` to see their structure.",
+  "commands": [
+    {
+      "keystrokes": "head -n 5 /data/fee_schedule.csv /data/region_map.csv /data/fx_rates.csv\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "head -n 5 /data/transactions.csv\n",
+      "duration": 0.5
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); TARGET = 'isFraud'; DROP = ['TransactionID', TAR
+GET, 'ProductCD', 'card4', 'card6']; features = [c for c in df.columns if c not in DROP]; print('isFraud' in features)"
+False
+root@0d5e255b62ea:/workspace#

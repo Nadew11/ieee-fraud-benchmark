@@ -1,0 +1,14 @@
+New Terminal Output:
+
+tionID'].head(3); print(df[df['TransactionID'].isin(dup_ids)].sort_values('TransactionID'))"
+     TransactionID  isFraud  TransactionAmt ProductCD       card4  ... currency  country_code  merchant_category settlement_status transaction_type
+65         3074723        0          164.60         W  mastercard  ...      USD            NG             retail           settled         purchase
+136        3074723        0          159.95         W  mastercard  ...      USD            NG             retail           settled         purchase
+774        3126842        0          443.52         W  mastercard  ...      USD            CA      digital_goods           settled         purchase
+867        3126842        0          445.00         W  mastercard  ...      USD            CA      digital_goods           settled         purchase
+573        3170869        0           56.40         W        visa  ...      EUR            FR                atm           settled         purchase
+683        3170869        0           54.00         W        visa  ...      EUR            FR                atm           settled         purchase
+
+[6 rows x 15 columns]
+root@cf0db7aa8136:/workspace#
+root@cf0db7aa8136:/workspace#

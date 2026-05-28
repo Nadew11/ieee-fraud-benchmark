@@ -1,0 +1,82 @@
+New Terminal Output:
+
+root@d8276d655354:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv', nrows=5); print(df.columns.tolist())"
+['TransactionID', 'isFraud', 'TransactionDT', 'TransactionAmt', 'ProductCD', 'card1', 'card2', 'card3', 'card4', 'card5', 'card6', 'addr1', 'addr2', 'dist1', 'd
+ist2', 'P_emaildomain', 'R_emaildomain', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'D1', 'D2', 'D3', 'D4', 'D5',
+'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'chargeback_amount', 'fraud_score', 'day
+s_to_chargeback']
+root@d8276d655354:/workspace#
+root@d8276d655354:/workspace# mkdir -p /output
+root@d8276d655354:/workspace# cat << 'EOF' > info.py
+> import pandas as pd
+> df = pd.read_csv('/data/train_transaction.csv')
+> print("Shape:", df.shape)
+> print("Columns:", list(df.columns))
+> print("Nulls:", df.isnull().sum()[df.isnull().sum() > 0])
+> print("Data types:")
+> print(df.dtypes.value_counts())
+> print(df.dtypes[df.dtypes == 'object'])
+> EOF
+root@d8276d655354:/workspace# python3 info.py
+Shape: (15000, 58)
+Columns: ['TransactionID', 'isFraud', 'TransactionDT', 'TransactionAmt', 'ProductCD', 'card1', 'card2', 'card3', 'card4', 'card5', 'card6', 'addr1', 'addr2', 'd
+ist1', 'dist2', 'P_emaildomain', 'R_emaildomain', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'C7', 'C8', 'C9', 'C10', 'C11', 'C12', 'C13', 'C14', 'D1', 'D2', 'D3', 'D4
+', 'D5', 'D6', 'D7', 'D8', 'D9', 'D10', 'D11', 'D12', 'D13', 'D14', 'D15', 'M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'chargeback_amount', 'fraud_sco
+re', 'days_to_chargeback']
+Nulls: card2              238
+card3               47
+card4               47
+card5              108
+card6               48
+addr1             1610
+addr2             1610
+dist1             8817
+dist2            14014
+P_emaildomain     2414
+R_emaildomain    11558
+D1                  34
+D2                7073
+D3                6656
+D4                4354
+D5                7902
+D6               13216
+D7               14062
+D8               13095
+D9               13095
+D10               1980
+D11               7030
+D12              13422
+D13              13488
+D14              13466
+D15               2295
+M1                6810
+M2                6810
+M3                6810
+M4                7125
+M5                8809
+M6                4264
+M7                8789
+M8                8788
+M9                8788
+dtype: int64
+Data types:
+float64    40
+object     14
+int64       4
+Name: count, dtype: int64
+ProductCD        object
+card4            object
+card6            object
+P_emaildomain    object
+R_emaildomain    object
+M1               object
+M2               object
+M3               object
+M4               object
+M5               object
+M6               object
+M7               object
+M8               object
+M9               object
+dtype: object
+root@d8276d655354:/workspace#

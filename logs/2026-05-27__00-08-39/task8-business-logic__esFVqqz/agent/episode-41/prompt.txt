@@ -1,0 +1,5 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 73 (char 74) | Content preview: '{\n  "analysis": "Ah! There are 16 duplicates among the fraud transactions!\nLet\'s see what these dupl'...
+WARNINGS: - Extra text detected after JSON object
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,78 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# cat << 'EOF' > analyze_constrained.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/predictions.csv')
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+> start_date = pd.to_datetime('2026-01-15 00:00:00')
+> end_date = pd.to_datetime('2026-04-30 23:59:59')
+> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)].copy()
+>
+> loss_per_undetected = 4200.0
+> cost_per_investigation = 35.0
+> daily_review_capacity = 1500  # alerts/day
+> quarterly_volume = 2800000
+> num_days_quarter = 90  # Standard quarter is 90 days
+>
+> holdout_size = len(clean_df)
+> extrap_ratio = quarterly_volume / holdout_size
+>
+> results = []
+> thresholds = np.linspace(0.0, 1.0, 10001)  # Fine-grained search
+>
+> for t in thresholds:
+>     flagged = clean_df['y_pred_prob'] >= t
+>     flagged_count = flagged.sum()
+>
+>     # Projected metrics
+>     q_flagged = flagged_count * extrap_ratio
+>     daily_alerts = q_flagged / num_days_quarter
+>
+>     tp = ((flagged) & (clean_df['y_true'] == 1)).sum()
+>     fp = ((flagged) & (clean_df['y_true'] == 0)).sum()
+>     fn = ((~flagged) & (clean_df['y_true'] == 1)).sum()
+>     tn = ((~flagged) & (clean_df['y_true'] == 0)).sum()
+>
+>     q_investigation_cost = q_flagged * cost_per_investigation
+>     q_fraud_loss = fn * extrap_ratio * loss_per_undetected
+>     q_total_cost = q_investigation_cost + q_fraud_loss
+>
+>     results.append({
+>         'threshold': t,
+>         'tp': tp, 'fp': fp, 'fn': fn, 'tn': tn,
+>         'flagged': flagged_count,
+>         'q_flagged': q_flagged,
+>         'daily_alerts': daily_alerts,
+>         'q_investigation_cost': q_investigation_cost,
+>         'q_fraud_loss': q_fraud_loss,
+>         'q_total_cost': q_total_cost
+>     })
+>
+> res_df = pd.DataFrame(results)
+>
+> # Filter to those within capacity
+> constrained_df = res_df[res_df['daily_alerts'] <= daily_review_capacity]
+>
+> print(f"Number of thresholds satisfying capacity: {len(constrained_df)}")
+> if not constrained_df.empty:
+>     best_constrained = constrained_df.loc[constrained_df['q_total_cost'].idxmin()]
+>     print("\nBest Constrained Threshold:")
+>     print(best_constrained)
+> else:
+>     print("No threshold satisfies the capacity constraint!")
+>
+> # Let's check what the baseline cost is if we do NO deployment (i.e. threshold = 1.0, meaning we flag nothing and investigate nothing)
+> baseline_row = res_df.iloc[res_df['threshold'].idxmax()] # t = 1.0
+> print("\nBaseline (No Model deployed, t=1.0) metrics:")
+> print(baseline_row)
+>
+> # Let's check what the cost is if we deploy with threshold = 0.5 (unconstrained but proposed by junior analyst)
+> row_05 = res_df.iloc[(res_df['threshold'] - 0.5).abs().idxmin()]
+> print("\nJunior Analyst's proposed threshold (0.5) metrics:")
+> print(row_05)
+>
+> EOF
+root@831ed0f33a44:/workspace# python3 analyze_constrained.py
+

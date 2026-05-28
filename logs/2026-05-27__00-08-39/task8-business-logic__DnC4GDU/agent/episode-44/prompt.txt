@@ -1,0 +1,97 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_summaries.py
+> import pandas as pd
+> import numpy as np
+>
+> df_orig = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+> region_map = pd.read_csv('/data/region_map.csv')
+>
+> # Prepare data
+> df_orig['original_index'] = df_orig.index
+> df = df_orig[(df_orig['transaction_date'] >= '2023-10-01') & (df_orig['transaction_date'] <= '2023-12-31')].copy()
+> df = df[df['settlement_status'] != 'declined']
+>
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+> df_merged = df_merged.sort_values('original_index')
+> df_merged['amt_usd'] = (df_merged['TransactionAmt'] * df_merged['rate_to_usd']).round(2)
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> df_merged = df_merged.sort_values('original_index')
+> df_merged['processing_fee'] = (df_merged['amt_usd'] * df_merged['fee_rate']).round(2)
+>
+> # Map region
+> df_merged = pd.merge(df_merged, region_map, on='country_code', how='left')
+> df_merged['region'] = df_merged['region'].fillna('Other')
+>
+> # Deduplicate based on TransactionID, keeping first occurrence in original order
+> frauds_all = df_merged[df_merged['isFraud'] == 1]
+> frauds_no_dup = frauds_all.drop_duplicates(subset=['TransactionID'], keep='first').copy()
+>
+> # Extract month
+> frauds_no_dup['month'] = frauds_no_dup['transaction_date'].str[:7]
+>
+> # Calculate by month and region
+> # For gross fraud and processing fees, we use transaction_type == 'purchase'
+> # For recoveries, we use transaction_type == 'refund'
+>
+> purchases = frauds_no_dup[frauds_no_dup['transaction_type'] == 'purchase']
+> refunds = frauds_no_dup[frauds_no_dup['transaction_type'] == 'refund']
+>
+> print("Purchases count:", len(purchases))
+> print("Refunds count:", len(refunds))
+>
+> # Let's group purchases by month and region
+> p_gp = purchases.groupby(['month', 'region']).agg(
+>     gross_fraud_usd=('amt_usd', 'sum'),
+>     processing_fees=('processing_fee', 'sum'),
+>     fraud_transaction_count=('TransactionID', 'count')
+> ).reset_index()
+>
+> # Group refunds by month and region
+> r_gp = refunds.groupby(['month', 'region']).agg(
+>     recoveries=('amt_usd', 'sum')
+> ).reset_index()
+>
+> # Merge them together on month and region
+> # We want all combinations of expected months and expected regions
+> months = ['2023-10', '2023-11', '2023-12']
+> regions = ['Africa', 'Europe', 'North America', 'Other']
+>
+> # Create a cartesian product of months and regions
+> grid = pd.MultiIndex.from_product([months, regions], names=['month', 'region']).to_frame().reset_index(drop=True)
+>
+> summary = pd.merge(grid, p_gp, on=['month', 'region'], how='left')
+> summary = pd.merge(summary, r_gp, on=['month', 'region'], how='left')
+>
+> summary = summary.fillna(0)
+> summary['gross_fraud_usd'] = summary['gross_fraud_usd'].round(2)
+> summary['processing_fees'] = summary['processing_fees'].round(2)
+> summary['recoveries'] = summary['recoveries'].round(2)
+> summary['net_fraud_usd'] = (summary['gross_fraud_usd'] - summary['recoveries'] - summary['processing_fees']).round(2)
+> summary['avg_ticket_usd'] = np.where(summary['fraud_transaction_count'] > 0, (summary['gross_fraud_usd'] / summary['fraud_transaction_count']).round(2), 0.0)
+>
+> print("\nMonthly Breakdown table:")
+> print(summary[['month', 'region', 'gross_fraud_usd', 'net_fraud_usd', 'processing_fees', 'fraud_transaction_count', 'avg_ticket_usd']])
+>
+> print("\nMonthly Breakdown sums:")
+> print("Gross:", summary['gross_fraud_usd'].sum())
+> print("Fees:", summary['processing_fees'].sum())
+> print("Recoveries:", summary['recoveries'].sum())
+> print("Net:", summary['net_fraud_usd'].sum())
+> print("Fraud Count:", summary['fraud_transaction_count'].sum())
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_summaries.py
+

@@ -1,0 +1,55 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > search_logic.py
+> import pandas as pd
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> rates_dict = {}
+> for idx, row in fx.iterrows():
+>     rates_dict[(row['currency'], row['date'])] = row['rate_to_usd']
+>
+> def get_rate(currency, date_str):
+>     if currency == 'USD':
+>         return 1.0
+>     if (currency, date_str) in rates_dict:
+>         return rates_dict[(currency, date_str)]
+>     currency_rates = fx[fx['currency'] == currency]
+>     prior_rates = currency_rates[currency_rates['date'] <= date_str]
+>     if len(prior_rates) == 0:
+>         return currency_rates.sort_values('date').iloc[0]['rate_to_usd']
+>     return prior_rates.sort_values('date', ascending=False).iloc[0]['rate_to_usd']
+>
+> rates = []
+> for idx, row in df.iterrows():
+>     rates.append(get_rate(row['currency'], row['transaction_date']))
+> df['fx_rate'] = rates
+> df['amt_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = dict(zip(fees['merchant_category'], fees['fee_rate']))
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee'] = df['amt_usd'] * df['fee_rate']
+>
+> all_fraud = df[df.isFraud == 1]
+> print("Total fraud transactions in entire file:", len(all_fraud))
+> print(all_fraud['settlement_status'].value_counts())
+> print(all_fraud['transaction_type'].value_counts())
+> print(all_fraud['transaction_date'].min(), all_fraud['transaction_date'].max())
+>
+> EOF
+root@b9e5a18b679d:/workspace# python3 search_logic.py
+Total fraud transactions in entire file: 340
+settlement_status
+settled     306
+declined     20
+pending      14
+Name: count, dtype: int64
+transaction_type
+purchase               298
+refund                  33
+chargeback_reversal      9
+Name: count, dtype: int64
+2023-10-01 2023-12-31
+root@b9e5a18b679d:/workspace#

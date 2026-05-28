@@ -1,0 +1,66 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# cat << 'EOF' > forward_selection.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.ensemble import RandomForestClassifier
+>
+> train_df = pd.read_csv('/data/train_identity.csv')
+> train_df.columns = [c.replace('-', '_') if '-' in c else c for c in train_df.columns]
+>
+> target_col = 'isFraud'
+> all_features = [c for c in train_df.columns if c != target_col and c != 'TransactionID']
+>
+> train_sub, val_sub = train_test_split(train_df, test_size=0.20, random_state=42, stratify=train_df[target_col])
+>
+> X_train = pd.DataFrame(index=train_sub.index)
+> X_val = pd.DataFrame(index=val_sub.index)
+>
+> num_cols = train_df[all_features].select_dtypes(exclude=['object']).columns.tolist()
+> for col in num_cols:
+>     median_val = train_sub[col].median()
+>     if pd.isna(median_val):
+>         median_val = 0
+>     X_train[col] = train_sub[col].fillna(median_val)
+>     X_val[col] = val_sub[col].fillna(median_val)
+>
+> cat_cols = train_df[all_features].select_dtypes(include=['object']).columns.tolist()
+> for col in cat_cols:
+>     train_cats = train_sub[col].fillna('Missing').astype(str).unique()
+>     cat_map = {cat: idx for idx, cat in enumerate(train_cats)}
+>     X_train[col] = train_sub[col].fillna('Missing').astype(str).map(cat_map).fillna(-1).astype(int)
+>     X_val[col] = val_sub[col].fillna('Missing').astype(str).map(cat_map).fillna(-1).astype(int)
+>
+> current_features = []
+> best_auc = 0.5
+>
+> for step in range(10):
+>     best_new_feature = None
+>     best_step_auc = 0.0
+>     for f in all_features:
+>         if f in current_features:
+>             continue
+>         candidate_features = current_features + [f]
+>         clf = RandomForestClassifier(n_estimators=50, max_depth=5, random_state=42, class_weight='balanced', n_jobs=-1)
+>         clf.fit(X_train[candidate_features], train_sub[target_col])
+>         preds = clf.predict_proba(X_val[candidate_features])[:, 1]
+>         auc = roc_auc_score(val_sub[target_col], preds)
+>         if auc > best_step_auc:
+>             best_step_auc = auc
+>             best_new_feature = f
+>
+>     if best_new_feature is not None and best_step_auc > best_auc:
+>         current_features.append(best_new_feature)
+>         best_auc = best_step_auc
+>         print(f'Step {step+1}: Added {best_new_feature}, Validation AUC = {best_auc:.6f}')
+>     else:
+>         print('No improvement, stopping.')
+>         break
+>
+> print('Final feature subset:', current_features)
+> print('Final best validation AUC:', best_auc)
+> EOF
+root@16de4ef61b18:/workspace# python3 -u forward_selection.py
+

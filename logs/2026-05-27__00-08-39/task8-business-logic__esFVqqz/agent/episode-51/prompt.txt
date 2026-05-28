@@ -1,0 +1,40 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > sum_rec_types.py
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+>
+> rates_dict = {}
+> for idx, row in fx.iterrows():
+>     rates_dict[(row['currency'], row['date'])] = row['rate_to_usd']
+>
+> def get_rate(currency, date_str):
+>     if currency == 'USD':
+>         return 1.0
+>     if (currency, date_str) in rates_dict:
+>         return rates_dict[(currency, date_str)]
+>     currency_rates = fx[fx['currency'] == currency]
+>     prior_rates = currency_rates[currency_rates['date'] <= date_str]
+>     if len(prior_rates) == 0:
+>         return currency_rates.sort_values('date').iloc[0]['rate_to_usd']
+>     return prior_rates.sort_values('date', ascending=False).iloc[0]['rate_to_usd']
+>
+> df['fx_rate'] = df.apply(lambda r: get_rate(r['currency'], r['transaction_date']), axis=1)
+> df['amt_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> df_clean = df.drop_duplicates(subset=['TransactionID'], keep='first')
+> df_clean_no_declined = df_clean[df_clean.settlement_status != 'declined'].copy()
+> fraud = df_clean_no_declined[df_clean_no_declined.isFraud == 1]
+>
+> refunds = fraud[fraud.transaction_type == 'refund']
+> cbs = fraud[fraud.transaction_type == 'chargeback_reversal']
+>
+> print("Refunds sum:", refunds['amt_usd'].sum())
+> print("Chargebacks sum:", cbs['amt_usd'].sum())
+>
+> EOF
+root@b9e5a18b679d:/workspace# python3 sum_rec_types.py
+Refunds sum: 2435.89068568
+Chargebacks sum: 863.08043642
+root@b9e5a18b679d:/workspace#

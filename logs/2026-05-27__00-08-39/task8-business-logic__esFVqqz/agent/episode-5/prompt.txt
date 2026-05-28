@@ -1,0 +1,4 @@
+New Terminal Output:
+
+}root@b9e5a18b679d:/workspace# python3 -c "import pandas, openpyxl; print('Pandas and Openpyxl are available')"
+

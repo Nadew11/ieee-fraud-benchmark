@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# python3 -c "import pandas as pd; trans = pd.read_csv('/data/transactions.csv'); ident = pd.read_csv('/data/identity.csv'); m_left
+= pd.merge(trans, ident, on='TransactionID', how='left'); print('Left merged NaN DeviceType with fraud:', m_left[m_left['isFraud']==1]['DeviceType'].isna().sum(
+)); m_inner = pd.merge(trans, ident, on='TransactionID', how='inner'); print('Inner merged NaN DeviceType with fraud:', m_inner[m_inner['isFraud']==1]['DeviceTy
+pe'].isna().sum())"
+Left merged NaN DeviceType with fraud: 153
+Inner merged NaN DeviceType with fraud: 0
+root@3532236a873b:/workspace#

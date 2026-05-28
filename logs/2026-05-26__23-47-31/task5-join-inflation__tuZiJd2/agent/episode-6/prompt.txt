@@ -1,0 +1,12 @@
+New Terminal Output:
+
+root@7e0b471406a5:/workspace# python3 -c "
+> import pandas as pd
+> tx = pd.read_csv('/data/transactions.csv')
+> id_df = pd.read_csv('/data/identity.csv')
+> print('tx dup IDs:', tx['TransactionID'].duplicated().sum())
+> print('id dup IDs:', id_df['TransactionID'].duplicated().sum())
+> "
+tx dup IDs: 0
+id dup IDs: 492
+

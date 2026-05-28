@@ -1,0 +1,14 @@
+{
+  "analysis": "Wait, let's wait a tiny bit or hit enter if the command was not sent correctly or if we need to see the result.",
+  "plan": "Send newline to run the command, or just run it again.",
+  "commands": [
+    {
+      "keystrokes": "\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "ls -la /data /output\n",
+      "duration": 1.0
+    }
+  ]
+}

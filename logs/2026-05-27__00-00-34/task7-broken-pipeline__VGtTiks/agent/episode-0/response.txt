@@ -1,0 +1,14 @@
+{
+  "analysis": "We need to inspect the contents of the `/data` directory to find the pipeline script and its structure, and inspect the code of `/data/pipeline.py`.",
+  "plan": "I will run `ls -la /data` to list the files and then print the contents of `/data/pipeline.py` using `cat`.",
+  "commands": [
+    {
+      "keystrokes": "ls -la /data\n",
+      "duration": 0.5
+    },
+    {
+      "keystrokes": "cat /data/pipeline.py\n",
+      "duration": 1.0
+    }
+  ]
+}

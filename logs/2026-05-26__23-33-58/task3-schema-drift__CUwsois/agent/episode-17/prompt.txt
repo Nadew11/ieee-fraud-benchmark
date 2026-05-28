@@ -1,0 +1,73 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# cat << 'EOF' > feature_analysis.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.metrics import roc_auc_score
+> from sklearn.model_selection import train_test_split
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> test.columns = [c.replace('-', '_') for c in test.columns]
+>
+> # Identify categorical columns
+> cat_cols = train.select_dtypes(include=['object']).columns.tolist()
+> for col in cat_cols:
+>     train[col] = train[col].astype(str).replace('nan', np.nan)
+>     # Map to numeric categories for simple AUC calculation
+>     train[col] = pd.factorize(train[col])[0]
+>
+> # Let's check single feature AUCs
+> X = train.drop(columns=['TransactionID', 'isFraud'])
+> y = train['isFraud']
+>
+> X_train, X_holdout, y_train, y_holdout = train_test_split(
+>     X, y, test_size=0.2, random_state=42, stratify=y
+> )
+>
+> feature_aucs = []
+> for col in X.columns:
+>     # handle NaNs
+>     col_train = X_train[col].fillna(X_train[col].median() if X_train[col].notnull().any() else 0)
+>     col_holdout = X_holdout[col].fillna(X_train[col].median() if X_train[col].notnull().any() else 0)
+>
+>     try:
+>         auc_train = roc_auc_score(y_train, col_train)
+>         if auc_train < 0.5: auc_train = 1.0 - auc_train
+>         auc_hold = roc_auc_score(y_holdout, col_holdout)
+>         if auc_hold < 0.5: auc_hold = 1.0 - auc_hold
+>         feature_aucs.append({
+>             'col': col,
+>             'train_auc': auc_train,
+>             'holdout_auc': auc_hold,
+>             'null_pct': train[col].isnull().mean()
+>         })
+>     except Exception as e:
+>         pass
+>
+> df_auc = pd.DataFrame(feature_aucs).sort_values(by='holdout_auc', ascending=False)
+> print(df_auc.head(20))
+> EOF
+root@27e59b3c4e79:/workspace# python3 feature_analysis.py
+           col  train_auc  holdout_auc  null_pct
+32       id_33   0.520474     0.555193  0.000000
+4        id_05   0.506606     0.553122  0.052875
+36       id_37   0.515220     0.551192  0.000000
+14       id_15   0.508453     0.546096  0.000000
+28       id_29   0.512018     0.535546  0.000000
+27       id_28   0.507433     0.532527  0.000000
+1        id_02   0.522869     0.530179  0.024500
+31       id_32   0.506389     0.526102  0.468625
+35       id_36   0.500447     0.524719  0.000000
+19       id_20   0.513233     0.523813  0.036000
+38  DeviceType   0.524612     0.522360  0.000000
+34       id_35   0.511365     0.520182  0.000000
+26       id_27   0.507695     0.520065  0.000000
+22       id_23   0.507728     0.520065  0.000000
+33       id_34   0.509174     0.519394  0.000000
+29       id_30   0.506800     0.518547  0.000000
+37       id_38   0.533985     0.517358  0.000000
+5        id_06   0.503879     0.517335  0.052875
+16       id_17   0.516332     0.516040  0.035250
+18       id_19   0.515635     0.515628  0.035375
+root@27e59b3c4e79:/workspace#

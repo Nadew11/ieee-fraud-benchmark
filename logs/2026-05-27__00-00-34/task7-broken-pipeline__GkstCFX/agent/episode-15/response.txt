@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, even with chronological split, the AUC is 0.999994! Why is that? \nLet's check `TransactionDT`. Wait! Is `TransactionDT` sorted in the dataset? Let's check `df['TransactionDT'].head(20)` and `df['TransactionDT'].tail(20)`. Let's see if the dataset is sorted or if `TransactionDT` actually leaks something.",
+  "plan": "Let's check the values of `TransactionDT` and understand the correlation or if there's any other leakage.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df['TransactionDT'].describe()); print(df.groupby('isFraud')['TransactionDT'].mean())\"\n",
+      "duration": 2.0
+    }
+  ]
+}

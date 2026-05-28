@@ -1,0 +1,88 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# cat << 'EOF' > feature_selection.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.ensemble import RandomForestClassifier
+> import xgboost as xgb
+>
+> train_df = pd.read_csv('/data/train_identity.csv')
+> train_df.columns = [c.replace('-', '_') if '-' in c else c for c in train_df.columns]
+>
+> target_col = 'isFraud'
+>
+> train_sub, val_sub = train_test_split(train_df, test_size=0.20, random_state=42, stratify=train_df[target_col])
+>
+> signal_features = []
+>
+> for col in train_df.columns:
+>     if col in ['isFraud', 'TransactionID']:
+>         continue
+>
+>     if train_df[col].dtype in [np.float64, np.int64]:
+>         valid_mask = train_sub[col].notna()
+>         if valid_mask.sum() > 5:
+>             try:
+>                 auc = roc_auc_score(train_sub.loc[valid_mask, target_col], train_sub.loc[valid_mask, col])
+>                 if abs(auc - 0.5) > 0.05:
+>                     signal_features.append((col, auc, 'numeric'))
+>             except:
+>                 pass
+>     else:
+>         valid_mask = train_sub[col].notna()
+>         if valid_mask.sum() > 5:
+>             means = train_sub.groupby(col)[target_col].mean()
+>             encoded_train = train_sub[col].map(means).fillna(0)
+>             try:
+>                 auc = roc_auc_score(train_sub[target_col], encoded_train)
+>                 if abs(auc - 0.5) > 0.05:
+>                     signal_features.append((col, auc, 'categorical'))
+>             except:
+>                 pass
+>
+> print(f'Found {len(signal_features)} signal features:')
+> for f, auc, t in sorted(signal_features, key=lambda x: abs(x[1]-0.5), reverse=True):
+>     print(f'  {f} ({t}): AUC = {auc:.4f}')
+>
+> top_features = [x[0] for x in sorted(signal_features, key=lambda x: abs(x[1]-0.5), reverse=True)[:10]]
+> print('Top 10 selected features:', top_features)
+>
+> X_train = pd.DataFrame(index=train_sub.index)
+> X_val = pd.DataFrame(index=val_sub.index)
+>
+> for col in top_features:
+>     col_type = [x[2] for x in signal_features if x[0] == col][0]
+>     if col_type == 'numeric':
+>         X_train[col] = train_sub[col].fillna(train_sub[col].median() if not train_sub[col].isna().all() else 0)
+>         X_val[col] = val_sub[col].fillna(train_sub[col].median() if not train_sub[col].isna().all() else 0)
+>     else:
+>         means = train_sub.groupby(col)[target_col].mean()
+>         X_train[col] = train_sub[col].map(means).fillna(train_sub[target_col].mean())
+>         X_val[col] = val_sub[col].map(means).fillna(train_sub[target_col].mean())
+>
+> clf = RandomForestClassifier(n_estimators=100, max_depth=5, random_state=42, class_weight='balanced')
+> clf.fit(X_train, train_sub[target_col])
+> auc_rf = roc_auc_score(val_sub[target_col], clf.predict_proba(X_val)[:, 1])
+> print(f'Selected Features RF holdout AUC: {auc_rf:.6f}')
+>
+> clf_xgb = xgb.XGBClassifier(n_estimators=50, max_depth=3, learning_rate=0.05, random_state=42, eval_metric='auc')
+> clf_xgb.fit(X_train, train_sub[target_col])
+> auc_xgb = roc_auc_score(val_sub[target_col], clf_xgb.predict_proba(X_val)[:, 1])
+> print(f'Selected Features XGB holdout AUC: {auc_xgb:.6f}')
+>
+> EOF
+root@16de4ef61b18:/workspace# python3 -u feature_selection.py
+Found 7 signal features:
+  id_25 (numeric): AUC = 0.2089
+  id_21 (numeric): AUC = 0.7512
+  id_08 (numeric): AUC = 0.2983
+  DeviceInfo (categorical): AUC = 0.6248
+  id_31 (categorical): AUC = 0.6117
+  id_24 (numeric): AUC = 0.4205
+  id_07 (numeric): AUC = 0.4426
+Top 10 selected features: ['id_25', 'id_21', 'id_08', 'DeviceInfo', 'id_31', 'id_24', 'id_07']
+Selected Features RF holdout AUC: 0.544684
+Selected Features XGB holdout AUC: 0.503354
+root@16de4ef61b18:/workspace#

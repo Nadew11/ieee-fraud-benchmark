@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 133 (char 134) | Content preview: '{\n  "analysis": "Fantastic! The only data type mismatch is indeed `TransactionID` which is `int64` i'...
+
+Please fix these issues and provide a proper JSON response.

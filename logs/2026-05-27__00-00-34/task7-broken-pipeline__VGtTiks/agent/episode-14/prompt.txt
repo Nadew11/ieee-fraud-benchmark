@@ -1,0 +1,25 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# find / -name "*eval*" -o -name "*test*" -o -name "*score*" 2>/dev/null | grep -v "/usr/" | grep -v "/lib/" | grep -v "/proc/"
+/sys/devices/virtual/net/ip6tnl0/testing
+/sys/devices/virtual/net/ip_vti0/testing
+/sys/devices/virtual/net/eth0/testing
+/sys/devices/virtual/net/gre0/testing
+/sys/devices/virtual/net/ip6gre0/testing
+/sys/devices/virtual/net/lo/testing
+/sys/devices/virtual/net/gretap0/testing
+/sys/devices/virtual/net/sit0/testing
+/sys/devices/virtual/net/erspan0/testing
+/sys/devices/virtual/net/ip6_vti0/testing
+/sys/devices/virtual/net/tunl0/testing
+/sys/fs/f2fs/features/test_dummy_encryption_v2
+/sys/fs/ext4/features/test_dummy_encryption_v2
+/sys/module/cryptomgr/parameters/notests
+/sys/module/8250/parameters/skip_txen_test
+/sys/module/8250_core/parameters/skip_txen_test
+/root/.github/skills/model-evaluation
+/root/.agents/skills/model-evaluation
+/root/.codex/skills/model-evaluation
+/root/.gemini/skills/model-evaluation
+/root/.claude/skills/model-evaluation
+root@0d5e255b62ea:/workspace#

@@ -1,0 +1,43 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# cat << 'EOF' > analyze_period_metrics.py
+> import pandas as pd
+> from sklearn.metrics import roc_auc_score, confusion_matrix, accuracy_score
+>
+> df = pd.read_csv('/data/predictions.csv')
+> df['scored_at'] = pd.to_datetime(df['scored_at'])
+>
+> start_date = pd.to_datetime('2026-01-15 00:00:00')
+> end_date = pd.to_datetime('2026-04-30 23:59:59')
+>
+> # Filter to scoring period
+> clean_df = df[(df['scored_at'] >= start_date) & (df['scored_at'] <= end_date)]
+>
+> y_true = clean_df['y_true']
+> y_pred_prob = clean_df['y_pred_prob']
+> y_pred_05 = (y_pred_prob >= 0.5).astype(int)
+>
+> auc = roc_auc_score(y_true, y_pred_prob)
+> acc = accuracy_score(y_true, y_pred_05)
+> cm = confusion_matrix(y_true, y_pred_05)
+> tn, fp, fn, tp = cm.ravel()
+>
+> print(f"Corrected dataset size: {len(clean_df)}")
+> print(f"Corrected y_true counts:\n{y_true.value_counts()}")
+> print(f"Corrected AUC-ROC: {auc:.4f}")
+> print(f"Corrected Accuracy: {acc:.4f}")
+> print(f"Corrected Confusion Matrix (at threshold 0.5):")
+> print(f"TP: {tp}, FP: {fp}, FN: {fn}, TN: {tn}")
+>
+> # Let's also check if the 585 out-of-period records are duplicate transactions
+> in_p_ids = set(clean_df['TransactionID'])
+> out_p_df = df[(df['scored_at'] < start_date) | (df['scored_at'] > end_date)]
+> out_p_ids = set(out_p_df['TransactionID'])
+>
+> print(f"Out of period records: {len(out_p_df)}")
+> print(f"Out of period unique IDs: {out_p_df['TransactionID'].nunique()}")
+> overlap = in_p_ids.intersection(out_p_ids)
+> print(f"Overlap of IDs between in-period and out-of-period: {len(overlap)}")
+> EOF
+root@831ed0f33a44:/workspace# python3 analyze_period_metrics.py
+

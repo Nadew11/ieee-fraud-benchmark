@@ -1,0 +1,46 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# cat << 'EOF' >> match_gt.py
+> print("Fraud purchase status counts:")
+> print(df_q4[df_q4['isFraud'] == 1].groupby(['transaction_type', 'settlement_status']).size())
+> print("Fraud purchase status sums:")
+> print(df_q4[df_q4['isFraud'] == 1].groupby(['transaction_type', 'settlement_status'])['amount_usd'].sum())
+> EOF
+root@474ebd5bd0a4:/workspace# python3 match_gt.py
+Missing fee rates: 0
+Total fraud txs (excluding declined) in Q4: 320
+By transaction type:
+transaction_type
+chargeback_reversal      9
+purchase               278
+refund                  33
+dtype: int64
+Gross fraud usd by type:
+transaction_type
+chargeback_reversal      863.080436
+purchase               31521.929699
+refund                  2435.890686
+Name: amount_usd, dtype: float64
+Processing fee usd by type:
+transaction_type
+chargeback_reversal      24.686746
+purchase               1068.538526
+refund                   78.081557
+Name: processing_fee_usd, dtype: float64
+Fraud purchase status counts:
+transaction_type     settlement_status
+chargeback_reversal  settled                9
+purchase             declined              20
+                     pending               14
+                     settled              264
+refund               settled               33
+dtype: int64
+Fraud purchase status sums:
+transaction_type     settlement_status
+chargeback_reversal  settled                863.080436
+purchase             declined              2888.535010
+                     pending               1212.593691
+                     settled              30309.336008
+refund               settled               2435.890686
+Name: amount_usd, dtype: float64
+root@474ebd5bd0a4:/workspace#

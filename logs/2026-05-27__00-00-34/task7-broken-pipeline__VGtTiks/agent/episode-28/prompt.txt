@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 709 (char 710) | Content preview: '{\n  "analysis": "Wait, the corrected validation AUC is still 1.0000 on the temporal split! Why is it'...
+
+Please fix these issues and provide a proper JSON response.

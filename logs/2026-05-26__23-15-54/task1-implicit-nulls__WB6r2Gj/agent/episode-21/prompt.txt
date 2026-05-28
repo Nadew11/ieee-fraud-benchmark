@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 87 (char 88) | Content preview: '{\n  "analysis": "Wait, let\'s look at the script `/setup/generate_data.py` again. It has:\n```\n# ── Sa'...
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,44 @@
+New Terminal Output:
+
+root@549b54a67146:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print('Fraud:'); print(df[df['isFraud']==1].head
+(10)); print('Legit:'); print(df[df['isFraud']==0].head(10))"
+Fraud:
+     TransactionID  isFraud  TransactionDT  TransactionAmt  card1  card2  addr1  ...        V2        V3        V4        V5  ProductCD             card4   card
+6
+27         2987027        1       11371582          190.18  13292  478.0    NaN  ...  1.135656       NaN  1.403123  1.101662          W          discover  credi
+t
+51         2987051        1        3355374          178.13  17901    NaN  445.0  ...  1.960305       NaN       NaN  1.938923          S              visa   debi
+t
+68         2987068        1       15535953          118.15  16351  493.0  566.0  ...  1.223233  0.750645       NaN  1.911679          S        mastercard   debi
+t
+84         2987084        1         551408          228.03   9276  373.0  488.0  ...  1.728177       NaN       NaN  1.378756          C          discover  credi
+t
+124        2987124        1        8160417           44.72  10489  392.0  450.0  ...  0.614600  0.446960       NaN  1.948156          H              visa  credi
+t
+135        2987135        1        3146968           79.88  15738  402.0  583.0  ...  0.734346  1.814195       NaN  1.783989          H        mastercard  credi
+t
+149        2987149        1       14779244          118.62  15353  586.0  570.0  ...  0.657661       NaN       NaN  1.049742          C          discover  credi
+t
+163        2987163        1        3269897           62.62  10120  423.0  541.0  ...  1.388619       NaN  1.697325  1.283302          H  american express   debi
+t
+175        2987175        1         719373          330.18  15471  395.0  590.0  ...  0.666081       NaN       NaN  1.304353          W        mastercard  credi
+t
+204        2987204        1       13010986          502.57  15057  541.0  532.0  ...  1.145349       NaN  1.413177  1.771345          W              visa  credi
+t
+
+[10 rows x 22 columns]
+Legit:
+   TransactionID  isFraud  TransactionDT  TransactionAmt  card1  card2  addr1  ...        V2        V3        V4        V5  ProductCD             card4   card6
+0        2987000        0        6248836           24.12   4784  121.0  238.0  ...  1.471590       NaN  1.167535       NaN          W        mastercard  credit
+1        2987001        0        7852508           33.68   7561  367.0  333.0  ...       NaN       NaN       NaN       NaN          H        mastercard  credit
+2        2987002        0       12705296           83.69  10142    NaN  247.0  ...  0.211914       NaN  1.569764  1.153218          W              visa  credit
+3        2987003        0        6629219           53.57   5156  233.0  363.0  ...  0.870313       NaN       NaN  0.057260          W        mastercard   debit
+4        2987004        0        6543222           37.27  14798  304.0    NaN  ...  0.448515       NaN       NaN  0.258928          W  american express   debit
+5        2987005        0       10914895           26.51   3885  122.0  274.0  ...       NaN       NaN       NaN  1.078233          C          discover  credit
+6        2987006        0        4123437           24.27  12330  298.0  339.0  ...       NaN       NaN  1.699675  0.899975          C              visa   debit
+7        2987007        0        9946082           49.14   3348  351.0  418.0  ...  0.427116  0.965122       NaN  0.816836          W          discover  credit
+8        2987008        0        6134434          276.07  10058  185.0  137.0  ...       NaN       NaN       NaN       NaN          H              visa   debit
+9        2987009        0        7587990           85.85   2477    NaN  372.0  ...  1.626939       NaN       NaN  1.887443          R              visa   debit
+
+[10 rows x 22 columns]
+root@549b54a67146:/workspace#

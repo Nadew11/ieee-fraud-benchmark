@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@3532236a873b:/workspace# python3 -c "import pandas as pd; trans = pd.read_csv('/data/transactions.csv'); print(trans[trans['isFraud']==1]['TransactionAmt']
+.head(20))"
+

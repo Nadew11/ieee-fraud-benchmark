@@ -1,0 +1,60 @@
+New Terminal Output:
+
+root@16de4ef61b18:/workspace# cat << 'EOF' > test_target_encoding.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import train_test_split
+> from sklearn.metrics import roc_auc_score
+> from sklearn.ensemble import RandomForestClassifier, ExtraTreesClassifier
+> import xgboost as xgb
+>
+> train_df = pd.read_csv('/data/train_identity.csv')
+> train_df.columns = [c.replace('-', '_') if '-' in c else c for c in train_df.columns]
+>
+> target_col = 'isFraud'
+> feature_cols = [c for c in train_df.columns if c != target_col and c != 'TransactionID']
+>
+> train_sub, val_sub = train_test_split(train_df, test_size=0.20, random_state=42, stratify=train_df[target_col])
+>
+> X_train = pd.DataFrame(index=train_sub.index)
+> X_val = pd.DataFrame(index=val_sub.index)
+>
+> num_cols = train_df[feature_cols].select_dtypes(exclude=['object']).columns.tolist()
+> for col in num_cols:
+>     median_val = train_sub[col].median()
+>     if pd.isna(median_val):
+>         median_val = 0
+>     X_train[col] = train_sub[col].fillna(median_val)
+>     X_val[col] = val_sub[col].fillna(median_val)
+>
+> cat_cols = train_df[feature_cols].select_dtypes(include=['object']).columns.tolist()
+> for col in cat_cols:
+>     global_mean = train_sub[target_col].mean()
+>     category_means = train_sub.groupby(col)[target_col].mean()
+>
+>     m = 10
+>     counts = train_sub.groupby(col)[target_col].count()
+>     smooth_means = (counts * category_means + m * global_mean) / (counts + m)
+>
+>     X_train[col] = train_sub[col].map(smooth_means).fillna(global_mean)
+>     X_val[col] = val_sub[col].map(smooth_means).fillna(global_mean)
+>
+> print('Features shape:', X_train.shape)
+>
+> clf_rf = RandomForestClassifier(n_estimators=100, max_depth=6, random_state=42, class_weight='balanced')
+> clf_rf.fit(X_train, train_sub[target_col])
+> auc_rf = roc_auc_score(val_sub[target_col], clf_rf.predict_proba(X_val)[:, 1])
+> print(f'RF with smoothed target encoding AUC: {auc_rf:.6f}')
+>
+> clf_et = ExtraTreesClassifier(n_estimators=100, max_depth=6, random_state=42, class_weight='balanced')
+> clf_et.fit(X_train, train_sub[target_col])
+> auc_et = roc_auc_score(val_sub[target_col], clf_et.predict_proba(X_val)[:, 1])
+> print(f'ET with smoothed target encoding AUC: {auc_et:.6f}')
+>
+> clf_xgb = xgb.XGBClassifier(n_estimators=100, max_depth=4, learning_rate=0.05, random_state=42, eval_metric='auc')
+> clf_xgb.fit(X_train, train_sub[target_col])
+> auc_xgb = roc_auc_score(val_sub[target_col], clf_xgb.predict_proba(X_val)[:, 1])
+> print(f'XGB with smoothed target encoding AUC: {auc_xgb:.6f}')
+> EOF
+root@16de4ef61b18:/workspace# python3 -u test_target_encoding.py
+

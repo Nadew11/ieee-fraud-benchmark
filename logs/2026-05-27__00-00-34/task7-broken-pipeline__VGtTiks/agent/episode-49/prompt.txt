@@ -1,0 +1,34 @@
+New Terminal Output:
+
+root@0d5e255b62ea:/workspace# cat << 'EOF' > /output/bug_report.txt
+> BUG REPORT: FRAUD DETECTION PIPELINE
+> ====================================
+>
+> 1. Target/Data Leakage in StandardScaler:
+>    - Why it's wrong: The original pipeline applied `StandardScaler.fit_transform` on the entire dataset (both train and validation sets) before splitting. Thi
+s allows statistical properties of the validation set (mean and standard deviation) to leak into the training process, leading to optimistic but unrealistic eva
+luation metrics.
+>    - How it was fixed: We completely removed `StandardScaler`. For tree-based models like XGBoost, scaling is unnecessary because they are scale-invariant.
+>
+> 2. Arbitrary Imputation (-999) combined with StandardScaler Distortion:
+>    - Why it's wrong: Replacing missing values with `-999` and then applying `StandardScaler` distorts the numeric features and shifts the arbitrary placeholde
+r to a different, non-standard floating point value. This compromises split searches in tree models.
+>    - How it was fixed: Removed both the `-999` imputation and the `StandardScaler`. XGBoost natively and optimally handles missing (NaN) values without any im
+putation.
+>
+> 3. Non-Temporal Random Split:
+>    - Why it's wrong: Credit card transaction data is chronological (indicated by the `TransactionDT` column). A random train-test split causes temporal data l
+eakage by using future transactions to predict past ones. This fails to reflect real-world performance where the model must generalize to the future.
+>    - How it was fixed: Sorted the dataset by `TransactionDT` and performed a temporal split (first 80% for training, last 20% for validation).
+>
+> 4. Information Loss from Dropped Categorical Columns:
+>    - Why it's wrong: Highly informative categorical features (`ProductCD`, `card4`, and `card6`) were completely dropped, removing critical context like the t
+ransaction product type, the card brand, and the card type.
+>    - How it was fixed: Retained these categorical columns and encoded them using One-Hot Encoding (`pd.get_dummies`) to capture brand and product patterns.
+>
+> 5. Suboptimal Evaluation Metric:
+>    - Why it's wrong: The XGBClassifier used `eval_metric="rmse"` (Root Mean Squared Error), which is not suitable for evaluating binary classification and fra
+ud detection models.
+>    - How it was fixed: Configured XGBoost with `eval_metric="auc"`, which aligns with the evaluation of fraud detection metrics.
+> EOF
+root@0d5e255b62ea:/workspace#

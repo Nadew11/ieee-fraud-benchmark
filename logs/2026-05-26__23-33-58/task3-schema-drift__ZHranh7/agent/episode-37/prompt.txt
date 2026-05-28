@@ -1,0 +1,10 @@
+New Terminal Output:
+
+Step 1: Added id_31, Validation AUC = 0.552786
+Step 2: Added id_34, Validation AUC = 0.583213
+Step 3: Added id_37, Validation AUC = 0.615928
+No improvement, stopping.
+Final feature subset: ['id_31', 'id_34', 'id_37']
+Final best validation AUC: 0.6159282141806414
+root@16de4ef61b18:/workspace#
+root@16de4ef61b18:/workspace#

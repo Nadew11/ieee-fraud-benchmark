@@ -1,0 +1,30 @@
+New Terminal Output:
+
+root@474ebd5bd0a4:/workspace# python3 -c "
+> import pandas as pd
+> df = pd.read_csv('/data/transactions.csv')
+> dups = df[df['TransactionID'].duplicated(keep=False)].sort_values('TransactionID')
+> print(dups[['TransactionID', 'isFraud', 'TransactionAmt', 'transaction_date', 'currency', 'country_code', 'settlement_status', 'transaction_type']].head(20))
+> "
+      TransactionID  isFraud  TransactionAmt transaction_date currency country_code settlement_status transaction_type
+147         2993201        0         161.610       2023-10-07      USD           FR           settled         purchase
+1291        2993201        0         160.500       2023-10-07      USD           FR           settled         purchase
+1546        2995937        0         111.070       2023-11-23      USD           KE           settled         purchase
+7272        2995937        0         108.950       2023-11-23      USD           KE           settled         purchase
+429         2996941        0          60.903       2023-11-08      USD           US           settled         purchase
+1554        2996941        0          62.820       2023-11-08      USD           US           settled         purchase
+1937        3001847        0         153.420       2023-12-16      USD           GB           settled         purchase
+4172        3001847        0         159.950       2023-12-16      USD           GB           settled         purchase
+2617        3002525        0         100.000       2023-12-16      ETB           DE           settled         purchase
+7654        3002525        0         102.160       2023-12-16      ETB           DE           settled         purchase
+199         3002625        0          50.000       2023-10-10      EUR           CA           settled         purchase
+1137        3002625        0          49.280       2023-10-10      EUR           CA           settled         purchase
+1415        3003505        0          40.000       2023-10-01      EUR           JP          declined         purchase
+5061        3003505        0          39.720       2023-10-01      EUR           JP          declined         purchase
+6796        3004648        1          39.400       2023-10-15      ETB           US           settled         purchase
+929         3004648        1          38.669       2023-10-15      ETB           US           settled         purchase
+948         3004960        0          38.460       2023-12-23      EUR           NG           settled         purchase
+3849        3004960        0          38.427       2023-12-23      EUR           NG           settled         purchase
+3801        3005143        0         108.950       2023-11-10      GBP           US           settled         purchase
+7981        3005143        0         106.700       2023-11-10      GBP           US           settled         purchase
+root@474ebd5bd0a4:/workspace#

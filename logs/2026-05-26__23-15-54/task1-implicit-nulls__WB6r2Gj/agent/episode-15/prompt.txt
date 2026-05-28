@@ -1,0 +1,9 @@
+New Terminal Output:
+
+root@cc7b6f7834c9:/workspace# ls -la /setup
+total 2176
+drwxr-xr-x 1 root root    4096 May 27 03:20 .
+drwxr-xr-x 1 root root    4096 May 27 04:17 ..
+-rw-rw-rw- 1 root root    2667 May 26 19:22 generate_data.py
+-rw-rw-rw- 1 root root 2215174 May 26 19:21 source_identity.csv
+root@cc7b6f7834c9:/workspace#

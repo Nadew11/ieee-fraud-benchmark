@@ -1,0 +1,20 @@
+New Terminal Output:
+
+root@27e59b3c4e79:/workspace# python3 inspect_details.py
+Train TransactionID unique: True
+Test TransactionID unique: True
+Train target distribution: isFraud
+0    7726
+1     274
+Name: count, dtype: int64
+Train columns with >50% nulls: 12
+Test columns with >50% nulls: 13
+   TransactionID  id_01     id_02  id_03  id_04  id_05  id_06  id_07  ...           id_34  id_35  id_36  id_37 id_38  DeviceType              DeviceInfo isFraud
+0        3056518  -15.0       NaN    NaN    NaN    NaN    NaN    NaN  ...             NaN    NaN    NaN    NaN   NaN         NaN                     NaN       0
+1        3477006   -5.0  362487.0    0.0    0.0    0.0    0.0    NaN  ...             NaN      F      F      T     F      mobile                     NaN       0
+2        3424043   -5.0  200785.0    0.0    0.0    0.0    0.0    NaN  ...             NaN      F      T      T     F     desktop             Trident/7.0       0
+3        3163577  -10.0  152340.0    0.0    0.0    0.0    0.0    NaN  ...             NaN      F      F      T     F      mobile  ONE A2003 Build/MMB29M       0
+4        3044921   -5.0   73250.0    0.0    0.0    0.0    0.0    NaN  ...  match_status:2      T      F      T     F     desktop                 rv:57.0       0
+
+[5 rows x 42 columns]
+root@27e59b3c4e79:/workspace#

@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 97 (char 98) | Content preview: '{\n  "analysis": "Wait, the AUC on numeric features is extremely low, barely around 0.50-0.53. Why?\nA'...
+
+Please fix these issues and provide a proper JSON response.

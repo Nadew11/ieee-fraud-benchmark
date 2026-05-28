@@ -1,0 +1,10 @@
+{
+  "analysis": "Ah! `identity.csv` has duplicate `TransactionID` entries! There are 2953 rows but only 2461 unique transaction IDs. Let's see how those duplicate entries look in `identity.csv`.",
+  "plan": "Check a few duplicate TransactionIDs in identity.csv to see why they are duplicated and how we should handle them (e.g. are they identical rows, or do they have different DeviceType or DeviceInfo?).",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; ident=pd.read_csv('/data/identity.csv'); dups = ident[ident.duplicated(subset=['TransactionID'], keep=False)]; print(dups.sort_values('TransactionID').head(10))\"\n",
+      "duration": 1.0
+    }
+  ]
+}

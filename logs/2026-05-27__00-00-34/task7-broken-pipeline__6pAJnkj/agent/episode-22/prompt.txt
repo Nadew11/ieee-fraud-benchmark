@@ -1,0 +1,46 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/train_transaction.csv'); print(df.head(20).to_string())"
+    TransactionID  isFraud  TransactionDT  TransactionAmt  card1  card2  addr1   dist1   C1   C2   C3   C4   C5    C6        V1        V2        V3        V4
+     V5 ProductCD             card4   card6
+0         2987000        0        6248836           24.12   4784  121.0  238.0  1265.0  1.0  0.0  1.0  1.0  2.0   7.0  0.670156  1.471590       NaN  1.167535
+    NaN         W        mastercard  credit
+1         2987001        0        7852508           33.68   7561  367.0  333.0   391.0  9.0  2.0  0.0  3.0  0.0   0.0  0.340408       NaN       NaN       NaN
+    NaN         H        mastercard  credit
+2         2987002        0       12705296           83.69  10142    NaN  247.0  1260.0  1.0  0.0  1.0  6.0  0.0   2.0       NaN  0.211914       NaN  1.569764  1
+.153218         W              visa  credit
+3         2987003        0        6629219           53.57   5156  233.0  363.0  2260.0  2.0  4.0  1.0  7.0  0.0   1.0       NaN  0.870313       NaN       NaN  0
+.057260         W        mastercard   debit
+4         2987004        0        6543222           37.27  14798  304.0    NaN   616.0  3.0  1.0  1.0  0.0  2.0  10.0  1.266538  0.448515       NaN       NaN  0
+.258928         W  american express   debit
+5         2987005        0       10914895           26.51   3885  122.0  274.0     NaN  5.0  2.0  1.0  NaN  2.0   5.0       NaN       NaN       NaN       NaN  1
+.078233         C          discover  credit
+6         2987006        0        4123437           24.27  12330  298.0  339.0     NaN  4.0  5.0  1.0  0.0  2.0   2.0  1.614686       NaN       NaN  1.699675  0
+.899975         C              visa   debit
+7         2987007        0        9946082           49.14   3348  351.0  418.0  3208.0  7.0  0.0  1.0  0.0  0.0   8.0       NaN  0.427116  0.965122       NaN  0
+.816836         W          discover  credit
+8         2987008        0        6134434          276.07  10058  185.0  137.0     NaN  8.0  0.0  1.0  7.0  3.0   6.0       NaN       NaN       NaN       NaN
+    NaN         H              visa   debit
+9         2987009        0        7587990           85.85   2477    NaN  372.0  2457.0  3.0  4.0  0.0  7.0  NaN  14.0  1.492061  1.626939       NaN       NaN  1
+.887443         R              visa   debit
+10        2987010        0       12262131           18.80   8074  490.0  380.0  1844.0  5.0  3.0  1.0  6.0  1.0   6.0       NaN       NaN  1.323127       NaN  1
+.949106         H              visa  credit
+11        2987011        0         829867           96.14   8422  344.0  363.0  3098.0  NaN  3.0  1.0  3.0  2.0   6.0  0.749221       NaN       NaN       NaN  0
+.473576         W  american express  credit
+12        2987012        0       10333083           29.75   1316  213.0  190.0  2203.0  9.0  5.0  NaN  0.0  NaN  14.0       NaN  1.845245  1.007925       NaN  0
+.267611         W          discover   debit
+13        2987013        0        4246162           54.39   3468  323.0  268.0     NaN  2.0  3.0  1.0  3.0  1.0  14.0       NaN  0.671881       NaN       NaN  0
+.475418         W          discover   debit
+14        2987014        0         231887           34.09   7074  384.0  387.0     NaN  0.0  3.0  NaN  7.0  3.0   9.0  0.951681  1.807535       NaN       NaN
+    NaN         W  american express   debit
+15        2987015        0        5032258          275.39  10234  316.0  416.0   336.0  4.0  2.0  NaN  2.0  2.0  11.0  1.412558  1.248990       NaN       NaN  1
+.927934         W          discover   debit
+16        2987016        0       12333342           22.04   4906  272.0  231.0     NaN  9.0  5.0  0.0  0.0  0.0  14.0       NaN       NaN  1.474257  1.098358  1
+.522704         W  american express  credit
+17        2987017        0       11604626           70.17   9727  261.0  350.0  2525.0  NaN  3.0  0.0  1.0  1.0   1.0  1.139852       NaN       NaN  1.393303  0
+.800932         W          discover  credit
+18        2987018        0        4125808           31.56   4557  345.0  439.0  2902.0  1.0  1.0  0.0  5.0  2.0   9.0  0.000088  0.110109  1.978054  1.083821
+    NaN         W              visa  credit
+19        2987019        0        6317915           98.60   2449  407.0  436.0     NaN  3.0  2.0  1.0  7.0  1.0  10.0       NaN       NaN  0.314913       NaN  0
+.366274         C        mastercard  credit
+root@e9645eb65f5b:/workspace#

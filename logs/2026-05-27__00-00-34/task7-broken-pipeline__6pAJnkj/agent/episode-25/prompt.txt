@@ -1,0 +1,7 @@
+New Terminal Output:
+
+root@e9645eb65f5b:/workspace# ls -la /workspace
+total 8
+drwxr-xr-x 2 root root 4096 May 26 02:54 .
+drwxr-xr-x 1 root root 4096 May 27 05:01 ..
+root@e9645eb65f5b:/workspace#

@@ -1,0 +1,7 @@
+New Terminal Output:
+
+lr=0.03, max_iter=150, max_leaf_nodes=63 -> AUC=0.890209
+lr=0.03, max_iter=200, max_leaf_nodes=31 -> AUC=0.900428
+lr=0.03, max_iter=200, max_leaf_nodes=63 -> AUC=0.890209
+lr=0.05, max_iter=100, max_leaf_nodes=31 -> AUC=0.900803
+

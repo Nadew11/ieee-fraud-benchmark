@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 55 (char 56) | Content preview: '{\n  "analysis": "The parameter tuning output shows that:\n- depth=4, lr=0.05 with early stopping gave'...
+
+Please fix these issues and provide a proper JSON response.

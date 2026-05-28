@@ -1,0 +1,10 @@
+{
+  "analysis": "In /setup/source_identity.csv, NaNs are written as empty fields. Let's understand how sentinel_empty_count would be calculated on /output/cleaned.csv. In pandas, when we do df.to_csv, both original NaN values and injected empty strings are written exactly as empty fields. Let's run a python snippet to test how pandas reads id_15 with keep_default_na=False from train_identity.csv.",
+  "plan": "I will run a python script to see if pandas `to_csv` writes `NaN` and `\"\"` identically in `/data/train_identity.csv`.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd; df = pd.read_csv('/data/train_identity.csv', keep_default_na=False); print(df['id_15'].unique())\"\n",
+      "duration": 5.0
+    }
+  ]
+}

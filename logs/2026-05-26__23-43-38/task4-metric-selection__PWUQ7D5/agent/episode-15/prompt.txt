@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid \escape: line 6 column 3334 (char 10559) | Content preview: '{\n  "analysis": "This is a key revelation!\\nIf we filter rows strictly to before May 1, 2026, we get'...
+
+Please fix these issues and provide a proper JSON response.

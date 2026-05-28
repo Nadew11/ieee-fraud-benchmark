@@ -1,0 +1,130 @@
+New Terminal Output:
+
+  HGB -> Train AUC: 0.6031, Val AUC: 0.4551
+N=5 (id_05, id_37, id_02, id_32, id_20):
+  LR  -> Train AUC: 0.5433, Val AUC: 0.5034
+  HGB -> Train AUC: 0.6366, Val AUC: 0.4885
+N=6 (id_05, id_37, id_02, id_32, id_20, id_16):
+  LR  -> Train AUC: 0.5399, Val AUC: 0.4911
+  HGB -> Train AUC: 0.6372, Val AUC: 0.4887
+N=7 (id_05, id_37, id_02, id_32, id_20, id_16, DeviceType):
+  LR  -> Train AUC: 0.5445, Val AUC: 0.5116
+  HGB -> Train AUC: 0.6387, Val AUC: 0.4898
+N=8 (id_05, id_37, id_02, id_32, id_20, id_16, DeviceType, id_23):
+  LR  -> Train AUC: 0.5506, Val AUC: 0.5338
+  HGB -> Train AUC: 0.6387, Val AUC: 0.4898
+N=9 (id_05, id_37, id_02, id_32, id_20, id_16, DeviceType, id_23, id_27):
+  LR  -> Train AUC: 0.5517, Val AUC: 0.5336
+  HGB -> Train AUC: 0.6387, Val AUC: 0.4898
+cat << 'EOF' > cross_val.py
+import pandas as pd
+import numpy as np
+from sklearn.model_selection import StratifiedKFold
+from sklearn.metrics import roc_auc_score
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.pipeline import make_pipeline
+from sklearn.impute import SimpleImputer
+
+train = pd.read_csv('/data/train_identity.csv')
+y = train['isFraud']
+X = train.drop(columns=['isFraud', 'TransactionID'])
+
+# Let's map categorical to codes
+cat_cols = [c for c in X.columns if X[c].dtype == 'O' or X[c].dtype == 'object']
+for col in cat_cols:
+    X[col] = X[col].astype('category').cat.codes
+
+def eval_features(features, C_val):
+    skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    val_aucs = []
+    for tr_idx, val_idx in skf.split(X, y):
+        X_tr, X_val = X.iloc[tr_idx][features], X.iloc[val_idx][features]
+        y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
+
+        pipe = make_pipeline(SimpleImputer(strategy='median'), StandardScaler(), LogisticRegression(C=C_val, random_state=42))
+        pipe.fit(X_tr, y_tr)
+        pred = pipe.predict_proba(X_val)[:, 1]
+        val_aucs.append(roc_auc_score(y_val, pred))
+    return np.mean(val_aucs), np.std(val_aucs)
+
+candidates = [
+    ['id_05'],
+    ['id_37'],
+    ['id_05', 'id_37'],
+    ['id_05', 'id_37', 'id_02'],
+    ['id_05', 'id_37', 'id_20'],
+    ['id_05', 'id_37', 'DeviceType'],
+    ['id_05', 'id_37', 'id_32'],
+    ['id_05', 'id_37', 'id_16'],
+    ['id_05', 'id_37', 'id_32', 'id_16'],
+    ['id_05', 'id_37', 'id_32', 'id_16', 'DeviceType'],
+]
+
+for c in [0.001, 0.01, 0.1, 1.0, 10.0]:
+    print(f"--- C = {c} ---")
+    for cand in candidates:
+        mean_auc, std_auc = eval_features(cand, c)
+        print(f"Features {cand}: CV AUC = {mean_auc:.4f} +/- {std_auc:.4f}")
+
+EOF
+python3 cross_val.py
+N=10 (id_05, id_37, id_02, id_32, id_20, id_16, DeviceType, id_23, id_27, id_15):
+  LR  -> Train AUC: 0.5518, Val AUC: 0.5332
+  HGB -> Train AUC: 0.6387, Val AUC: 0.4898
+root@8b9ff8325d75:/workspace# cat << 'EOF' > cross_val.py
+> import pandas as pd
+> import numpy as np
+> from sklearn.model_selection import StratifiedKFold
+> from sklearn.metrics import roc_auc_score
+> from sklearn.preprocessing import StandardScaler
+> from sklearn.linear_model import LogisticRegression
+> from sklearn.pipeline import make_pipeline
+> from sklearn.impute import SimpleImputer
+>
+> train = pd.read_csv('/data/train_identity.csv')
+> y = train['isFraud']
+> X = train.drop(columns=['isFraud', 'TransactionID'])
+>
+> # Let's map categorical to codes
+> cat_cols = [c for c in X.columns if X[c].dtype == 'O' or X[c].dtype == 'object']
+> for col in cat_cols:
+>     X[col] = X[col].astype('category').cat.codes
+>
+> def eval_features(features, C_val):
+>     skf = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+>     val_aucs = []
+>     for tr_idx, val_idx in skf.split(X, y):
+>         X_tr, X_val = X.iloc[tr_idx][features], X.iloc[val_idx][features]
+>         y_tr, y_val = y.iloc[tr_idx], y.iloc[val_idx]
+>
+>         pipe = make_pipeline(SimpleImputer(strategy='median'), StandardScaler(), LogisticRegression(C=C_val, random_state=42))
+>         pipe.fit(X_tr, y_tr)
+>         pred = pipe.predict_proba(X_val)[:, 1]
+>         val_aucs.append(roc_auc_score(y_val, pred))
+>     return np.mean(val_aucs), np.std(val_aucs)
+>
+> candidates = [
+>     ['id_05'],
+>     ['id_37'],
+>     ['id_05', 'id_37'],
+>     ['id_05', 'id_37', 'id_02'],
+>     ['id_05', 'id_37', 'id_20'],
+>     ['id_05', 'id_37', 'DeviceType'],
+>     ['id_05', 'id_37', 'id_32'],
+>     ['id_05', 'id_37', 'id_16'],
+>     ['id_05', 'id_37', 'id_32', 'id_16'],
+>     ['id_05', 'id_37', 'id_32', 'id_16', 'DeviceType'],
+> ]
+>
+> for c in [0.001, 0.01, 0.1, 1.0, 10.0]:
+>     print(f"--- C = {c} ---")
+>     for cand in candidates:
+>         mean_auc, std_auc = eval_features(cand, c)
+>         print(f"Features {cand}: CV AUC = {mean_auc:.4f} +/- {std_auc:.4f}")
+>
+> EOF
+root@8b9ff8325d75:/workspace# python3 cross_val.py
+--- C = 0.001 ---
+Features ['id_05']: CV AUC = 0.5160 +/- 0.0250
+

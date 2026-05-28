@@ -1,0 +1,10 @@
+{
+  "analysis": "Wait, let's wait for HistGB and RF outputs to print.",
+  "plan": "Wait for command output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

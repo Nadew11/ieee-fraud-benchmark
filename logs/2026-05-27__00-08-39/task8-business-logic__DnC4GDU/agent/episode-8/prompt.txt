@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# python3 -c "import pandas as pd; df = pd.read_csv('/data/transactions.csv'); df_settled = df[df['settlement_status'] != 'declined'
+]; print(df_settled.groupby(['transaction_type', 'isFraud']).size())"
+

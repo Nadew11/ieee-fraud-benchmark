@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 56 (char 57) | Content preview: '{\n  "analysis": "The training run completed successfully!\nLet\'s see the metrics:\n- Train AUC: 0.9678'...
+
+Please fix these issues and provide a proper JSON response.

@@ -1,0 +1,20 @@
+[
+  {
+    "source": "/logs/artifacts",
+    "destination": "artifacts",
+    "type": "directory",
+    "status": "empty"
+  },
+  {
+    "source": "/output/fraud_by_device.csv",
+    "destination": "artifacts/fraud_by_device.csv",
+    "type": "file",
+    "status": "ok"
+  },
+  {
+    "source": "/output/total_fraud.txt",
+    "destination": "artifacts/total_fraud.txt",
+    "type": "file",
+    "status": "ok"
+  }
+]

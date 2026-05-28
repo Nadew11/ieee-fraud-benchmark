@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 262 (char 263) | Content preview: '{\n  "analysis": "Ah! So many columns have missing values, e.g., `card2` (238 missing), `dist1` (8817'...
+
+Please fix these issues and provide a proper JSON response.

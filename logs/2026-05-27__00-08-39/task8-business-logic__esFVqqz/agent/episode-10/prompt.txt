@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# python3 -c "import pandas as pd; df=pd.read_csv('/data/transactions.csv'); print(df.currency.unique())"
+['USD' 'NGN' 'EUR' 'GBP' 'ETB']
+root@b9e5a18b679d:/workspace#

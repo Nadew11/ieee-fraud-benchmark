@@ -1,0 +1,17 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# cat << 'EOF' > check_types.py
+> import pandas as pd
+> train = pd.read_csv('/data/train_identity.csv')
+> test = pd.read_csv('/data/test_identity.csv')
+> test = test.rename(columns=lambda x: x.replace('-', '_'))
+>
+> for col in test.columns:
+>     if col == 'isFraud': continue
+>     tr_dt = train[col].dtype
+>     te_dt = test[col].dtype
+>     if tr_dt != te_dt:
+>         print(f"Type mismatch in {col}: train={tr_dt}, test={te_dt}")
+> EOF
+root@8b9ff8325d75:/workspace# python3 check_types.py
+

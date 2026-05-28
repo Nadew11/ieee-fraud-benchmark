@@ -1,0 +1,10 @@
+{
+  "analysis": "I need to ensure no raw control characters are present. I will run a script to test random split with some fixes (no scaling, native NaN handling, categorical encoding).",
+  "plan": "Run a python script to test XGBoost performance with label encoded categories, no scaling, and native NaN handling under a random split.",
+  "commands": [
+    {
+      "keystrokes": "python3 -c \"import pandas as pd, numpy as np, xgboost as xgb; from sklearn.metrics import roc_auc_score; from sklearn.preprocessing import LabelEncoder; from sklearn.model_selection import train_test_split; df = pd.read_csv('/data/train_transaction.csv'); [df.__setitem__(col, LabelEncoder().fit_transform(df[col].astype(str))) for col in ['ProductCD', 'card4', 'card6']]; features = [c for c in df.columns if c not in ['TransactionID', 'isFraud']]; X = df[features].values; y = df['isFraud'].values; X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42); model = xgb.XGBClassifier(objective='binary:logistic', eval_metric='auc', n_estimators=300, max_depth=6, learning_rate=0.05, subsample=0.8, colsample_bytree=0.8, random_state=42); model.fit(X_train, y_train); print('Random split AUC:', roc_auc_score(y_val, model.predict_proba(X_val)[:, 1]))\"\n",
+      "duration": 5.0
+    }
+  ]
+}

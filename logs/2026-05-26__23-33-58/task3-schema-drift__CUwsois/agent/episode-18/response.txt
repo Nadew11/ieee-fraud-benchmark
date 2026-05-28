@@ -1,0 +1,10 @@
+{
+  "analysis": "Let's wait for `test_robust_models.py` to finish executing.",
+  "plan": "Wait for command output.",
+  "commands": [
+    {
+      "keystrokes": "",
+      "duration": 2.0
+    }
+  ]
+}

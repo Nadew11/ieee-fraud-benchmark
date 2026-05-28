@@ -1,0 +1,41 @@
+New Terminal Output:
+root@9da0ecea1a80:/workspace# ls -la /data
+total 1392
+drwxr-xr-x 1 root root    4096 May 27 03:30 .
+drwxr-xr-x 1 root root    4096 May 27 04:52 ..
+-rw-rw-rw- 1 root root 1417085 May 26 21:27 transactions.csv
+root@9da0ecea1a80:/workspace# head -n 5 /data/transactions.csv
+TransactionID,TransactionDT,isFraud,TransactionAmt,card1,ProductCD,addr1,C1,C2
+2987000,86413,0,127.9,6734,C,139.0,10.0,6.0
+2987001,86607,0,96.23,3337,C,143.0,10.0,5.0
+2987002,87074,0,60.98,1322,W,399.0,3.0,4.0
+2987003,88364,0,66.88,10576,S,430.0,5.0,2.0
+root@9da0ecea1a80:/workspace# wc -l /data/transactions.csv
+30001 /data/transactions.csv
+root@9da0ecea1a80:/workspace# python3 -c "import pandas, sklearn, lightgbm, xgboost; print('Libraries available')"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

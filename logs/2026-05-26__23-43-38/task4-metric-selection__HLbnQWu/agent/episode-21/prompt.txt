@@ -1,0 +1,55 @@
+New Terminal Output:
+
+root@831ed0f33a44:/workspace# head -n 20 /output/audit_findings.txt
+AUDIT FINDINGS: FRAUD MODEL EVALUATION DRAFT REPORT
+==================================================
+Audited by: Senior AI Consultant / Lead Fraud Analyst
+Date: May 27, 2026
+Subject: Technical and Operational Audit of Draft Evaluation Report by Alex Chen (Junior Analyst)
+
+This document contains detailed findings from our technical audit of the draft fraud model evaluation report. The audit revealed multiple critical errors, misle
+ading claims, and major analytical gaps. Deploying the model under the draft's assumptions would have overwhelmed Fraud Operations and led to sub-optimal financ
+ial results.
+
+Below are the 6 primary findings, including explanations of what is wrong, why it matters, and the corrected interpretations.
+
+--------------------------------------------------------------------------------
+FINDING 1: Data Pipeline Failure (Out-of-Period Data and Duplicate Leakage)
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  "The XGBoost fraud detection model was evaluated against 5,650 held-out transactions."
+* What is Wrong:
+  The evaluation dataset export was not pre-processed or filtered. It contains 585 records from May (May 1 to May 11, 2026) which fall outside the designated sc
+oring period of January 15 - April 30, 2026 specified in dataset_info.txt.
+  Crucially, 500 of these 585 records are exact duplicates (by TransactionID) of transactions already present within the correct scoring period. The analyst fai
+led to perform basic deduplication and date filtering.
+* Why it Matters:
+  Including duplicate and out-of-period records inflates the evaluation dataset size by 11.5% and distorts all performance metrics. When properly cleaned, the t
+rue holdout dataset contains exactly 5,065 unique transactions and 0 duplicates.
+root@831ed0f33a44:/workspace# tail -n 20 /output/audit_findings.txt
+* What is Wrong:
+  At a threshold of 0.5, the model flags 698 of 5,065 holdout transactions (13.78%). Extrapolated to our quarterly production volume of 2,800,000 transactions,
+this would generate 385,864 alerts per quarter, which translates to 4,287 alerts per day (assuming 90 days per quarter).
+  However, the Fraud Operations team has a strict daily review capacity of only 1,500 alerts per day (12 analysts, 8-hour shifts). The draft recommendation comp
+letely ignores this operational reality.
+* Why it Matters:
+  Deploying the model at threshold 0.5 would generate 4,287 daily alerts, exceeding our team's capacity by 2.85x. This would overwhelm the operations team, caus
+e massive backlogs, lead to severe analyst burnout, and leave thousands of fraud alerts unreviewed, creating a critical security gap.
+
+--------------------------------------------------------------------------------
+FINDING 6: Absence of Financial Modeling and Threshold Optimization
+--------------------------------------------------------------------------------
+* Claim in Draft:
+  "No further tuning is required. ... recommended for production deployment."
+* What is Wrong:
+  The analyst failed to conduct any cost-benefit analysis or threshold optimization using the cost parameters provided by Finance ($4,200 loss per undetected fr
+aud, $35 cost per manual investigation).
+  They did not realize that threshold 0.5 is not only operationally impossible, but also financially sub-optimal.
+* Why it Matters:
+  Tuning the threshold is necessary to balance investigation costs and undetected fraud losses.
+  - At threshold 0.5, the projected quarterly cost is $127.27M ($13.51M investigation + $113.77M fraud loss).
+  - While an unconstrained cost-minimizing threshold exists at 0.29 (cost of $63.60M), it is operationally impossible as it generates 14,293 alerts/day.
+  - By performing a constrained optimization, we can find a threshold that satisfies the daily review capacity of 1,500 alerts while minimizing cost. This occur
+s at t = 0.644, generating 1,480.3 alerts/day and minimizing the quarterly cost to $192.73M ($4.66M investigation + $188.07M fraud loss).
+  This represents a net quarterly savings of $255.38M compared to doing nothing (baseline cost of $448.11M), while remaining fully within operational capacity.
+root@831ed0f33a44:/workspace#

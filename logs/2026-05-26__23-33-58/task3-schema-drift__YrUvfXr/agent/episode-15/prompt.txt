@@ -1,0 +1,5 @@
+New Terminal Output:
+
+root@8b9ff8325d75:/workspace# python3 -c "import sklearn; print(sklearn.__version__)"
+1.4.0
+root@8b9ff8325d75:/workspace#

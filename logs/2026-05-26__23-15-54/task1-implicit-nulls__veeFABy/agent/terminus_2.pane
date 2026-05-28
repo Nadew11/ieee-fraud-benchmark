@@ -1,0 +1,569 @@
+[?2004hroot@803b650a44b8:/workspace# asciinema rec --stdin /logs/agent/recording.cast
+[?2004l[0;32masciinema: recording asciicast to /logs/agent/recording.cast[0m
+[0;32masciinema: press <ctrl-d> or type "exit" when you're done[0m
+[?2004hroot@803b650a44b8:/workspace# clear
+[?2004l[H[J[3J[?2004hroot@803b650a44b8:/workspace# ls -l /data
+[?2004ltotal 1908
+-rw-r--r-- 1 root root 1950924 May 27 03:20 train_identity.csv
+[?2004hroot@803b650a44b8:/workspace# mkdir -p /output
+[?2004l[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv", nrows=5); print(df.head()); print(df.info())'
+[?2004l   TransactionID  id_01     id_02  id_03  id_04  id_05  id_06  id_07  id_08  ...  id_32      id_33           id_34 id_35  id_36  id_37 id_38 DeviceType  DeviceInfo
+0      3082972.0   -5.0  119617.0    0.0    0.0    0.0    0.0    NaN    NaN  ...    NaN        NaN             NaN     F      F      T     T    desktop         NaN
+1      3488422.0   -5.0   35555.0    0.0    0.0    0.0    0.0    NaN    NaN  ...   24.0  1919x1079  match_status:2     T      F      T     T    desktop     Windows
+2      3276554.0   -5.0   69490.0    0.0    0.0    1.0   -4.0    NaN    NaN  ...   24.0  1920x1080  match_status:2     T      F      T     F    desktop     Windows
+3      3070458.0  -15.0       NaN    NaN    NaN    NaN    NaN    NaN    NaN  ...    NaN        NaN             NaN   NaN    NaN    NaN   NaN        NaN         NaN
+4      3107819.0    0.0   35376.0    0.0    0.0    6.0    0.0    NaN    NaN  ...   32.0   1280x720  match_status:2     T      F      T     T     mobile         NaN
+
+[5 rows x 41 columns]
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 5 entries, 0 to 4
+Data columns (total 41 columns):
+ #   Column         Non-Null Count  Dtype  
+---  ------         --------------  -----  
+ 0   TransactionID  5 non-null      float64
+ 1   id_01          5 non-null      float64
+ 2   id_02          4 non-null      float64
+ 3   id_03          4 non-null      float64
+ 4   id_04          4 non-null      float64
+ 5   id_05          4 non-null      float64
+ 6   id_06          4 non-null      float64
+ 7   id_07          0 non-null      float64
+ 8   id_08          0 non-null      float64
+ 9   id_09          4 non-null      float64
+ 10  id_10          4 non-null      float64
+ 11  id_11          4 non-null      float64
+ 12  id_12          5 non-null      object 
+ 13  id_13          4 non-null      float64
+ 14  id_14          3 non-null      float64
+ 15  id_15          4 non-null      object 
+ 16  id_16          4 non-null      object 
+ 17  id_17          4 non-null      float64
+ 18  id_18          2 non-null      float64
+ 19  id_19          4 non-null      float64
+ 20  id_20          4 non-null      float64
+ 21  id_21          0 non-null      float64
+ 22  id_22          0 non-null      float64
+ 23  id_23          0 non-null      float64
+ 24  id_24          0 non-null      float64
+ 25  id_25          0 non-null      float64
+ 26  id_26          0 non-null      float64
+ 27  id_27          0 non-null      float64
+ 28  id_28          4 non-null      object 
+ 29  id_29          4 non-null      object 
+ 30  id_30          3 non-null      object 
+ 31  id_31          4 non-null      object 
+ 32  id_32          3 non-null      float64
+ 33  id_33          3 non-null      object 
+ 34  id_34          3 non-null      object 
+ 35  id_35          4 non-null      object 
+ 36  id_36          4 non-null      object 
+ 37  id_37          4 non-null      object 
+ 38  id_38          4 non-null      object 
+ 39  DeviceType     4 non-null      object 
+ 40  DeviceInfo     2 non-null      object 
+dtypes: float64(26), object(15)
+memory usage: 1.7+ KB
+None
+[?2004hroot@803b650a44b8:/workspace# cat << 'EOF' > analyze.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> df = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> print("Shape:", df.shape)
+[?2004l[?2004h> print("Number of duplicates based on TransactionID:", df.duplicated(subset=['TransactionID']).sum())
+[?2004l[?2004h> print("Are all TransactionID integers?", (df['TransactionID'] % 1 == 0).all())
+[?2004l[?2004h> missing = df.isnull().sum()
+[?2004l[?2004h> for col in df.columns:
+[?2004l[?2004h>     print(f"{col}: dtype={df[col].dtype}, nulls={missing[col]} ({missing[col]/len(df):.2%}), unique={df[col].nunique()}")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@803b650a44b8:/workspace# python3 analyze.py
+[?2004lShape: (10500, 41)
+Number of duplicates based on TransactionID: 500
+Are all TransactionID integers? True
+TransactionID: dtype=float64, nulls=0 (0.00%), unique=10000
+id_01: dtype=float64, nulls=0 (0.00%), unique=32
+id_02: dtype=float64, nulls=265 (2.52%), unique=10098
+id_03: dtype=float64, nulls=5608 (53.41%), unique=16
+id_04: dtype=float64, nulls=5608 (53.41%), unique=13
+id_05: dtype=float64, nulls=550 (5.24%), unique=71
+id_06: dtype=float64, nulls=550 (5.24%), unique=82
+id_07: dtype=float64, nulls=10150 (96.67%), unique=47
+id_08: dtype=float64, nulls=10150 (96.67%), unique=69
+id_09: dtype=float64, nulls=5001 (47.63%), unique=25
+id_10: dtype=float64, nulls=5001 (47.63%), unique=31
+id_11: dtype=float64, nulls=252 (2.40%), unique=123
+id_12: dtype=object, nulls=0 (0.00%), unique=2
+id_13: dtype=float64, nulls=1218 (11.60%), unique=32
+id_14: dtype=float64, nulls=4741 (45.15%), unique=18
+id_15: dtype=object, nulls=251 (2.39%), unique=3
+id_16: dtype=object, nulls=1101 (10.49%), unique=2
+id_17: dtype=float64, nulls=377 (3.59%), unique=54
+id_18: dtype=float64, nulls=7273 (69.27%), unique=10
+id_19: dtype=float64, nulls=378 (3.60%), unique=329
+id_20: dtype=float64, nulls=384 (3.66%), unique=179
+id_21: dtype=float64, nulls=10149 (96.66%), unique=94
+id_22: dtype=float64, nulls=10149 (96.66%), unique=8
+id_23: dtype=object, nulls=10149 (96.66%), unique=3
+id_24: dtype=float64, nulls=10183 (96.98%), unique=6
+id_25: dtype=float64, nulls=10151 (96.68%), unique=93
+id_26: dtype=float64, nulls=10150 (96.67%), unique=42
+id_27: dtype=object, nulls=10149 (96.66%), unique=2
+id_28: dtype=object, nulls=252 (2.40%), unique=2
+id_29: dtype=object, nulls=252 (2.40%), unique=2
+id_30: dtype=object, nulls=4950 (47.14%), unique=70
+id_31: dtype=object, nulls=323 (3.08%), unique=105
+id_32: dtype=float64, nulls=4949 (47.13%), unique=3
+id_33: dtype=object, nulls=5244 (49.94%), unique=96
+id_34: dtype=object, nulls=4894 (46.61%), unique=3
+id_35: dtype=object, nulls=251 (2.39%), unique=2
+id_36: dtype=object, nulls=251 (2.39%), unique=2
+id_37: dtype=object, nulls=251 (2.39%), unique=2
+id_38: dtype=object, nulls=251 (2.39%), unique=2
+DeviceType: dtype=object, nulls=272 (2.59%), unique=2
+DeviceInfo: dtype=object, nulls=1906 (18.15%), unique=676
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); print("Entire row duplicates:", df.duplicated().sum())'
+[?2004lEntire row duplicates: 17
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); dup_ids = df[df.duplicated(subset=["TransactionID"], keep=False)]["TransactionID"].unique()[:5]; print(df[df["TransactionID"].isin(dup_ids)].sort_values("TransactionID").head(10))'
+[?2004l       TransactionID  id_01          id_02  id_03  id_04  id_05  id_06  ...           id_34  id_35  id_36  id_37  id_38 DeviceType                     DeviceInfo
+64         3100991.0   -5.0   98682.000000    NaN    NaN    1.0    0.0  ...  match_status:1      T      F      T      F     mobile                     iOS Device
+10007      3100991.0   -5.0   98685.373824    NaN    NaN    1.0    0.0  ...  match_status:1      T      F      T      F     mobile                     iOS Device
+52         3155064.0   -5.0  150177.000000    0.0    0.0   -1.0  -11.0  ...             NaN      F      F      T      T    desktop                            NaN
+10315      3155064.0   -5.0  150180.973022    0.0    0.0   -1.0  -11.0  ...             NaN      F      F      T      T    desktop                            NaN
+138        3251454.0    0.0   61950.000000    0.0    0.0    0.0   -1.0  ...  match_status:1      T      F      T      T     mobile                     iOS Device
+10358      3251454.0    0.0   61948.790527    0.0    0.0    0.0   -1.0  ...  match_status:1      T      F      T      T     mobile                     iOS Device
+70         3485744.0  -25.0   61319.000000    0.0    0.0    1.0  -32.0  ...  match_status:2      T      F      T      F     mobile  SAMSUNG-SM-J327A Build/NRD90M
+10215      3485744.0  -25.0   61315.851793    0.0    0.0    1.0  -32.0  ...  match_status:2      T      F      T      F     mobile  SAMSUNG-SM-J327A Build/NRD90M
+97         3575086.0   -5.0  116381.000000    0.0    0.0    0.0    0.0  ...  match_status:2      T      F      F      F     mobile                     iOS Device
+10270      3575086.0   -5.0  116378.416389    0.0    0.0    0.0    0.0  ...  match_status:2      T      F      F      F     mobile                     iOS Device
+
+[10 rows x 41 columns]
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); print(df.iloc[10000:].head(10))'
+[?2004l       TransactionID  id_01          id_02  id_03  id_04  id_05  id_06  ...           id_34  id_35  id_36  id_37  id_38 DeviceType                 DeviceInfo
+10000      3521414.0  -20.0  312995.367057    NaN    NaN   -7.0  -29.0  ...             NaN      F      F      F      F     mobile                        NaN
+10001      3382929.0   -5.0  159409.864029    0.0    0.0    9.0  -12.0  ...  match_status:1      T      F      T      F     mobile                 iOS Device
+10002      3048867.0   -5.0  954835.210572    NaN    NaN    0.0    0.0  ...  match_status:2      T      F      F      F    desktop                      MacOS
+10003      3049537.0    0.0   43547.036329    0.0    0.0    1.0    0.0  ...  match_status:1      T      F      T      T     mobile                 iOS Device
+10004      3523900.0   -5.0   65854.202751    NaN    NaN    0.0    0.0  ...  match_status:2      T      F      F      T     mobile                 iOS Device
+10005      3026070.0  -20.0  252177.998704    NaN    NaN   -3.0  -24.0  ...             NaN      F      F      F      T     mobile       LG-H870 Build/NRD90U
+10006      3514831.0  -10.0  320567.144507    0.0    0.0    0.0    0.0  ...             NaN      F      F      T      F     mobile  Redmi 5 Plus Build/N2G47H
+10007      3100991.0   -5.0   98685.373824    NaN    NaN    1.0    0.0  ...  match_status:1      T      F      T      F     mobile                 iOS Device
+10008      3372659.0   -5.0  267249.941416    NaN    NaN    0.0    0.0  ...             NaN      F      F      T      F    desktop                        NaN
+10009      3075771.0  -20.0   63184.158567    NaN    NaN    0.0    0.0  ...             NaN      F      F      F      T     mobile                        NaN
+
+[10 rows x 41 columns]
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); ids_first = set(df.iloc[:10000]["TransactionID"]); ids_second = set(df.iloc[10000:]["TransactionID"]); print("Intersection size:", len(ids_first.intersection(ids_second))); print("Is every second ID in first?", ids_second.issubset(ids_first))'
+[?2004lIntersection size: 500
+Is every second ID in first? True
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); row64 = df.iloc[64]; row10007 = df.iloc[10007]; diff = row64 != row10007; print(pd.concat([row64[diff], row10007[diff]], axis=1))'
+[?2004l         64            10007
+id_02  98682.0  98685.373824
+id_03      NaN           NaN
+id_04      NaN           NaN
+id_07      NaN           NaN
+id_08      NaN           NaN
+id_09      NaN           NaN
+id_10      NaN           NaN
+id_21      NaN           NaN
+id_22      NaN           NaN
+id_23      NaN           NaN
+id_24      NaN           NaN
+id_25      NaN           NaN
+id_26      NaN           NaN
+id_27      NaN           NaN
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); r1 = df.iloc[64]; r2 = df.iloc[10007]; print([(col, r1[col], r2[col]) for col in df.columns if not (pd.isna(r1[col]) and pd.isna(r2[col])) and r1[col] != r2[col]])'
+[?2004l[('id_02', 98682.0, 98685.37382362343)]
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); d = df[df.duplicated(subset=["TransactionID"], keep=False)].sort_values("TransactionID"); d1 = d.groupby("TransactionID").first(); d2 = d.groupby("TransactionID").last(); diffs = (d1 != d2) & ~d1.isna() & ~d2.isna(); print(diffs.any())'
+[?2004lid_01         False
+id_02          True
+id_03         False
+id_04         False
+id_05         False
+id_06         False
+id_07         False
+id_08         False
+id_09         False
+id_10         False
+id_11         False
+id_12         False
+id_13         False
+id_14         False
+id_15         False
+id_16         False
+id_17         False
+id_18         False
+id_19         False
+id_20         False
+id_21         False
+id_22         False
+id_23         False
+id_24         False
+id_25         False
+id_26         False
+id_27         False
+id_28         False
+id_29         False
+id_30         False
+id_31         False
+id_32         False
+id_33         False
+id_34         False
+id_35         False
+id_36         False
+id_37         False
+id_38         False
+DeviceType    False
+DeviceInfo    False
+dtype: bool
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); d = df[df.duplicated(subset=["TransactionID"], keep=False)].sort_values("TransactionID"); d1 = d.groupby("TransactionID").first(); d2 = d.groupby("TransactionID").last(); print((d1["id_02"] != d2["id_02"]).sum())'
+[?2004l500
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); d = df[df.duplicated(subset=["TransactionID"], keep=False)].sort_values("TransactionID"); d1 = d.groupby("TransactionID").first(); d2 = d.groupby("TransactionID").last(); diff = (d1["id_02"] != d2["id_02"]); print("Differing id_02:", diff.sum(), "out of", len(diff))'
+[?2004lDiffering id_02: 500 out of 500
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); d = df[df.duplicated(subset=["TransactionID"], keep=False)].sort_values("TransactionID"); print(d[["TransactionID", "id_02"]].head(10))'
+[?2004l       TransactionID          id_02
+10340      2987528.0  118375.124699
+7361       2987528.0  118380.000000
+3564       2987660.0  162818.000000
+10320      2987660.0  162813.505197
+10243      2987726.0   27357.012331
+4850       2987726.0   27362.000000
+10178      2988623.0  353812.343669
+1101       2988623.0  353816.000000
+6247       2989291.0   83638.000000
+10049      2989291.0   83637.337790
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv"); df_clean = df.drop_duplicates(subset=["TransactionID"], keep="first"); print("Clean shape:", df_clean.shape); print("Are indices identical to 0-9999?", (df_clean.index == range(10000)).all())'
+[?2004lClean shape: (10000, 41)
+Are indices identical to 0-9999? True
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; cat_cols = df.select_dtypes(include=["object"]).columns; print("Categorical columns:", list(cat_cols)); [print(col, df[col].unique()[:10]) for col in cat_cols]'
+[?2004lCategorical columns: ['id_12', 'id_15', 'id_16', 'id_23', 'id_27', 'id_28', 'id_29', 'id_30', 'id_31', 'id_33', 'id_34', 'id_35', 'id_36', 'id_37', 'id_38', 'DeviceType', 'DeviceInfo']
+id_12 ['NotFound' 'Found']
+id_15 ['Found' nan 'New' 'Unknown']
+id_16 ['Found' nan 'NotFound']
+id_23 [nan 'IP_PROXY:TRANSPARENT' 'IP_PROXY:HIDDEN' 'IP_PROXY:ANONYMOUS']
+id_27 [nan 'Found' 'NotFound']
+id_28 ['Found' nan 'New']
+id_29 ['Found' nan 'NotFound']
+id_30 [nan 'Windows 10' 'Android' 'iOS 11.1.2' 'iOS 11.2.1' 'Android 7.0'
+ 'Windows 7' 'iOS 11.2.6' 'iOS 11.3.0' 'iOS 11.2.2']
+id_31 ['chrome 63.0' 'edge 16.0' nan 'chrome 65.0' 'mobile safari 11.0'
+ 'chrome 64.0' 'chrome 62.0 for android' 'chrome 64.0 for android'
+ 'firefox' 'safari 9.0']
+id_33 [nan '1919x1079' '1920x1080' '1280x720' '1600x900' '2001x1125' '2208x1242'
+ '2436x1125' '1366x768' '1334x750']
+id_34 [nan 'match_status:2' 'match_status:1' 'match_status:0']
+id_35 ['F' 'T' nan]
+id_36 ['F' nan 'T']
+id_37 ['T' nan 'F']
+id_38 ['T' 'F' nan]
+DeviceType ['desktop' nan 'mobile']
+DeviceInfo [nan 'Windows' 'iOS Device' 'LG-X180g Build/LMY47I'
+ 'SM-A520F Build/NRD90M' 'rv:54.0' 'Trident/7.0'
+ 'SAMSUNG-SM-G930A Build/NRD90M' 'LG-H320 Build/LRX21Y'
+ '9008A Build/NRD90M']
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; missing = df.isnull().sum(); print(missing[missing > 0])'
+[?2004lid_02          248
+id_03         5320
+id_04         5320
+id_05          525
+id_06          525
+id_07         9659
+id_08         9659
+id_09         4756
+id_10         4756
+id_11          236
+id_13         1162
+id_14         4502
+id_15          235
+id_16         1034
+id_17          358
+id_18         6928
+id_19          359
+id_20          365
+id_21         9658
+id_22         9658
+id_23         9658
+id_24         9691
+id_25         9660
+id_26         9659
+id_27         9658
+id_28          236
+id_29          236
+id_30         4697
+id_31          302
+id_32         4696
+id_33         4974
+id_34         4644
+id_35          235
+id_36          235
+id_37          235
+id_38          235
+DeviceType     255
+DeviceInfo    1800
+dtype: int64
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; m = df.isnull().sum(); print("Total null columns:", (m > 0).sum()); print(m[m > 0])'
+[?2004lTotal null columns: 38
+id_02          248
+id_03         5320
+id_04         5320
+id_05          525
+id_06          525
+id_07         9659
+id_08         9659
+id_09         4756
+id_10         4756
+id_11          236
+id_13         1162
+id_14         4502
+id_15          235
+id_16         1034
+id_17          358
+id_18         6928
+id_19          359
+id_20          365
+id_21         9658
+id_22         9658
+id_23         9658
+id_24         9691
+id_25         9660
+id_26         9659
+id_27         9658
+id_28          236
+id_29          236
+id_30         4697
+id_31          302
+id_32         4696
+id_33         4974
+id_34         4644
+id_35          235
+id_36          235
+id_37          235
+id_38          235
+DeviceType     255
+DeviceInfo    1800
+dtype: int64
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; num_cols = df.select_dtypes(include=["number"]).columns; [print(col, "has floats:", (df[col].dropna() % 1 != 0).any()) for col in num_cols]'
+[?2004lTransactionID has floats: False
+id_01 has floats: False
+id_02 has floats: False
+id_03 has floats: False
+id_04 has floats: False
+id_05 has floats: False
+id_06 has floats: False
+id_07 has floats: False
+id_08 has floats: False
+id_09 has floats: False
+id_10 has floats: False
+id_11 has floats: True
+id_13 has floats: False
+id_14 has floats: False
+id_17 has floats: False
+id_18 has floats: False
+id_19 has floats: False
+id_20 has floats: False
+id_21 has floats: False
+id_22 has floats: False
+id_24 has floats: False
+id_25 has floats: False
+id_26 has floats: False
+id_32 has floats: False
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; print(df["id_11"].dropna().unique()[:15])'
+[?2004l[100.          93.55000305  95.08000183  92.86000061  94.19999695
+  95.34999847  95.69999695  95.16000366  97.80000305  91.02999878
+  97.12000275  94.29000092  97.84999847  95.65000153  96.23000336]
+[?2004hroot@803b650a44b8:/workspace# find . -maxdepth 3 -not -path '*/.*'
+[?2004l.
+./analyze.py
+[?2004hroot@803b650a44b8:/workspace# find / -maxdepth 2 -name "*eval*" -o -name "*test*" -o -name "*run*" 2>/dev/null
+[?2004l/run
+/var/run
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; num_cols = df.select_dtypes(include=["number"]).columns; stats = df[num_cols].describe().T; print(stats[["min", "50%", "max", "mean"]])'
+[?2004l                     min        50%        max          mean
+TransactionID  2987004.0  3205429.5  3577509.0  3.239337e+06
+id_01             -100.0       -5.0        0.0 -1.012180e+01
+id_02               44.0   129118.0   990657.0  1.776883e+05
+id_03              -13.0        0.0        6.0  5.705128e-02
+id_04              -13.0        0.0        0.0 -5.940171e-02
+id_05              -72.0        0.0       52.0  1.511873e+00
+id_06             -100.0        0.0        0.0 -6.856253e+00
+id_07              -33.0       13.0       38.0  1.286510e+01
+id_08             -100.0      -33.0        0.0 -3.724340e+01
+id_09              -23.0        0.0       15.0  8.695652e-02
+id_10             -100.0        0.0        0.0 -3.043478e-01
+id_11               90.0      100.0      100.0  9.975739e+01
+id_13               11.0       52.0       64.0  4.791084e+01
+id_14             -600.0     -300.0      720.0 -3.452346e+02
+id_17              100.0      166.0      226.0  1.895219e+02
+id_18               11.0       15.0       26.0  1.421680e+01
+id_19              100.0      339.0      671.0  3.527817e+02
+id_20              100.0      472.0      660.0  4.028431e+02
+id_21              100.0      252.0      849.0  3.588450e+02
+id_22               14.0       14.0       41.0  1.593860e+01
+id_24               11.0       11.0       26.0  1.279288e+01
+id_25              110.0      321.0      545.0  3.294324e+02
+id_26              100.0      147.0      216.0  1.483284e+02
+id_32               16.0       24.0       32.0  2.647210e+01
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/data/train_identity.csv").iloc[:10000]; num_cols = [c for c in df.select_dtypes(include=["number"]).columns if c != "id_11"]; medians = df[num_cols].median(); print(medians); print("Are all medians integers?", (medians % 1 == 0).all())'
+[?2004lTransactionID    3205429.5
+id_01                 -5.0
+id_02             129118.0
+id_03                  0.0
+id_04                  0.0
+id_05                  0.0
+id_06                  0.0
+id_07                 13.0
+id_08                -33.0
+id_09                  0.0
+id_10                  0.0
+id_13                 52.0
+id_14               -300.0
+id_17                166.0
+id_18                 15.0
+id_19                339.0
+id_20                472.0
+id_21                252.0
+id_22                 14.0
+id_24                 11.0
+id_25                321.0
+id_26                147.0
+id_32                 24.0
+dtype: float64
+Are all medians integers? False
+[?2004hroot@803b650a44b8:/workspace# cat << 'EOF' > clean.py
+[?2004l[?2004h> import pandas as pd
+[?2004l[?2004h> import numpy as np
+[?2004l[?2004h> 
+[?2004l[?2004h> # Load dataset
+[?2004l[?2004h> df = pd.read_csv('/data/train_identity.csv')
+[?2004l[?2004h> print("Original shape:", df.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Remove duplicate records based on TransactionID, keeping the first occurrence
+[?2004l[?2004h> df_clean = df.drop_duplicates(subset=['TransactionID'], keep='first').copy()
+[?2004l[?2004h> print("Shape after deduplication:", df_clean.shape)
+[?2004l[?2004h> 
+[?2004l[?2004h> # Handle missing values and ensure correct data types
+[?2004l[?2004h> for col in df_clean.columns:
+[?2004l[?2004h>     if df_clean[col].dtype == 'object':
+[?2004l[?2004h>         # Categorical columns: fill missing with 'Unknown'
+[?2004l[?2004h>         df_clean[col] = df_clean[col].fillna('Unknown').astype(str)
+[?2004l[?2004h>     else:
+[?2004l[?2004h>         # Numeric columns: fill missing with median
+[?2004l[?2004h>         median_val = df_clean[col].median()
+[?2004l[?2004h>         df_clean[col] = df_clean[col].fillna(median_val)
+[?2004l[?2004h>         
+[?2004l[?2004h>         # Cast integer-valued columns to int64
+[?2004l[?2004h>         # (We check if all values are integers after filling)
+[?2004l[?2004h>         if (df_clean[col] % 1 == 0).all():
+[?2004l[?2004h>             df_clean[col] = df_clean[col].astype('int64')
+[?2004l[?2004h>         else:
+[?2004l[?2004h>             df_clean[col] = df_clean[col].astype('float64')
+[?2004l[?2004h> 
+[?2004l[?2004h> # Verify types and missing values
+[?2004l[?2004h> print("Null counts:", df_clean.isnull().sum().sum())
+[?2004l[?2004h> print("Column data types:")
+[?2004l[?2004h> for col in df_clean.columns:
+[?2004l[?2004h>     print(f"{col}: {df_clean[col].dtype}")
+[?2004l[?2004h> 
+[?2004l[?2004h> # Save cleaned dataset
+[?2004l[?2004h> import os
+[?2004l[?2004h> os.makedirs('/output', exist_ok=True)
+[?2004l[?2004h> df_clean.to_csv('/output/cleaned.csv', index=False)
+[?2004l[?2004h> print("Saved cleaned dataset to /output/cleaned.csv")
+[?2004l[?2004h> EOF
+[?2004l[?2004hroot@803b650a44b8:/workspace# python3 clean.py
+[?2004lOriginal shape: (10500, 41)
+Shape after deduplication: (10000, 41)
+Null counts: 0
+Column data types:
+TransactionID: int64
+id_01: int64
+id_02: int64
+id_03: int64
+id_04: int64
+id_05: int64
+id_06: int64
+id_07: int64
+id_08: int64
+id_09: int64
+id_10: int64
+id_11: float64
+id_12: object
+id_13: int64
+id_14: int64
+id_15: object
+id_16: object
+id_17: int64
+id_18: int64
+id_19: int64
+id_20: int64
+id_21: int64
+id_22: int64
+id_23: object
+id_24: int64
+id_25: int64
+id_26: int64
+id_27: object
+id_28: object
+id_29: object
+id_30: object
+id_31: object
+id_32: int64
+id_33: object
+id_34: object
+id_35: object
+id_36: object
+id_37: object
+id_38: object
+DeviceType: object
+DeviceInfo: object
+Saved cleaned dataset to /output/cleaned.csv
+[?2004hroot@803b650a44b8:/workspace# python3 -c 'import pandas as pd; df = pd.read_csv("/output/cleaned.csv"); print("Shape:", df.shape); print("Null count:", df.isnull().sum().sum()); print(df.info())'
+[?2004lShape: (10000, 41)
+Null count: 0
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 10000 entries, 0 to 9999
+Data columns (total 41 columns):
+ #   Column         Non-Null Count  Dtype  
+---  ------         --------------  -----  
+ 0   TransactionID  10000 non-null  int64  
+ 1   id_01          10000 non-null  int64  
+ 2   id_02          10000 non-null  int64  
+ 3   id_03          10000 non-null  int64  
+ 4   id_04          10000 non-null  int64  
+ 5   id_05          10000 non-null  int64  
+ 6   id_06          10000 non-null  int64  
+ 7   id_07          10000 non-null  int64  
+ 8   id_08          10000 non-null  int64  
+ 9   id_09          10000 non-null  int64  
+ 10  id_10          10000 non-null  int64  
+ 11  id_11          10000 non-null  float64
+ 12  id_12          10000 non-null  object 
+ 13  id_13          10000 non-null  int64  
+ 14  id_14          10000 non-null  int64  
+ 15  id_15          10000 non-null  object 
+ 16  id_16          10000 non-null  object 
+ 17  id_17          10000 non-null  int64  
+ 18  id_18          10000 non-null  int64  
+ 19  id_19          10000 non-null  int64  
+ 20  id_20          10000 non-null  int64  
+ 21  id_21          10000 non-null  int64  
+ 22  id_22          10000 non-null  int64  
+ 23  id_23          10000 non-null  object 
+ 24  id_24          10000 non-null  int64  
+ 25  id_25          10000 non-null  int64  
+ 26  id_26          10000 non-null  int64  
+ 27  id_27          10000 non-null  object 
+ 28  id_28          10000 non-null  object 
+ 29  id_29          10000 non-null  object 
+ 30  id_30          10000 non-null  object 
+ 31  id_31          10000 non-null  object 
+ 32  id_32          10000 non-null  int64  
+ 33  id_33          10000 non-null  object 
+ 34  id_34          10000 non-null  object 
+ 35  id_35          10000 non-null  object 
+ 36  id_36          10000 non-null  object 
+ 37  id_37          10000 non-null  object 
+ 38  id_38          10000 non-null  object 
+ 39  DeviceType     10000 non-null  object 
+ 40  DeviceInfo     10000 non-null  object 
+dtypes: float64(1), int64(23), object(17)
+memory usage: 3.1+ MB
+None
+[?2004hroot@803b650a44b8:/workspace# rm -f analyze.py clean.py
+[?2004l[?2004hroot@803b650a44b8:/workspace# 

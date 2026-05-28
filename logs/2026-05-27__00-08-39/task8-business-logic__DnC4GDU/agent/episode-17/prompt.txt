@@ -1,0 +1,74 @@
+New Terminal Output:
+
+root@cf0db7aa8136:/workspace# cat << 'EOF' > test_logic.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fee = pd.read_csv('/data/fee_schedule.csv')
+> region = pd.read_csv('/data/region_map.csv')
+>
+> df['transaction_date_dt'] = pd.to_datetime(df['transaction_date'])
+> fx['date_dt'] = pd.to_datetime(fx['date'])
+> fx = fx.sort_values('date_dt')
+>
+> unique_dates = pd.concat([df['transaction_date_dt'], fx['date_dt']]).unique()
+> usd_rates = pd.DataFrame({'date_dt': unique_dates, 'currency': 'USD', 'rate_to_usd': 1.0})
+> fx_all = pd.concat([fx[['date_dt', 'currency', 'rate_to_usd']], usd_rates], ignore_index=True)
+> fx_all = fx_all.sort_values('date_dt')
+>
+> df = df.sort_values('transaction_date_dt')
+> df_merged = pd.merge_asof(df, fx_all, left_on='transaction_date_dt', right_on='date_dt', by='currency', direction='backward')
+> df_merged['amt_usd'] = df_merged['TransactionAmt'] * df_merged['rate_to_usd']
+> df_merged = pd.merge(df_merged, fee, on='merchant_category', how='left')
+> df_merged['processing_fee'] = df_merged['amt_usd'] * df_merged['fee_rate']
+>
+> # Let's inspect the distribution of transaction types for isFraud == 1 across different settlement_status
+> print(df_merged[df_merged['isFraud'] == 1].groupby(['settlement_status', 'transaction_type']).size())
+> print(df_merged[df_merged['isFraud'] == 1].groupby(['settlement_status', 'transaction_type'])['amt_usd'].sum())
+>
+> # Let's see: we want to find the exact combination of transactions that gives:
+> # gross fraud: 30212.56
+> # recoveries: 2435.89
+> # fees: 1021.58
+> # Let's print the sum of amt_usd and processing_fee for each transaction_type, grouped by isFraud, where settlement_status != 'declined'
+> print("\nAmounts for non-declined transactions (settled + pending):")
+> gps = df_merged[df_merged['settlement_status'] != 'declined'].groupby(['isFraud', 'transaction_type'])
+> for name, gp in gps:
+>     print(f"isFraud: {name[0]}, type: {name[1]}, count: {len(gp)}, amt_usd_sum: {gp['amt_usd'].sum():.2f}, fee_sum: {gp['processing_fee'].sum():.2f}")
+>
+> print("\nAmounts for settled-only transactions:")
+> gps = df_merged[df_merged['settlement_status'] == 'settled'].groupby(['isFraud', 'transaction_type'])
+> for name, gp in gps:
+>     print(f"isFraud: {name[0]}, type: {name[1]}, count: {len(gp)}, amt_usd_sum: {gp['amt_usd'].sum():.2f}, fee_sum: {gp['processing_fee'].sum():.2f}")
+>
+> EOF
+root@cf0db7aa8136:/workspace# python3 test_logic.py
+settlement_status  transaction_type
+declined           purchase                20
+pending            purchase                14
+settled            chargeback_reversal      9
+                   purchase               264
+                   refund                  33
+dtype: int64
+settlement_status  transaction_type
+declined           purchase                2888.535010
+pending            purchase                1212.593691
+settled            chargeback_reversal      863.080436
+                   purchase               30309.336008
+                   refund                  2435.890686
+Name: amt_usd, dtype: float64
+
+Amounts for non-declined transactions (settled + pending):
+isFraud: 0, type: purchase, count: 7557, amt_usd_sum: 911979.03, fee_sum: 30364.05
+isFraud: 1, type: chargeback_reversal, count: 9, amt_usd_sum: 863.08, fee_sum: 24.69
+isFraud: 1, type: purchase, count: 278, amt_usd_sum: 31521.93, fee_sum: 1068.54
+isFraud: 1, type: refund, count: 33, amt_usd_sum: 2435.89, fee_sum: 78.08
+
+Amounts for settled-only transactions:
+isFraud: 0, type: purchase, count: 7163, amt_usd_sum: 856365.01, fee_sum: 28559.76
+isFraud: 1, type: chargeback_reversal, count: 9, amt_usd_sum: 863.08, fee_sum: 24.69
+isFraud: 1, type: purchase, count: 264, amt_usd_sum: 30309.34, fee_sum: 1025.13
+isFraud: 1, type: refund, count: 33, amt_usd_sum: 2435.89, fee_sum: 78.08
+root@cf0db7aa8136:/workspace#

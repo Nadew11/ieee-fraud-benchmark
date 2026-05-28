@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Expecting ',' delimiter: line 2 column 717 (char 718) | Content preview: '{\n  "analysis": "Ah! If we did an inner join, the total fraud in the joined table is only `19421.642'...
+
+Please fix these issues and provide a proper JSON response.

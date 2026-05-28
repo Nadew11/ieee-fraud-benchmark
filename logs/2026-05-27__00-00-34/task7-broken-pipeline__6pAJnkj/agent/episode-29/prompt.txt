@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 982 (char 983) | Content preview: '{\n  "analysis": "Wait, let\'s look at the dataset columns and values. Why does the model get AUC 1.00'...
+
+Please fix these issues and provide a proper JSON response.

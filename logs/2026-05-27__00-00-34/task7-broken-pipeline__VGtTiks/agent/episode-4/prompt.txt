@@ -1,0 +1,4 @@
+Previous response had parsing errors:
+ERROR: Invalid JSON: Invalid control character at: line 2 column 205 (char 206) | Content preview: '{\n  "analysis": "Wait! The script actually outputs `Validation AUC: 1.0000`? Or is it 0.73? In the p'...
+
+Please fix these issues and provide a proper JSON response.

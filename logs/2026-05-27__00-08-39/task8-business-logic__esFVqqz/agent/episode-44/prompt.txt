@@ -1,0 +1,82 @@
+New Terminal Output:
+
+root@b9e5a18b679d:/workspace# cat << 'EOF' > test_dups_strategy.py
+> import pandas as pd
+> import numpy as np
+>
+> df = pd.read_csv('/data/transactions.csv')
+> fx = pd.read_csv('/data/fx_rates.csv')
+> fees = pd.read_csv('/data/fee_schedule.csv')
+>
+> rates_dict = {}
+> for idx, row in fx.iterrows():
+>     rates_dict[(row['currency'], row['date'])] = row['rate_to_usd']
+>
+> def get_rate(currency, date_str):
+>     if currency == 'USD':
+>         return 1.0
+>     if (currency, date_str) in rates_dict:
+>         return rates_dict[(currency, date_str)]
+>     currency_rates = fx[fx['currency'] == currency]
+>     prior_rates = currency_rates[currency_rates['date'] <= date_str]
+>     if len(prior_rates) == 0:
+>         return currency_rates.sort_values('date').iloc[0]['rate_to_usd']
+>     return prior_rates.sort_values('date', ascending=False).iloc[0]['rate_to_usd']
+>
+> rates = []
+> for idx, row in df.iterrows():
+>     rates.append(get_rate(row['currency'], row['transaction_date']))
+> df['fx_rate'] = rates
+> df['amt_usd'] = df['TransactionAmt'] * df['fx_rate']
+>
+> fee_dict = dict(zip(fees['merchant_category'], fees['fee_rate']))
+> df['fee_rate'] = df['merchant_category'].map(fee_dict)
+> df['processing_fee'] = df['amt_usd'] * df['fee_rate']
+>
+> for keep_strat in ['first', 'last', 'none']:
+>     print(f"\n--- Strategy: Keep {keep_strat} ---")
+>     if keep_strat == 'none':
+>         df_clean = df.drop_duplicates(subset=['TransactionID'], keep=False)
+>     else:
+>         df_clean = df.drop_duplicates(subset=['TransactionID'], keep=keep_strat)
+>
+>     df_clean_no_declined = df_clean[df_clean.settlement_status != 'declined'].copy()
+>
+>     fraud = df_clean_no_declined[df_clean_no_declined.isFraud == 1]
+>     fraud_purchases = fraud[fraud.transaction_type == 'purchase']
+>
+>     print("Fraud purchase count:", len(fraud_purchases))
+>
+>     gross_fraud = fraud_purchases['amt_usd'].sum()
+>     proc_fees = fraud_purchases['processing_fee'].sum()
+>     recoveries = fraud[fraud.transaction_type.isin(['refund', 'chargeback_reversal'])]['amt_usd'].sum()
+>
+>     print("Gross fraud:", gross_fraud)
+>     print("Processing fees:", proc_fees)
+>     print("Recoveries:", recoveries)
+>     print("Net fraud:", gross_fraud - recoveries - proc_fees)
+>
+> EOF
+root@b9e5a18b679d:/workspace# python3 test_dups_strategy.py
+
+--- Strategy: Keep first ---
+Fraud purchase count: 263
+Gross fraud: 30212.65790995
+Processing fees: 1021.4958475308201
+Recoveries: 3298.9711221
+Net fraud: 25892.190940319182
+
+--- Strategy: Keep last ---
+Fraud purchase count: 263
+Gross fraud: 30218.609409570003
+Processing fees: 1021.714292958145
+Recoveries: 3298.9711221
+Net fraud: 25897.923994511857
+
+--- Strategy: Keep none ---
+Fraud purchase count: 248
+Gross fraud: 28909.337620485
+Processing fees: 974.671614343535
+Recoveries: 3298.9711221
+Net fraud: 24635.694884041466
+root@b9e5a18b679d:/workspace#
